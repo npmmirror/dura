@@ -1,5 +1,10 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.recursiveEnhanceFun = recursiveEnhanceFun;
+
 /**
  * 递归增强函数
  *
