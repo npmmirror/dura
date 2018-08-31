@@ -3,7 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import {validateModel} from './validation'
 import {handleActions} from 'redux-actions'
 import * as reduxSagaEffects from "redux-saga/effects";
-import {  } from 'dura-util/lib'
+import { re } from 'dura-util'
 
 const defaultOptions = {
     initialModel: []

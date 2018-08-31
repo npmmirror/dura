@@ -41,3 +41,7 @@ function recursiveEnhanceFun(funArray, targetFun) {
 
   return targetFun;
 }
+
+export {
+  recursiveEnhanceFun
+}
