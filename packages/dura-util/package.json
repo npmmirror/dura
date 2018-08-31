@@ -2,7 +2,7 @@
   "name": "dura-util",
   "version": "0.0.1-alpha.0",
   "description": "",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib"
   },
