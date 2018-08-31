@@ -1,0 +1,11 @@
+{
+  "name": "dura-util",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && npx babel ./src -d ./lib"
+  },
+  "author": "",
+  "license": "ISC"
+}
