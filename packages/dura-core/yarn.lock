@@ -22,6 +22,14 @@
   version "1.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@redux-saga/symbols/-/symbols-1.0.0-beta.2.tgz#4ee36997971e974f64532fe0b1f398f2a6ce41b0"
 
+dura-util@^0.0.2-alpha.3:
+  version "0.0.2-alpha.3"
+  resolved "https://registry.yarnpkg.com/dura-util/-/dura-util-0.0.2-alpha.3.tgz#5d15c0b57fad62aa4240dd6887fff939bdf55788"
+
+immer@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-1.5.0.tgz#1ed9b1b653643fe9276bbc36377613523ea32a39"
+
 invariant@^2.2.1, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
