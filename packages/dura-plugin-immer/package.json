@@ -2,7 +2,7 @@
   "name": "dura-plugin-immer",
   "version": "0.0.2-alpha.6",
   "description": "",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib"
   },
