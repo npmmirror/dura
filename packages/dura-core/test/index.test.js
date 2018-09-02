@@ -1,5 +1,6 @@
 import {createDuraCore} from '../src/index'
 import produce from 'immer'
+import DuraPluginImmer from 'dura-plugin-immer'
 
 describe('demo', () => {
 
@@ -96,7 +97,7 @@ describe('demo', () => {
             },
         }
 
-        duraCore.addPlugin(undoPlugin)
+        duraCore.addPlugin(DuraPluginImmer)
 
         duraCore.start()
 

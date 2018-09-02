@@ -17,6 +17,7 @@
     "redux-saga": "^1.0.0-beta"
   },
   "devDependencies": {
+    "dura-plugin-immer": "0.0.2-alpha.5",
     "immer": "^1.5.0"
   }
 }
