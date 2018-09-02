@@ -1,6 +1,6 @@
 {
   "name": "dura-core",
-  "version": "0.0.2-alpha.5",
+  "version": "0.0.2-alpha.6",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dura-util": "^0.0.2-alpha.5",
+    "dura-util": "^0.0.2-alpha.6",
     "invariant": "^2.2.4",
     "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",
@@ -17,7 +17,7 @@
     "redux-saga": "^1.0.0-beta"
   },
   "devDependencies": {
-    "dura-plugin-immer": "0.0.2-alpha.5",
+    "dura-plugin-immer": "^0.0.2-alpha.6",
     "immer": "^1.5.0"
   }
 }
