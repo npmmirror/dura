@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.recursiveEnhanceFun = recursiveEnhanceFun;
+exports.default = void 0;
 
 /**
  * 递归增强函数
@@ -51,3 +51,6 @@ function recursiveEnhanceFun(funArray, targetFun) {
 
   return targetFun;
 }
+
+var _default = recursiveEnhanceFun;
+exports.default = _default;
