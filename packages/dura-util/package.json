@@ -1,11 +1,11 @@
 {
   "name": "dura-util",
-  "version": "0.0.2-alpha.10",
+  "version": "0.0.2-alpha.11",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib",
-    "test":"jest --coverage"
+    "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC"
