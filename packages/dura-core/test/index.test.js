@@ -15,7 +15,7 @@ describe('demo', () => {
                 s() {
                     console.log("ss")
                 },
-                a(state , {payload}) {
+                a(state, {payload}) {
                     state.name = payload?.name
                 }
             },
@@ -53,32 +53,44 @@ describe('demo', () => {
 
         const loadingPlugin = {
             namespace: 'loading',
-            initialState:{
-
+            initialState: {},
+            reducers: {
+                onChangeStatus(state, {payload}) {
+                    console.log("onChangeStatus",payload)
+                    console.log("12",{...state , ...payload})
+                    return {...state , ...payload}
+                }
             },
-            reducers:{
-
-            },
-            onEffect: function (effect) {
+            onEffect: function (effect, name, {put}) {
                 return function* (...args) {
-                    console.log("loading effect start")
+                    yield put({
+                        type: 'loading/reducers/onChangeStatus',
+                        payload: {
+                            [name]: true
+                        }
+                    })
                     yield effect(...args)
-                    console.log("loading effect end")
+                    yield put({
+                        type: 'loading/reducers/onChangeStatus',
+                        payload: {
+                            [name]: false
+                        }
+                    })
                 }
             }
         }
 
-        duraCore.addPlugin(loadingPlugin,DuraImmer)
+        duraCore.addPlugin(DuraImmer,loadingPlugin)
 
 
         duraCore.start()
 
         console.log(duraCore._reduxStore.getState())
 
-        duraCore._reduxStore.dispatch({type: 'user/reducers/a',payload: {name: "里斯"}})
+        // duraCore._reduxStore.dispatch({type: 'user/reducers/a',payload: {name: "里斯"}})
+        duraCore._reduxStore.dispatch({type: 'user/effects/o'})
 
         console.log(duraCore._reduxStore.getState())
-
 
 
         // duraCore._reduxStore.dispatch({type: 'user/effects/o', payload: {name: "里斯"}})

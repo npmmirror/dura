@@ -14,7 +14,7 @@ var _default = {
   onReducer: function onReducer(reducer) {
     return function (state, action) {
       return (0, _immer.default)(state, function (draft) {
-        reducer(draft, action);
+        return reducer(draft, action);
       });
     };
   }

@@ -7,7 +7,7 @@ export default {
         return function (state, action) {
 
             return produce(state, function (draft) {
-                reducer(draft, action)
+                return reducer(draft, action)
             })
 
         }

@@ -47,6 +47,20 @@ function () {
 
     _defineProperty(this, "pluginHandler", undefined);
 
+    _defineProperty(this, "defaultModels", [{
+      namespace: '@@duraCore',
+      initialState: {
+        count: 0
+      },
+      reducers: {
+        onChangeState: function onChangeState(state) {
+          return _objectSpread({}, state, {
+            count: state.count + 1
+          });
+        }
+      }
+    }]);
+
     this.pluginHandler = pluginHandler;
   }
 
@@ -91,20 +105,23 @@ function () {
   }, {
     key: "_getModels",
     value: function _getModels() {
-      var duraModel = {
-        namespace: '@@duraCore',
-        initialState: {
-          count: 0
-        },
-        reducers: {
-          onChangeState: function onChangeState(state) {
-            return _objectSpread({}, state, {
-              count: state.count + 1
-            });
-          }
-        }
-      };
-      return [this._additionalNamespacePrefix(duraModel)].concat(this.models);
+      var _this2 = this;
+
+      var defaultModels = this.defaultModels.map(function (model) {
+        return _this2._additionalNamespacePrefix(model);
+      });
+      var pluginModels = this.pluginHandler.plugins.filter(function (plugin) {
+        return plugin.reducers;
+      }).map(function (plugin) {
+        return {
+          namespace: plugin.namespace,
+          initialState: plugin.initialState || {},
+          reducers: plugin.reducers
+        };
+      }).map(function (pluginModel) {
+        return _this2._additionalNamespacePrefix(pluginModel);
+      });
+      return defaultModels.concat(this.models).concat(pluginModels);
     }
   }, {
     key: "_mapGenerateSaga",
@@ -202,7 +219,7 @@ function () {
       var onEffectEventFuns = this.pluginHandler.getOnEffectEventFun();
 
       if (!Array.isArray(effect)) {
-        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, effect, name);
+        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, effect, name, reduxSagaEffects);
       } else {
         var _effect = _slicedToArray(effect, 2),
             saga = _effect[0],
@@ -218,7 +235,7 @@ function () {
           newEffect.type = defaultType;
         }
 
-        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, saga);
+        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, saga, name, reduxSagaEffects);
       }
 
       return newEffect;

@@ -9,6 +9,20 @@ class ModelHandler {
 
     pluginHandler = undefined;
 
+    defaultModels = [
+        {
+            namespace: '@@duraCore',
+            initialState: {
+                count: 0
+            },
+            reducers: {
+                onChangeState(state) {
+                    return ({...state, count: state.count + 1});
+                }
+            }
+        }
+    ]
+
     constructor({pluginHandler}) {
         this.pluginHandler = pluginHandler;
     }
@@ -36,18 +50,18 @@ class ModelHandler {
     }
 
     _getModels() {
-        const duraModel = {
-            namespace: '@@duraCore',
-            initialState: {
-                count: 0
-            },
-            reducers: {
-                onChangeState(state) {
-                    return ({...state, count: state.count + 1});
-                }
-            }
-        }
-        return [this._additionalNamespacePrefix(duraModel)].concat(this.models)
+
+        const defaultModels = this.defaultModels.map(model => this._additionalNamespacePrefix(model))
+
+        const pluginModels = this.pluginHandler.plugins.filter(plugin => plugin.reducers).map(plugin => ({
+            namespace: plugin.namespace,
+            initialState: plugin.initialState || {},
+            reducers: plugin.reducers
+        })).map(pluginModel => this._additionalNamespacePrefix(pluginModel))
+
+        return defaultModels
+            .concat(this.models)
+            .concat(pluginModels)
     }
 
     * _mapGenerateSaga(effects) {
@@ -77,7 +91,7 @@ class ModelHandler {
         }
         const onEffectEventFuns = this.pluginHandler.getOnEffectEventFun();
         if (!Array.isArray(effect)) {
-            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, effect, name);
+            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, effect, name, reduxSagaEffects);
         } else {
             const [saga, conf] = effect;
             if (!typeof  conf) {
@@ -89,7 +103,7 @@ class ModelHandler {
             } else {
                 newEffect.type = defaultType;
             }
-            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, saga);
+            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, saga, name, reduxSagaEffects);
         }
         return newEffect;
     }
