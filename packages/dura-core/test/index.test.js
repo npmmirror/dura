@@ -2,6 +2,7 @@ import {createDuraCore} from '../src/index'
 import produce from 'immer'
 import DuraImmer from 'dura-plugin-immer'
 import {delay} from 'redux-saga/effects'
+import DuraStatus from 'dura-plugin-status'
 
 describe('demo', () => {
 
@@ -79,18 +80,18 @@ describe('demo', () => {
             }
         }
 
-        duraCore.addPlugin(DuraImmer, loadingPlugin)
+        duraCore.addPlugin(DuraImmer, DuraStatus)
 
 
         duraCore.start()
 
         // duraCore._reduxStore.dispatch({type: 'user/reducers/a',payload: {name: "里斯"}})
         duraCore._reduxStore.dispatch({type: 'user/effects/o'})
-        console.log(duraCore._reduxStore.getState()['loading'])
+        console.log(duraCore._reduxStore.getState()['@@duraStatus'])
 
 
         setTimeout(() => {
-            console.log(duraCore._reduxStore.getState()['loading'])
+            console.log(duraCore._reduxStore.getState()['@@duraStatus'])
             done()
         }, 1000)
 

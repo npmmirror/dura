@@ -1,1 +1,5 @@
-export * from './recursive'
+import recursiveEnhanceFun from './recursive'
+
+export {
+    recursiveEnhanceFun
+}

@@ -40,6 +40,4 @@ function recursiveEnhanceFun(funArray, targetFun, ...args) {
 }
 
 
-export {
-    recursiveEnhanceFun
-}
+export default recursiveEnhanceFun

@@ -4,7 +4,8 @@
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "rm -rf ./lib && npx babel ./src -d ./lib"
+    "build": "rm -rf ./lib && npx babel ./src -d ./lib",
+    "test":"jest --coverage"
   },
   "author": "",
   "license": "ISC"
