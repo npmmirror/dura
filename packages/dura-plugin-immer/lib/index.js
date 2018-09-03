@@ -10,7 +10,7 @@ var _immer = _interopRequireDefault(require("immer"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = {
-  namespace: '@@duraImmerPlugin',
+  namespace: '@@duraImmer',
   onReducer: function onReducer(reducer) {
     return function (state, action) {
       return (0, _immer.default)(state, function (draft) {

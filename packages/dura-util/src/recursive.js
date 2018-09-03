@@ -3,11 +3,11 @@
  *
  *
  * const funArray = [
- *      function(targetFun){
+ *      function(targetFun , args){
  *          console.log("A")
  *          return targetFun
  *      },
- *      function(targetFun){
+ *      function(targetFun, args){
  *          console.log("B)
  *          return targetFun
  *      }
@@ -29,11 +29,12 @@
  *
  * @param funArray
  * @param targetFun
+ * @param args 参数
  */
-function recursiveEnhanceFun(funArray, targetFun) {
+function recursiveEnhanceFun(funArray, targetFun, ...args) {
     const first = funArray.shift();
     if (first) {
-        return recursiveEnhanceFun(funArray, first(targetFun))
+        return recursiveEnhanceFun(funArray, first(targetFun, ...args))
     }
     return targetFun;
 }

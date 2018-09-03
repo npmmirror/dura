@@ -77,7 +77,7 @@ class ModelHandler {
         }
         const onEffectEventFuns = this.pluginHandler.getOnEffectEventFun();
         if (!Array.isArray(effect)) {
-            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, effect);
+            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, effect, name);
         } else {
             const [saga, conf] = effect;
             if (!typeof  conf) {

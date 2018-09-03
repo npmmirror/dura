@@ -202,7 +202,7 @@ function () {
       var onEffectEventFuns = this.pluginHandler.getOnEffectEventFun();
 
       if (!Array.isArray(effect)) {
-        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, effect);
+        newEffect.saga = (0, _duraUtil.recursiveEnhanceFun)(onEffectEventFuns, effect, name);
       } else {
         var _effect = _slicedToArray(effect, 2),
             saga = _effect[0],

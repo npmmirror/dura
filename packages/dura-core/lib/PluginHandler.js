@@ -54,15 +54,6 @@ function () {
         return plugin.onStateChange;
       });
     }
-  }, {
-    key: "getOnAction",
-    value: function getOnAction() {
-      return this.plugins.filter(function (plugin) {
-        return plugin.onAction;
-      }).map(function (plugin) {
-        return plugin.onAction;
-      });
-    }
   }]);
 
   return PluginHandler;

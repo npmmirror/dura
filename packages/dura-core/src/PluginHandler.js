@@ -22,10 +22,6 @@ class PluginHandler {
         return this.plugins.filter(plugin => plugin.onStateChange).map(plugin => plugin.onStateChange)
     }
 
-    getOnAction() {
-        return this.plugins.filter(plugin => plugin.onAction).map(plugin => plugin.onAction)
-    }
-
 }
 
 export default PluginHandler

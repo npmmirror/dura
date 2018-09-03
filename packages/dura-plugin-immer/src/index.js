@@ -1,7 +1,7 @@
 import produce from 'immer'
 
 export default {
-    namespace: '@@duraImmerPlugin',
+    namespace: '@@duraImmer',
     onReducer: function (reducer) {
 
         return function (state, action) {

@@ -1,6 +1,6 @@
 import {createDuraCore} from '../src/index'
 import produce from 'immer'
-import DuraPluginImmer from 'dura-plugin-immer'
+import DuraImmer from 'dura-plugin-immer'
 
 describe('demo', () => {
 
@@ -53,53 +53,27 @@ describe('demo', () => {
 
         const loadingPlugin = {
             namespace: 'loading',
+            initialState:{
+
+            },
+            reducers:{
+
+            },
             onEffect: function (effect) {
                 return function* (...args) {
                     console.log("loading effect start")
                     yield effect(...args)
                     console.log("loading effect end")
                 }
-            },
-            onReducer: function (reducer) {
-                return function (state, action) {
-                    console.log("loading reducer start")
-                    const result = reducer(state, action)
-                    console.log("loading reducer end")
-                    return result
-                }
-            },
-            onStateChange:function (state) {
-                console.log(state)
             }
         }
 
-        const undoPlugin = {
-            namespace:'undo',
-            onReducer:function (reducer) {
-                return function (state, action) {
-                    console.log('undo reducer start')
-                    const nextState = produce( state , (draft) => {
-                        reducer(draft , action)
-                    } )
-                    console.log('undo reducer end')
-                    return nextState
-                }
-            },
-            onEffect: function (effect) {
-                return function* (...args) {
-                    console.log("undo effect start")
-                    yield effect(...args)
-                    console.log("undo effect end")
-                }
-            },
-            onStateChange:function (state) {
-                // console.log(state)
-            },
-        }
+        duraCore.addPlugin(loadingPlugin,DuraImmer)
 
-        duraCore.addPlugin(DuraPluginImmer)
 
         duraCore.start()
+
+        console.log(duraCore._reduxStore.getState())
 
         duraCore._reduxStore.dispatch({type: 'user/reducers/a',payload: {name: "里斯"}})
 

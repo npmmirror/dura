@@ -10,11 +10,11 @@ exports.recursiveEnhanceFun = recursiveEnhanceFun;
  *
  *
  * const funArray = [
- *      function(targetFun){
+ *      function(targetFun , args){
  *          console.log("A")
  *          return targetFun
  *      },
- *      function(targetFun){
+ *      function(targetFun, args){
  *          console.log("B)
  *          return targetFun
  *      }
@@ -36,12 +36,17 @@ exports.recursiveEnhanceFun = recursiveEnhanceFun;
  *
  * @param funArray
  * @param targetFun
+ * @param args 参数
  */
 function recursiveEnhanceFun(funArray, targetFun) {
   var first = funArray.shift();
 
   if (first) {
-    return recursiveEnhanceFun(funArray, first(targetFun));
+    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      args[_key - 2] = arguments[_key];
+    }
+
+    return recursiveEnhanceFun(funArray, first.apply(void 0, [targetFun].concat(args)));
   }
 
   return targetFun;
