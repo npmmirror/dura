@@ -1,10 +1,11 @@
 import {createDuraCore} from '../src/index'
 import produce from 'immer'
 import DuraImmer from 'dura-plugin-immer'
+import {delay} from 'redux-saga/effects'
 
 describe('demo', () => {
 
-    it('should ', function () {
+    it('should ', function (done) {
         const duraCore = createDuraCore();
         duraCore.addModel({
             namespace: "user",
@@ -27,7 +28,7 @@ describe('demo', () => {
                     console.log("kk")
                 },
                 o: [function* (a, b) {
-                    console.log('oo')
+                    yield delay(500, () => console.log('oo'))
                 }, {type: 'throttle', ms: 50}]
             }
         }, {
@@ -56,9 +57,7 @@ describe('demo', () => {
             initialState: {},
             reducers: {
                 onChangeStatus(state, {payload}) {
-                    console.log("onChangeStatus",payload)
-                    console.log("12",{...state , ...payload})
-                    return {...state , ...payload}
+                    return {...state, ...payload}
                 }
             },
             onEffect: function (effect, name, {put}) {
@@ -80,18 +79,20 @@ describe('demo', () => {
             }
         }
 
-        duraCore.addPlugin(DuraImmer,loadingPlugin)
+        duraCore.addPlugin(DuraImmer, loadingPlugin)
 
 
         duraCore.start()
 
-        console.log(duraCore._reduxStore.getState())
-
         // duraCore._reduxStore.dispatch({type: 'user/reducers/a',payload: {name: "里斯"}})
         duraCore._reduxStore.dispatch({type: 'user/effects/o'})
+        console.log(duraCore._reduxStore.getState()['loading'])
 
-        console.log(duraCore._reduxStore.getState())
 
+        setTimeout(() => {
+            console.log(duraCore._reduxStore.getState()['loading'])
+            done()
+        }, 1000)
 
         // duraCore._reduxStore.dispatch({type: 'user/effects/o', payload: {name: "里斯"}})
         // duraCore._reduxStore.dispatch({type: 'user/effects/o'})

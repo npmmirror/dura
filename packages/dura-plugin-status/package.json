@@ -1,0 +1,11 @@
+{
+  "name": "dura-plugin-status",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && npx babel ./src -d ./lib"
+  },
+  "author": "",
+  "license": "ISC"
+}
