@@ -2,14 +2,14 @@
   "name": "dura-core",
   "version": "0.0.2-alpha.12",
   "description": "",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dura-util": "^0.0.2-alpha.12",
+    "dura-util": "^0.0.2-alpha.11",
     "invariant": "^2.2.4",
     "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",
