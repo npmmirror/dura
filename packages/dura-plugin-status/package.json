@@ -1,5 +1,5 @@
 {
-  "name": "dura-plugin-status",
+  "name": "@dura/plugin-status",
   "version": "0.0.2-alpha.12",
   "description": "",
   "main": "./lib/index.js",

@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/*"
+    "packages/dura-util"
   ],
-  "version": "0.0.2-alpha.12"
+  "version": "0.0.1"
 }
+
