@@ -4,14 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _core = require("./core");
+var _DuraCore = require("./DuraCore");
 
-Object.keys(_core).forEach(function (key) {
+Object.keys(_DuraCore).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function get() {
-      return _core[key];
+      return _DuraCore[key];
     }
   });
 });

@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
 var _redux = require("redux");
 
 var _reduxActions = require("redux-actions");
@@ -14,6 +16,8 @@ var _duraUtil = require("dura-util");
 var reduxSagaEffects = _interopRequireWildcard(require("redux-saga/effects"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -127,10 +131,10 @@ function () {
     key: "_mapGenerateSaga",
     value:
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _mapGenerateSaga(effects) {
+    _regenerator.default.mark(function _mapGenerateSaga(effects) {
       var effectKs, _i, name, effect, watcher;
 
-      return regeneratorRuntime.wrap(function _mapGenerateSaga$(_context) {
+      return _regenerator.default.wrap(function _mapGenerateSaga$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -165,9 +169,9 @@ function () {
     key: "_getRootSaga",
     value:
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _getRootSaga(effects) {
+    _regenerator.default.mark(function _getRootSaga(effects) {
       var rootTask;
-      return regeneratorRuntime.wrap(function _getRootSaga$(_context3) {
+      return _regenerator.default.wrap(function _getRootSaga$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
@@ -179,8 +183,8 @@ function () {
               _context3.next = 5;
               return reduxSagaEffects.fork(
               /*#__PURE__*/
-              regeneratorRuntime.mark(function _callee() {
-                return regeneratorRuntime.wrap(function _callee$(_context2) {
+              _regenerator.default.mark(function _callee() {
+                return _regenerator.default.wrap(function _callee$(_context2) {
                   while (1) {
                     switch (_context2.prev = _context2.next) {
                       case 0:
@@ -252,13 +256,13 @@ function () {
         case 'takeLatest':
           return (
             /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee2() {
+            _regenerator.default.mark(function _callee2() {
               var _len,
                   args,
                   _key,
                   _args4 = arguments;
 
-              return regeneratorRuntime.wrap(function _callee2$(_context4) {
+              return _regenerator.default.wrap(function _callee2$(_context4) {
                 while (1) {
                   switch (_context4.prev = _context4.next) {
                     case 0:
@@ -281,13 +285,13 @@ function () {
         case 'takeLeading':
           return (
             /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee3() {
+            _regenerator.default.mark(function _callee3() {
               var _len2,
                   args,
                   _key2,
                   _args5 = arguments;
 
-              return regeneratorRuntime.wrap(function _callee3$(_context5) {
+              return _regenerator.default.wrap(function _callee3$(_context5) {
                 while (1) {
                   switch (_context5.prev = _context5.next) {
                     case 0:
@@ -310,13 +314,13 @@ function () {
         case 'throttle':
           return (
             /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee4() {
+            _regenerator.default.mark(function _callee4() {
               var _len3,
                   args,
                   _key3,
                   _args6 = arguments;
 
-              return regeneratorRuntime.wrap(function _callee4$(_context6) {
+              return _regenerator.default.wrap(function _callee4$(_context6) {
                 while (1) {
                   switch (_context6.prev = _context6.next) {
                     case 0:
@@ -339,13 +343,13 @@ function () {
         default:
           return (
             /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee5() {
+            _regenerator.default.mark(function _callee5() {
               var _len4,
                   args,
                   _key4,
                   _args7 = arguments;
 
-              return regeneratorRuntime.wrap(function _callee5$(_context7) {
+              return _regenerator.default.wrap(function _callee5$(_context7) {
                 while (1) {
                   switch (_context7.prev = _context7.next) {
                     case 0:

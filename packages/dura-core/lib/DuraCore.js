@@ -9,8 +9,6 @@ var _redux = require("redux");
 
 var _reduxSaga2 = _interopRequireDefault(require("redux-saga"));
 
-var _duraUtil = require("dura-util");
-
 var _PluginHandler = _interopRequireDefault(require("./PluginHandler"));
 
 var _ModelHandler = _interopRequireDefault(require("./ModelHandler"));
@@ -19,25 +17,12 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var defaultOptions = {
-  initialModel: []
-};
-
 function createDuraCore() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOptions;
-
-  var newOps = _objectSpread({}, defaultOptions, options);
-
   var pluginHandler = new _PluginHandler.default();
   var modelHandler = new _ModelHandler.default({
     pluginHandler: pluginHandler
   });
   var duraCore = {
-    _initialModel: newOps.initialModel,
     _reduxStore: undefined,
     _reduxSaga: undefined,
     _namespaces: {},
