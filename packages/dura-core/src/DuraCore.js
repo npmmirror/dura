@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from "redux-saga";
 import PluginHandler from './PluginHandler'
 import ModelHandler from './ModelHandler'
@@ -62,10 +62,11 @@ function createDuraCore() {
     }
 
     function start() {
+        const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
         duraCore._reduxSaga = createSagaMiddleware();
         duraCore._reduxStore = createStore(
             modelHandler.getCombineReducers(),
-            applyMiddleware(duraCore._reduxSaga)
+            composeEnhancers(applyMiddleware(duraCore._reduxSaga))
         )
         const onStateChangeEventFuns = pluginHandler.getOnStateChangeEventFun();
         for (const fun of onStateChangeEventFuns) {

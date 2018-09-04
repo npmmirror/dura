@@ -80,8 +80,9 @@ function createDuraCore() {
   }
 
   function start() {
+    var composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || _redux.compose;
     duraCore._reduxSaga = (0, _reduxSaga2.default)();
-    duraCore._reduxStore = (0, _redux.createStore)(modelHandler.getCombineReducers(), (0, _redux.applyMiddleware)(duraCore._reduxSaga));
+    duraCore._reduxStore = (0, _redux.createStore)(modelHandler.getCombineReducers(), composeEnhancers((0, _redux.applyMiddleware)(duraCore._reduxSaga)));
     var onStateChangeEventFuns = pluginHandler.getOnStateChangeEventFun();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
