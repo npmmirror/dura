@@ -36,8 +36,9 @@ class ModelHandler {
     }
 
     getCombineReducers() {
+        let len = this._getModels().length
         return combineReducers(
-            this._getModels().map(
+            this._getModels().slice(0,len).map(
                 ({namespace, reducers = {}, initialState = {}}) =>
                     ({[namespace]: handleActions(this._applyOnReducerEvent(Object.keys(reducers), reducers, {}), initialState)})
             ).reduce(this._reduce, {})

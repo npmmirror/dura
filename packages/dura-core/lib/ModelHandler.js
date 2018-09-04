@@ -85,7 +85,9 @@ function () {
     value: function getCombineReducers() {
       var _this = this;
 
-      return (0, _redux.combineReducers)(this._getModels().map(function (_ref2) {
+      var len = this._getModels().length;
+
+      return (0, _redux.combineReducers)(this._getModels().slice(0, len).map(function (_ref2) {
         var namespace = _ref2.namespace,
             _ref2$reducers = _ref2.reducers,
             reducers = _ref2$reducers === void 0 ? {} : _ref2$reducers,

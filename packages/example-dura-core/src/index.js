@@ -29,11 +29,11 @@ class A extends React.Component{
     componentWillMount(){
         duraStore.addModel(modelA)
         duraStore.restart();
+        console.log(duraStore._reduxStore.getState())
     }
 
     componentWillUnmount(){
         duraStore.delModel("am")
-        duraStore.restart();
     }
 
     render(){
@@ -49,11 +49,11 @@ class B extends React.Component{
     componentWillMount(){
         duraStore.addModel(modelB)
         duraStore.restart();
+        console.log(duraStore._reduxStore.getState())
     }
 
     componentWillUnmount(){
         duraStore.delModel("bm")
-        duraStore.restart();
     }
 
     render(){
@@ -69,11 +69,11 @@ class C extends React.Component{
     componentWillMount(){
         duraStore.addModel(modelC)
         duraStore.restart();
+        console.log(duraStore._reduxStore.getState())
     }
 
     componentWillUnmount(){
         duraStore.delModel("cm")
-        duraStore.restart();
     }
 
     render(){
