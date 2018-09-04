@@ -122,16 +122,16 @@ function createDuraCore() {
     var _reduxStore = duraCore._reduxStore,
         _reduxSaga = duraCore._reduxSaga;
 
-    _reduxStore.replaceReducer(modelHandler.getCombineReducers());
-
-    _reduxStore.dispatch({
-      type: '@@duraCore/reducers/onChangeState'
-    });
-
     _reduxStore.dispatch({
       type: '@@dura/cancel'
     });
 
+    _reduxStore.replaceReducer(modelHandler.getCombineReducers());
+
     _reduxSaga.run(modelHandler.getCombineEffects());
+
+    _reduxStore.dispatch({
+      type: '@@duraCore/reducers/onChangeState'
+    });
   }
 }

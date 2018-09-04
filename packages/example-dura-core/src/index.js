@@ -34,7 +34,6 @@ class A extends React.Component{
     componentWillUnmount(){
         duraStore.delModel("am")
         duraStore.restart();
-        duraStore.restart();
     }
 
     render(){
