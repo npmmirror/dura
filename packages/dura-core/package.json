@@ -1,6 +1,6 @@
 {
   "name": "dura-core",
-  "version": "0.0.2-alpha.11",
+  "version": "0.0.2-alpha.12",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dura-util": "^0.0.2-alpha.11",
+    "dura-util": "^0.0.2-alpha.12",
     "invariant": "^2.2.4",
     "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",
@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.0.0",
-    "dura-plugin-immer": "^0.0.2-alpha.11",
-    "dura-plugin-status": "^0.0.2-alpha.11",
+    "dura-plugin-immer": "^0.0.2-alpha.12",
+    "dura-plugin-status": "^0.0.2-alpha.12",
     "immer": "^1.5.0"
   }
 }

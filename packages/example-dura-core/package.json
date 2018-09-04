@@ -1,6 +1,6 @@
 {
   "name": "example-dura-core",
-  "version": "1.0.0",
+  "version": "0.0.2-alpha.12",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dura-core": "0.0.2-alpha.11",
+    "dura-core": "^0.0.2-alpha.12",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
