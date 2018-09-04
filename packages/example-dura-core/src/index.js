@@ -1,46 +1,99 @@
 import React from 'react'
 import {render} from 'react-dom'
 import {createDuraCore} from 'dura-core/lib'
-import {HashRouter , Route , Switch,Link} from 'react-router-dom'
+import {HashRouter, Route, Switch, Link} from 'react-router-dom'
 
 const duraStore = createDuraCore()
 
 duraStore.start()
 
 const modelA = {
-    namespace:'am',
-    initialState:{
-        name:'a'
+    namespace: 'am',
+    initialState: {
+        name: 'a'
     }
-},modelB = {
-    namespace:'bm',
-    initialState:{
-        name:'b'
+}, modelB = {
+    namespace: 'bm',
+    initialState: {
+        name: 'b'
     }
-},modelC = {
-    namespace:'cm',
-    initialState:{
-        name:'c'
+}, modelC = {
+    namespace: 'cm',
+    initialState: {
+        name: 'c'
     }
 }
 
-duraStore.addModel(modelA , modelB , modelC)
+class A extends React.Component{
 
-duraStore.restart();
+    componentWillMount(){
+        duraStore.addModel(modelA)
+        duraStore.restart();
+    }
 
+    componentWillUnmount(){
+        duraStore.delModel("am")
+        duraStore.restart();
+        duraStore.restart();
+    }
 
-function A(){
-    return <h1>A</h1>
+    render(){
+        return(
+            <h1>A</h1>
+        )
+    }
+
 }
 
-function B(){
-    return <h1>B</h1>
+class B extends React.Component{
+
+    componentWillMount(){
+        duraStore.addModel(modelB)
+        duraStore.restart();
+    }
+
+    componentWillUnmount(){
+        duraStore.delModel("bm")
+        duraStore.restart();
+    }
+
+    render(){
+        return(
+            <h1>B</h1>
+        )
+    }
+
 }
 
-function C(){
-    return <h1>C</h1>
+class C extends React.Component{
+
+    componentWillMount(){
+        duraStore.addModel(modelC)
+        duraStore.restart();
+    }
+
+    componentWillUnmount(){
+        duraStore.delModel("cm")
+        duraStore.restart();
+    }
+
+    render(){
+        return(
+            <h1>C</h1>
+        )
+    }
+
 }
 
+function X(props) {
+    console.log(props)
+    return (
+        <div>
+            <Route exact path={`${props.match.url}/b`} component={B} />
+            <Route exact path={`${props.match.url}/c`} component={C} />
+        </div>
+    )
+}
 
 render(
     <HashRouter>
@@ -50,16 +103,15 @@ render(
                     <Link to="/a">A</Link>
                 </li>
                 <li>
-                    <Link to="/b">B</Link>
+                    <Link to="/x/b">B</Link>
                 </li>
                 <li>
-                    <Link to="/c">C</Link>
+                    <Link to="/x/c">C</Link>
                 </li>
             </ul>
             <Switch>
                 <Route exact path="/a" component={A} />
-                <Route exact path="/b" component={B} />
-                <Route exact path="/c" component={C} />
+                <Route path="/x"  component={X}/>
             </Switch>
         </div>
     </HashRouter>
