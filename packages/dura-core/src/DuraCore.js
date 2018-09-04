@@ -4,13 +4,7 @@ import PluginHandler from './PluginHandler'
 import ModelHandler from './ModelHandler'
 import invariant from "invariant";
 
-const defaultOptions = {
-    initialModel: []
-}
-
-function createDuraCore(options = defaultOptions) {
-
-    const newOps = {...defaultOptions, ...options}
+function createDuraCore() {
 
     const pluginHandler = new PluginHandler();
 
@@ -19,7 +13,6 @@ function createDuraCore(options = defaultOptions) {
     });
 
     const duraCore = {
-        _initialModel: newOps.initialModel,
         _reduxStore: undefined,
         _reduxSaga: undefined,
         _namespaces: {},
@@ -69,7 +62,6 @@ function createDuraCore(options = defaultOptions) {
     }
 
     function start() {
-
         duraCore._reduxSaga = createSagaMiddleware();
         duraCore._reduxStore = createStore(
             modelHandler.getCombineReducers(),
@@ -85,14 +77,11 @@ function createDuraCore(options = defaultOptions) {
     }
 
     function restart() {
-
         const {_reduxStore, _reduxSaga} = duraCore
-
         _reduxStore.replaceReducer(modelHandler.getCombineReducers());
         _reduxStore.dispatch({type: '@@duraCore/reducers/onChangeState'})
         _reduxStore.dispatch({type: '@@dura/cancel'})
         _reduxSaga.run(modelHandler.getCombineEffects())
-
     }
 
 }

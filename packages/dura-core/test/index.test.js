@@ -1,5 +1,4 @@
 import {createDuraCore} from '../src/index'
-import produce from 'immer'
 import DuraImmer from 'dura-plugin-immer'
 import {delay} from 'redux-saga/effects'
 import DuraStatus from 'dura-plugin-status'
