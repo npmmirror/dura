@@ -14,10 +14,10 @@
     "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",
     "redux-actions": "^2.6.1",
-    "redux-saga": "^1.0.0-beta"
+    "redux-saga": "^1.0.0-beta",
+    "@babel/plugin-transform-runtime": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.0.0",
     "dura-plugin-immer": "^0.0.1-alpha.3",
     "dura-plugin-status": "^0.0.1-alpha.3",
     "immer": "^1.5.0"
