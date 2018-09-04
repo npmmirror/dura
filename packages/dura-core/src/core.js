@@ -1,6 +1,5 @@
 import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from "redux-saga";
-import {recursiveEnhanceFun} from 'dura-util'
 import PluginHandler from './PluginHandler'
 import ModelHandler from './ModelHandler'
 import invariant from "invariant";
