@@ -1,6 +1,6 @@
 {
   "name": "dura-core",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.7",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.0.0",
-    "dura-plugin-immer": "^0.0.1-alpha.6",
-    "dura-plugin-status": "^0.0.1-alpha.6",
+    "dura-plugin-immer": "^0.0.1-alpha.7",
+    "dura-plugin-status": "^0.0.1-alpha.7",
     "immer": "^1.5.0"
   }
 }
