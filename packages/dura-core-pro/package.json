@@ -1,0 +1,11 @@
+{
+  "name": "dura-core-pro",
+  "version": "0.0.1-alpha.10",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && npx babel ./src -d ./lib"
+  },
+  "author": "",
+  "license": "ISC"
+}
