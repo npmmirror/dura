@@ -3,15 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _DuraCore = require("./DuraCore");
-
-Object.keys(_DuraCore).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _DuraCore[key];
-    }
-  });
+Object.defineProperty(exports, "createDuraCore", {
+  enumerable: true,
+  get: function get() {
+    return _DuraCore.default;
+  }
 });
+
+var _DuraCore = _interopRequireDefault(require("./DuraCore"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

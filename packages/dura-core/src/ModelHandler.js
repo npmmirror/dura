@@ -1,166 +1,116 @@
 import {combineReducers} from 'redux'
 import {handleActions} from 'redux-actions'
-import {recursiveEnhanceFun} from 'dura-util'
 import * as reduxSagaEffects from "redux-saga/effects";
 
-class ModelHandler {
-
-    models = [];
-
-    pluginHandler = undefined;
-
-    defaultModels = [
-        {
-            namespace: '@@duraCore',
-            initialState: {
-                count: 0
-            },
-            reducers: {
-                onChangeState(state) {
-                    return ({...state, count: state.count + 1});
-                }
-            }
-        }
-    ]
-
-    constructor({pluginHandler}) {
-        this.pluginHandler = pluginHandler;
+const defaultCore = {
+    namespace: '@@duraCore',
+    initialState: 0,
+    reducers: {
+        onChangeCount: (state) => state + 1
     }
-
-    addModel(model) {
-        this.models.push(this._additionalNamespacePrefix(model))
-    }
-
-    delModel(namespace) {
-        this.models = this.models.filter((model) => model.namespace !== namespace)
-    }
-
-    getCombineReducers() {
-        let len = this._getModels().length
-        return combineReducers(
-            this._getModels().slice(0,len).map(
-                ({namespace, reducers = {}, initialState = {}}) =>
-                    ({[namespace]: handleActions(this._applyOnReducerEvent(Object.keys(reducers), reducers, {}), initialState)})
-            ).reduce(this._reduce, {})
-        )
-    }
-
-    getCombineEffects() {
-        const effects = this._getModels().map(({effects}) => effects).reduce((prev, next) => ({...prev, ...next}), {})
-        return this._getRootSaga.bind(this, effects)
-    }
-
-    _getModels() {
-
-        const defaultModels = this.defaultModels.map(model => this._additionalNamespacePrefix(model))
-
-        const pluginModels = this.pluginHandler.plugins.filter(plugin => plugin.reducers).map(plugin => ({
-            namespace: plugin.namespace,
-            initialState: plugin.initialState || {},
-            reducers: plugin.reducers
-        })).map(pluginModel => this._additionalNamespacePrefix(pluginModel))
-
-        return defaultModels
-            .concat(this.models)
-            .concat(pluginModels)
-    }
-
-    * _mapGenerateSaga(effects) {
-        const effectKs = Object.keys(effects);
-        for (const name of effectKs) {
-            const effect = this._packEffect(name, effects[name]);
-            const watcher = this._getWatcher(effect);
-            yield reduxSagaEffects.fork(watcher)
-        }
-    }
-
-    * _getRootSaga(effects) {
-        const rootTask = yield reduxSagaEffects.fork(this._mapGenerateSaga.bind(this, effects))
-        yield reduxSagaEffects.fork(function* () {
-            yield reduxSagaEffects.take(`@@dura/cancel`)
-            yield reduxSagaEffects.cancel(rootTask)
-        })
-    }
-
-    _packEffect(name, effect) {
-        const defaultType = 'takeEvery';
-        const newEffect = {
-            name: name,
-            saga: undefined,
-            type: defaultType,
-            ms: 100
-        }
-        const onEffectEventFuns = this.pluginHandler.getOnEffectEventFun();
-        if (!Array.isArray(effect)) {
-            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, effect, name, reduxSagaEffects);
-        } else {
-            const [saga, conf] = effect;
-            if (!typeof  conf) {
-                newEffect.type = defaultType;
-            } else if (typeof conf === 'string') {
-                newEffect.type = conf;
-            } else if (typeof conf === 'object') {
-                newEffect.type = conf?.type || defaultType;
-            } else {
-                newEffect.type = defaultType;
-            }
-            newEffect.saga = recursiveEnhanceFun(onEffectEventFuns, saga, name, reduxSagaEffects);
-        }
-        return newEffect;
-    }
-
-    _getWatcher(effect) {
-        const {name, saga, type, ms} = effect;
-        switch (type) {
-            case 'takeLatest':
-                return function* (...args) {
-                    yield reduxSagaEffects.takeLatest(name, saga, reduxSagaEffects, args);
-                }
-            case 'takeLeading':
-                return function* (...args) {
-                    yield reduxSagaEffects.takeLeading(name, saga, reduxSagaEffects, args);
-                }
-            case 'throttle':
-                return function* (...args) {
-                    yield reduxSagaEffects.throttle(ms, name, saga, reduxSagaEffects, args);
-                }
-            default:
-                return function* (...args) {
-                    yield reduxSagaEffects.takeEvery(name, saga, reduxSagaEffects, args);
-                }
-        }
-    }
-
-    _applyOnReducerEvent(reducerKeys, reducers, nextReducers) {
-        const first = reducerKeys.shift();
-        if (first) {
-            return this._applyOnReducerEvent(reducerKeys, reducers, {
-                ...nextReducers,
-                [first]: recursiveEnhanceFun(this.pluginHandler.getOnReducerEventFun(), reducers[first])
-            })
-        }
-        return nextReducers
-    }
-
-    _additionalNamespacePrefix(model) {
-        const {namespace, reducers = {}, effects = {}, initialState = {}} = model
-        const [newReducers, newEffects] = [
-            this._rename(namespace, reducers, 'reducers'),
-            this._rename(namespace, effects, 'effects')
-        ]
-        return ({
-            namespace, initialState, reducers: newReducers, effects: newEffects
-        })
-    }
-
-    _reduce(prev, next) {
-        return ({...prev, ...next})
-    }
-
-    _rename(namespace, argObj, type) {
-        return Object.keys(argObj).map((key) => ({[`${namespace}/${type}/${key}`]: argObj[key]})).reduce(this._reduce, {})
-    }
-
 }
 
-export default ModelHandler
+const rename = (namespace, argObj, type) =>
+    Object.keys(argObj).map((key) =>
+        ({[`${namespace}/${type}/${key}`]: argObj[key]})).reduce(reduce, {})
+
+const reduce = (prev, next) => ({...prev, ...next})
+
+const additionalNamespacePrefix = (model) => {
+    const {namespace, reducers = {}, effects = {}, initialState = {}} = model
+    return ({
+        namespace,
+        initialState,
+        reducers: rename(namespace, reducers, 'reducers'),
+        effects: rename(namespace, effects, 'effects')
+    })
+}
+
+const mapModelToCombineReducers =
+    ({namespace, reducers, initialState}) =>
+        ({[namespace]: handleActions(reducers, initialState)})
+
+const getWatcher = (effect) => {
+    const {name, saga, type, ms} = effect;
+    switch (type) {
+        case 'takeLatest':
+            return function* (...args) {
+                yield reduxSagaEffects.takeLatest(name, saga, reduxSagaEffects, ...args);
+            }
+        case 'takeLeading':
+            return function* (...args) {
+                yield reduxSagaEffects.takeLeading(name, saga, reduxSagaEffects, ...args);
+            }
+        case 'throttle':
+            return function* (...args) {
+                yield reduxSagaEffects.throttle(ms, name, saga, reduxSagaEffects, ...args);
+            }
+        default:
+            return function* (...args) {
+                yield reduxSagaEffects.takeEvery(name, saga, reduxSagaEffects, ...args);
+            }
+    }
+}
+
+const enhanceEffect = (name, effect) => {
+    const defaultType = 'takeEvery';
+    const newEffect = {
+        name: name,
+        saga: effect,
+        type: defaultType,
+        ms: 100
+    }
+    if (Array.isArray(effect)) {
+        const [one, two] = effect
+        newEffect.saga = one
+        if (typeof two === 'string') {
+            newEffect.type = two;
+        } else if (typeof two === 'object') {
+            newEffect.type = two?.type || defaultType;
+            if (two?.type === 'throttle') {
+                newEffect.ms = two?.ms
+            }
+        } else {
+            newEffect.type = defaultType;
+        }
+    }
+    return newEffect;
+}
+
+const mapGenerateSaga = function* (effects) {
+    const effectKs = Object.keys(effects);
+    for (const name of effectKs) {
+        const effect = enhanceEffect(name, effects[name]);
+        const watcher = getWatcher(effect);
+        yield reduxSagaEffects.fork(watcher)
+    }
+}
+
+const getRootSaga = function* (effects) {
+    const rootTask = yield reduxSagaEffects.fork(mapGenerateSaga.bind(this, effects))
+    yield reduxSagaEffects.fork(function* () {
+        yield reduxSagaEffects.take(`@@dura/cancel`)
+        yield reduxSagaEffects.cancel(rootTask)
+    })
+}
+
+const enhanceModels = (models) =>
+    [defaultCore].concat(models).map(m => additionalNamespacePrefix(m));
+
+
+const getCombineReducers = (models) =>
+    combineReducers(
+        enhanceModels(models).map(mapModelToCombineReducers).reduce(reduce, {})
+    )
+
+const getCombineEffects = (models) =>
+    getRootSaga.bind(
+        this,
+        enhanceModels(models).map(({effects}) => effects).reduce(reduce, {})
+    )
+
+
+export {
+    getCombineReducers,
+    getCombineEffects,
+}

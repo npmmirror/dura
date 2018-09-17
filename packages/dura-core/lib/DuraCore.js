@@ -3,135 +3,58 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createDuraCore = createDuraCore;
+exports.default = _default;
 
 var _redux = require("redux");
 
-var _reduxSaga2 = _interopRequireDefault(require("redux-saga"));
+var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 
-var _PluginHandler = _interopRequireDefault(require("./PluginHandler"));
-
-var _ModelHandler = _interopRequireDefault(require("./ModelHandler"));
-
-var _invariant = _interopRequireDefault(require("invariant"));
+var _ModelHandler = require("./ModelHandler");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function createDuraCore() {
-  var pluginHandler = new _PluginHandler.default();
-  var modelHandler = new _ModelHandler.default({
-    pluginHandler: pluginHandler
-  });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _default(_ref) {
+  var models = _ref.models,
+      _ref$middleware = _ref.middleware,
+      middleware = _ref$middleware === void 0 ? [] : _ref$middleware,
+      _ref$enhancers = _ref.enhancers,
+      enhancers = _ref$enhancers === void 0 ? [] : _ref$enhancers;
   var duraCore = {
-    _reduxStore: undefined,
-    _reduxSaga: undefined,
-    _namespaces: {},
-    addModel: addModel,
-    delModel: delModel,
-    addPlugin: addPlugin,
-    start: start,
-    restart: restart
+    dispatch: undefined,
+    getState: undefined,
+    subscribe: undefined,
+    replaceModel: replaceModel //redux-dev-tools enhancers
+
   };
-  return duraCore;
+  var composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || _redux.compose; //create redux-saga middleware
 
-  function validate(target) {
-    var namespace = target.namespace; //必须有namespace
+  var reduxSaga = (0, _reduxSaga.default)(); //create redux store
 
-    (0, _invariant.default)(namespace, "namespace should be defined"); //必须是string类型
+  var reduxStore = (0, _redux.createStore)((0, _ModelHandler.getCombineReducers)(models), composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
 
-    (0, _invariant.default)(typeof namespace === 'string', "namespace should be string"); //必须唯一
+  reduxSaga.run((0, _ModelHandler.getCombineEffects)(models));
+  duraCore.dispatch = reduxStore.dispatch;
+  duraCore.getState = reduxStore.getState;
+  duraCore.subscribe = reduxStore.subscribe;
 
-    (0, _invariant.default)(!duraCore._namespaces[namespace], "namespace should be unique , the repeated namespace is ".concat(namespace));
-  }
-
-  function addPlugin() {
-    for (var _len = arguments.length, plugins = new Array(_len), _key = 0; _key < _len; _key++) {
-      plugins[_key] = arguments[_key];
-    }
-
-    plugins.forEach(function (plugin) {
-      validate(plugin);
-      duraCore._namespaces[plugin.namespace] = plugin;
-      pluginHandler.addPlugin(plugin);
-    });
-  }
-
-  function addModel() {
-    for (var _len2 = arguments.length, models = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      models[_key2] = arguments[_key2];
-    }
-
-    models.forEach(function (model) {
-      validate(model);
-      duraCore._namespaces[model.namespace] = model;
-      modelHandler.addModel(model);
-    });
-  }
-
-  function delModel() {
-    for (var _len3 = arguments.length, namespaces = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      namespaces[_key3] = arguments[_key3];
-    }
-
-    namespaces.forEach(function (namespace) {
-      delete duraCore._namespaces[namespace];
-      modelHandler.delModel(namespace);
-    });
-  }
-
-  function start() {
-    var composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || _redux.compose;
-    duraCore._reduxSaga = (0, _reduxSaga2.default)();
-    duraCore._reduxStore = (0, _redux.createStore)(modelHandler.getCombineReducers(), composeEnhancers((0, _redux.applyMiddleware)(duraCore._reduxSaga)));
-    var onStateChangeEventFuns = pluginHandler.getOnStateChangeEventFun();
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      var _loop = function _loop() {
-        var fun = _step.value;
-
-        duraCore._reduxStore.subscribe(function () {
-          fun(duraCore._reduxStore.getState());
-        });
-      };
-
-      for (var _iterator = onStateChangeEventFuns[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        _loop();
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-
-    duraCore._reduxSaga.run(modelHandler.getCombineEffects());
-  }
-
-  function restart() {
-    var _reduxStore = duraCore._reduxStore,
-        _reduxSaga = duraCore._reduxSaga;
-
-    _reduxStore.dispatch({
+  function replaceModel(nextModels) {
+    reduxStore.dispatch({
       type: '@@dura/cancel'
     });
-
-    _reduxStore.replaceReducer(modelHandler.getCombineReducers());
-
-    _reduxSaga.run(modelHandler.getCombineEffects());
-
-    _reduxStore.dispatch({
-      type: '@@duraCore/reducers/onChangeState'
+    reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
+    reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
+    reduxStore.dispatch({
+      type: '@@duraCore/reducers/onChangeCount'
     });
   }
+
+  return duraCore;
 }

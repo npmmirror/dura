@@ -1,1 +1,6 @@
-export * from './DuraCore'
+
+import createDuraCore from './DuraCore'
+
+export {
+    createDuraCore
+}
