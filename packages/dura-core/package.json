@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "dura-util": "^0.0.2-alpha.11",
     "invariant": "^2.2.4",
     "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",

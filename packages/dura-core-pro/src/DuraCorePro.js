@@ -1,4 +1,5 @@
 import {createDuraCore} from "dura-core";
+import {recursiveEnhanceFun} from 'dura-util'
 
 const defaultOps = {
     initialModels: [],
@@ -6,6 +7,12 @@ const defaultOps = {
     enhancers: [],
     plugins: []
 };
+
+const enhanceReducer = function (reducers, onReducers) {
+    return Object.keys(reducers).map(
+        (key) => ({[key]: recursiveEnhanceFun(onReducers, reducers[key])})
+    ).reduce((prev, next) => ({...prev, ...next}), {})
+}
 
 export default function (ops = defaultOps) {
 
@@ -16,13 +23,18 @@ export default function (ops = defaultOps) {
         addModel, delModel, clear, destroy, refresh
     };
 
+    const onReducers = duraCorePro.plugins.filter(({onReducer}) => onReducer).map(({onReducer}) => onReducer)
+
     const duraCore = createDuraCore({
-        models: duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins)
+        models: [
+            ...duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins)
+        ].map(({namespace, initialState, reducers = {}, effects}) => ({
+            namespace, initialState, effects,
+            reducers: enhanceReducer(reducers, onReducers)
+        }))
     });
 
-    console.log(duraCore)
-
-    duraCorePro.getState = duraCore.getState
+    duraCorePro.reduxStore = duraCore.reduxStore
 
     function addModel(model) {
         duraCorePro.models.push(model)

@@ -1,5 +1,8 @@
 import recursiveEnhanceFun from './recursive'
+import { objectReduce , arrayReduce } from './reduce'
 
 export {
-    recursiveEnhanceFun
+    recursiveEnhanceFun,
+    objectReduce,
+    arrayReduce
 }

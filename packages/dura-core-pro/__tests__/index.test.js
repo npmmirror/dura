@@ -1,5 +1,6 @@
 import {createDuraCorePro} from '../src/index'
-
+import DuraImmer from 'dura-plugin-immer'
+import DuraStatus from 'dura-plugin-status'
 
 describe('dura-core-pro', function () {
 
@@ -9,6 +10,12 @@ describe('dura-core-pro', function () {
             namespace: 'default',
             initialState: {
                 name: '张三'
+            },
+            reducers:{
+                onChangeName(state,action){
+                    console.log(action)
+                    state.name = action?.payload?.name
+                }
             }
         }, default2Model = {
             namespace: 'default2',
@@ -18,21 +25,20 @@ describe('dura-core-pro', function () {
         };
 
         const duraCorePro = createDuraCorePro({
-            initialModels: [defaultModel]
+            initialModels: [defaultModel],
+            plugins: [DuraImmer, DuraStatus]
+        })
+        
+        console.log(duraCorePro.reduxStore.getState())
+
+        duraCorePro.reduxStore.dispatch({
+            type:'default/reducers/onChangeName',
+            payload:{
+                name:'李四'
+            }
         })
 
-        console.log("初始化", duraCorePro.getState())
+        console.log(duraCorePro.reduxStore.getState())
 
-        duraCorePro.addModel(default2Model).refresh()
-
-        console.log("新增了default2", duraCorePro.getState())
-
-        duraCorePro.delModel("default2").refresh()
-
-        console.log("删除了default2", duraCorePro.getState())
-
-        duraCorePro.destroy().refresh()
-
-        console.log("销毁", duraCorePro.getState())
     })
 })
