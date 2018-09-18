@@ -17,8 +17,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultOps = {
@@ -31,9 +29,53 @@ var defaultOps = {
 var enhanceReducer = function enhanceReducer(reducers, onReducers) {
   return Object.keys(reducers).map(function (key) {
     return _defineProperty({}, key, (0, _duraUtil.recursiveEnhanceFun)(onReducers, reducers[key]));
-  }).reduce(function (prev, next) {
-    return _objectSpread({}, prev, next);
-  }, {});
+  }).reduce(_duraUtil.objectReduce, {});
+};
+
+var enhanceEffect = function enhanceEffect(effects, onEffects) {
+  return Object.keys(effects).map(function (key) {
+    return _defineProperty({}, key, (0, _duraUtil.recursiveEnhanceFun)(onEffects, effects[key], name));
+  }).reduce(_duraUtil.objectReduce, {});
+};
+
+var enhanceModels = function enhanceModels(duraCorePro) {
+  var plugins = duraCorePro.plugins;
+  var onReducers = plugins.filter(function (_ref3) {
+    var onReducer = _ref3.onReducer;
+    return onReducer;
+  }).map(function (_ref4) {
+    var onReducer = _ref4.onReducer;
+    return onReducer;
+  });
+  var onEffects = plugins.filter(function (_ref5) {
+    var onEffect = _ref5.onEffect;
+    return onEffect;
+  }).map(function (_ref6) {
+    var onEffect = _ref6.onEffect;
+    return onEffect;
+  });
+  return mergeModels(duraCorePro).map(function (_ref7) {
+    var namespace = _ref7.namespace,
+        _ref7$initialState = _ref7.initialState,
+        initialState = _ref7$initialState === void 0 ? {} : _ref7$initialState,
+        _ref7$reducers = _ref7.reducers,
+        reducers = _ref7$reducers === void 0 ? {} : _ref7$reducers,
+        _ref7$effects = _ref7.effects,
+        effects = _ref7$effects === void 0 ? {} : _ref7$effects;
+    return {
+      namespace: namespace,
+      initialState: initialState,
+      reducers: enhanceReducer(reducers, onReducers),
+      effects: enhanceEffect(effects, onEffects)
+    };
+  });
+};
+
+var mergeModels = function mergeModels(duraCorePro) {
+  var initialModels = duraCorePro.initialModels,
+      plugins = duraCorePro.plugins,
+      models = duraCorePro.models;
+  return _toConsumableArray(initialModels.concat(models).concat(plugins));
 };
 
 function _default() {
@@ -48,27 +90,8 @@ function _default() {
     destroy: destroy,
     refresh: refresh
   };
-  var onReducers = duraCorePro.plugins.filter(function (_ref2) {
-    var onReducer = _ref2.onReducer;
-    return onReducer;
-  }).map(function (_ref3) {
-    var onReducer = _ref3.onReducer;
-    return onReducer;
-  });
   var duraCore = (0, _duraCore.createDuraCore)({
-    models: _toConsumableArray(duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins)).map(function (_ref4) {
-      var namespace = _ref4.namespace,
-          initialState = _ref4.initialState,
-          _ref4$reducers = _ref4.reducers,
-          reducers = _ref4$reducers === void 0 ? {} : _ref4$reducers,
-          effects = _ref4.effects;
-      return {
-        namespace: namespace,
-        initialState: initialState,
-        effects: effects,
-        reducers: enhanceReducer(reducers, onReducers)
-      };
-    })
+    models: enhanceModels(duraCorePro)
   });
   duraCorePro.reduxStore = duraCore.reduxStore;
 

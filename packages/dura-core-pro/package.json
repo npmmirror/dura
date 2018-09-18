@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "dura-core": "^0.0.1-alpha.21",
     "dura-util": "^0.0.1-alpha.21"
   },

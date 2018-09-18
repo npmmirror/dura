@@ -11,10 +11,18 @@ describe('dura-core-pro', function () {
             initialState: {
                 name: '张三'
             },
-            reducers:{
-                onChangeName(state,action){
+            reducers: {
+                onChangeName(state, action) {
                     console.log(action)
                     state.name = action?.payload?.name
+                }
+            },
+            effects: {
+                * onChangeName({put}, action) {
+                    put({
+                        type: 'default/reducers/onChangeName',
+                        payload: action?.payload
+                    })
                 }
             }
         }, default2Model = {
@@ -28,13 +36,13 @@ describe('dura-core-pro', function () {
             initialModels: [defaultModel],
             plugins: [DuraImmer, DuraStatus]
         })
-        
+
         console.log(duraCorePro.reduxStore.getState())
 
         duraCorePro.reduxStore.dispatch({
-            type:'default/reducers/onChangeName',
-            payload:{
-                name:'李四'
+            type: 'default/reducers/onChangeName',
+            payload: {
+                name: '李四'
             }
         })
 

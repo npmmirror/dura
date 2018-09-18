@@ -1,5 +1,5 @@
 import {createDuraCore} from "dura-core";
-import {recursiveEnhanceFun} from 'dura-util'
+import {recursiveEnhanceFun, objectReduce} from 'dura-util'
 
 const defaultOps = {
     initialModels: [],
@@ -11,7 +11,35 @@ const defaultOps = {
 const enhanceReducer = function (reducers, onReducers) {
     return Object.keys(reducers).map(
         (key) => ({[key]: recursiveEnhanceFun(onReducers, reducers[key])})
-    ).reduce((prev, next) => ({...prev, ...next}), {})
+    ).reduce(objectReduce, {})
+}
+
+const enhanceEffect = function (effects, onEffects) {
+    return Object.keys(effects).map(
+        (key) => ({[key]: recursiveEnhanceFun(onEffects, effects[key], name)})
+    ).reduce(objectReduce, {})
+}
+
+const enhanceModels = function (duraCorePro) {
+
+    const {plugins} = duraCorePro
+
+    const onReducers = plugins.filter(({onReducer}) => onReducer).map(({onReducer}) => onReducer)
+    const onEffects = plugins.filter(({onEffect}) => onEffect).map(({onEffect}) => onEffect)
+
+    return mergeModels(duraCorePro).map(function ({namespace, initialState = {}, reducers = {}, effects = {}}) {
+        return ({
+            namespace,
+            initialState,
+            reducers: enhanceReducer(reducers, onReducers),
+            effects: enhanceEffect(effects, onEffects)
+        })
+    })
+}
+
+const mergeModels = function (duraCorePro) {
+    const {initialModels, plugins, models} = duraCorePro
+    return [...initialModels.concat(models).concat(plugins)]
 }
 
 export default function (ops = defaultOps) {
@@ -23,15 +51,8 @@ export default function (ops = defaultOps) {
         addModel, delModel, clear, destroy, refresh
     };
 
-    const onReducers = duraCorePro.plugins.filter(({onReducer}) => onReducer).map(({onReducer}) => onReducer)
-
     const duraCore = createDuraCore({
-        models: [
-            ...duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins)
-        ].map(({namespace, initialState, reducers = {}, effects}) => ({
-            namespace, initialState, effects,
-            reducers: enhanceReducer(reducers, onReducers)
-        }))
+        models: enhanceModels(duraCorePro)
     });
 
     duraCorePro.reduxStore = duraCore.reduxStore

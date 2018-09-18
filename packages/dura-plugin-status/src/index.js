@@ -6,16 +6,16 @@ export default {
             return {...state, ...payload}
         }
     },
-    onEffect: function (effect, name, {put}) {
-        return function* (...args) {
-            yield put({
+    onEffect: function (effect, name) {
+        return function* (reduxEffect, action) {
+            yield reduxEffect.put({
                 type: '@@duraStatus/reducers/onChangeStatus',
                 payload: {
                     [name]: true
                 }
             })
-            yield effect(...args)
-            yield put({
+            yield effect(reduxEffect, action)
+            yield reduxEffect.put({
                 type: '@@duraStatus/reducers/onChangeStatus',
                 payload: {
                     [name]: false

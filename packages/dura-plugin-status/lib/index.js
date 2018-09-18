@@ -18,29 +18,27 @@ var _default = {
       return _objectSpread({}, state, payload);
     }
   },
-  onEffect: function onEffect(effect, name, _ref2) {
-    var put = _ref2.put;
+  onEffect: function onEffect(effect, name) {
     return (
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var _args = arguments;
+      regeneratorRuntime.mark(function _callee(reduxEffect, action) {
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return put({
+                return reduxEffect.put({
                   type: '@@duraStatus/reducers/onChangeStatus',
                   payload: _defineProperty({}, name, true)
                 });
 
               case 2:
                 _context.next = 4;
-                return effect.apply(void 0, _args);
+                return effect(reduxEffect, action);
 
               case 4:
                 _context.next = 6;
-                return put({
+                return reduxEffect.put({
                   type: '@@duraStatus/reducers/onChangeStatus',
                   payload: _defineProperty({}, name, false)
                 });
