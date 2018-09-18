@@ -1,6 +1,6 @@
 {
   "name": "dura-core",
-  "version": "0.0.1-alpha.20",
+  "version": "0.0.1-alpha.21",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -21,8 +21,8 @@
     "redux-actions": "^2.6.1"
   },
   "devDependencies": {
-    "dura-plugin-immer": "^0.0.1-alpha.20",
-    "dura-plugin-status": "^0.0.1-alpha.20",
+    "dura-plugin-immer": "^0.0.1-alpha.21",
+    "dura-plugin-status": "^0.0.1-alpha.21",
     "immer": "^1.5.0",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0"
