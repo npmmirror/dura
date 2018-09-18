@@ -2,7 +2,15 @@ import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { getCombineReducers, getCombineEffects } from "./ModelHandler";
 
-export default function({ models, middleware = [], enhancers = [] }) {
+const defaultOps = {
+  models: [],
+  middleware: [],
+  enhancers: []
+};
+
+export default function(ops = defaultOps) {
+  const { models = [], middleware = [], enhancers = [] } = ops;
+
   const duraCore = {
     dispatch: undefined,
     getState: undefined,

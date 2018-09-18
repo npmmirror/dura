@@ -21,12 +21,20 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-function _default(_ref) {
-  var models = _ref.models,
-      _ref$middleware = _ref.middleware,
-      middleware = _ref$middleware === void 0 ? [] : _ref$middleware,
-      _ref$enhancers = _ref.enhancers,
-      enhancers = _ref$enhancers === void 0 ? [] : _ref$enhancers;
+var defaultOps = {
+  models: [],
+  middleware: [],
+  enhancers: []
+};
+
+function _default() {
+  var ops = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOps;
+  var _ops$models = ops.models,
+      models = _ops$models === void 0 ? [] : _ops$models,
+      _ops$middleware = ops.middleware,
+      middleware = _ops$middleware === void 0 ? [] : _ops$middleware,
+      _ops$enhancers = ops.enhancers,
+      enhancers = _ops$enhancers === void 0 ? [] : _ops$enhancers;
   var duraCore = {
     dispatch: undefined,
     getState: undefined,

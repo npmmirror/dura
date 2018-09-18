@@ -1,6 +1,3 @@
-console.log('hello')
-console.log('hello')
-console.log('hello')
-console.log('hello')
-console.log('hello')
-console.log('hello')
+import createDuraCorePro from "./DuraCorePro";
+
+export { createDuraCorePro };

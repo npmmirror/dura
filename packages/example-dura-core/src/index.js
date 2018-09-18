@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { HashRouter, Route, Switch, Link } from "react-router-dom";
 import { createDuraCore } from "dura-core";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
 const modelA = {
