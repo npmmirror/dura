@@ -1,9 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
+import { Provider } from "react-redux";
 import { HashRouter, Route, Switch, Link } from "react-router-dom";
-import { createDuraCore } from "../../dura-core";
-import { persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { createDuraCore } from "dura-core";
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 const modelA = {
     namespace: "am",
@@ -28,14 +29,14 @@ const duraStore = createDuraCore({
   models: [modelA, modelB, modelC]
 });
 
-persistStore(duraStore.reduxStore, {
-  key: "dura"
+const result = persistStore(duraStore, {}, function() {
+  console.log("finally");
 });
 
+console.log(duraStore.getState());
+
 class A extends React.Component {
-  componentWillMount() {
-    console.log(duraStore._reduxStore.getState());
-  }
+  componentWillMount() {}
 
   componentWillUnmount() {}
 
@@ -79,24 +80,26 @@ function X(props) {
 }
 
 render(
-  <HashRouter>
-    <div>
-      <ul>
-        <li>
-          <Link to="/a">A</Link>
-        </li>
-        <li>
-          <Link to="/x/b">B</Link>
-        </li>
-        <li>
-          <Link to="/x/c">C</Link>
-        </li>
-      </ul>
-      <Switch>
-        <Route exact path="/a" component={A} />
-        <Route path="/x" component={X} />
-      </Switch>
-    </div>
-  </HashRouter>,
+  <Provider store={duraStore}>
+    <HashRouter>
+      <div>
+        <ul>
+          <li>
+            <Link to="/a">A</Link>
+          </li>
+          <li>
+            <Link to="/x/b">B</Link>
+          </li>
+          <li>
+            <Link to="/x/c">C</Link>
+          </li>
+        </ul>
+        <Switch>
+          <Route exact path="/a" component={A} />
+          <Route path="/x" component={X} />
+        </Switch>
+      </div>
+    </HashRouter>
+  </Provider>,
   document.querySelector("#root")
 );

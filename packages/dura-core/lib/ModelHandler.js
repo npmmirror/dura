@@ -34,7 +34,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultCore = {
-  namespace: '@@duraCore',
+  namespace: "@@duraCore",
   initialState: 0,
   reducers: {
     onChangeCount: function onChangeCount(state) {
@@ -64,8 +64,8 @@ var additionalNamespacePrefix = function additionalNamespacePrefix(model) {
   return {
     namespace: namespace,
     initialState: initialState,
-    reducers: rename(namespace, reducers, 'reducers'),
-    effects: rename(namespace, effects, 'effects')
+    reducers: rename(namespace, reducers, "reducers"),
+    effects: rename(namespace, effects, "effects")
   };
 };
 
@@ -83,7 +83,7 @@ var getWatcher = function getWatcher(effect) {
       ms = effect.ms;
 
   switch (type) {
-    case 'takeLatest':
+    case "takeLatest":
       return (
         /*#__PURE__*/
         _regenerator.default.mark(function _callee() {
@@ -112,7 +112,7 @@ var getWatcher = function getWatcher(effect) {
         })
       );
 
-    case 'takeLeading':
+    case "takeLeading":
       return (
         /*#__PURE__*/
         _regenerator.default.mark(function _callee2() {
@@ -141,7 +141,7 @@ var getWatcher = function getWatcher(effect) {
         })
       );
 
-    case 'throttle':
+    case "throttle":
       return (
         /*#__PURE__*/
         _regenerator.default.mark(function _callee3() {
@@ -202,7 +202,7 @@ var getWatcher = function getWatcher(effect) {
 };
 
 var enhanceEffect = function enhanceEffect(name, effect) {
-  var defaultType = 'takeEvery';
+  var defaultType = "takeEvery";
   var newEffect = {
     name: name,
     saga: effect,
@@ -217,12 +217,12 @@ var enhanceEffect = function enhanceEffect(name, effect) {
 
     newEffect.saga = one;
 
-    if (typeof two === 'string') {
+    if (typeof two === "string") {
       newEffect.type = two;
-    } else if (_typeof(two) === 'object') {
+    } else if (_typeof(two) === "object") {
       newEffect.type = (two === null || two === void 0 ? void 0 : two.type) || defaultType;
 
-      if ((two === null || two === void 0 ? void 0 : two.type) === 'throttle') {
+      if ((two === null || two === void 0 ? void 0 : two.type) === "throttle") {
         newEffect.ms = two === null || two === void 0 ? void 0 : two.ms;
       }
     } else {

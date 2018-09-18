@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { getCombineReducers, getCombineEffects } from "./ModelHandler";
+import { persistStore, persistReducer } from "redux-persist";
 
 export default function({ models, middleware = [], enhancers = [] }) {
   const duraCore = {
@@ -19,7 +20,7 @@ export default function({ models, middleware = [], enhancers = [] }) {
 
   //create redux store
   const reduxStore = createStore(
-    getCombineReducers(models),
+    persistReducer({}, getCombineReducers(models)),
     composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
   );
 
