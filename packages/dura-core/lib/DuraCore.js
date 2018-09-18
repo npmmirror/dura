@@ -40,7 +40,9 @@ function _default(_ref) {
 
   var reduxSaga = (0, _reduxSaga.default)(); //create redux store
 
-  var reduxStore = (0, _redux.createStore)((0, _reduxPersist.persistReducer)({}, (0, _ModelHandler.getCombineReducers)(models)), composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
+  var reduxStore = (0, _redux.createStore)((0, _reduxPersist.persistReducer)({
+    key: "@@dura"
+  }, (0, _ModelHandler.getCombineReducers)(models)), composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
 
   reduxSaga.run((0, _ModelHandler.getCombineEffects)(models));
   duraCore.dispatch = reduxStore.dispatch;

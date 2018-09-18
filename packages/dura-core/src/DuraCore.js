@@ -20,7 +20,7 @@ export default function({ models, middleware = [], enhancers = [] }) {
 
   //create redux store
   const reduxStore = createStore(
-    persistReducer({}, getCombineReducers(models)),
+    persistReducer({ key: "@@dura" }, getCombineReducers(models)),
     composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
   );
 
