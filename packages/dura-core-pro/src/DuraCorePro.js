@@ -16,7 +16,7 @@ const enhanceReducer = function (reducers, onReducers) {
 
 const enhanceEffect = function (effects, onEffects) {
     return Object.keys(effects).map(
-        (key) => ({[key]: recursiveEnhanceFun(onEffects, effects[key], name)})
+        (key) => ({[key]: recursiveEnhanceFun(onEffects, effects[key], key)})
     ).reduce(objectReduce, {})
 }
 

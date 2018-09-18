@@ -34,7 +34,7 @@ var enhanceReducer = function enhanceReducer(reducers, onReducers) {
 
 var enhanceEffect = function enhanceEffect(effects, onEffects) {
   return Object.keys(effects).map(function (key) {
-    return _defineProperty({}, key, (0, _duraUtil.recursiveEnhanceFun)(onEffects, effects[key], name));
+    return _defineProperty({}, key, (0, _duraUtil.recursiveEnhanceFun)(onEffects, effects[key], key));
   }).reduce(_duraUtil.objectReduce, {});
 };
 

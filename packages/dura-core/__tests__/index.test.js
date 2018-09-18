@@ -1,4 +1,4 @@
-import {createDuraCore} from "../src/index";
+import {createDuraCore} from "../src";
 
 describe("demo", () => {
 
@@ -58,7 +58,7 @@ describe("demo", () => {
                 }
             },
             effects: {
-                enhanceName: function* ({delay, put}, action) {
+                enhanceName: function* ({put,delay}, action) {
                     yield delay(500);
                     const newName = "enhanceName" + action?.payload?.name;
                     yield put({
@@ -262,7 +262,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put, delay}, action) {
+                    function* ({put,delay}, action) {
                         yield delay(1000);
                         yield put({
                             type: "takeLatest/reducers/onChangeName",
@@ -322,7 +322,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put, delay}, action) {
+                    function* ({put,delay}, action) {
                         yield delay(1000);
                         yield put({
                             type: "takeLeading/reducers/onChangeName",
@@ -382,7 +382,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put, delay}, action) {
+                    function* ({put,delay}, action) {
                         yield delay(500);
                         yield put({
                             type: "throttle/reducers/onChangeName",

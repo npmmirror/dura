@@ -4,7 +4,7 @@ import DuraStatus from 'dura-plugin-status'
 
 describe('dura-core-pro', function () {
 
-    it('dd', function () {
+    it('dd', function (done) {
 
         const defaultModel = {
             namespace: 'default',
@@ -18,8 +18,16 @@ describe('dura-core-pro', function () {
                 }
             },
             effects: {
-                * onChangeName({put}, action) {
-                    put({
+                * onChangeName(a, action) {
+                    console.log(a)
+                    yield new Promise(
+                        (resolve) =>{
+                            setTimeout(() => {
+                                resolve()
+                            },500)
+                        }
+                    )
+                    yield a.put({
                         type: 'default/reducers/onChangeName',
                         payload: action?.payload
                     })
@@ -40,13 +48,20 @@ describe('dura-core-pro', function () {
         console.log(duraCorePro.reduxStore.getState())
 
         duraCorePro.reduxStore.dispatch({
-            type: 'default/reducers/onChangeName',
+            type: 'default/effects/onChangeName',
             payload: {
                 name: '李四'
             }
         })
 
+        setTimeout(() => console.log(duraCorePro.reduxStore.getState()),300 )
+
         console.log(duraCorePro.reduxStore.getState())
+
+        setTimeout(() => {
+            console.log(duraCorePro.reduxStore.getState())
+            done()
+        },1000 )
 
     })
 })
