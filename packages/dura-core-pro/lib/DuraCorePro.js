@@ -7,10 +7,6 @@ exports.default = _default;
 
 var _duraCore = require("dura-core");
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var defaultOps = {
   initialModels: [],
   middleware: [],
@@ -21,23 +17,48 @@ var defaultOps = {
 function _default() {
   var ops = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOps;
   var duraCorePro = {
-    plugins: ops.plugins,
-    initialModels: ops.initialModels,
-    addModels: function addModels() {
-      return false;
-    },
-    delModels: function delModels() {
-      return false;
-    },
-    clear: function clear() {
-      return false;
-    },
-    destroy: function destroy() {
-      return false;
-    }
+    plugins: ops.plugins || [],
+    initialModels: ops.initialModels || [],
+    models: [],
+    addModel: addModel,
+    delModel: delModel,
+    clear: clear,
+    destroy: destroy,
+    refresh: refresh
   };
   var duraCore = (0, _duraCore.createDuraCore)({
-    models: ops.initialModels
+    models: duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins)
   });
-  return _objectSpread({}, duraCorePro, duraCore);
+  console.log(duraCore);
+  duraCorePro.getState = duraCore.getState;
+
+  function addModel(model) {
+    duraCorePro.models.push(model);
+    return duraCorePro;
+  }
+
+  function delModel(namespace) {
+    duraCorePro.models = duraCorePro.models.filter(function (m) {
+      return m.namespace !== namespace;
+    });
+    return duraCorePro;
+  }
+
+  function clear() {
+    duraCorePro.models = [];
+    return duraCorePro;
+  }
+
+  function destroy() {
+    duraCorePro.initialModels = [];
+    duraCorePro.models = [];
+    return duraCorePro;
+  }
+
+  function refresh() {
+    duraCore.replaceModel(duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins));
+    return duraCorePro;
+  }
+
+  return duraCorePro;
 }

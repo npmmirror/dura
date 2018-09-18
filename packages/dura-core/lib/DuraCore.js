@@ -13,10 +13,6 @@ var _ModelHandler = require("./ModelHandler");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -43,6 +39,7 @@ function _default() {
     dispatch: undefined,
     getState: undefined,
     subscribe: undefined,
+    reduxStore: undefined,
     replaceModel: replaceModel
   }; //redux-dev-tools enhancers
 
@@ -53,11 +50,7 @@ function _default() {
   var reduxStore = (0, _redux.createStore)((0, _ModelHandler.getCombineReducers)(models), composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
 
   reduxSaga.run((0, _ModelHandler.getCombineEffects)(models));
-  duraCore.dispatch = reduxStore.dispatch;
-  duraCore.getState = reduxStore.getState;
-  duraCore.subscribe = reduxStore.subscribe;
-
-  var nextDuraCore = _objectSpread({}, duraCore, reduxStore);
+  duraCore.reduxStore = reduxStore;
 
   function replaceModel(nextModels) {
     reduxStore.dispatch({
@@ -68,8 +61,8 @@ function _default() {
     reduxStore.dispatch({
       type: "@@duraCore/reducers/onChangeCount"
     });
-    return nextDuraCore;
+    return duraCore;
   }
 
-  return nextDuraCore;
+  return duraCore;
 }
