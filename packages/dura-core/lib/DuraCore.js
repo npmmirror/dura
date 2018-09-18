@@ -31,9 +31,9 @@ function _default(_ref) {
     dispatch: undefined,
     getState: undefined,
     subscribe: undefined,
-    replaceModel: replaceModel //redux-dev-tools enhancers
+    replaceModel: replaceModel
+  }; //redux-dev-tools enhancers
 
-  };
   var composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || _redux.compose; //create redux-saga middleware
 
   var reduxSaga = (0, _reduxSaga.default)(); //create redux store
@@ -44,15 +44,16 @@ function _default(_ref) {
   duraCore.dispatch = reduxStore.dispatch;
   duraCore.getState = reduxStore.getState;
   duraCore.subscribe = reduxStore.subscribe;
+  duraCore.reduxStore = reduxStore;
 
   function replaceModel(nextModels) {
     reduxStore.dispatch({
-      type: '@@dura/cancel'
+      type: "@@dura/cancel"
     });
     reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
     reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
     reduxStore.dispatch({
-      type: '@@duraCore/reducers/onChangeCount'
+      type: "@@duraCore/reducers/onChangeCount"
     });
   }
 
