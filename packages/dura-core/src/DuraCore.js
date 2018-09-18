@@ -37,14 +37,16 @@ export default function(ops = defaultOps) {
   duraCore.dispatch = reduxStore.dispatch;
   duraCore.getState = reduxStore.getState;
   duraCore.subscribe = reduxStore.subscribe;
-  duraCore.reduxStore = reduxStore;
+
+  const nextDuraCore = { ...duraCore, ...reduxStore };
 
   function replaceModel(nextModels) {
     reduxStore.dispatch({ type: "@@dura/cancel" });
     reduxStore.replaceReducer(getCombineReducers(nextModels));
     reduxSaga.run(getCombineEffects(nextModels));
     reduxStore.dispatch({ type: "@@duraCore/reducers/onChangeCount" });
+    return nextDuraCore;
   }
 
-  return duraCore;
+  return nextDuraCore;
 }
