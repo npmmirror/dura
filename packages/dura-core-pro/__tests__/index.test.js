@@ -18,16 +18,9 @@ describe('dura-core-pro', function () {
                 }
             },
             effects: {
-                * onChangeName(a, action) {
-                    console.log(a)
-                    yield new Promise(
-                        (resolve) =>{
-                            setTimeout(() => {
-                                resolve()
-                            },500)
-                        }
-                    )
-                    yield a.put({
+                * onChangeName({put, delay}, action) {
+                    yield delay(500)
+                    yield put({
                         type: 'default/reducers/onChangeName',
                         payload: action?.payload
                     })
@@ -54,14 +47,12 @@ describe('dura-core-pro', function () {
             }
         })
 
-        setTimeout(() => console.log(duraCorePro.reduxStore.getState()),300 )
-
         console.log(duraCorePro.reduxStore.getState())
 
         setTimeout(() => {
             console.log(duraCorePro.reduxStore.getState())
             done()
-        },1000 )
+        }, 1000)
 
     })
 })
