@@ -15,6 +15,8 @@
   },
   "devDependencies": {
     "dura-plugin-immer": "^0.0.1-alpha.23",
-    "dura-plugin-status": "^0.0.1-alpha.23"
+    "dura-plugin-status": "^0.0.1-alpha.23",
+    "redux": "^4.0.0",
+    "redux-persist": "^5.10.0"
   }
 }

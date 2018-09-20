@@ -1,6 +1,8 @@
 import {createDuraCorePro} from '../src/index'
 import DuraImmer from 'dura-plugin-immer'
 import DuraStatus from 'dura-plugin-status'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 describe('dura-core-pro', function () {
 
@@ -26,16 +28,23 @@ describe('dura-core-pro', function () {
                     })
                 }
             }
-        }, default2Model = {
-            namespace: 'default2',
-            initialState: {
-                name: '张三2'
-            }
         };
+
+        const persistConfig = {
+            key: 'root',
+            storage,
+        }
+
+        const plugin = {
+            namespace:'@@duraPersist',
+            onReducer:function (reducer) {
+                return persistReducer(persistConfig, reducer)
+            }
+        }
 
         const duraCorePro = createDuraCorePro({
             initialModels: [defaultModel],
-            plugins: [DuraImmer, DuraStatus]
+            plugins: [DuraImmer, DuraStatus,plugin]
         })
 
         console.log(duraCorePro.reduxStore.getState())
