@@ -47,12 +47,16 @@ export default function (ops = defaultOps) {
     const duraCorePro = {
         plugins: ops.plugins || [],
         initialModels: ops.initialModels || [],
+        middleware: ops.middleware || [],
+        enhancers: ops.enhancers || [],
         models: [],
         addModel, delModel, clear, destroy, refresh
     };
 
     const duraCore = createDuraCore({
-        models: enhanceModels(duraCorePro)
+        models: enhanceModels(duraCorePro),
+        middleware: duraCorePro.middleware,
+        enhancers: duraCorePro.enhancers
     });
 
     duraCorePro.reduxStore = duraCore.reduxStore

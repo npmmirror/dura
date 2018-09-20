@@ -83,6 +83,8 @@ function _default() {
   var duraCorePro = {
     plugins: ops.plugins || [],
     initialModels: ops.initialModels || [],
+    middleware: ops.middleware || [],
+    enhancers: ops.enhancers || [],
     models: [],
     addModel: addModel,
     delModel: delModel,
@@ -91,7 +93,9 @@ function _default() {
     refresh: refresh
   };
   var duraCore = (0, _duraCore.createDuraCore)({
-    models: enhanceModels(duraCorePro)
+    models: enhanceModels(duraCorePro),
+    middleware: duraCorePro.middleware,
+    enhancers: duraCorePro.enhancers
   });
   duraCorePro.reduxStore = duraCore.reduxStore;
 
