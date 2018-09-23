@@ -5,11 +5,12 @@ import {getCombineReducers, getCombineEffects} from "./ModelHandler";
 const defaultOps = {
     models: [],
     middleware: [],
-    enhancers: []
+    enhancers: [],
+    initialState: {}
 };
 
 export default function (ops = defaultOps) {
-    const {models = [], middleware = [], enhancers = []} = ops;
+    const {models = [], middleware = [], enhancers = [], initialState = {}} = ops;
 
     const duraCore = {
         dispatch: undefined,
@@ -29,6 +30,7 @@ export default function (ops = defaultOps) {
     //create redux store
     const reduxStore = createStore(
         getCombineReducers(models),
+        initialState,
         composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
     );
 
@@ -37,7 +39,7 @@ export default function (ops = defaultOps) {
 
     duraCore.reduxStore = reduxStore;
 
-    function replaceModel(nextModels) {
+    function replaceModel(nextModels = []) {
         reduxStore.dispatch({type: "@@dura/cancel"});
         reduxStore.replaceReducer(getCombineReducers(nextModels));
         reduxSaga.run(getCombineEffects(nextModels));

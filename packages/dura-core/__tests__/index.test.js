@@ -58,7 +58,7 @@ describe("demo", () => {
                 }
             },
             effects: {
-                enhanceName: function* ({put,delay}, action) {
+                enhanceName: function* ({put, delay}, action) {
                     yield delay(500);
                     const newName = "enhanceName" + action?.payload?.name;
                     yield put({
@@ -115,6 +115,10 @@ describe("demo", () => {
 
         expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
         expect(duraCore.reduxStore.getState()["next"]).toEqual(nextModel.initialState);
+
+        duraCore.replaceModel();
+        expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
+
     });
 
     it("array default effect ", function () {
@@ -262,7 +266,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put,delay}, action) {
+                    function* ({put, delay}, action) {
                         yield delay(1000);
                         yield put({
                             type: "takeLatest/reducers/onChangeName",
@@ -322,7 +326,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put,delay}, action) {
+                    function* ({put, delay}, action) {
                         yield delay(1000);
                         yield put({
                             type: "takeLeading/reducers/onChangeName",
@@ -382,7 +386,7 @@ describe("demo", () => {
             },
             effects: {
                 onChangeName: [
-                    function* ({put,delay}, action) {
+                    function* ({put, delay}, action) {
                         yield delay(500);
                         yield put({
                             type: "throttle/reducers/onChangeName",
@@ -437,5 +441,18 @@ describe("demo", () => {
             models: [defaultModel]
         });
         expect(duraCore.reduxStore.getState()["default"]).toEqual({});
+    });
+
+    it('init state', function () {
+        const initState = {
+            name: "张三"
+        }
+
+        const duraCore = createDuraCore({
+            initialState: initState
+        })
+
+        // expect(duraCore.reduxStore.getState()).toEqual(initState)
+
     });
 });
