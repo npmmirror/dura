@@ -24,7 +24,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var defaultOps = {
   models: [],
   middleware: [],
-  enhancers: []
+  enhancers: [],
+  initialState: {}
 };
 
 function _default() {
@@ -34,7 +35,9 @@ function _default() {
       _ops$middleware = ops.middleware,
       middleware = _ops$middleware === void 0 ? [] : _ops$middleware,
       _ops$enhancers = ops.enhancers,
-      enhancers = _ops$enhancers === void 0 ? [] : _ops$enhancers;
+      enhancers = _ops$enhancers === void 0 ? [] : _ops$enhancers,
+      _ops$initialState = ops.initialState,
+      initialState = _ops$initialState === void 0 ? {} : _ops$initialState;
   var duraCore = {
     dispatch: undefined,
     getState: undefined,
@@ -47,12 +50,13 @@ function _default() {
 
   var reduxSaga = (0, _reduxSaga.default)(); //create redux store
 
-  var reduxStore = (0, _redux.createStore)((0, _ModelHandler.getCombineReducers)(models), composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
+  var reduxStore = (0, _redux.createStore)((0, _ModelHandler.getCombineReducers)(models), initialState, composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
 
   reduxSaga.run((0, _ModelHandler.getCombineEffects)(models));
   duraCore.reduxStore = reduxStore;
 
-  function replaceModel(nextModels) {
+  function replaceModel() {
+    var nextModels = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     reduxStore.dispatch({
       type: "@@dura/cancel"
     });
