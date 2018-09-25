@@ -5,7 +5,8 @@ const defaultOps = {
     initialModels: [],
     middleware: [],
     enhancers: [],
-    plugins: []
+    plugins: [],
+    initialState: {}
 };
 
 const enhanceReducer = function (reducers, onReducers) {
@@ -55,6 +56,7 @@ export default function (ops = defaultOps) {
 
     const duraCore = createDuraCore({
         models: enhanceModels(duraCorePro),
+        initialState: ops.initialState,
         middleware: duraCorePro.middleware,
         enhancers: duraCorePro.enhancers
     });

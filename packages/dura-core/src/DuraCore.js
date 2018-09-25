@@ -29,13 +29,13 @@ export default function (ops = defaultOps) {
 
     //create redux store
     const reduxStore = createStore(
-        getCombineReducers(models),
-        initialState,
+        getCombineReducers(models), initialState,
         composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
     );
 
     //run redux-saga
     reduxSaga.run(getCombineEffects(models));
+
 
     duraCore.reduxStore = reduxStore;
 

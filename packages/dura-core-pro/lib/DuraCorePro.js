@@ -23,7 +23,8 @@ var defaultOps = {
   initialModels: [],
   middleware: [],
   enhancers: [],
-  plugins: []
+  plugins: [],
+  initialState: {}
 };
 
 var enhanceReducer = function enhanceReducer(reducers, onReducers) {
@@ -94,6 +95,7 @@ function _default() {
   };
   var duraCore = (0, _duraCore.createDuraCore)({
     models: enhanceModels(duraCorePro),
+    initialState: ops.initialState,
     middleware: duraCorePro.middleware,
     enhancers: duraCorePro.enhancers
   });
