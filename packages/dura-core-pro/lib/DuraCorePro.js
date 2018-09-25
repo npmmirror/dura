@@ -9,18 +9,9 @@ var _duraCore = require("dura-core");
 
 var _duraUtil = require("dura-util");
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultOps = {
-  initialModels: [],
   middleware: [],
   enhancers: [],
   plugins: [],
@@ -73,24 +64,21 @@ var enhanceModels = function enhanceModels(duraCorePro) {
 };
 
 var mergeModels = function mergeModels(duraCorePro) {
-  var initialModels = duraCorePro.initialModels,
-      plugins = duraCorePro.plugins,
+  var plugins = duraCorePro.plugins,
       models = duraCorePro.models;
-  return _toConsumableArray(initialModels.concat(models).concat(plugins));
+  return [models.concat(plugins)];
 };
 
 function _default() {
   var ops = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOps;
   var duraCorePro = {
     plugins: ops.plugins || [],
-    initialModels: ops.initialModels || [],
     middleware: ops.middleware || [],
     enhancers: ops.enhancers || [],
     models: [],
     addModel: addModel,
     delModel: delModel,
     clear: clear,
-    destroy: destroy,
     refresh: refresh
   };
   var duraCore = (0, _duraCore.createDuraCore)({
@@ -118,14 +106,8 @@ function _default() {
     return duraCorePro;
   }
 
-  function destroy() {
-    duraCorePro.initialModels = [];
-    duraCorePro.models = [];
-    return duraCorePro;
-  }
-
   function refresh() {
-    duraCore.replaceModel(duraCorePro.initialModels.concat(duraCorePro.models).concat(duraCorePro.plugins));
+    duraCore.replaceModel(duraCorePro.models.concat(duraCorePro.plugins));
     return duraCorePro;
   }
 
