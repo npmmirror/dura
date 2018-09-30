@@ -11,6 +11,8 @@ var _redux = require("redux");
 
 var _reduxActions = require("redux-actions");
 
+var _ActionTypes = _interopRequireDefault(require("./ActionTypes"));
+
 var reduxSagaEffects = _interopRequireWildcard(require("redux-saga/effects"));
 
 var _this = void 0;
@@ -36,11 +38,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var defaultCore = {
   namespace: "@@duraCore",
   initialState: 0,
-  reducers: {
-    onChangeCount: function onChangeCount(state) {
-      return state + 1;
-    }
-  }
+  reducers: _defineProperty({}, _ActionTypes.default.PLUS_COUNT.split('/').reverse()[0], function (state) {
+    return state + 1;
+  })
 };
 
 var rename = function rename(namespace, argObj, type) {
@@ -292,7 +292,7 @@ _regenerator.default.mark(function getRootSaga(effects) {
                 switch (_context6.prev = _context6.next) {
                   case 0:
                     _context6.next = 2;
-                    return reduxSagaEffects.take("@@dura/cancel");
+                    return reduxSagaEffects.take(_ActionTypes.default.CANCEL);
 
                   case 2:
                     _context6.next = 4;

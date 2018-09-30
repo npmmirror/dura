@@ -2,6 +2,39 @@ import {createDuraCore} from "../src";
 
 describe("demo", () => {
 
+    it("replace model", function () {
+        const defaultModel = {
+            namespace: "default",
+            initialState: {
+                name: "张三"
+            }
+        };
+
+        const nextModel = {
+            namespace: "next",
+            initialState: {
+                address: "江苏省南京市"
+            }
+        };
+
+        const duraCore = createDuraCore({
+            models: [defaultModel]
+        });
+
+        expect(duraCore.reduxStore.getState()["default"]).toEqual(defaultModel.initialState);
+        expect(duraCore.reduxStore.getState()["next"]).toBeUndefined();
+
+        duraCore.replaceModel(nextModel);
+
+        expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
+        expect(duraCore.reduxStore.getState()["next"]).toEqual(nextModel.initialState);
+
+        duraCore.replaceModel();
+
+        expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
+
+    });
+
     it("empty create", function () {
 
         const duraCore = createDuraCore({});
@@ -89,37 +122,6 @@ describe("demo", () => {
         }, 1000);
     });
 
-    it("replace model", function () {
-        const defaultModel = {
-            namespace: "default",
-            initialState: {
-                name: "张三"
-            }
-        };
-
-        const nextModel = {
-            namespace: "next",
-            initialState: {
-                address: "江苏省南京市"
-            }
-        };
-
-        const duraCore = createDuraCore({
-            models: [defaultModel]
-        });
-
-        expect(duraCore.reduxStore.getState()["default"]).toEqual(defaultModel.initialState);
-        expect(duraCore.reduxStore.getState()["next"]).toBeUndefined();
-
-        duraCore.replaceModel([nextModel]);
-
-        expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
-        expect(duraCore.reduxStore.getState()["next"]).toEqual(nextModel.initialState);
-
-        duraCore.replaceModel();
-        expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
-
-    });
 
     it("array default effect ", function () {
         const defaultModel = {
@@ -359,13 +361,6 @@ describe("demo", () => {
             );
         }
 
-        setTimeout(
-            () =>
-                expect(duraCore.reduxStore.getState()["takeLeading"]).toEqual(
-                    takeLeadingModel.initialState
-                ),
-            998
-        );
 
         setTimeout(() => {
             expect(duraCore.reduxStore.getState()["takeLeading"]).toEqual({name: "新名称0"});
@@ -444,15 +439,24 @@ describe("demo", () => {
     });
 
     it('init state', function () {
-        const initState = {
-            name: "张三"
+
+        process.env.NODE_ENV = "production"
+
+        const model = {
+            namespace: 'default',
+            initialState: {
+                name: "张三"
+            },
+            reducers: {},
+            effects: {}
         }
 
         const duraCore = createDuraCore({
-            initialState: initState
+            models: [model],
+            initialState: {default: {name: "李四"}}
         })
 
-        // expect(duraCore.reduxStore.getState()).toEqual(initState)
+        expect(duraCore.reduxStore.getState()?.default).toEqual({name: '李四'})
 
     });
 });

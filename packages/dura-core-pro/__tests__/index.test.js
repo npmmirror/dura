@@ -1,8 +1,6 @@
 import {createDuraCorePro} from '../src/index'
 import DuraImmer from 'dura-plugin-immer'
 import DuraStatus from 'dura-plugin-status'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
 
 describe('dura-core-pro', function () {
 
@@ -30,33 +28,23 @@ describe('dura-core-pro', function () {
             }
         };
 
-        const persistConfig = {
-            key: 'root',
-            storage,
-        }
-
-        const plugin = {
-            namespace:'@@duraPersist',
-            onReducer:function (reducer) {
-                return persistReducer(persistConfig, reducer)
-            }
-        }
 
         const duraCorePro = createDuraCorePro({
-            initialModels: [defaultModel],
-            plugins: [DuraImmer, DuraStatus,plugin]
+            plugins: [DuraImmer, DuraStatus]
         })
 
-        console.log(duraCorePro.reduxStore.getState())
+        duraCorePro.addModel(defaultModel).refresh()
 
-        duraCorePro.reduxStore.dispatch({
-            type: 'default/effects/onChangeName',
-            payload: {
-                name: '李四'
-            }
-        })
-
-        console.log(duraCorePro.reduxStore.getState())
+        // console.log(duraCorePro.reduxStore.getState())
+        //
+        // duraCorePro.reduxStore.dispatch({
+        //     type: 'default/effects/onChangeName',
+        //     payload: {
+        //         name: '李四'
+        //     }
+        // })
+        //
+        // console.log(duraCorePro.reduxStore.getState())
 
         setTimeout(() => {
             console.log(duraCorePro.reduxStore.getState())

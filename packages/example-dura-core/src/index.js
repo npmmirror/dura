@@ -2,88 +2,28 @@ import React from "react";
 import {render} from "react-dom";
 import {Provider, connect} from "react-redux";
 import {HashRouter, Route, Switch, Link} from "react-router-dom";
-import {createDuraCorePro} from "dura-core-pro"
+import {createDuraCorePro} from "../../dura-core-pro/src"
 import {persistStore, persistReducer} from "redux-persist";
 import storage from 'redux-persist/lib/storage'
+import LayoutRoute from './routes/LayoutRoute'
 
 
-
-
-const modelA = {
-    namespace: "am",
-    initialState: {
-        name: "a"
-    },
-    reducers: {
-        onChangeName(state, {payload}) {
-            return ({...state, ...payload})
-        }
-    }
-}, modelB = {
-    namespace: 'bm',
-    initialState: {
-        name: 'b'
-    }
-}
-
-const persistConfig = {
-    key: '@@dura',
-    storage,
-}
-
-function persist() {
-    return createStore => (reducer, initialState, enhancer) => {
-        return createStore(persistReducer(persistConfig, reducer), initialState, enhancer)
-    }
-}
+console.log(
+    require('./models/UserModel').default
+)
 
 const duraCorePro = createDuraCorePro({
-    initialModels: [modelA],
-    enhancers: [persist()]
+    models:[require('./models/UserModel').default]
 })
 
-duraCorePro.addModel(modelA).refresh()
-
-persistStore(duraCorePro.reduxStore)
-
-const Main = connect(function (state) {
-
-    return ({
-        name: state?.am?.name
-    })
-}, function (dispatch) {
-    return ({
-        changeName: function () {
-            dispatch({
-                type: "am/reducers/onChangeName",
-                payload: {
-                    name: "张三"
-                }
-            })
-        }
-    })
-})((props) => <div>
-    <h1>{props.name}</h1>
-    <button onClick={() => {
-
-        console.log(duraCorePro)
-
-        duraCorePro.delModel('am').addModel(modelB).refresh()
-
-        console.log(duraCorePro)
-
-    }}>换model
-    </button>
-    <button onClick={props.changeName}>换name</button>
-</div>)
-
-
-
-
+duraCorePro
+    .addModel(require('./models/UserModel').default)
+    .addModel(require('./models/OrderModel').default)
+    .refresh();
 
 render(
     <Provider store={duraCorePro.reduxStore}>
-        <Main/>
+        <LayoutRoute/>
     </Provider>,
     document.querySelector("#root")
 );

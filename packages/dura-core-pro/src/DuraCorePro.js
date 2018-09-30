@@ -39,7 +39,7 @@ const enhanceModels = function (duraCorePro) {
 
 const mergeModels = function (duraCorePro) {
     const {plugins, models} = duraCorePro
-    return [models.concat(plugins)]
+    return models.concat(plugins)
 }
 
 export default function (ops = defaultOps) {
@@ -61,8 +61,8 @@ export default function (ops = defaultOps) {
 
     duraCorePro.reduxStore = duraCore.reduxStore
 
-    function addModel(model) {
-        duraCorePro.models.push(model)
+    function addModel(...models) {
+        duraCorePro.models = duraCorePro.models.concat(models)
         return duraCorePro
     }
 
@@ -77,7 +77,7 @@ export default function (ops = defaultOps) {
     }
 
     function refresh() {
-        duraCore.replaceModel(duraCorePro.models.concat(duraCorePro.plugins))
+        duraCore.replaceModel(enhanceModels(duraCorePro))
         return duraCorePro
     }
 

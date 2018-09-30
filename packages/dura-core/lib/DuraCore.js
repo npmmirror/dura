@@ -11,6 +11,8 @@ var _reduxSaga = _interopRequireDefault(require("redux-saga"));
 
 var _ModelHandler = require("./ModelHandler");
 
+var _ActionTypes = _interopRequireDefault(require("./ActionTypes"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -50,20 +52,35 @@ function _default() {
 
   var reduxSaga = (0, _reduxSaga.default)(); //create redux store
 
-  var reduxStore = (0, _redux.createStore)((0, _ModelHandler.getCombineReducers)(models), initialState, composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
+  var reduxStore = (0, _redux.createStore)(function (state, action) {
+    if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
+      return undefined;
+    }
+
+    return (0, _ModelHandler.getCombineReducers)(models)(state, action);
+  }, initialState, composeEnhancers.apply(void 0, [_redux.applyMiddleware.apply(void 0, [reduxSaga].concat(_toConsumableArray(middleware)))].concat(_toConsumableArray(enhancers)))); //run redux-saga
 
   reduxSaga.run((0, _ModelHandler.getCombineEffects)(models));
   duraCore.reduxStore = reduxStore;
 
   function replaceModel() {
-    var nextModels = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    for (var _len = arguments.length, nextModels = new Array(_len), _key = 0; _key < _len; _key++) {
+      nextModels[_key] = arguments[_key];
+    }
+
     reduxStore.dispatch({
-      type: "@@dura/cancel"
+      type: _ActionTypes.default.CANCEL
     });
-    reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
+    reduxStore.replaceReducer(function (state, action) {
+      if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
+        return undefined;
+      }
+
+      return (0, _ModelHandler.getCombineReducers)(nextModels)(state, action);
+    });
     reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
     reduxStore.dispatch({
-      type: "@@duraCore/reducers/onChangeCount"
+      type: _ActionTypes.default.PLUS_COUNT
     });
     return duraCore;
   }

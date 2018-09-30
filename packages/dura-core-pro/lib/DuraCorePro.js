@@ -66,7 +66,7 @@ var enhanceModels = function enhanceModels(duraCorePro) {
 var mergeModels = function mergeModels(duraCorePro) {
   var plugins = duraCorePro.plugins,
       models = duraCorePro.models;
-  return [models.concat(plugins)];
+  return models.concat(plugins);
 };
 
 function _default() {
@@ -89,8 +89,12 @@ function _default() {
   });
   duraCorePro.reduxStore = duraCore.reduxStore;
 
-  function addModel(model) {
-    duraCorePro.models.push(model);
+  function addModel() {
+    for (var _len = arguments.length, models = new Array(_len), _key = 0; _key < _len; _key++) {
+      models[_key] = arguments[_key];
+    }
+
+    duraCorePro.models = duraCorePro.models.concat(models);
     return duraCorePro;
   }
 
@@ -107,7 +111,7 @@ function _default() {
   }
 
   function refresh() {
-    duraCore.replaceModel(duraCorePro.models.concat(duraCorePro.plugins));
+    duraCore.replaceModel(enhanceModels(duraCorePro));
     return duraCorePro;
   }
 

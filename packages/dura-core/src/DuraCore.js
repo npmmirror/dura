@@ -1,6 +1,7 @@
-import {createStore, applyMiddleware, compose} from "redux";
+import {createStore, applyMiddleware, compose , combineReducers} from "redux";
 import createSagaMiddleware from "redux-saga";
 import {getCombineReducers, getCombineEffects} from "./ModelHandler";
+import ActionTypes from './ActionTypes'
 
 const defaultOps = {
     models: [],
@@ -29,7 +30,12 @@ export default function (ops = defaultOps) {
 
     //create redux store
     const reduxStore = createStore(
-        getCombineReducers(models), initialState,
+        function (state, action) {
+            if (action?.type === ActionTypes.CANCEL) {
+                return undefined
+            }
+            return getCombineReducers(models)(state,action);
+        }, initialState,
         composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
     );
 
@@ -39,11 +45,16 @@ export default function (ops = defaultOps) {
 
     duraCore.reduxStore = reduxStore;
 
-    function replaceModel(nextModels = []) {
-        reduxStore.dispatch({type: "@@dura/cancel"});
-        reduxStore.replaceReducer(getCombineReducers(nextModels));
+    function replaceModel(...nextModels) {
+        reduxStore.dispatch({type: ActionTypes.CANCEL});
+        reduxStore.replaceReducer(function (state, action) {
+            if (action?.type === ActionTypes.CANCEL) {
+                return undefined
+            }
+            return getCombineReducers(nextModels)(state,action);
+        });
         reduxSaga.run(getCombineEffects(nextModels));
-        reduxStore.dispatch({type: "@@duraCore/reducers/onChangeCount"});
+        reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
         return duraCore;
     }
 
