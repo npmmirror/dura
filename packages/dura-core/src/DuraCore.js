@@ -1,8 +1,7 @@
-import {createStore, applyMiddleware, compose , combineReducers} from "redux";
+import {createStore, applyMiddleware, compose} from "redux";
 import createSagaMiddleware from "redux-saga";
 import {getCombineReducers, getCombineEffects} from "./ModelHandler";
 import ActionTypes from './ActionTypes'
-import defaultModel from './DefaultModel'
 
 const defaultOps = {
     models: [],
@@ -30,30 +29,18 @@ export default function (ops = defaultOps) {
     const reduxSaga = createSagaMiddleware();
 
     //create redux store
-    const reduxStore = createStore(
-        function (state, action) {
-            if (action?.type === ActionTypes.CANCEL) {
-                return getCombineReducers()
-            }
-            return getCombineReducers(models)(state,action);
-        }, initialState,
+    const reduxStore = createStore(getCombineReducers(models), initialState,
         composeEnhancers(applyMiddleware(reduxSaga, ...middleware), ...enhancers)
     );
 
     //run redux-saga
     reduxSaga.run(getCombineEffects(models));
 
-
     duraCore.reduxStore = reduxStore;
 
     function replaceModel(...nextModels) {
         reduxStore.dispatch({type: ActionTypes.CANCEL});
-        reduxStore.replaceReducer(function (state, action) {
-            if (action?.type === ActionTypes.CANCEL) {
-                return getCombineReducers()
-            }
-            return getCombineReducers(nextModels)(state,action);
-        });
+        reduxStore.replaceReducer(getCombineReducers(nextModels));
         reduxSaga.run(getCombineEffects(nextModels));
         reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
         return duraCore;

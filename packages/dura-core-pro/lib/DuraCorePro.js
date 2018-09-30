@@ -104,7 +104,6 @@ function _default() {
     }
 
     duraCorePro.models = duraCorePro.models.concat(models);
-    console.log(duraCorePro.models);
     return duraCorePro;
   }
 

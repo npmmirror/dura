@@ -64,7 +64,6 @@ export default function (ops = defaultOps) {
 
     function addModel(...models) {
         duraCorePro.models = duraCorePro.models.concat(models)
-        console.log(duraCorePro.models)
         return duraCorePro
     }
 
