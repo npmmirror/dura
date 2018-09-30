@@ -13,6 +13,8 @@ var _ModelHandler = require("./ModelHandler");
 
 var _ActionTypes = _interopRequireDefault(require("./ActionTypes"));
 
+var _DefaultModel = _interopRequireDefault(require("./DefaultModel"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -54,7 +56,7 @@ function _default() {
 
   var reduxStore = (0, _redux.createStore)(function (state, action) {
     if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
-      return undefined;
+      return (0, _ModelHandler.getCombineReducers)([_DefaultModel.default]);
     }
 
     return (0, _ModelHandler.getCombineReducers)(models)(state, action);
@@ -73,7 +75,7 @@ function _default() {
     });
     reduxStore.replaceReducer(function (state, action) {
       if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
-        return undefined;
+        return (0, _ModelHandler.getCombineReducers)([_DefaultModel.default]);
       }
 
       return (0, _ModelHandler.getCombineReducers)(nextModels)(state, action);

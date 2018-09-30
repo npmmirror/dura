@@ -13,6 +13,8 @@ var _reduxActions = require("redux-actions");
 
 var _ActionTypes = _interopRequireDefault(require("./ActionTypes"));
 
+var _DefaultModel = _interopRequireDefault(require("./DefaultModel"));
+
 var reduxSagaEffects = _interopRequireWildcard(require("redux-saga/effects"));
 
 var _this = void 0;
@@ -34,14 +36,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var defaultCore = {
-  namespace: "@@duraCore",
-  initialState: 0,
-  reducers: _defineProperty({}, _ActionTypes.default.PLUS_COUNT.split('/').reverse()[0], function (state) {
-    return state + 1;
-  })
-};
 
 var rename = function rename(namespace, argObj, type) {
   return Object.keys(argObj).map(function (key) {
@@ -315,7 +309,7 @@ _regenerator.default.mark(function getRootSaga(effects) {
 });
 
 var enhanceModels = function enhanceModels(models) {
-  return [defaultCore].concat(models).map(function (m) {
+  return [_DefaultModel.default].concat(models).map(function (m) {
     return additionalNamespacePrefix(m);
   });
 };

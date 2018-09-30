@@ -9,11 +9,20 @@ var _duraCore = require("dura-core");
 
 var _duraUtil = require("dura-util");
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultOps = {
   middleware: [],
   enhancers: [],
+  models: [],
   plugins: [],
   initialState: {}
 };
@@ -75,7 +84,7 @@ function _default() {
     plugins: ops.plugins || [],
     middleware: ops.middleware || [],
     enhancers: ops.enhancers || [],
-    models: [],
+    models: defaultOps.models || [],
     addModel: addModel,
     delModel: delModel,
     clear: clear,
@@ -95,6 +104,7 @@ function _default() {
     }
 
     duraCorePro.models = duraCorePro.models.concat(models);
+    console.log(duraCorePro.models);
     return duraCorePro;
   }
 
@@ -111,7 +121,7 @@ function _default() {
   }
 
   function refresh() {
-    duraCore.replaceModel(enhanceModels(duraCorePro));
+    duraCore.replaceModel.apply(duraCore, _toConsumableArray(enhanceModels(duraCorePro)));
     return duraCorePro;
   }
 
