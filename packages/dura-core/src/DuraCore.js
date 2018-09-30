@@ -2,6 +2,7 @@ import {createStore, applyMiddleware, compose , combineReducers} from "redux";
 import createSagaMiddleware from "redux-saga";
 import {getCombineReducers, getCombineEffects} from "./ModelHandler";
 import ActionTypes from './ActionTypes'
+import defaultModel from './DefaultModel'
 
 const defaultOps = {
     models: [],
@@ -32,7 +33,7 @@ export default function (ops = defaultOps) {
     const reduxStore = createStore(
         function (state, action) {
             if (action?.type === ActionTypes.CANCEL) {
-                return undefined
+                return getCombineReducers([defaultModel])
             }
             return getCombineReducers(models)(state,action);
         }, initialState,
@@ -49,7 +50,7 @@ export default function (ops = defaultOps) {
         reduxStore.dispatch({type: ActionTypes.CANCEL});
         reduxStore.replaceReducer(function (state, action) {
             if (action?.type === ActionTypes.CANCEL) {
-                return undefined
+                return getCombineReducers([defaultModel])
             }
             return getCombineReducers(nextModels)(state,action);
         });

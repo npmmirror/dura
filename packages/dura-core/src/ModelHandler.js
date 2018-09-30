@@ -1,15 +1,9 @@
 import {combineReducers} from "redux";
 import {handleActions} from "redux-actions";
 import ActionTypes from './ActionTypes'
+import defaultModel from './DefaultModel'
 import * as reduxSagaEffects from "redux-saga/effects";
 
-const defaultCore = {
-    namespace: "@@duraCore",
-    initialState: 0,
-    reducers: {
-        [ActionTypes.PLUS_COUNT.split('/').reverse()[0]]: state => state + 1
-    }
-};
 
 const rename = (namespace, argObj, type) =>
     Object.keys(argObj)
@@ -115,7 +109,7 @@ const getRootSaga = function* (effects) {
 };
 
 const enhanceModels = models =>
-    [defaultCore].concat(models).map(m => additionalNamespacePrefix(m));
+    [defaultModel].concat(models).map(m => additionalNamespacePrefix(m));
 
 const getCombineReducers = models =>
     combineReducers(

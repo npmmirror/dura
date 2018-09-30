@@ -4,6 +4,7 @@ import {recursiveEnhanceFun, objectReduce} from 'dura-util'
 const defaultOps = {
     middleware: [],
     enhancers: [],
+    models: [],
     plugins: [],
     initialState: {}
 };
@@ -48,7 +49,7 @@ export default function (ops = defaultOps) {
         plugins: ops.plugins || [],
         middleware: ops.middleware || [],
         enhancers: ops.enhancers || [],
-        models: [],
+        models: defaultOps.models || [],
         addModel, delModel, clear, refresh
     };
 
@@ -63,6 +64,7 @@ export default function (ops = defaultOps) {
 
     function addModel(...models) {
         duraCorePro.models = duraCorePro.models.concat(models)
+        console.log(duraCorePro.models)
         return duraCorePro
     }
 
@@ -77,7 +79,7 @@ export default function (ops = defaultOps) {
     }
 
     function refresh() {
-        duraCore.replaceModel(enhanceModels(duraCorePro))
+        duraCore.replaceModel(...enhanceModels(duraCorePro))
         return duraCorePro
     }
 
