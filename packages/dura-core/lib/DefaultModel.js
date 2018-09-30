@@ -11,12 +11,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _default = defaultCore = {
+var _default = {
   namespace: "@@duraCore",
   initialState: 0,
   reducers: _defineProperty({}, _ActionTypes.default.PLUS_COUNT.split('/').reverse()[0], function (state) {
     return state + 1;
   })
 };
-
 exports.default = _default;

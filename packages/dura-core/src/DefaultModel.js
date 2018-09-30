@@ -1,7 +1,7 @@
 import ActionTypes from "./ActionTypes";
 
 
-export default defaultCore = {
+export default {
     namespace: "@@duraCore",
     initialState: 0,
     reducers: {
