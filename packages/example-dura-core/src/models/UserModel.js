@@ -4,6 +4,10 @@ export default {
         name: "张三",
         age: 12
     },
-    reducers: {},
+    reducers: {
+        onChangeName: function (state, action) {
+            return ({...state, name: action?.payload?.name})
+        }
+    },
     effects: {}
 }

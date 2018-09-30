@@ -58,14 +58,12 @@ function _default() {
   duraCore.reduxStore = reduxStore;
 
   function replaceModel() {
+    var nextModels = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var done = arguments.length > 1 ? arguments[1] : undefined;
     reduxStore.dispatch({
-      type: _ActionTypes.default.CANCEL
+      type: _ActionTypes.default.CANCEL,
+      done: done
     });
-
-    for (var _len = arguments.length, nextModels = new Array(_len), _key = 0; _key < _len; _key++) {
-      nextModels[_key] = arguments[_key];
-    }
-
     reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
     reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
     reduxStore.dispatch({

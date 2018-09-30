@@ -6,6 +6,14 @@ class UserRoute extends Component {
         return (
             <div>
                 <h1>{this.props.name}</h1>
+                <button onClick={() => {
+                    this.props.dispatch({
+                        type: "user/reducers/onChangeName",
+                        payload: {
+                            name: "李四"
+                        }
+                    })
+                }}>变名字</button>
             </div>
         );
     }

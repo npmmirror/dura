@@ -103,8 +103,10 @@ const getRootSaga = function* (effects) {
         mapGenerateSaga.bind(this, effects)
     );
     yield reduxSagaEffects.fork(function* () {
-        yield reduxSagaEffects.take(ActionTypes.CANCEL);
-        yield reduxSagaEffects.cancel(rootTask);
+        yield reduxSagaEffects.takeEvery(ActionTypes.CANCEL,function *(action) {
+            yield reduxSagaEffects.cancel(rootTask);
+            action?.done?.()
+        })
     });
 };
 

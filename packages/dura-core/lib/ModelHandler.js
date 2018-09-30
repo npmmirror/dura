@@ -268,41 +268,58 @@ var getRootSaga =
 /*#__PURE__*/
 _regenerator.default.mark(function getRootSaga(effects) {
   var rootTask;
-  return _regenerator.default.wrap(function getRootSaga$(_context7) {
+  return _regenerator.default.wrap(function getRootSaga$(_context8) {
     while (1) {
-      switch (_context7.prev = _context7.next) {
+      switch (_context8.prev = _context8.next) {
         case 0:
-          _context7.next = 2;
+          _context8.next = 2;
           return reduxSagaEffects.fork(mapGenerateSaga.bind(this, effects));
 
         case 2:
-          rootTask = _context7.sent;
-          _context7.next = 5;
+          rootTask = _context8.sent;
+          _context8.next = 5;
           return reduxSagaEffects.fork(
           /*#__PURE__*/
-          _regenerator.default.mark(function _callee5() {
-            return _regenerator.default.wrap(function _callee5$(_context6) {
+          _regenerator.default.mark(function _callee6() {
+            return _regenerator.default.wrap(function _callee6$(_context7) {
               while (1) {
-                switch (_context6.prev = _context6.next) {
+                switch (_context7.prev = _context7.next) {
                   case 0:
-                    _context6.next = 2;
-                    return reduxSagaEffects.take(_ActionTypes.default.CANCEL);
+                    _context7.next = 2;
+                    return reduxSagaEffects.takeEvery(_ActionTypes.default.CANCEL,
+                    /*#__PURE__*/
+                    _regenerator.default.mark(function _callee5(action) {
+                      var _action$done;
+
+                      return _regenerator.default.wrap(function _callee5$(_context6) {
+                        while (1) {
+                          switch (_context6.prev = _context6.next) {
+                            case 0:
+                              _context6.next = 2;
+                              return reduxSagaEffects.cancel(rootTask);
+
+                            case 2:
+                              action === null || action === void 0 ? void 0 : (_action$done = action.done) === null || _action$done === void 0 ? void 0 : _action$done.call(action);
+
+                            case 3:
+                            case "end":
+                              return _context6.stop();
+                          }
+                        }
+                      }, _callee5, this);
+                    }));
 
                   case 2:
-                    _context6.next = 4;
-                    return reduxSagaEffects.cancel(rootTask);
-
-                  case 4:
                   case "end":
-                    return _context6.stop();
+                    return _context7.stop();
                 }
               }
-            }, _callee5, this);
+            }, _callee6, this);
           }));
 
         case 5:
         case "end":
-          return _context7.stop();
+          return _context8.stop();
       }
     }
   }, getRootSaga, this);

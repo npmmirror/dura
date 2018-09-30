@@ -4,7 +4,7 @@ const webpackDevServer = require("webpack-dev-server");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const compiler = webpack({
-  mode: "none",
+  mode: "production",
   entry: path.resolve(__dirname, "src/index.js"),
   output: {
     filename: "bundle.js",

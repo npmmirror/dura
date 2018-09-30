@@ -24,7 +24,9 @@ describe("demo", () => {
         expect(duraCore.reduxStore.getState()["default"]).toEqual(defaultModel.initialState);
         expect(duraCore.reduxStore.getState()["next"]).toBeUndefined();
 
-        duraCore.replaceModel(nextModel);
+        duraCore.replaceModel([nextModel],function () {
+            console.log("hello")
+        });
 
 
         expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
