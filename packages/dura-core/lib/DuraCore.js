@@ -56,7 +56,7 @@ function _default() {
 
   var reduxStore = (0, _redux.createStore)(function (state, action) {
     if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
-      return (0, _ModelHandler.getCombineReducers)([_DefaultModel.default]);
+      return (0, _ModelHandler.getCombineReducers)();
     }
 
     return (0, _ModelHandler.getCombineReducers)(models)(state, action);
@@ -75,7 +75,7 @@ function _default() {
     });
     reduxStore.replaceReducer(function (state, action) {
       if ((action === null || action === void 0 ? void 0 : action.type) === _ActionTypes.default.CANCEL) {
-        return (0, _ModelHandler.getCombineReducers)([_DefaultModel.default]);
+        return (0, _ModelHandler.getCombineReducers)();
       }
 
       return (0, _ModelHandler.getCombineReducers)(nextModels)(state, action);

@@ -314,7 +314,8 @@ var enhanceModels = function enhanceModels(models) {
   });
 };
 
-var getCombineReducers = function getCombineReducers(models) {
+var getCombineReducers = function getCombineReducers() {
+  var models = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   return (0, _redux.combineReducers)(enhanceModels(models).map(mapModelToCombineReducers).reduce(reduce, {}));
 };
 

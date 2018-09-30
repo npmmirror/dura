@@ -33,7 +33,7 @@ export default function (ops = defaultOps) {
     const reduxStore = createStore(
         function (state, action) {
             if (action?.type === ActionTypes.CANCEL) {
-                return getCombineReducers([defaultModel])
+                return getCombineReducers()
             }
             return getCombineReducers(models)(state,action);
         }, initialState,
@@ -50,7 +50,7 @@ export default function (ops = defaultOps) {
         reduxStore.dispatch({type: ActionTypes.CANCEL});
         reduxStore.replaceReducer(function (state, action) {
             if (action?.type === ActionTypes.CANCEL) {
-                return getCombineReducers([defaultModel])
+                return getCombineReducers()
             }
             return getCombineReducers(nextModels)(state,action);
         });

@@ -111,7 +111,7 @@ const getRootSaga = function* (effects) {
 const enhanceModels = models =>
     [defaultModel].concat(models).map(m => additionalNamespacePrefix(m));
 
-const getCombineReducers = models =>
+const getCombineReducers = (models = []) =>
     combineReducers(
         enhanceModels(models)
             .map(mapModelToCombineReducers)
