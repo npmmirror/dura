@@ -19,12 +19,12 @@ class LayoutRoute extends Component {
                         </ul>
                         <Switch>
                             <Route path="/user" exact render={() => {
-                                this.props.duraCorePro.clear().refresh().addModel(require('../models/UserModel').default).refresh()
+                                this.props?.duraCorePro.clear().refresh().addModel(require('../models/UserModel').default).refresh()
                                 return (<UserRoute/>)
                             }}/>
                             <Route path="/order" exact render={() => {
-                                this.props.duraCorePro.clear().refresh().addModel(require('../models/OrderModel').default).refresh()
-                                return(
+                                this.props?.duraCorePro.clear().refresh().addModel(require('../models/OrderModel').default).refresh()
+                                return (
                                     <OrderRoute/>
                                 )
                             }}/>
