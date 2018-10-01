@@ -28,7 +28,6 @@ describe("demo", () => {
             console.log("hello")
         });
 
-
         expect(duraCore.reduxStore.getState()["default"]).toBeUndefined();
         expect(duraCore.reduxStore.getState()["next"]).toEqual(nextModel.initialState);
 

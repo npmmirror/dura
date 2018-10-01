@@ -102,18 +102,16 @@ const getRootSaga = function* (effects) {
     const rootTask = yield reduxSagaEffects.fork(
         mapGenerateSaga.bind(this, effects)
     );
-    yield reduxSagaEffects.fork(function* () {
-        yield reduxSagaEffects.takeEvery(ActionTypes.CANCEL,function *(action) {
-            yield reduxSagaEffects.cancel(rootTask);
-            action?.done?.()
-        })
-    });
+    yield reduxSagaEffects.takeEvery(ActionTypes.CANCEL, function* (action) {
+        yield reduxSagaEffects.cancel(rootTask);
+        action?.done?.()
+    })
 };
 
 const enhanceModels = models =>
     [defaultModel].concat(models).map(m => additionalNamespacePrefix(m));
 
-const getCombineReducers = (models = []) =>
+const getCombineReducers = (models) =>
     combineReducers(
         enhanceModels(models)
             .map(mapModelToCombineReducers)

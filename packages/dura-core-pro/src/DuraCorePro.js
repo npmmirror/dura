@@ -77,8 +77,8 @@ export default function (ops = defaultOps) {
         return duraCorePro
     }
 
-    function refresh() {
-        duraCore.replaceModel(...enhanceModels(duraCorePro))
+    function refresh(done) {
+        duraCore.replaceModel(enhanceModels(duraCorePro) , done)
         return duraCorePro
     }
 
