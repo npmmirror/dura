@@ -59,15 +59,19 @@ function _default() {
 
   function replaceModel() {
     var nextModels = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    var done = arguments.length > 1 ? arguments[1] : undefined;
+
+    var _done = arguments.length > 1 ? arguments[1] : undefined;
+
     reduxStore.dispatch({
       type: _ActionTypes.default.CANCEL,
-      done: done
-    });
-    reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
-    reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
-    reduxStore.dispatch({
-      type: _ActionTypes.default.PLUS_COUNT
+      done: function done() {
+        reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
+        reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
+        reduxStore.dispatch({
+          type: _ActionTypes.default.PLUS_COUNT
+        });
+        _done === null || _done === void 0 ? void 0 : _done();
+      }
     });
     return duraCore;
   }

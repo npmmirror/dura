@@ -39,10 +39,14 @@ export default function (ops = defaultOps) {
     duraCore.reduxStore = reduxStore;
 
     function replaceModel(nextModels = [], done) {
-        reduxStore.dispatch({type: ActionTypes.CANCEL, done});
-        reduxStore.replaceReducer(getCombineReducers(nextModels));
-        reduxSaga.run(getCombineEffects(nextModels));
-        reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
+        reduxStore.dispatch({
+            type: ActionTypes.CANCEL, done: function () {
+                reduxStore.replaceReducer(getCombineReducers(nextModels));
+                reduxSaga.run(getCombineEffects(nextModels));
+                reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
+                done?.()
+            }
+        });
         return duraCore;
     }
 
