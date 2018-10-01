@@ -278,22 +278,28 @@ _regenerator.default.mark(function getRootSaga(effects) {
         case 2:
           rootTask = _context7.sent;
           _context7.next = 5;
-          return reduxSagaEffects.takeEvery(_ActionTypes.default.CANCEL,
+          return reduxSagaEffects.fork(
           /*#__PURE__*/
-          _regenerator.default.mark(function _callee5(action) {
+          _regenerator.default.mark(function _callee5() {
             var _action$done;
 
+            var action;
             return _regenerator.default.wrap(function _callee5$(_context6) {
               while (1) {
                 switch (_context6.prev = _context6.next) {
                   case 0:
                     _context6.next = 2;
-                    return reduxSagaEffects.cancel(rootTask);
+                    return reduxSagaEffects.take(_ActionTypes.default.CANCEL);
 
                   case 2:
+                    action = _context6.sent;
+                    _context6.next = 5;
+                    return reduxSagaEffects.cancel(rootTask);
+
+                  case 5:
                     action === null || action === void 0 ? void 0 : (_action$done = action.done) === null || _action$done === void 0 ? void 0 : _action$done.call(action);
 
-                  case 3:
+                  case 6:
                   case "end":
                     return _context6.stop();
                 }
