@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = _default;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
 var _redux = require("redux");
 
 var _reduxSaga = _interopRequireDefault(require("redux-saga"));
@@ -14,6 +16,10 @@ var _ModelHandler = require("./ModelHandler");
 var _ActionTypes = _interopRequireDefault(require("./ActionTypes"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -62,18 +68,42 @@ function _default() {
 
     var _done = arguments.length > 1 ? arguments[1] : undefined;
 
-    reduxStore.dispatch({
-      type: _ActionTypes.default.CANCEL,
-      done: function done() {
-        reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
-        reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
-        reduxStore.dispatch({
-          type: _ActionTypes.default.PLUS_COUNT
-        });
-        _done === null || _done === void 0 ? void 0 : _done();
-      }
+    return new Promise(function (resolve) {
+      reduxStore.dispatch({
+        type: _ActionTypes.default.CANCEL,
+        done: function () {
+          var _done2 = _asyncToGenerator(
+          /*#__PURE__*/
+          _regenerator.default.mark(function _callee() {
+            return _regenerator.default.wrap(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    reduxStore.replaceReducer((0, _ModelHandler.getCombineReducers)(nextModels));
+                    reduxSaga.run((0, _ModelHandler.getCombineEffects)(nextModels));
+                    reduxStore.dispatch({
+                      type: _ActionTypes.default.PLUS_COUNT
+                    });
+                    _context.next = 5;
+                    return _done === null || _done === void 0 ? void 0 : _done();
+
+                  case 5:
+                    resolve(duraCore);
+
+                  case 6:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            }, _callee, this);
+          }));
+
+          return function done() {
+            return _done2.apply(this, arguments);
+          };
+        }()
+      });
     });
-    return duraCore;
   }
 
   return duraCore;

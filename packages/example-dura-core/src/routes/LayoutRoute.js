@@ -3,7 +3,6 @@ import {HashRouter, Route, Switch, Link} from "react-router-dom";
 import UserRoute from './UserRoute'
 import OrderRoute from "./OrderRoute"
 import UserDetailRoute from "./UserDetailRoute"
-import UserModel from "../models/UserModel"
 
 class LayoutRoute extends Component {
     render() {
@@ -28,14 +27,13 @@ class LayoutRoute extends Component {
                         <Switch>
                             <Route path="/user/again" exact render={() => {
 
-                                const { duraCorePro } = this.props
+                                const {duraCorePro} = this.props
 
                                 duraCorePro.clear().refresh(() => {
-                                    console.log("hello")
-                                    duraCorePro.addModel(UserModel).refresh(() => console.log(duraCorePro))
+                                    duraCorePro.addModel(require('../models/UserModel').default).refresh()
                                 })
 
-                                return(
+                                return (
                                     <UserRoute/>
                                 )
 

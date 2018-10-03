@@ -6,13 +6,16 @@ import {createDuraCorePro} from "../../dura-core-pro/src"
 import LayoutRoute from './routes/LayoutRoute'
 import UserModel from './models/UserModel'
 import OrderModel from './models/OrderModel'
+import { createLogger } from "redux-logger"
 
 console.log(
     require('./models/UserModel').default
 )
 
 
-const duraCorePro = createDuraCorePro()
+const duraCorePro = createDuraCorePro({
+    middleware:[createLogger()]
+})
 
 
 render(
