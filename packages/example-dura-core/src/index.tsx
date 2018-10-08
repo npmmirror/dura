@@ -4,13 +4,7 @@ import {Provider, connect} from "react-redux";
 import {HashRouter, Route, Switch, Link} from "react-router-dom";
 import {createDuraCorePro} from "../../dura-core-pro/src"
 import LayoutRoute from './routes/LayoutRoute'
-import UserModel from './models/UserModel'
-import OrderModel from './models/OrderModel'
 import { createLogger } from "redux-logger"
-
-console.log(
-    require('./models/UserModel').default
-)
 
 
 const duraCorePro = createDuraCorePro({

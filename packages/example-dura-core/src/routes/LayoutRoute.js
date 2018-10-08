@@ -25,6 +25,7 @@ class LayoutRoute extends Component {
                             </li>
                         </ul>
                         <Switch>
+
                             <Route path="/user/again" exact render={() => {
 
                                 const {duraCorePro} = this.props
@@ -41,7 +42,7 @@ class LayoutRoute extends Component {
                             }}/>
                             <Route path="/user" exact render={() => {
                                 this.props?.duraCorePro.clear().addModel(require('../models/UserModel').default).refresh()
-                                return (<UserRoute/>)
+                                return (<UserRoute duraCorePro={this.props.duraCorePro}/>)
                             }}/>
                             <Route path="/user/detail" exact render={() => {
                                 this.props?.duraCorePro.clear().addModel(require('../models/UserModel').default).refresh()

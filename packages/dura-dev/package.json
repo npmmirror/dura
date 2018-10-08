@@ -1,0 +1,29 @@
+{
+  "name": "dura-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./bin && npx babel ./src -d ./bin",
+    "build:watch": "rm -rf ./bin && npx babel ./src -d ./bin --watch"
+  },
+  "bin": {
+    "dura": "bin/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.4",
+    "cli-color": "^1.3.0",
+    "commander": "^2.18.0",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "style-loader": "^0.23.0",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.20.2"
+  }
+}

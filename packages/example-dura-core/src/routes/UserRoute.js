@@ -5,6 +5,7 @@ class UserRoute extends Component {
 
 
     render() {
+        console.log(this.props.duraCorePro)
         return (
             <div>
                 <h1>{this.props.name}</h1>

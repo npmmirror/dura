@@ -1,0 +1,13 @@
+{
+  "entry": "src/hello.tsx",
+  "outDir": "dist",
+  "alias": {
+    "c": "component"
+  },
+  "extensions": [
+    ".css"
+  ],
+  "define": {
+    "VERSION": "1.0.0-RELEASE"
+  }
+}

@@ -39,18 +39,16 @@ export default function (ops = defaultOps) {
     duraCore.reduxStore = reduxStore;
 
     function replaceModel(nextModels = [], done) {
-        return new Promise((resolve) => {
-            reduxStore.dispatch({
-                type: ActionTypes.CANCEL,
-                done: async function () {
-                    reduxStore.replaceReducer(getCombineReducers(nextModels));
-                    reduxSaga.run(getCombineEffects(nextModels));
-                    reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
-                    await done?.()
-                    resolve(duraCore)
-                }
-            });
-        })
+        reduxStore.dispatch({
+            type: ActionTypes.CANCEL,
+            done: function () {
+                reduxStore.replaceReducer(getCombineReducers(nextModels));
+                reduxSaga.run(getCombineEffects(nextModels));
+                reduxStore.dispatch({type: ActionTypes.PLUS_COUNT});
+                done?.()
+            }
+        });
+        return duraCore;
     }
 
     return duraCore;
