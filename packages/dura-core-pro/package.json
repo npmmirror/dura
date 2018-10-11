@@ -1,6 +1,6 @@
 {
   "name": "dura-core-pro",
-  "version": "0.0.1-alpha.44",
+  "version": "0.0.1-alpha.45",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -10,12 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "dura-core": "^0.0.1-alpha.44",
-    "dura-util": "^0.0.1-alpha.44"
+    "dura-core": "^0.0.1-alpha.45",
+    "dura-util": "^0.0.1-alpha.45"
   },
   "devDependencies": {
-    "dura-plugin-immer": "^0.0.1-alpha.44",
-    "dura-plugin-status": "^0.0.1-alpha.44",
+    "dura-plugin-immer": "^0.0.1-alpha.45",
+    "dura-plugin-status": "^0.0.1-alpha.45",
     "redux": "^4.0.0",
     "redux-persist": "^5.10.0"
   }
