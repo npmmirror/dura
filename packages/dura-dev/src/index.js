@@ -6,9 +6,8 @@ const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
 
-import getWebpackConfig from './webpackConfig'
+import getWebpackConfig from './webpack.config'
 
-const title = clc.xterm(46)
 
 program
     .usage('<command> [options]')
