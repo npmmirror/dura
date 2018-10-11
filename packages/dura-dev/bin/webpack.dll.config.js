@@ -22,7 +22,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var DllPlugin = _webpack.default.DllPlugin;
 
 function getWebpackDllConfig(_ref) {
-  var dll = _ref.dll;
+  var _ref$dll = _ref.dll,
+      dll = _ref$dll === void 0 ? [] : _ref$dll;
   return {
     entry: {
       vendor: [].concat(_toConsumableArray(dll))

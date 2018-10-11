@@ -3,7 +3,7 @@ import webpack from 'webpack'
 
 const {DllPlugin} = webpack
 
-function getWebpackDllConfig({dll}) {
+function getWebpackDllConfig({dll = []}) {
     return {
         entry: {
             vendor: [...[], ...dll]

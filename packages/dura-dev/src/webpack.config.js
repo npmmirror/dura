@@ -13,17 +13,12 @@ function mapObjectValue(object, mapFn) {
         .reduce((prev, next) => ({...prev, ...next}), {});
 }
 
-function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html = true}) {
+function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html}) {
 
     const babelConfig = getBabelConfig({});
 
     let plugin = html ? [
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            minify: {
-                collapseWhitespace: true
-            }
-        }),
+        new HtmlWebpackPlugin({...html}),
         new AddAssetHtmlPlugin({
             filepath: path.join(process.cwd(), '.dura', 'vendor.dll.js')
         })
@@ -35,6 +30,7 @@ function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html =
         entry: path.join(process.cwd(), entry),
         output: {
             filename: "app-[hash:8].js",
+            chunkFilename:'[name].bundle.js',
             path: path.join(process.cwd(), outDir)
         },
         resolve: {
@@ -71,7 +67,9 @@ function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html =
         plugins: [
             ...plugin,
             new NamedModulesPlugin(),
-            new CleanWebpackPlugin([path.join(process.cwd(), outDir)]),
+            new CleanWebpackPlugin([path.join(process.cwd(), outDir)], {
+                root: process.cwd(),
+            }),
             new DefinePlugin({
                 ...{},
                 ...mapObjectValue(define, key => ({

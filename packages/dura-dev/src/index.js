@@ -19,30 +19,32 @@ program
     .description('start dev server')
     .action(function (type, name) {
 
-        fs.readFile(path.join(process.cwd(), '.durc'), null, function (err, data) {
+        const hasConfig = fs.existsSync(path.join(process.cwd(), '.durc'))
 
-            const config = JSON.parse(data);
+        if (!hasConfig) {
+            console.error("配置文件不存在！")
+            return;
+        }
 
-            const webpackConfig = getWebpackConfig(config)
+        const configBuffer = fs.readFileSync(path.join(process.cwd(), '.durc'));
 
-            if (config.dll && typeof config.dll === "object" && config.dll.length > 0) {
-                // webpack(getWebpackDllConfig({dll: config.dll})).run(function (dllWebpackErr, stat) {
-                //     console.log("dll",stat.toJson().errors)
-                // })
-            }
+        const config = JSON.parse(configBuffer.toString());
 
-            console.log(config)
+        const appCompilerCallback = function (err, stat) {
+            console.log("app compiler done")
+        }
 
-            console.log("\r\n\r\n")
+        if (config?.dll && !fs.existsSync(path.join(process.cwd(), ".dura", "vendor.dll.js"))) {
+            webpack(getWebpackDllConfig(config)).run(function (err, stat) {
+                if (!err) {
+                    console.log("dll compiler done")
+                    webpack(getWebpackConfig(config)).run(appCompilerCallback)
+                }
+            })
+        } else {
+            webpack(getWebpackConfig(config)).run(appCompilerCallback)
+        }
 
-            console.log(JSON.stringify(webpackConfig))
-
-            webpack(webpackConfig)
-                .run(function (webpackErr, stat) {
-                    console.log(webpackErr, stat.toJson().errors)
-                    console.log('done')
-                })
-        })
     })
 
 program

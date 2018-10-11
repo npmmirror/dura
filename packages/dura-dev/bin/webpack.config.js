@@ -48,15 +48,9 @@ function getWebpackConfig(_ref) {
       alias = _ref.alias,
       define = _ref.define,
       dll = _ref.dll,
-      _ref$html = _ref.html,
-      html = _ref$html === void 0 ? true : _ref$html;
+      html = _ref.html;
   var babelConfig = (0, _babel.default)({});
-  var plugin = html ? [new _htmlWebpackPlugin.default({
-    filename: 'index.html',
-    minify: {
-      collapseWhitespace: true
-    }
-  }), new _addAssetHtmlWebpackPlugin.default({
+  var plugin = html ? [new _htmlWebpackPlugin.default(_objectSpread({}, html)), new _addAssetHtmlWebpackPlugin.default({
     filepath: _path.default.join(process.cwd(), '.dura', 'vendor.dll.js')
   })] : [];
   return {
@@ -65,6 +59,7 @@ function getWebpackConfig(_ref) {
     entry: _path.default.join(process.cwd(), entry),
     output: {
       filename: "app-[hash:8].js",
+      chunkFilename: '[name].bundle.js',
       path: _path.default.join(process.cwd(), outDir)
     },
     resolve: {
@@ -92,7 +87,9 @@ function getWebpackConfig(_ref) {
         }
       }]
     },
-    plugins: plugin.concat([new NamedModulesPlugin(), new _cleanWebpackPlugin.default([_path.default.join(process.cwd(), outDir)]), new DefinePlugin(_objectSpread({}, {}, mapObjectValue(define, function (key) {
+    plugins: plugin.concat([new NamedModulesPlugin(), new _cleanWebpackPlugin.default([_path.default.join(process.cwd(), outDir)], {
+      root: process.cwd()
+    }), new DefinePlugin(_objectSpread({}, {}, mapObjectValue(define, function (key) {
       return _defineProperty({}, key, JSON.stringify(define[key]));
     }))), new DllReferencePlugin({
       manifest: require(_path.default.join(process.cwd(), ".dura/vendor-manifest.json"))
