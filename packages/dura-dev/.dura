@@ -1,7 +1,0 @@
-{
-  "entry": "src/demo.js",
-  "output": {
-    "filename": "bundle-[hash:8].js",
-    "path": "dist"
-  }
-}

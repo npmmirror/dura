@@ -1,6 +1,6 @@
 import React from 'react'
 import enhance from 'c'
-import './hello.css'
+// import './hello.css'
 
 interface User {
     name: string;

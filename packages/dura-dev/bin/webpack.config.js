@@ -11,6 +11,12 @@ var _babel = _interopRequireDefault(require("./babel.config"));
 
 var _webpack = _interopRequireDefault(require("webpack"));
 
+var _htmlWebpackPlugin = _interopRequireDefault(require("html-webpack-plugin"));
+
+var _addAssetHtmlWebpackPlugin = _interopRequireDefault(require("add-asset-html-webpack-plugin"));
+
+var _cleanWebpackPlugin = _interopRequireDefault(require("clean-webpack-plugin"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -25,7 +31,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var DefinePlugin = _webpack.default.DefinePlugin;
+var DefinePlugin = _webpack.default.DefinePlugin,
+    DllReferencePlugin = _webpack.default.DllReferencePlugin,
+    NamedModulesPlugin = _webpack.default.NamedModulesPlugin;
 
 function mapObjectValue(object, mapFn) {
   return Object.keys(object).map(mapFn).reduce(function (prev, next) {
@@ -38,18 +46,29 @@ function getWebpackConfig(_ref) {
       outDir = _ref.outDir,
       extensions = _ref.extensions,
       alias = _ref.alias,
-      define = _ref.define;
+      define = _ref.define,
+      dll = _ref.dll,
+      _ref$html = _ref.html,
+      html = _ref$html === void 0 ? true : _ref$html;
   var babelConfig = (0, _babel.default)({});
+  var plugin = html ? [new _htmlWebpackPlugin.default({
+    filename: 'index.html',
+    minify: {
+      collapseWhitespace: true
+    }
+  }), new _addAssetHtmlWebpackPlugin.default({
+    filepath: _path.default.join(process.cwd(), '.dura', 'vendor.dll.js')
+  })] : [];
   return {
-    mode: 'production',
+    mode: "production",
     stats: "errors-only",
     entry: _path.default.join(process.cwd(), entry),
     output: {
-      filename: 'bundle-[hash:8].js',
+      filename: "app-[hash:8].js",
       path: _path.default.join(process.cwd(), outDir)
     },
     resolve: {
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'].concat(_toConsumableArray(extensions)),
+      extensions: [".js", ".jsx", ".ts", ".tsx", ".json"].concat(_toConsumableArray(extensions)),
       alias: _objectSpread({}, {}, mapObjectValue(alias, function (key) {
         return _defineProperty({}, key, _path.default.join(process.cwd(), alias[key]));
       }))
@@ -64,7 +83,7 @@ function getWebpackConfig(_ref) {
         }
       }, {
         test: /\.ts|.tsx?$/,
-        loader: 'awesome-typescript-loader',
+        loader: "awesome-typescript-loader",
         options: {
           useBabel: true,
           useCache: true,
@@ -73,9 +92,11 @@ function getWebpackConfig(_ref) {
         }
       }]
     },
-    plugins: [new DefinePlugin(_objectSpread({}, {}, mapObjectValue(define, function (key) {
+    plugins: plugin.concat([new NamedModulesPlugin(), new _cleanWebpackPlugin.default([_path.default.join(process.cwd(), outDir)]), new DefinePlugin(_objectSpread({}, {}, mapObjectValue(define, function (key) {
       return _defineProperty({}, key, JSON.stringify(define[key]));
-    })))]
+    }))), new DllReferencePlugin({
+      manifest: require(_path.default.join(process.cwd(), ".dura/vendor-manifest.json"))
+    })])
   };
 }
 

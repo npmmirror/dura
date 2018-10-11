@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import getWebpackDllConfig from "./webpack.dll.config";
+
 const program = require('commander')
 const clc = require('cli-color')
 const path = require('path')
@@ -16,22 +18,28 @@ program
     .command('dev')
     .description('start dev server')
     .action(function (type, name) {
-        fs.readFile(path.join(process.cwd(), '.dura'), null, function (err, data) {
+
+        fs.readFile(path.join(process.cwd(), '.durc'), null, function (err, data) {
 
             const config = JSON.parse(data);
+
+            const webpackConfig = getWebpackConfig(config)
+
+            if (config.dll && typeof config.dll === "object" && config.dll.length > 0) {
+                // webpack(getWebpackDllConfig({dll: config.dll})).run(function (dllWebpackErr, stat) {
+                //     console.log("dll",stat.toJson().errors)
+                // })
+            }
 
             console.log(config)
 
             console.log("\r\n\r\n")
 
-            const webpackConfig = getWebpackConfig(config)
-
             console.log(JSON.stringify(webpackConfig))
 
             webpack(webpackConfig)
-                .run(function (webpackErr,stat) {
-
-                    console.log(webpackErr,stat.toJson().errors)
+                .run(function (webpackErr, stat) {
+                    console.log(webpackErr, stat.toJson().errors)
                     console.log('done')
                 })
         })
