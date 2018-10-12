@@ -26,11 +26,10 @@ function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html})
 
     return {
         mode: "production",
-        stats: "errors-only",
         entry: path.join(process.cwd(), entry),
         output: {
             filename: "app-[hash:8].js",
-            chunkFilename:'[name].bundle.js',
+            chunkFilename: '[name].bundle.js',
             path: path.join(process.cwd(), outDir)
         },
         resolve: {
@@ -77,7 +76,8 @@ function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html})
                 }))
             }),
             new DllReferencePlugin({
-                manifest: require(path.join(process.cwd(), ".dura/vendor-manifest.json"))
+                context: process.cwd(),
+                manifest: require(path.join(process.cwd(), `.dura/vendor-manifest.json`))
             })
         ]
     };

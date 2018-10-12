@@ -55,7 +55,6 @@ function getWebpackConfig(_ref) {
   })] : [];
   return {
     mode: "production",
-    stats: "errors-only",
     entry: _path.default.join(process.cwd(), entry),
     output: {
       filename: "app-[hash:8].js",
@@ -92,6 +91,7 @@ function getWebpackConfig(_ref) {
     }), new DefinePlugin(_objectSpread({}, {}, mapObjectValue(define, function (key) {
       return _defineProperty({}, key, JSON.stringify(define[key]));
     }))), new DllReferencePlugin({
+      context: process.cwd(),
       manifest: require(_path.default.join(process.cwd(), ".dura/vendor-manifest.json"))
     })])
   };

@@ -7,6 +7,7 @@ const clc = require('cli-color')
 const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
+import webpackDevServer from 'webpack-dev-server'
 
 import getWebpackConfig from './webpack.config'
 
@@ -30,23 +31,42 @@ program
 
         const config = JSON.parse(configBuffer.toString());
 
-        const appCompilerCallback = function (err, stat) {
-            // stat.toJson().modules.forEach(function (item) {
-            //     console.log(item.identifier)
-            // })
-            console.log("app compiler done")
-        }
-
-        if (config?.dll && !fs.existsSync(path.join(process.cwd(), ".dura", "vendor.dll.js"))) {
-            webpack(getWebpackDllConfig(config)).run(function (err, stat) {
+        if (config?.dll && !fs.existsSync(path.join(process.cwd(), ".dura", "vendor-manifest.json"))) {
+            webpack(getWebpackDllConfig(config) ,function (err, stat) {
+                console.log("dll compiler done")
+                stat.toJson().errors.forEach(console.log)
                 if (!err) {
-                    console.log("dll compiler done")
-                    webpack(getWebpackConfig(config)).run(appCompilerCallback)
+                    new webpackDevServer(webpack(getWebpackConfig(config)), {
+                            hot: true,
+                            open: true,
+                            watchOptions: {
+                                aggregateTimeout: 300,
+                                poll: 1000
+                            },
+                            stats: {
+                                colors: true
+                            }
+                        }
+                    ).listen(9999 , '127.0.0.1' , function(){
+
+                    })
                 }
             })
         } else {
-            const compiler = webpack(getWebpackConfig(config));
-            compiler.run(appCompilerCallback)
+            new webpackDevServer(webpack(getWebpackConfig(config)), {
+                    hot: true,
+                    open: true,
+                    watchOptions: {
+                        aggregateTimeout: 300,
+                        poll: 1000
+                    },
+                    stats: {
+                        colors: true
+                    }
+                }
+            ).listen(9999 , '127.0.0.1' , function(){
+
+            })
         }
 
     })

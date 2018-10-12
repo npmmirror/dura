@@ -10,11 +10,13 @@ function getWebpackDllConfig({dll = []}) {
         },
         output: {
             path: path.join(process.cwd(), ".dura"),
-            filename: "[name].dll.js"
+            filename: "[name].dll.js",
+            library: "[name]"
         },
         plugins: [
             new DllPlugin({
-                path: path.join(process.cwd(), ".dura", "[name]-manifest.json"),
+                context: process.cwd(),
+                path: `.dura/[name]-manifest.json`,
                 name: "[name]"
             })
         ]

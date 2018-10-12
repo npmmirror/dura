@@ -1,9 +1,18 @@
 {
-  "entry": "src/hello.tsx",
+  "entry": "src/index.tsx",
   "outDir": "dist",
-  "html":{
-
+  "html": {
+    "template": "public/index.html"
   },
+  "dll": [
+    "react",
+    "react-dom",
+    "react-redux",
+    "react-router-dom",
+    "redux-persist",
+    "dura-core-pro",
+    "dura-plugin-persist"
+  ],
   "alias": {
     "c": "component"
   },

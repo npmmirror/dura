@@ -117,27 +117,30 @@ dll.run((err) => {
                 })
             ]
         });
-
-
+        //
+        //
         compiler.run((err, stats) => {
             console.log("compiler", err)
             // console.log(stats)
         })
+
+
+
+        // const server = new webpackDevServer(compiler, {
+        //     hot: true,
+        //     open: true,
+        //     watchOptions: {
+        //         aggregateTimeout: 300,
+        //         poll: 1000
+        //     },
+        //     stats: {
+        //         colors: true
+        //     }
+        // });
+        //
+        // server.listen(9999, "127.0.0.1", function () {
+        // });
+
     }
 })
 
-
-// const server = new webpackDevServer(compiler, {
-//     hot: true,
-//     open: true,
-//     watchOptions: {
-//         aggregateTimeout: 300,
-//         poll: 1000
-//     },
-//     stats: {
-//         colors: true
-//     }
-// });
-//
-// server.listen(9999, "127.0.0.1", function () {
-// });
