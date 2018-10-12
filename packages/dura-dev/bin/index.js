@@ -30,6 +30,9 @@ program.command('dev').description('start dev server').action(function (type, na
   var config = JSON.parse(configBuffer.toString());
 
   var appCompilerCallback = function appCompilerCallback(err, stat) {
+    // stat.toJson().modules.forEach(function (item) {
+    //     console.log(item.identifier)
+    // })
     console.log("app compiler done");
   };
 
@@ -41,7 +44,8 @@ program.command('dev').description('start dev server').action(function (type, na
       }
     });
   } else {
-    webpack((0, _webpack.default)(config)).run(appCompilerCallback);
+    var compiler = webpack((0, _webpack.default)(config));
+    compiler.run(appCompilerCallback);
   }
 });
 program.command('build').description('build your app').action(function (type, name) {

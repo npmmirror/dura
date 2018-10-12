@@ -1,5 +1,5 @@
 {
-  "entry": "src/demo.js",
+  "entry": "test/demo.js",
   "outDir": "dist",
   "html": {
     "filename": "index.html"

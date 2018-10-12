@@ -31,6 +31,9 @@ program
         const config = JSON.parse(configBuffer.toString());
 
         const appCompilerCallback = function (err, stat) {
+            // stat.toJson().modules.forEach(function (item) {
+            //     console.log(item.identifier)
+            // })
             console.log("app compiler done")
         }
 
@@ -42,7 +45,8 @@ program
                 }
             })
         } else {
-            webpack(getWebpackConfig(config)).run(appCompilerCallback)
+            const compiler = webpack(getWebpackConfig(config));
+            compiler.run(appCompilerCallback)
         }
 
     })

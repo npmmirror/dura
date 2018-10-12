@@ -9,6 +9,7 @@ function getBabelConfig({}) {
             ]
         ],
         plugins: [
+            "@babel/plugin-syntax-dynamic-import",
             "@babel/plugin-transform-react-jsx",
             [
                 "@babel/plugin-transform-runtime",
