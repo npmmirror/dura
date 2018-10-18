@@ -53,13 +53,7 @@ function getWebpackConfig({entry, outDir, extensions, alias, define, dll, html})
                 },
                 {
                     test: /\.ts|.tsx?$/,
-                    loader: "awesome-typescript-loader",
-                    options: {
-                        useBabel: true,
-                        useCache: true,
-                        babelCore: "@babel/core",
-                        babelOptions: babelConfig
-                    }
+                    loader: 'ts-loader'
                 }
             ]
         },

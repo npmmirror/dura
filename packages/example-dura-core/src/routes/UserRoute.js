@@ -15,7 +15,6 @@ class UserRoute extends Component {
                 name: "李四"
               }
             });
-            import("./test-util").then(n => n.hello());
           }}
         >
           变名字
