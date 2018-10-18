@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./bin && npx babel ./src -d ./bin"
+    "build": "rm -rf ./bin && npx babel ./src -d ./bin && cp ./src/index.html ./bin/index.html"
   },
   "bin": {
     "dura": "bin/index.js"
@@ -17,7 +17,6 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "add-asset-html-webpack-plugin": "^3.0.1",
-    "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "cli-color": "^1.3.0",
@@ -26,7 +25,6 @@
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "lodash": "^4.17.11",
-    "react": "^16.5.2",
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.2",
     "url-loader": "^1.1.1",
@@ -34,6 +32,8 @@
     "webpack-dev-server": "^3.1.9"
   },
   "devDependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "typescript": "^3.1.3"
   }
 }

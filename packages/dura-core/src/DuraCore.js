@@ -11,6 +11,7 @@ const defaultOps = {
 };
 
 export default function (ops = defaultOps) {
+
     const {models = [], middleware = [], enhancers = [], initialState = {}} = ops;
 
     const duraCore = {

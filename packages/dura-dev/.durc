@@ -1,8 +1,9 @@
 {
-  "entry": "test/demo.ts",
+  "entry": "test/demo.tsx",
   "outDir": "dist",
   "html": {
-    "filename": "index.html"
+    "filename": "index.html",
+    "template":"./public/index.html"
   },
   "dll": [
     "react"
