@@ -17,7 +17,6 @@ export default class Dura {
     private extractReducer;
     private mergeReducers;
     private addModel;
-    private delModel;
     /**
      * 创建store
      */

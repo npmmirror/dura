@@ -8,7 +8,7 @@ function createAsyncEffects(): IPlugin {
             gEffects: {}
         },
         onModel(model:IModel) {
-            
+
         },
         middleware(store) {
             return next => action => {

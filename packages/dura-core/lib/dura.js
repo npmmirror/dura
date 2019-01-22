@@ -50,16 +50,9 @@ var Dura = /** @class */ (function () {
             throw new Error("[model.name] repeat definition!");
         }
         var onModelFns = this.gPlugins.filter(function (plugin) { return plugin.onModel; }).map(function (plugin) { return plugin.onModel; });
-        var recursive = function (fns, model) { return fns.length === 0 ? model : recursive(fns, fns.shift()(model)); };
+        var recursive = function (fns, model) { return (fns.length === 0 ? model : recursive(fns, fns.shift()(model))); };
         var nextModel = recursive(onModelFns, model);
         this.gModels.push(nextModel);
-    };
-    Dura.prototype.delModel = function (name) {
-        var exits = this.gModels.some(function (model) { return model.name === name; });
-        if (!exits) {
-            throw new Error("[mode.name]there is no");
-        }
-        this.gModels = this.gModels.filter(function (model) { return model.name !== name; });
     };
     /**
      * 创建store
@@ -74,13 +67,6 @@ var Dura = /** @class */ (function () {
                     models[_i] = arguments[_i];
                 }
                 models.forEach(_this.addModel.bind(_this));
-                _this.duraStore.replaceReducer(_this.mergeReducers());
-            }, unModels: function () {
-                var names = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    names[_i] = arguments[_i];
-                }
-                names.forEach(_this.delModel.bind(_this));
                 _this.duraStore.replaceReducer(_this.mergeReducers());
             } });
         return this.duraStore;
