@@ -1,9 +1,19 @@
-import { IPlugin } from 'dura-core/src/typings'
+import {IPlugin , IModel} from 'dura-core/src/typings'
 
-function createAsyncEffects():IPlugin {
+function createAsyncEffects(): IPlugin {
 
 
     return {
-        
+        self: {
+            gEffects: {}
+        },
+        onModel(model:IModel) {
+            
+        },
+        middleware(store) {
+            return next => action => {
+
+            }
+        }
     }
 }
