@@ -1,7 +1,9 @@
+import { IPlugin } from 'dura-core/src/typings'
+
+function createAsyncEffects():IPlugin {
 
 
-function createAsyncEffects() {
-
-
-
+    return {
+        
+    }
 }
