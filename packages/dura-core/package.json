@@ -3,7 +3,7 @@
   "version": "0.0.3-alpha.4",
   "description": "",
   "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./src/index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib"
   },
