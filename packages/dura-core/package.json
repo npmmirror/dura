@@ -14,18 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
-    "invariant": "^2.2.4",
-    "is-plain-object": "^2.0.4",
     "redux": "^4.0.0",
-    "redux-actions": "^2.6.1",
-    "redux-saga": "1.0.0-beta.2"
+    "redux-actions": "^2.6.4"
   },
   "devDependencies": {
-    "dura-plugin-immer": "^0.0.1-alpha.51",
-    "dura-plugin-status": "^0.0.1-alpha.51",
-    "immer": "^1.5.0",
-    "redux-logger": "^3.0.6",
-    "redux-persist": "^5.10.0"
+    "@types/redux": "^3.6.0",
+    "@types/redux-actions": "^2.3.1"
   }
 }
