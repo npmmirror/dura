@@ -1,4 +1,4 @@
-import {IPlugin , IModel} from 'dura-core/src/typings'
+import { IPlugin , IModel } from 'dura-core/src/typings'
 
 function createAsyncEffects(): IPlugin {
 
