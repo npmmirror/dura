@@ -1,6 +1,15 @@
-28 error Error: Command failed: git tag v0.0.2-alpha.0 -m v0.0.2-alpha.0
-28 error fatal: tag 'v0.0.2-alpha.0' already exists
-28 error
-28 error     at makeError (/Users/yuany/GitRepository/dura/node_modules/execa/index.js:174:9)
-28 error     at Promise.all.then.arr (/Users/yuany/GitRepository/dura/node_modules/execa/index.js:278:16)
-28 error     at <anonymous>
+14 error Error: Command failed: git remote update
+14 error error: cannot lock ref 'refs/remotes/origin/class-new': is at 55ccf7cfe28bc9a22541b2623926401d122e4bdd but expected fc8e137569c4a798c8b19a9c3972b91622fe66e5
+14 error From https://github.com/CN-YUANYU/dura
+14 error  ! fc8e137..55ccf7c  class-new  -> origin/class-new  (unable to update local ref)
+14 error error: Could not fetch origin
+14 error
+14 error Fetching origin
+14 error
+14 error     at makeError (/Users/yuany/GitRepository/dura/node_modules/execa/index.js:174:9)
+14 error     at Function.module.exports.sync (/Users/yuany/GitRepository/dura/node_modules/execa/index.js:338:15)
+14 error     at Object.execSync (/Users/yuany/GitRepository/dura/node_modules/@lerna/child-process/index.js:22:16)
+14 error     at updateRemote (/Users/yuany/GitRepository/dura/node_modules/@lerna/version/lib/is-behind-upstream.js:26:16)
+14 error     at isBehindUpstream (/Users/yuany/GitRepository/dura/node_modules/@lerna/version/lib/is-behind-upstream.js:11:3)
+14 error     at VersionCommand.initialize (/Users/yuany/GitRepository/dura/node_modules/@lerna/version/index.js:109:7)
+14 error     at Promise.resolve.then (/Users/yuany/GitRepository/dura/node_modules/@lerna/command/index.js:245:24)
