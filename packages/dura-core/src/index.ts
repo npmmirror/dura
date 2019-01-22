@@ -5,5 +5,4 @@ export default function(config: IConfig) {
   return new Dura(config).createDuraStore();
 }
 
-
-export * from './typings'
+export * from "./typings";

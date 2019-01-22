@@ -10,12 +10,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = require("redux");
-var reducersPlugin_1 = __importDefault(require("./reducersPlugin"));
 var redux_actions_1 = require("redux-actions");
 var Dura = /** @class */ (function () {
     function Dura(config) {
@@ -29,7 +25,7 @@ var Dura = /** @class */ (function () {
         this.gPlugins = [];
         this.config = config;
         config.models.forEach(this.addModel.bind(this));
-        this.gPlugins = [reducersPlugin_1.default()].concat(config.plugins);
+        this.gPlugins = [].concat(config.plugins);
     }
     Dura.prototype.extractReducer = function (model) {
         var _a;

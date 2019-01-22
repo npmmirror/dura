@@ -1,6 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { IModel, IConfig, IPlugin, DuraStore } from "./typings";
-import createReducersPlugin from "./reducersPlugin";
 import { handleActions } from "redux-actions";
 
 export default class Dura {
@@ -24,7 +23,7 @@ export default class Dura {
   constructor(config: IConfig) {
     this.config = config;
     config.models.forEach(this.addModel.bind(this));
-    this.gPlugins = [createReducersPlugin()].concat(config.plugins);
+    this.gPlugins = [].concat(config.plugins);
   }
 
   private extractReducer(model: IModel) {
