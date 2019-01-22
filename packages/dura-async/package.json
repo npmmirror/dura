@@ -1,6 +1,6 @@
 {
   "name": "dura-async",
-  "version": "0.0.3-alpha.3",
+  "version": "0.0.3-alpha.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dura-core": "^0.0.3-alpha.3"
+    "dura-core": "^0.0.3-alpha.4"
   }
 }
