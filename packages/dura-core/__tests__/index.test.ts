@@ -1,6 +1,11 @@
-import create from "../src/index";
+import { create, actions } from "../src/index";
+import { IPlugin, IModel, DuraState } from "../src/typings";
 
 describe("dd", function() {
+  interface EModel extends IModel {
+    effects: () => object;
+  }
+
   it("dd", function() {
     const user = {
       name: "user",
@@ -10,58 +15,60 @@ describe("dd", function() {
       },
       reducers: {
         onChangeName(state, action) {
-          return { ...state, name: action.payload.name };
+          state.name = action.payload.name;
         }
       },
       effects: {
-        onAsyncChangeName(store, action) {
-          store.dispatch({ type: "user.onChangeName", payload: action.payload });
+        async onAsyncChangeName({ dispatch, action }) {
+
+          dispatch({
+            type: "user.onChangeName",
+            payload: action.payload
+          });
           console.log("onAsyncChangeName");
         }
       }
     };
     const store = create({
-      models: [user],
+      models: {
+        user
+      },
       initialState: { user: { name: undefined, sex: "男" } },
       plugins: [],
       middlewares: []
     });
 
-    const stu = {
-      name: "stu",
-      state: {
-        age: undefined
-      },
-      reducers: {
-        onChange(state) {
-          return state;
-        }
-      }
-    };
+    // const stu = {
+    //   name: "stu",
+    //   state: {
+    //     age: undefined
+    //   },
+    //   reducers: {
+    //     onChange(state) {
+    //       return state;
+    //     }
+    //   }
+    // };
 
-    const action = store.dispatch({
-      type: "user.onChangeName",
-      payload: {
-        name: "章三"
-      }
-    });
+    // // actions([user]).user.onChangeName(store.dispatch, { name: "张三" });
 
-    console.log(action);
+    // const f = () => ({
+    //   user:user
+    // })
 
-    console.log(store.getState());
+    // const res = f();
 
-    store.models(stu);
+    // const state: DuraState<typeof res> = store.getState();
+
+    // typeof console.log(store.getState());
 
     // store.dispatch({
-    //     type: "user.clear",
+    //   type: "user.onAsyncChangeName",
+    //   payload: {
+    //     name: "哈哈"
+    //   }
     // });
 
-    console.log(store.getState());
-
-    console.log(store.getState());
-
-    store.models(user);
-
-    console.log(store.getState());
+    // console.log(store.getState());
   });
 });

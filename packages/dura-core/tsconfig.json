@@ -3,12 +3,18 @@
     "outDir": "./lib",
     "sourceMap": true,
     "target": "es5",
+    "lib": ["es2017", "dom"],
     "moduleResolution": "node",
     "declaration": true,
     "declarationDir": "./lib",
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["./@types"],
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "strictNullChecks": true
   },
-  "files": ["./src/index.ts", "./src/typings.d.ts"]
+  "files": ["./src/index.ts"]
 }

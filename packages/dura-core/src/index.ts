@@ -1,8 +1,9 @@
 import Dura from "./dura";
 import { IConfig } from "./typings";
+import { actions } from "./actions";
 
-export default function(config: IConfig) {
+function create(config: IConfig) {
   return new Dura(config).createDuraStore();
 }
 
-export * from "./typings";
+export { create, actions };

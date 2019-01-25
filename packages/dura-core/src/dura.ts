@@ -1,6 +1,15 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import { IModel, IConfig, IPlugin, DuraStore } from "./typings";
+import { IConfig, IPlugin, DuraStore, IRootReducer } from "./typings";
 import { handleActions } from "redux-actions";
+import clone from "clone";
+
+function extractReducers(name: string, model: IModel) {}
+
+function create(config: IConfig) {
+  const initialModel = config.models || {};
+
+  Object.keys(initialModel).map((name: string) => initialModel[name]);
+}
 
 export default class Dura {
   /**
@@ -11,7 +20,7 @@ export default class Dura {
   /**
    * 全局models
    */
-  private gModels: Array<IModel> = [];
+  private rootReducer: IRootReducer;
 
   /**
    * 全局的插件
@@ -22,53 +31,53 @@ export default class Dura {
 
   constructor(config: IConfig) {
     this.config = config;
-    config.models.forEach(this.addModel.bind(this));
     this.gPlugins = [].concat(config.plugins);
+    // config.models.forEach(this.addModel.bind(this));
   }
 
-  private extractReducer(model: IModel) {
-    const nextReducer = Object.keys(model.reducers)
-      .map((key: string) => ({ [`${model.name}.${key}`]: model.reducers[key] }))
+  private renameReducer(modelName: string, model: IModel) {
+    const nextReducer = Object.keys(model.reducers).map((reducerKey: string) => ({
+      [`${modelName}.${reducerKey}`]: model[reducerKey]
+    }));
+    return { [modelName]: handleActions(nextReducer, model.state) };
+  }
+
+  private extractReducers() {
+    this.rootReducer = Object.keys(this.config.models)
+      .map((modelName: string) => this.renameReducer(modelName, this.config.models[modelName]))
       .reduce((prev, next) => ({ ...prev, ...next }), {});
-    return { [model.name]: handleActions(nextReducer, model.state) };
-  }
-
-  private mergeReducers() {
-    return combineReducers(
-      this.gModels.map(this.extractReducer.bind(this)).reduce((prev, next) => ({ ...prev, ...next }), {})
-    );
-  }
-
-  private addModel(model: IModel) {
-    const exits = this.gModels.some((m: IModel) => m.name === model.name);
-    if (exits) {
-      throw new Error("[model.name] repeat definition!");
-    }
-
-    const onModelFns = this.gPlugins.filter(plugin => plugin.onModel).map(plugin => plugin.onModel);
-
-    const recursive = (fns, model) => (fns.length === 0 ? model : recursive(fns, fns.shift()(model)));
-
-    const nextModel = recursive(onModelFns, model);
-
-    this.gModels.push(nextModel);
   }
 
   /**
    * 创建store
    */
   public createDuraStore(): DuraStore {
-    const storeEnhancer = compose(applyMiddleware(...this.config.middlewares));
+    this.extractReducers();
 
-    const reduxStore = createStore(this.mergeReducers(), this.config.initialState || {}, storeEnhancer);
+    // const effects = this.mergeEffects();
 
-    this.duraStore = {
-      ...reduxStore,
-      models: (...models: Array<IModel>) => {
-        models.forEach(this.addModel.bind(this));
-        this.duraStore.replaceReducer(this.mergeReducers());
-      }
-    };
+    // const effectsMiddlewares = store => next => action => {
+    //   if (typeof effects[action.type] === "function") {
+    //     effects[action.type]({
+    //       rootState: clone(store.getState()),
+    //       dispatch: store.dispatch,
+    //       action: action
+    //     });
+    //   }
+    //   return next(action);
+    // };
+
+    // const storeEnhancer = compose(applyMiddleware(effectsMiddlewares));
+
+    // const reduxStore = createStore(this.mergeReducers(), this.config.initialState || {}, storeEnhancer);
+
+    // this.duraStore = {
+    //   ...reduxStore,
+    //   models: (...models: Array<IModel>) => {
+    //     models.forEach(this.addModel.bind(this));
+    //     this.duraStore.replaceReducer(this.mergeReducers());
+    //   }
+    // };
 
     return this.duraStore;
   }

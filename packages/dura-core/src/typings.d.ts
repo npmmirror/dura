@@ -1,9 +1,21 @@
 import { AnyAction, Store } from "redux";
 
-export interface IModel {
-  name: string;
+declare interface IModel {
   state: object;
   reducers: object;
+  effects: object;
+}
+
+interface IRootModel {
+  [name: string]: IModel;
+}
+
+interface IReducer {
+  [name: string]: () => any;
+}
+
+export interface IRootReducer {
+  [name: string]: () => any;
 }
 
 export interface IPlugin {
@@ -15,7 +27,7 @@ export interface IPlugin {
 }
 
 export interface IConfig {
-  models: Array<IModel>;
+  models: IRootModel;
   initialState?: object;
   middlewares?: Array<any>;
   plugins?: Array<IPlugin>;
@@ -24,3 +36,5 @@ export interface IConfig {
 export interface DuraStore extends Store<any, AnyAction> {
   models: (...models: Array<IModel>) => void;
 }
+
+export type DuraState<M extends IRootModel> = { [modelKey in keyof M]: M[modelKey]["state"] };
