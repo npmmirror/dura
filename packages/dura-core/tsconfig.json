@@ -10,11 +10,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "typeRoots": ["./@types"],
-    "noImplicitAny": true,
-    "importHelpers": true,
-    "strictNullChecks": true
+    "allowSyntheticDefaultImports": true
   },
   "files": ["./src/index.ts"]
 }
