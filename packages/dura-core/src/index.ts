@@ -1,60 +1,14 @@
-import { createStore, combineReducers, compose, applyMiddleware, Store, Dispatch, Action , bindActionCreators } from "redux";
-import { handleActions, createActions, createAction } from "redux-actions";
+import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { handleActions, createAction } from "redux-actions";
 import clone from "clone";
+import { Model, Plugin, Config, RootModel, RequestForEffect, DuraStore } from "./typing";
 
-interface IReducers {
-  [name: string]: (state: any, action: any) => any;
-}
-
-interface PayloadAction<P> extends Action {
-  payload?: P;
-}
-
-interface DuraEffectRequest<P> {
-  dispatch: Dispatch;
-  getState: () => any;
-  action: PayloadAction<P>;
-}
-
-interface IEffects {
-  [name: string]: (params: DuraEffectRequest<any>) => void;
-}
-
-interface IState {
-  [name: string]: any;
-}
-
-interface IModel {
-  state: IState;
-  reducers?: IReducers;
-  effects?: IEffects;
-}
-
-interface IRootModel {
-  [name: string]: IModel;
-}
-
-interface IMeta {
-  loading: boolean;
-}
-
-interface IPlugin {
-  self: object;
-  name: () => string;
-  addModel?: () => IModel;
-  wrapModel?: (model: IModel, name: string) => IModel;
-  isInterceptEffect?: (action: Action) => boolean;
-  effectBefore?: (action: any) => void;
-  effectAfter?: (action: any) => void;
-}
-
-interface IConfig {
-  initialModel?: IRootModel;
-  initialState?: any;
-  plugins?: Array<IPlugin>;
-}
-
-function extractReducers(name: string, model: IModel) {
+/**
+ * 提取reducers
+ * @param name
+ * @param model
+ */
+function extractReducers(name: string, model: Model<any>) {
   const reducers = model.reducers || {};
   const reducerKeys = Object.keys(reducers);
   const nextReducer = reducerKeys
@@ -63,7 +17,12 @@ function extractReducers(name: string, model: IModel) {
   return { [name]: handleActions(nextReducer, model.state) };
 }
 
-function extractEffects(name: string, model: IModel) {
+/**
+ * 提取effects
+ * @param name
+ * @param model
+ */
+function extractEffects(name: string, model: Model<any>) {
   const effects = model.effects || {};
   const effectKeys = Object.keys(effects);
   const nextEffects = effectKeys
@@ -72,113 +31,131 @@ function extractEffects(name: string, model: IModel) {
   return nextEffects;
 }
 
-function extractActionCreator(name: string, model: IModel, dispatch: Dispatch) {
+/**
+ * 提取action creator
+ * @param name
+ * @param model
+ */
+function extractActionCreator(name: string, model: Model<any>) {
   const { reducers = {}, effects = {} } = model;
   const reducerKeys = Object.keys(reducers);
   const effectKeys = Object.keys(effects);
-
   const action = reducerKeys
     .concat(effectKeys)
     .map((key: string) => ({
       [key]: (payload, meta) =>
-        dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
+        createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta)
     }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
-  return { [name]: action };
+  return function(dispatch: any) {
+    dispatch[name] = Object.keys(action)
+      .map((key: string) => ({
+        [key]: (payload: any, meta: any) => dispatch(action[key](payload, meta))
+      }))
+      .reduce((prev, next) => ({ ...prev, ...next }), {});
+  };
 }
 
-function createEffectsMiddleware(rootEffects, plugins: Array<IPlugin>) {
-  return (store: Store) => next => action => {
+function createEffectsMiddleware(allModel, plugins: Array<Plugin<any>>, warpDispatchFuncs) {
+  //聚合effects
+  const rootEffects = Object.keys(allModel)
+    .map((name: string) => extractEffects(name, allModel[name]))
+    .reduce((prev, next) => ({ ...prev, ...next }), {});
+
+  const intercepts = plugins.filter(p => p.intercept).map(p => p.intercept);
+
+  return store => next => async action => {
+    //新的dispatch
+    function dispatch(action) {
+      return store.dispatch(action);
+    }
+    //绑定action
+    warpDispatchFuncs.forEach(fn => fn(dispatch));
+
     if (typeof rootEffects[action.type] === "function") {
       //前置拦截器
-      plugins
-        .filter(p => p.effectBefore)
-        .filter(p => p.isInterceptEffect && p.isInterceptEffect.call(p.self, action))
-        .forEach(p => p.effectBefore.call(p.self, action));
+      intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, dispatch));
       //执行effect
-      rootEffects[action.type]({
-        dispatch: store.dispatch,
+      await rootEffects[action.type]({
+        dispatch: dispatch,
         getState: () => clone(store.getState()),
         action
       });
       //后置拦截器
-      plugins
-        .filter(p => p.effectAfter)
-        .filter(p => p.isInterceptEffect && p.isInterceptEffect.call(p.self, action))
-        .forEach(p => p.effectAfter.call(p.self, action));
+      intercepts.filter(i => i.pre(action)).forEach(i => i.after(action, dispatch));
     }
     return next(action);
   };
 }
 
-function onWrapModel(plugins: Array<IPlugin>, name: string, model: IModel) {
+/**
+ * 包装原始model
+ * @param plugins
+ * @param name
+ * @param model
+ */
+function onWrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>) {
   if (plugins && plugins.length === 0) {
     return { [name]: model };
   }
   const firstPlugin = plugins.shift();
-  const nextModel = firstPlugin.wrapModel.call(firstPlugin.self, model, name);
+  const nextModel = firstPlugin.wrapModel.call(name, model);
   return onWrapModel(plugins, name, nextModel);
 }
 
-function getPluginModel(plugins: Array<IPlugin>) {
+/**
+ * 获取插件里面的model
+ * @param plugins
+ */
+function getPluginModel(plugins: Array<Plugin<any>>) {
   return plugins
-    .map(({ name, self, addModel }: IPlugin) => ({ [name()]: addModel.call(self) }))
+    .map(({ name, model }: Plugin<any>) => ({ [name]: model }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-let actionCreator = undefined;
-
-function create(config: IConfig) {
-  const { initialModel = {}, initialState = {}, plugins = [] } = config;
-
+function onModel(config: Config): DuraStore<any, any> {
+  const { initialModel = {}, plugins = [] } = config;
   //追加插件model
-  const pluginModel = getPluginModel(plugins.filter(p => p.addModel));
+  const pluginModel = getPluginModel(plugins.filter(p => p.model));
 
   //全部的model
-  const allModel = { ...initialModel, ...pluginModel };
+  const models = { ...initialModel, ...pluginModel };
+
+  const modelKeys = Object.keys(models);
+
+  //包装已有的model
+  return modelKeys
+    .map((name: string) => onWrapModel(plugins.filter(p => p.wrapModel), name, models[name]))
+    .reduce((prev, next) => ({ ...prev, ...next }), {});
+}
+
+function create(config: Config) {
+  const { initialState = {}, plugins = [] } = config;
+
+  const allModel = onModel(config);
 
   const allModelKeys = Object.keys(allModel);
 
-  //包装已有的model
-  const warpModel = allModelKeys
-    .map((name: string) => onWrapModel(plugins.filter(p => p.wrapModel), name, allModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
+  const warpDispatchFuncs = Object.keys(allModel).map((name: string) => extractActionCreator(name, allModel[name]));
 
   //聚合reducers
   const rootReducers = allModelKeys
-    .map((name: string) => extractReducers(name, warpModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-  //聚合effects
-  const rootEffects = allModelKeys
-    .map((name: string) => extractEffects(name, warpModel[name]))
+    .map((name: string) => extractReducers(name, allModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
   //创建effects的中间件
-  const effectMiddleware = createEffectsMiddleware(rootEffects, plugins);
+  const effectMiddleware = createEffectsMiddleware(allModel, plugins, warpDispatchFuncs);
 
   //store增强器
   const storeEnhancer = compose(applyMiddleware(effectMiddleware));
 
   //创建redux-store
-  const reduxStore = createStore(combineReducers(rootReducers), initialState, storeEnhancer);
+  const reduxStore = createStore(combineReducers(rootReducers), initialState, storeEnhancer) as DuraStore<any, any>;
 
-  //聚合actions
-  actionCreator = allModelKeys
-    .map((name: string) => extractActionCreator(name, warpModel[name], reduxStore.dispatch))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
+  warpDispatchFuncs.forEach(fn => fn(reduxStore.dispatch));
 
   return reduxStore;
 }
+export * from "./typing";
 
-type DuraRootState<M extends IRootModel> = { [key in keyof M]: M[key]["state"] };
-
-type DuraRootReducers<M extends IRootModel> = { [key in keyof M]: M[key]["reducers"] };
-
-type DuraEffects<E extends IEffects> = { [key in keyof E]: (payload: any, meta?: IMeta) => E[key] };
-
-type DuraRootEffects<M extends IRootModel> = { [key in keyof M]: DuraEffects<M[key]["effects"]> };
-
-type DuraDispatch<M extends IRootModel> = DuraRootEffects<M> & DuraRootReducers<M>;
-
-export { create, actionCreator, DuraRootState, DuraDispatch, DuraEffectRequest, IPlugin, IModel, IRootModel,DuraRootEffects };
+export { create, RequestForEffect, Plugin, Model, RootModel };

@@ -1,19 +1,21 @@
 import {
   create,
-  actionCreator,
-  DuraRootState,
-  DuraDispatch,
-  DuraEffectRequest,
-  IPlugin,
-  DuraRootEffects,
-  IModel
+  ExtractRootState,
+  RequestForEffect,
+  Plugin,
+  ExtractRootEffects,
+  ExtractDispatch,
+  Model,
+  RootModel
 } from "../src/index";
-import { createAction } from "redux-actions";
 
 describe("dds", function() {
   it("dd", function() {
     const user = {
       state: {
+        /**
+         * 姓名
+         */
         name: undefined,
         sex: undefined
       },
@@ -28,67 +30,49 @@ describe("dds", function() {
          * 异步获取用户信息
          * @param param0
          */
-        async onAsyncChangeName(request: DuraEffectRequest<{ name: string }>) {
-          actionCreator.user.onChangeName(request.action.payload);
+        async onAsyncChangeName(request: RequestForEffect<{ name: string }, {}>) {
+          const dispatch = request.dispatch as Dispatch,
+            action = request.action,
+            rootState = request.getState() as RootState;
+
+          dispatch.user.onChangeName(action.payload);
         }
       }
     };
 
-    const loadPlugin: IPlugin = {
-      self: {
-        loading: {
-          state: {},
-          reducers: {
-            onChangeLoading(state, action) {
-              return {
-                ...state,
-                [action.payload.name]: {
-                  [action.payload.fnName]: action.payload.loading
-                }
-              };
-            }
+    const loadPlugin: Plugin<any> = {
+      name: "loading",
+      model: {
+        state: {},
+        reducers: {
+          onChangeLoading(state, action) {
+            return {
+              ...state,
+              [action.payload.name]: {
+                [action.payload.fnName]: action.payload.loading
+              }
+            };
           }
         }
       },
-      name(): string {
-        return "loading";
-      },
-      addModel(): IModel {
-        return this.loading;
-      },
-      wrapModel(model: IModel, name: string): IModel {
-        if (name === "loading") {
-          return model;
+      wrapModel: (model: Model<any>) => model,
+      intercept: {
+        pre: action => action && action.meta && action.meta.loading,
+        before: (action, dispatch) => {
+          const [name, fnName] = action.type.split("/");
+          dispatch.loading.onChangeLoading({ name, fnName, loading: true });
+        },
+        after: (action, dispatch) => {
+          const [name, fnName] = action.type.split("/");
+          dispatch.loading.onChangeLoading({ name, fnName, loading: false });
         }
-        const { effects = {} } = model;
-        const modelState = Object.keys(effects)
-          .map((key: string) => ({ [key]: false }))
-          .reduce((prev, next) => ({ ...prev, ...next }), {});
-        this.loading.state = { ...this.loading.state, [name]: modelState };
-        return model;
-      },
-      isInterceptEffect(action) {
-        return action["meta"].loading;
-      },
-      effectBefore(action) {
-        const ac: DuraDispatch<typeof initialModel> = actionCreator;
-        actionCreator.loading.onChangeLoading({
-          name: action.type.split("/")[0],
-          fnName: action.type.split("/")[1],
-          loading: true
-        });
-      },
-      effectAfter(action) {
-        const ac: DuraDispatch<typeof initialModel> = actionCreator;
-        actionCreator.loading.onChangeLoading({
-          name: action.type.split("/")[0],
-          fnName: action.type.split("/")[1],
-          loading: false
-        });
       }
     };
 
     const initialModel = {
+      /**
+       * 用户模块
+       */
       user: user,
       test: {
         state: {
@@ -100,21 +84,26 @@ describe("dds", function() {
       }
     };
 
+    type ExtractLoadingState<RMT extends RootModel> = {
+      loading: ExtractRootEffects<RMT>;
+    };
+
+    type Dispatch = ExtractDispatch<typeof initialModel>;
+    type RootState = ExtractRootState<typeof initialModel> & ExtractLoadingState<typeof initialModel>;
+
     const store = create({
       initialModel,
       plugins: [loadPlugin]
     });
 
-    let state = store.getState() as DuraRootState<typeof initialModel> & {
-      loading: DuraRootEffects<typeof initialModel>;
-    };
+    console.log(store.dispatch);
 
-    const ac: DuraDispatch<typeof initialModel> = actionCreator;
+    let state = store.getState() as RootState;
+
+    const ac = store.dispatch as Dispatch;
 
     ac.user.onAsyncChangeName({ name: "章三" }, { loading: true });
 
-
-    console.log(state["loading"]);
-    console.log(state.loading.user.onAsyncChangeName);
+    console.log(store.getState());
   });
 });
