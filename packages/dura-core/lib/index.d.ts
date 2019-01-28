@@ -1,2 +1,4 @@
-import { IConfig } from "./typings";
-export default function (config: IConfig): import("./typings").DuraStore;
+import { Config, DuraStore } from "./typing";
+declare function create(config: Config): DuraStore<P, M>;
+export * from "./typing";
+export { create };

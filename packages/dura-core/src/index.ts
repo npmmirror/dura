@@ -158,4 +158,4 @@ function create(config: Config) {
 }
 export * from "./typing";
 
-export { create, RequestForEffect, Plugin, Model, RootModel };
+export { create };
