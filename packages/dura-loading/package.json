@@ -1,6 +1,6 @@
 {
   "name": "dura-loading",
-  "version": "0.0.3-alpha.8",
+  "version": "0.0.3-alpha.9",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "dura-core": "0.0.3-alpha.8"
+    "dura-core": "^0.0.3-alpha.9"
   }
 }
