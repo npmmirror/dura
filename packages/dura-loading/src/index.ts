@@ -1,3 +1,7 @@
+/**
+ * 自动loading
+ */
+
 export default {
   name: "loading",
   model: {
