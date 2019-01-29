@@ -1,5 +1,5 @@
 {
-  "name": "dura-types",
+  "name": "@types/dura",
   "version": "0.0.3-alpha.10",
   "description": "",
   "main": "index.js",
