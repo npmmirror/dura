@@ -4,6 +4,9 @@
   "description": "",
   "main": "./lib/index.js",
   "types": "./src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "rm -rf ./lib && npx babel ./src -d ./lib"
   },
