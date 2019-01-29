@@ -1,6 +1,6 @@
 {
   "name": "@dura/loading",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "",
   "main": "index.js",
   "publishConfig": {
@@ -15,6 +15,6 @@
     "dura-core": "^0.0.4-alpha.11"
   },
   "dependencies": {
-    "@dura/types": "^1.0.0-alpha.2"
+    "@dura/types": "^1.0.0-alpha.3"
   }
 }
