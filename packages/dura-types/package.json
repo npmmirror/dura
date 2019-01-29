@@ -1,6 +1,6 @@
 {
   "name": "@types/dura",
-  "version": "0.0.4-alpha.5",
+  "version": "0.0.4-alpha.6",
   "types": "./src/typeing.d.ts",
   "typings": "./src/typeing.d.ts",
   "scripts": {
@@ -12,6 +12,5 @@
     "@types/redux": "^3.6.0"
   },
   "main": "index.js",
-  "devDependencies": {},
   "description": ""
 }

@@ -1,6 +1,6 @@
 {
   "name": "dura-core",
-  "version": "0.0.4-alpha.5",
+  "version": "0.0.4-alpha.6",
   "description": "",
   "main": "./lib/index.js",
   "types": "./src/index.d.ts",
