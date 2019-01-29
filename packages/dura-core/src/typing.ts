@@ -75,6 +75,7 @@ export type ReviewEffectsParam<E extends Effects<any, any>> = {
   [key in keyof E]: (payload?: any, meta?: any) => E[key]
 };
 
+
 export type ExtractRootEffects<M extends RootModel> = { [key in keyof M]: ReviewEffectsParam<M[key]["effects"]> };
 
 export type ExtractDispatch<M extends RootModel> = ExtractRootEffects<M> & ExtractRootReducers<M> & DuraDispatch;
