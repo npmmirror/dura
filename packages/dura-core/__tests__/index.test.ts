@@ -68,7 +68,7 @@ describe("单元测试", function() {
     });
 
     type RootState = ExtractRootState<typeof initModel>;
-    type Dispatch = ExtractDispatch<typeof initModel>;
+    type Dispatch = ExtractDispatch<typeof initModel> | any;
 
     function getState(): RootState {
       return store.getState() as RootState;

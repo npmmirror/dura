@@ -12,8 +12,8 @@ export type DuraAction<P = any, M = any> = PayloadAction<P> & MetaAction<M>;
 
 export type DuraDispatch = Dispatch<AnyAction>;
 
-export type DuraStore<P, M> = Store & {
-  dispatch: DuraDispatch;
+export type DuraStore = Store & {
+  dispatch: DuraDispatch | any;
 };
 
 export type Reducers<S> = {
