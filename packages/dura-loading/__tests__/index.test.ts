@@ -26,7 +26,6 @@ describe("ddd", function() {
           const dispatch = request.dispatch as Dispatch,
             action = request.action,
             rootState = request.getState() as RootState;
-
           dispatch.user.onChangeName(action.payload);
         }
       }
