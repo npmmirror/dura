@@ -14,7 +14,7 @@ describe("dds", function() {
     const user = {
       state: {
         /**
-         * 姓名1
+         * 姓名11
          */
         name: undefined,
         /**
