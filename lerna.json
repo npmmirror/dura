@@ -1,9 +1,5 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "publicConfig": {
-    "access": "public"
-  },
+  "packages": ["packages/*"],
+
   "version": "1.0.0-alpha.2"
 }

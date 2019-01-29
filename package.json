@@ -1,6 +1,8 @@
 {
-  "name": "root",
-  "private": true,
+  "name": "dura",
+  "publicConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.12",
     "jest": "^23.6.0",
