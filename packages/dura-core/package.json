@@ -1,5 +1,5 @@
 {
-  "name": "dura-core",
+  "name": "@dura/core",
   "version": "0.0.4-alpha.11",
   "description": "",
   "main": "./lib/index.js",
