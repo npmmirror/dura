@@ -6,112 +6,82 @@ import {
   ExtractRootEffects,
   ExtractDispatch,
   Model,
-  RootModel
+  RootModel,
+  DuraAction
 } from "@dura/types";
 
-describe("dds", function() {
-  it("dd", function() {
-    const user = {
-      state: {
-        /**
-         * 姓名11
-         */
-        name: undefined,
-        /**
-         * 性别
-         */
-        sex: undefined
-      },
-      reducers: {
-        onChangeName(state: any, action: any): any {
-          state.name = action.payload.name;
-          return { ...state, ...action.payload };
-        }
-      },
-      effects: {
-        /**
-         * 异步获取用户信息
-         * @param param0
-         */
-        async onAsyncChangeName(request: RequestForEffect<{ name: string }, {}>) {
-          const dispatch = request.dispatch as Dispatch,
-            action = request.action,
-            rootState = request.getState() as RootState;
-
-          dispatch.user.onChangeName(action.payload);
-        }
-      }
+describe("单元测试", function() {
+  it("测试创建store", function() {
+    const userInitState = {
+      name: undefined,
+      sex: undefined
     };
 
-    const loadPlugin: Plugin<any> = {
-      name: "loading",
-      model: {
-        state: {},
-        reducers: {
-          onChangeLoading(state, action) {
-            return {
-              ...state,
-              [action.payload.name]: {
-                [action.payload.fnName]: action.payload.loading
-              }
-            };
-          }
-        }
-      },
-      wrapModel: (model: Model<any>) => model,
-      intercept: {
-        pre: action => action && action.meta && action.meta.loading,
-        before: (action, dispatch) => {
-          const [name, fnName] = action.type.split("/");
-          dispatch.loading.onChangeLoading({ name, fnName, loading: true });
-        },
-        after: (action, dispatch) => {
-          const [name, fnName] = action.type.split("/");
-          dispatch.loading.onChangeLoading({ name, fnName, loading: false });
-        }
-      }
+    const user = {
+      state: userInitState
     };
 
     const initialModel = {
       /**
        * 用户模块
        */
-      user: user,
-      /**
-       * 测试模块
-       */
-      test: {
-        state: {
-          test: "xx"
-        },
-        effects: {
-          onAsyncTestFunc() {}
+      user
+    };
+
+    type RootState = ExtractRootState<typeof initialModel>;
+
+    const store = create({
+      initialModel: initialModel
+    });
+
+    function getState(): RootState {
+      return store.getState();
+    }
+
+    expect(getState()).toEqual({ user: userInitState });
+  });
+
+  it("测试reducers", function() {
+    const userInitState = {
+      name: undefined,
+      sex: undefined
+    };
+
+    const user = {
+      state: userInitState,
+      reducers: {
+        onChangeName(state: typeof userInitState, action: DuraAction<{ name?: string }, {}>) {
+          return {
+            ...state,
+            name: action.payload.name
+          };
         }
       }
     };
 
-    type ExtractLoadingState<RMT extends RootModel> = {
-      loading: ExtractRootEffects<RMT>;
+    const initModel = {
+      user
     };
 
-    type Dispatch = ExtractDispatch<typeof initialModel>;
-    type RootState = ExtractRootState<typeof initialModel> & ExtractLoadingState<typeof initialModel>;
-
     const store = create({
-      initialModel,
-      plugins: [loadPlugin]
+      initialModel: initModel
     });
 
-    console.log(store.dispatch);
+    type RootState = ExtractRootState<typeof initModel>;
+    type Dispatch = ExtractDispatch<typeof initModel>;
 
-    let state = store.getState() as RootState;
+    function getState(): RootState {
+      return store.getState() as RootState;
+    }
 
-    const ac = store.dispatch as Dispatch;
+    function getDispatch(): Dispatch {
+      return store.dispatch as Dispatch;
+    }
 
-    ac.user.onAsyncChangeName({ name: "章三" }, { loading: true });
+    expect(getState()).toEqual({ user: userInitState });
 
-    ac.user.onAsyncChangeName();
+    getDispatch().user.onChangeName({ name: "张三" });
 
-    // console.log(state.loading.user.onAsyncChangeName);
+    expect(getState()).toEqual({ user: { ...userInitState, name: "张三" } });
   });
 });

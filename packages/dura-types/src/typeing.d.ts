@@ -1,14 +1,14 @@
 import { Dispatch, Store, AnyAction, DeepPartial } from "redux";
 
-export type PayloadAction<P> = {
+export type PayloadAction<P = any> = {
   payload?: P;
 } & AnyAction;
 
-export type MetaAction<M> = {
+export type MetaAction<M = any> = {
   meta?: M;
 } & AnyAction;
 
-export type DuraAction<P, M> = PayloadAction<P> & MetaAction<M>;
+export type DuraAction<P = any, M = any> = PayloadAction<P> & MetaAction<M>;
 
 export type DuraDispatch = Dispatch<AnyAction>;
 
@@ -16,11 +16,11 @@ export type DuraStore<P, M> = Store & {
   dispatch: DuraDispatch;
 };
 
-export type Reducers<S, P, M> = {
-  [name: string]: (state: S, action: DuraAction<P, M>) => S;
+export type Reducers<S> = {
+  [name: string]: (state: S, action: DuraAction<any, any>) => S;
 };
 
-export type RequestForEffect<P, M> = {
+export type RequestForEffect<P = any, M = any> = {
   dispatch: DuraDispatch;
   getState: () => any;
   action: DuraAction<P, M>;
@@ -34,9 +34,9 @@ export type State = {
   [name: string]: number | string | object | undefined | null;
 };
 
-export interface Model<S> {
+export interface Model<S = any> {
   state: State;
-  reducers?: Reducers<S, any, any>;
+  reducers?: Reducers<S>;
   effects?: Effects<any, any>;
 }
 
@@ -65,9 +65,7 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ReviewReducersParam<R extends Reducers<any, any, any>> = {
-  [key in keyof R]: (payload?: any, meta?: any) => R[key]
-};
+export type ReviewReducersParam<R extends Reducers<any>> = { [key in keyof R]: (payload?: any, meta?: any) => R[key] };
 
 export type ExtractRootReducers<M extends RootModel> = { [key in keyof M]: ReviewReducersParam<M[key]["reducers"]> };
 
@@ -77,4 +75,4 @@ export type ReviewEffectsParam<E extends Effects<any, any>> = {
 
 export type ExtractRootEffects<M extends RootModel> = { [key in keyof M]: ReviewEffectsParam<M[key]["effects"]> };
 
-export type ExtractDispatch<M extends RootModel> = ExtractRootEffects<M> & ExtractRootReducers<M> & DuraDispatch;
+export type ExtractDispatch<M extends RootModel> = ExtractRootEffects<M> & ExtractRootReducers<M>;

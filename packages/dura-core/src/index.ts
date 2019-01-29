@@ -129,7 +129,7 @@ function onModel(config: Config): DuraStore<any, any> {
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-function create(config: Config) {
+function create(config: Config): DuraStore<any, any> {
   const { initialState = {}, plugins = [] } = config;
 
   const allModel = onModel(config);
