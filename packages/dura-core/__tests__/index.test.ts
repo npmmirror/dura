@@ -14,7 +14,7 @@ describe("dds", function() {
     const user = {
       state: {
         /**
-         * 姓名
+         * 姓名1
          */
         name: undefined,
         /**
@@ -34,12 +34,9 @@ describe("dds", function() {
          * @param param0
          */
         async onAsyncChangeName(request: RequestForEffect<{ name: string }, {}>) {
-
-
           const dispatch = request.dispatch as Dispatch,
             action = request.action,
             rootState = request.getState() as RootState;
-
 
           dispatch.user.onChangeName(action.payload);
         }
@@ -109,12 +106,11 @@ describe("dds", function() {
 
     let state = store.getState() as RootState;
 
-
     const ac = store.dispatch as Dispatch;
 
     ac.user.onAsyncChangeName({ name: "章三" }, { loading: true });
 
-    ac.user.onAsyncChangeName()
+    ac.user.onAsyncChangeName();
 
     // console.log(state.loading.user.onAsyncChangeName);
   });
