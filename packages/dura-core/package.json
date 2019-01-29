@@ -3,12 +3,11 @@
   "version": "1.0.0-alpha.0",
   "description": "",
   "main": "./lib/index.js",
-  "types": "./src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "rm -rf ./lib && npx babel ./src -d ./lib"
+    "build": "rm -rf ./lib && tsc"
   },
   "jest": {
     "transform": {
@@ -25,6 +24,7 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
+    "@dura/types": "^1.0.0-alpha.0",
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^2.3.1"
   }

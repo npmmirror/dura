@@ -1,5 +1,5 @@
+import { create } from "../src/index";
 import {
-  create,
   ExtractRootState,
   RequestForEffect,
   Plugin,
@@ -7,7 +7,7 @@ import {
   ExtractDispatch,
   Model,
   RootModel
-} from "../src/index";
+} from "@dura/types";
 
 describe("dds", function() {
   it("dd", function() {

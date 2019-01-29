@@ -7,11 +7,14 @@
     "access": "public"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf ./lib && tsc"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "dura-core": "^0.0.4-alpha.11"
+  },
+  "dependencies": {
+    "@dura/types": "^1.0.0-alpha.0"
   }
 }

@@ -1,6 +1,7 @@
 /**
  * 自动loading
  */
+import { ExtractRootEffects, RootModel } from "@dura/types";
 
 export default {
   name: "loading",
@@ -29,4 +30,8 @@ export default {
       dispatch.loading.onChangeLoading({ name, fnName, loading: false });
     }
   }
+};
+
+export type ExtractLoadingState<RMT extends RootModel> = {
+  loading: ExtractRootEffects<RMT>;
 };

@@ -1,4 +1,3 @@
-import { Config, DuraStore } from "./typing";
+import { Config, DuraStore } from "@dura/types";
 declare function create(config: Config): DuraStore<P, M>;
-export * from "./typing";
 export { create };

@@ -1,7 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { handleActions, createAction } from "redux-actions";
 import clone from "clone";
-import { Model, Plugin, Config, RootModel, RequestForEffect, DuraStore } from "./typing";
+import { Model, Plugin, Config, DuraStore } from "@dura/types";
 
 /**
  * 提取reducers
@@ -156,6 +156,5 @@ function create(config: Config) {
 
   return reduxStore;
 }
-export * from "./typing";
 
 export { create };
