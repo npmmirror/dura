@@ -1,4 +1,5 @@
-import { create, RequestForEffect, ExtractDispatch, ExtractRootState, RootModel, ExtractRootEffects } from "dura-core";
+import { create } from "@dura/core";
+import { RequestForEffect, ExtractDispatch, ExtractRootState, RootModel, ExtractRootEffects } from "@dura/types";
 import loading from "../src/index";
 
 describe("ddd", function() {
