@@ -6,9 +6,9 @@ clone@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
 
-dura-core@0.0.3-alpha.8:
-  version "0.0.3-alpha.8"
-  resolved "https://registry.yarnpkg.com/dura-core/-/dura-core-0.0.3-alpha.8.tgz#c8d5b217907e05fd6ff9c14985fae6307273adcf"
+dura-core@^0.0.4-alpha.1:
+  version "0.0.3-alpha.10"
+  resolved "https://registry.yarnpkg.com/dura-core/-/dura-core-0.0.3-alpha.10.tgz#31ac3a403506185852a37b19b430e70e9f085ff3"
   dependencies:
     clone "^2.1.2"
     immer "^1.12.0"
