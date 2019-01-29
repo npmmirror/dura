@@ -8,9 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "publicConfig": {
-    "access": "public"
-  },
   "devDependencies": {
     "dura-core": "^0.0.4-alpha.11"
   }

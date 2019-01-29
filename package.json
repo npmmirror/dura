@@ -1,6 +1,6 @@
 {
   "name": "dura",
-  "publicConfig": {
+  "publishConfig": {
     "access": "public"
   },
   "devDependencies": {

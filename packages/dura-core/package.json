@@ -13,9 +13,6 @@
     }
   },
   "author": "",
-  "publicConfig": {
-    "access": "public"
-  },
   "license": "ISC",
   "dependencies": {
     "clone": "^2.1.2",
