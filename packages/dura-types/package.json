@@ -1,7 +1,6 @@
 {
   "name": "@types/dura",
   "version": "0.0.4-alpha.5",
-  "description": "",
   "types": "./src/typeing.d.ts",
   "typings": "./src/typeing.d.ts",
   "scripts": {
@@ -11,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/redux": "^3.6.0"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "description": ""
 }
