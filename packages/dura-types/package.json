@@ -2,8 +2,8 @@
   "name": "@types/dura",
   "version": "0.0.4-alpha.4",
   "description": "",
-  "main": "index.js",
   "types": "./src/typeing.d.ts",
+  "typings": "./src/typeing.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
