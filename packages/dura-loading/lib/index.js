@@ -16,11 +16,13 @@ exports.default = {
     model: {
         state: {},
         reducers: {
-            onChangeLoading: function (state, action) {
-                var _a, _b;
-                return __assign({}, state, (_a = {}, _a[action.payload.name] = (_b = {},
-                    _b[action.payload.fnName] = action.payload.loading,
-                    _b), _a));
+            onChangeLoading: function (payload) {
+                return function (state) {
+                    var _a, _b;
+                    return __assign({}, state, (_a = {}, _a[payload.name] = (_b = {},
+                        _b[payload.fnName] = payload.loading,
+                        _b), _a));
+                };
             }
         }
     },
@@ -29,11 +31,25 @@ exports.default = {
         pre: function (action) { return action && action.meta && action.meta.loading; },
         before: function (action, dispatch) {
             var _a = action.type.split("/"), name = _a[0], fnName = _a[1];
-            dispatch.loading.onChangeLoading({ name: name, fnName: fnName, loading: true });
+            dispatch({
+                type: "loading/onChangeLoading",
+                payload: {
+                    name: name,
+                    fnName: fnName,
+                    loading: true
+                }
+            });
         },
         after: function (action, dispatch) {
             var _a = action.type.split("/"), name = _a[0], fnName = _a[1];
-            dispatch.loading.onChangeLoading({ name: name, fnName: fnName, loading: false });
+            dispatch({
+                type: "loading/onChangeLoading",
+                payload: {
+                    name: name,
+                    fnName: fnName,
+                    loading: false
+                }
+            });
         }
     }
 };

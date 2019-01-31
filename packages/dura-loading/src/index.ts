@@ -8,12 +8,14 @@ export default {
   model: {
     state: {},
     reducers: {
-      onChangeLoading(state, action) {
-        return {
-          ...state,
-          [action.payload.name]: {
-            [action.payload.fnName]: action.payload.loading
-          }
+      onChangeLoading(payload: { name: string; fnName: string; loading: true }) {
+        return function(state) {
+          return {
+            ...state,
+            [payload.name]: {
+              [payload.fnName]: payload.loading
+            }
+          };
         };
       }
     }

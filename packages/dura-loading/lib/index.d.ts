@@ -1,13 +1,17 @@
 /**
  * 自动loading
  */
-import { ExtractRootEffects, RootModel } from "@dura/types";
+import { RootModel, Effects } from "@dura/types";
 declare const _default: {
     name: string;
     model: {
         state: {};
         reducers: {
-            onChangeLoading(state: any, action: any): any;
+            onChangeLoading(payload: {
+                name: string;
+                fnName: string;
+                loading: true;
+            }): (state: any) => any;
         };
     };
     wrapModel: (model: any) => any;
@@ -18,6 +22,14 @@ declare const _default: {
     };
 };
 export default _default;
+declare type ConvertFnToBoolean<E extends Effects> = {
+    [key in keyof E]: boolean;
+};
 export declare type ExtractLoadingState<RMT extends RootModel> = {
-    loading: ExtractRootEffects<RMT>;
+    loading: {
+        [key in keyof RMT]: ConvertFnToBoolean<RMT[key]["effects"]>;
+    };
+};
+export declare type LoadingMeta = {
+    loading: boolean;
 };

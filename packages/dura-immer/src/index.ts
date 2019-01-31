@@ -8,7 +8,8 @@ export default {
 
     const nextReducers = Object.keys(reducers)
       .map((name: string) => ({
-        [name]: (baseState, action) => produce(baseState, draftState => reducers[name](draftState, action))
+        [name]: (payload?: any, meta?: any) => (baseState: any) =>
+          produce(baseState, draftState => reducers[name](payload, meta)(draftState))
       }))
       .reduce((prev, next) => ({ ...prev, ...next }), {});
 
