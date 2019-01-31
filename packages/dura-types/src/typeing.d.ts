@@ -1,57 +1,61 @@
 import { Dispatch, Store, AnyAction, DeepPartial } from "redux";
 
-export type PayloadAction<P = any> = {
+export type Payload = {
+  [name: string]: any;
+};
+
+export type Meta = {
+  [name: string]: any;
+};
+
+export type DuraAction<P extends Payload = any, M extends Meta = any> = {
+  type: string;
   payload?: P;
-} & AnyAction;
-
-export type MetaAction<M = any> = {
   meta?: M;
-} & AnyAction;
+  error?: boolean;
+};
 
-export type DuraAction<P = any, M = any> = PayloadAction<P> & MetaAction<M>;
-
-export type DuraDispatch = Dispatch<AnyAction>;
-
-export type DuraStore<RootState = any, ActionCreator = any> = Store<RootState> & {
-  dispatch: DuraDispatch | any;
-  actionCreator: ActionCreator;
+export type DuraStore<RootState = any, ActionRunner = any> = Store<RootState> & {
+  dispatch: Dispatch;
+  actionRunner: ActionRunner;
 };
 
 export type Reducers<S = any> = {
-  [name: string]: (state: S, action: DuraAction) => S;
+  [name: string]: (payload?: Payload, meta?: Meta) => (state: S) => S;
 };
 
-export type SelectRequest<S = any, R = any> = (state: S) => R;
+export type Effect<RootState> = (request: EffectAPI<RootState>) => void;
 
-export type ERequest<P = any, S = any, M = any> = {
-  dispatch: DuraDispatch | any;
-  select: (fn: SelectRequest<S>) => any;
+export type Effects<RootState = any> = {
+  [name: string]: (payload?: Payload, meta?: Meta) => Effect<RootState>;
+};
+
+export type Select<RootState = any, R = any> = (state: RootState) => R;
+
+export type EffectAPI<RootState = any> = {
+  dispatch: Dispatch;
+  getState: () => RootState;
   delay: (ms: number) => Promise<{}>;
-  action: DuraAction<P, M>;
-};
-
-export type Effects<P = any, M = any> = {
-  [name: string]: ((request: ERequest<P, M>) => void) | ((request: ERequest<P, M>) => () => void);
 };
 
 export type State = {
   [name: string]: number | string | object | undefined | null;
 };
 
-export interface Model<S = any> {
+export interface Model<ModelState = any, RootState = any> {
   state: State;
-  reducers?: Reducers<S>;
-  effects?: Effects<any, any>;
+  reducers?: Reducers<ModelState>;
+  effects?: Effects<RootState>;
 }
 
 export interface RootModel {
-  [name: string]: Model<any>;
+  [name: string]: Model;
 }
 
 type EffectIntercept = {
   pre: (action: DuraAction) => boolean;
-  before: (action: DuraAction, dispatch: DuraDispatch) => void;
-  after: (action: DuraAction, dispatch: DuraDispatch) => void;
+  before: (action: DuraAction, dispatch: Dispatch) => void;
+  after: (action: DuraAction, dispatch: Dispatch) => void;
 };
 
 export type Plugin<S = any> = {
@@ -69,12 +73,8 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ExtractRootAction<M extends RootModel> = ExtractReducersAction<M> & ExtractEffectsAction<M>;
+export type ExtractRootActionRunner<M extends RootModel> = ExtractReducersActionRunner<M> & ExtractEffectsActionRunner<M>;
 
-export type ExtractReducersAction<M extends RootModel> = { [key in keyof M]: WrapReducerAction<M[key]["reducers"]> };
+export type ExtractReducersActionRunner<M extends RootModel> = { [key in keyof M]: M[key]["reducers"] };
 
-export type ExtractEffectsAction<M extends RootModel> = { [key in keyof M]: WrapEffectAction<M[key]["effects"]> };
-
-export type WrapReducerAction<R extends Reducers> = { [key in keyof R]: (payload?: any, meta?: any) => DuraAction };
-
-export type WrapEffectAction<E extends Effects> = { [key in keyof E]: (payload?: any, meta?: any) => DuraAction };
+export type ExtractEffectsActionRunner<M extends RootModel> = { [key in keyof M]: M[key]["effects"] };

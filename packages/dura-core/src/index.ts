@@ -12,7 +12,9 @@ function extractReducers(name: string, model: Model<any>) {
   const reducers = model.reducers || {};
   const reducerKeys = Object.keys(reducers);
   const nextReducer = reducerKeys
-    .map((reducerName: string) => ({ [`${name}/${reducerName}`]: reducers[reducerName] }))
+    .map((reducerName: string) => ({
+      [`${name}/${reducerName}`]: (state, action) => reducers[reducerName](action.payload, action.meta)(state)
+    }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
   return { [name]: handleActions(nextReducer, model.state) };
 }
@@ -42,22 +44,23 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
   const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
 
   return store => next => async action => {
+    let result = next(action);
     if (typeof rootEffects[action.type] === "function") {
       const dispatch = store.dispatch;
-      const select = fn => fn(clone(store.getState()));
+      const getState = () => clone(store.getState());
       //前置拦截器
       intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, store.dispatch));
       //执行effect
-      await rootEffects[action.type]({
+      const effect = rootEffects[action.type](action.payload);
+      result = await effect({
         dispatch,
-        select,
-        delay,
-        action
+        getState,
+        delay
       });
       //后置拦截器
       intercepts.filter(i => i.pre(action)).forEach(i => i.after(action, store.dispatch));
     }
-    return next(action);
+    return result;
   };
 }
 
@@ -109,8 +112,6 @@ function create(config: Config): DuraStore {
 
   const allModelKeys = Object.keys(allModel);
 
-  const actionCreator = createActionCreator(allModel)
-
   //聚合reducers
   const rootReducers = allModelKeys
     .map((name: string) => extractReducers(name, allModel[name]))
@@ -126,10 +127,13 @@ function create(config: Config): DuraStore {
   const reduxStore = (initialState
     ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
-  return {...reduxStore , actionCreator};
+
+  const actionRunner = createActionCreator(allModel, reduxStore.dispatch);
+
+  return { ...reduxStore, actionRunner };
 }
 
-function createModelAction(name: string, model: Model) {
+function createModelAction(name: string, model: Model, dispatch: Dispatch) {
   const { reducers = {}, effects = {} } = model;
   const reducerKeys = Object.keys(reducers);
   const effectKeys = Object.keys(effects);
@@ -137,17 +141,17 @@ function createModelAction(name: string, model: Model) {
 
   const createActionMap = (key: string) => ({
     [key]: (payload: any, meta: any) =>
-      createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta)
+      dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
   });
 
   const action = [...reducerKeys, ...effectKeys].map(createActionMap).reduce(merge, {});
   return { [name]: action };
 }
 
-function createActionCreator(models: RootModel) {
+function createActionCreator(models: RootModel, dispatch: Dispatch) {
   const merge = (prev, next) => ({ ...prev, ...next });
   return Object.keys(models)
-    .map((name: string) => createModelAction(name, models[name]))
+    .map((name: string) => createModelAction(name, models[name], dispatch))
     .reduce(merge, {});
 }
 
