@@ -1,7 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware, Dispatch } from "redux";
 import { handleActions, createAction } from "redux-actions";
 import clone from "clone";
-import { Model, Plugin, Config, DuraStore, RootModel, ActionCreator } from "@dura/types";
+import { Model, Plugin, Config, DuraStore, RootModel } from "@dura/types";
 
 /**
  * 提取reducers
@@ -109,6 +109,8 @@ function create(config: Config): DuraStore {
 
   const allModelKeys = Object.keys(allModel);
 
+  const actionCreator = createActionCreator(allModel)
+
   //聚合reducers
   const rootReducers = allModelKeys
     .map((name: string) => extractReducers(name, allModel[name]))
@@ -124,7 +126,7 @@ function create(config: Config): DuraStore {
   const reduxStore = (initialState
     ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
-  return reduxStore;
+  return {...reduxStore , actionCreator};
 }
 
 function createModelAction(name: string, model: Model) {

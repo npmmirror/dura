@@ -12,8 +12,9 @@ export type DuraAction<P = any, M = any> = PayloadAction<P> & MetaAction<M>;
 
 export type DuraDispatch = Dispatch<AnyAction>;
 
-export type DuraStore<RS = any> = Store<RS> & {
+export type DuraStore<RootState = any, ActionCreator = any> = Store<RootState> & {
   dispatch: DuraDispatch | any;
+  actionCreator: ActionCreator;
 };
 
 export type Reducers<S = any> = {
@@ -22,9 +23,9 @@ export type Reducers<S = any> = {
 
 export type SelectRequest<S = any, R = any> = (state: S) => R;
 
-export type ERequest<P = any, AC = any, RS = any, M = any> = {
+export type ERequest<P = any, S = any, M = any> = {
   dispatch: DuraDispatch | any;
-  select: (fn: SelectRequest<RS>) => any;
+  select: (fn: SelectRequest<S>) => any;
   delay: (ms: number) => Promise<{}>;
   action: DuraAction<P, M>;
 };
@@ -68,22 +69,12 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ActionCreator<M extends RootModel> = ReducersActionCreator<M> & EffectsActionCreator<M>;
+export type ExtractRootAction<M extends RootModel> = ExtractReducersAction<M> & ExtractEffectsAction<M>;
 
-export type ReducersActionCreator<M extends RootModel> = { [key in keyof M]: ReducerAction<M[key]["reducers"]> };
+export type ExtractReducersAction<M extends RootModel> = { [key in keyof M]: WrapReducerAction<M[key]["reducers"]> };
 
-export type EffectsActionCreator<M extends RootModel> = { [key in keyof M]: EffectAction<M[key]["effects"]> };
+export type ExtractEffectsAction<M extends RootModel> = { [key in keyof M]: WrapEffectAction<M[key]["effects"]> };
 
-export type ReducerAction<R extends Reducers> = { [key in keyof R]: (payload?: any, meta?: any) => DuraAction };
+export type WrapReducerAction<R extends Reducers> = { [key in keyof R]: (payload?: any, meta?: any) => DuraAction };
 
-export type EffectAction<E extends Effects> = { [key in keyof E]: (payload?: any, meta?: any) => DuraAction };
-
-export type ReviewReducersParam<R extends Reducers> = { [key in keyof R]: (payload?: any, meta?: any) => R[key] };
-
-export type ExtractRootReducers<M extends RootModel> = { [key in keyof M]: ReviewReducersParam<M[key]["reducers"]> };
-
-export type ReviewEffectsParam<E extends Effects> = { [key in keyof E]: (payload?: any, meta?: any) => E[key] };
-
-export type ExtractRootEffects<M extends RootModel> = { [key in keyof M]: ReviewEffectsParam<M[key]["effects"]> };
-
-export type ExtractDispatch<M extends RootModel> = ExtractRootEffects<M> & ExtractRootReducers<M>;
+export type WrapEffectAction<E extends Effects> = { [key in keyof E]: (payload?: any, meta?: any) => DuraAction };

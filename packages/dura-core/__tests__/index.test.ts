@@ -1,5 +1,5 @@
 import { create, createActionCreator } from "../src/index";
-import { ExtractRootState, ERequest, Plugin, Model, DuraAction, ActionCreator, DuraStore } from "@dura/types";
+import { ExtractRootState, ERequest, Plugin, Model, DuraAction, ExtractRootAction, DuraStore } from "@dura/types";
 
 describe("单元测试", function() {
   it("测试创建store", function() {
@@ -23,13 +23,9 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initialModel
-    });
+    }) as DuraStore<RootState>;
 
-    function getState(): RootState {
-      return store.getState();
-    }
-
-    expect(getState()).toEqual({ user: initialState });
+    expect(store.getState()).toEqual({ user: initialState });
   });
 
   it("测试初始化全局的state", function() {
@@ -94,13 +90,13 @@ describe("单元测试", function() {
     };
 
     type RootState = ExtractRootState<typeof initModel>;
-    type RootAction = ActionCreator<typeof initModel>;
+    type RootAction = ExtractRootAction<typeof initModel>;
 
     const store = create({
       initialModel: initModel
-    }) as DuraStore<RootState>;
+    }) as DuraStore<RootState, RootAction>;
 
-    const actionCreator = createActionCreator(initModel);
+    const actionCreator = store.actionCreator;
 
     expect(store.getState().user).toEqual(initialState);
 
@@ -158,15 +154,15 @@ describe("单元测试", function() {
     };
 
     type RootState = ExtractRootState<typeof initModel>;
-    type RootAction = ActionCreator<typeof initModel>;
+    type RootAction = ExtractRootAction<typeof initModel>;
 
-    type Request<P> = ERequest<P, RootAction, RootState>;
-
-    const actionCreator = createActionCreator(initModel);
+    type Request<P> = ERequest<P, RootState, RootAction>;
 
     const store = create({
       initialModel: initModel
-    }) as DuraStore<RootState>;
+    }) as DuraStore<RootState, RootAction>;
+
+    const actionCreator = store.actionCreator;
 
     expect(store.getState().user).toEqual(initialState);
 

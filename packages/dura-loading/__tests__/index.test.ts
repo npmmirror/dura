@@ -1,9 +1,9 @@
-import { create } from "@dura/core";
-import { RequestForEffect, ExtractDispatch, ExtractRootState, RootModel, ExtractRootEffects } from "@dura/types";
-import loading from "../src/index";
+import { create, createActionCreator } from "@dura/core";
+import { ERequest, ExtractRootState, ExtractRootAction, DuraStore } from "@dura/types";
+import loading, { ExtractLoadingState, LoadingMeta } from "../src/index";
 
-describe("ddd", function() {
-  it("xx", function() {
+describe("测试loading 插件", function() {
+  it("测试loading 插件", function(done) {
     const user = {
       state: {
         /**
@@ -23,11 +23,10 @@ describe("ddd", function() {
          * 异步获取用户信息
          * @param param0
          */
-        async onAsyncChangeName(request: RequestForEffect<{ name: string }, {}>) {
-          const dispatch = request.dispatch as Dispatch,
-            action = request.action,
-            rootState = request.getState() as RootState;
-          dispatch.user.onChangeName(action.payload);
+        async onAsyncChangeName(request) {
+          const { delay, dispatch, action } = request as ERequest<{ name: string }, RootState, LoadingMeta>;
+          await delay(1500);
+          dispatch(actionCreator.user.onChangeName(action.payload));
         }
       }
     };
@@ -46,25 +45,27 @@ describe("ddd", function() {
         }
       }
     };
-    type ExtractLoadingState<RMT extends RootModel> = {
-      loading: ExtractRootEffects<RMT>;
-    };
-    type Dispatch = ExtractDispatch<typeof initialModel>;
+
+    type RootAction = ExtractRootAction<typeof initialModel>;
     type RootState = ExtractRootState<typeof initialModel> & ExtractLoadingState<typeof initialModel>;
 
     const store = create({
       initialModel,
       plugins: [loading]
-    });
+    }) as DuraStore<RootState>;
 
-    console.log(store.dispatch);
+    const actionCreator = createActionCreator(initialModel) as RootAction;
 
-    let state = store.getState() as RootState;
+    expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
 
-    const ac = store.dispatch as Dispatch;
+    store.dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));
 
-    ac.user.onAsyncChangeName({ name: "章三" }, { loading: true });
+    setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
 
-    console.log(store.getState());
+    setTimeout(() => {
+      expect(store.getState().user.name).toEqual("张三");
+      expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
+      done();
+    }, 2000);
   });
 });
