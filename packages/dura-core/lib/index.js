@@ -64,7 +64,9 @@ function extractReducers(name, model) {
     var nextReducer = reducerKeys
         .map(function (reducerName) {
         var _a;
-        return (_a = {}, _a[name + "/" + reducerName] = reducers[reducerName], _a);
+        return (_a = {},
+            _a[name + "/" + reducerName] = function (state, action) { return reducers[reducerName](action.payload, action.meta)(state); },
+            _a);
     })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     return _a = {}, _a[name] = redux_actions_1.handleActions(nextReducer, model.state), _a;
@@ -94,29 +96,28 @@ function createEffectsMiddleware(allModel, plugins) {
     var intercepts = plugins.filter(function (p) { return p.intercept; }).map(function (p) { return p.intercept; });
     var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
     return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
-        var dispatch, select;
+        var result, dispatch, getState, effect;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    result = next(action);
                     if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
                     dispatch = store.dispatch;
-                    select = function (fn) { return fn(clone_1.default(store.getState())); };
+                    getState = function () { return clone_1.default(store.getState()); };
                     //前置拦截器
                     intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.before(action, store.dispatch); });
-                    //执行effect
-                    return [4 /*yield*/, rootEffects[action.type]({
+                    effect = rootEffects[action.type](action.payload);
+                    return [4 /*yield*/, effect({
                             dispatch: dispatch,
-                            select: select,
-                            delay: delay,
-                            action: action
+                            getState: getState,
+                            delay: delay
                         })];
                 case 1:
-                    //执行effect
-                    _a.sent();
+                    result = _a.sent();
                     //后置拦截器
                     intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.after(action, store.dispatch); });
                     _a.label = 2;
-                case 2: return [2 /*return*/, next(action)];
+                case 2: return [2 /*return*/, result];
             }
         });
     }); }; }; };
@@ -177,10 +178,11 @@ function create(config) {
     var reduxStore = (initialState
         ? redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
         : redux_1.createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
-    return reduxStore;
+    var actionRunner = createActionCreator(allModel, reduxStore.dispatch);
+    return __assign({}, reduxStore, { actionRunner: actionRunner });
 }
 exports.create = create;
-function createModelAction(name, model) {
+function createModelAction(name, model, dispatch) {
     var _a;
     var _b = model.reducers, reducers = _b === void 0 ? {} : _b, _c = model.effects, effects = _c === void 0 ? {} : _c;
     var reducerKeys = Object.keys(reducers);
@@ -190,17 +192,17 @@ function createModelAction(name, model) {
         var _a;
         return (_a = {},
             _a[key] = function (payload, meta) {
-                return redux_actions_1.createAction(name + "/" + key, function (payload) { return payload; }, function (payload, meta) { return meta; })(payload, meta);
+                return dispatch(redux_actions_1.createAction(name + "/" + key, function (payload) { return payload; }, function (payload, meta) { return meta; })(payload, meta));
             },
             _a);
     };
     var action = reducerKeys.concat(effectKeys).map(createActionMap).reduce(merge, {});
     return _a = {}, _a[name] = action, _a;
 }
-function createActionCreator(models) {
+function createActionCreator(models, dispatch) {
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     return Object.keys(models)
-        .map(function (name) { return createModelAction(name, models[name]); })
+        .map(function (name) { return createModelAction(name, models[name], dispatch); })
         .reduce(merge, {});
 }
 exports.createActionCreator = createActionCreator;
