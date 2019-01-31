@@ -1,6 +1,6 @@
 {
   "name": "@dura/core",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -24,7 +24,7 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@dura/types": "^1.0.0-alpha.4",
+    "@dura/types": "^1.0.0-alpha.5",
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^2.3.1"
   }
