@@ -1,7 +1,7 @@
-import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { createStore, combineReducers, compose, applyMiddleware, Dispatch } from "redux";
 import { handleActions, createAction } from "redux-actions";
 import clone from "clone";
-import { Model, Plugin, Config, DuraStore } from "@dura/types";
+import { Model, Plugin, Config, DuraStore, RootModel, ActionCreator } from "@dura/types";
 
 /**
  * 提取reducers
@@ -31,32 +31,7 @@ function extractEffects(name: string, model: Model<any>) {
   return nextEffects;
 }
 
-/**
- * 提取action creator
- * @param name
- * @param model
- */
-function extractActionCreator(name: string, model: Model<any>) {
-  const { reducers = {}, effects = {} } = model;
-  const reducerKeys = Object.keys(reducers);
-  const effectKeys = Object.keys(effects);
-  const action = reducerKeys
-    .concat(effectKeys)
-    .map((key: string) => ({
-      [key]: (payload, meta) =>
-        createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta)
-    }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-  return function(dispatch: any) {
-    dispatch[name] = Object.keys(action)
-      .map((key: string) => ({
-        [key]: (payload: any, meta: any) => dispatch(action[key](payload, meta))
-      }))
-      .reduce((prev, next) => ({ ...prev, ...next }), {});
-  };
-}
-
-function createEffectsMiddleware(allModel, plugins: Array<Plugin<any>>, warpDispatchFuncs) {
+function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
   //聚合effects
   const rootEffects = Object.keys(allModel)
     .map((name: string) => extractEffects(name, allModel[name]))
@@ -64,25 +39,23 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin<any>>, warpDisp
 
   const intercepts = plugins.filter(p => p.intercept).map(p => p.intercept);
 
-  return store => next => async action => {
-    //新的dispatch
-    function dispatch(action) {
-      return store.dispatch(action);
-    }
-    //绑定action
-    warpDispatchFuncs.forEach(fn => fn(dispatch));
+  const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
 
+  return store => next => async action => {
     if (typeof rootEffects[action.type] === "function") {
+      const dispatch = store.dispatch;
+      const select = fn => fn(clone(store.getState()));
       //前置拦截器
-      intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, dispatch));
+      intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, store.dispatch));
       //执行effect
       await rootEffects[action.type]({
-        dispatch: dispatch,
-        getState: () => clone(store.getState()),
+        dispatch,
+        select,
+        delay,
         action
       });
       //后置拦截器
-      intercepts.filter(i => i.pre(action)).forEach(i => i.after(action, dispatch));
+      intercepts.filter(i => i.pre(action)).forEach(i => i.after(action, store.dispatch));
     }
     return next(action);
   };
@@ -94,7 +67,7 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin<any>>, warpDisp
  * @param name
  * @param model
  */
-function onWrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>) {
+function onWrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>): RootModel {
   if (plugins && plugins.length === 0) {
     return { [name]: model };
   }
@@ -113,7 +86,7 @@ function getPluginModel(plugins: Array<Plugin<any>>) {
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-function onModel(config: Config): DuraStore<any, any> {
+function onModel(config: Config): RootModel {
   const { initialModel = {}, plugins = [] } = config;
   //追加插件model
   const pluginModel = getPluginModel(plugins.filter(p => p.model));
@@ -129,14 +102,12 @@ function onModel(config: Config): DuraStore<any, any> {
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-function create(config: Config): DuraStore<any, any> {
-  const { initialState = {}, plugins = [] } = config;
+function create(config: Config): DuraStore {
+  const { initialState, plugins = [] } = config;
 
   const allModel = onModel(config);
 
   const allModelKeys = Object.keys(allModel);
-
-  const warpDispatchFuncs = Object.keys(allModel).map((name: string) => extractActionCreator(name, allModel[name]));
 
   //聚合reducers
   const rootReducers = allModelKeys
@@ -144,17 +115,38 @@ function create(config: Config): DuraStore<any, any> {
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
   //创建effects的中间件
-  const effectMiddleware = createEffectsMiddleware(allModel, plugins, warpDispatchFuncs);
+  const effectMiddleware = createEffectsMiddleware(allModel, plugins);
 
   //store增强器
   const storeEnhancer = compose(applyMiddleware(effectMiddleware));
 
   //创建redux-store
-  const reduxStore = createStore(combineReducers(rootReducers), initialState, storeEnhancer) as DuraStore<any, any>;
-
-  warpDispatchFuncs.forEach(fn => fn(reduxStore.dispatch));
-
+  const reduxStore = (initialState
+    ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
+    : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
   return reduxStore;
 }
 
-export { create };
+function createModelAction(name: string, model: Model) {
+  const { reducers = {}, effects = {} } = model;
+  const reducerKeys = Object.keys(reducers);
+  const effectKeys = Object.keys(effects);
+  const merge = (prev, next) => ({ ...prev, ...next });
+
+  const createActionMap = (key: string) => ({
+    [key]: (payload: any, meta: any) =>
+      createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta)
+  });
+
+  const action = [...reducerKeys, ...effectKeys].map(createActionMap).reduce(merge, {});
+  return { [name]: action };
+}
+
+function createActionCreator(models: RootModel) {
+  const merge = (prev, next) => ({ ...prev, ...next });
+  return Object.keys(models)
+    .map((name: string) => createModelAction(name, models[name]))
+    .reduce(merge, {});
+}
+
+export { create, createActionCreator };

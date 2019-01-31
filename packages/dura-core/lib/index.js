@@ -85,68 +85,36 @@ function extractEffects(name, model) {
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     return nextEffects;
 }
-/**
- * 提取action creator
- * @param name
- * @param model
- */
-function extractActionCreator(name, model) {
-    var _a = model.reducers, reducers = _a === void 0 ? {} : _a, _b = model.effects, effects = _b === void 0 ? {} : _b;
-    var reducerKeys = Object.keys(reducers);
-    var effectKeys = Object.keys(effects);
-    var action = reducerKeys
-        .concat(effectKeys)
-        .map(function (key) {
-        var _a;
-        return (_a = {},
-            _a[key] = function (payload, meta) {
-                return redux_actions_1.createAction(name + "/" + key, function (payload) { return payload; }, function (payload, meta) { return meta; })(payload, meta);
-            },
-            _a);
-    })
-        .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    return function (dispatch) {
-        dispatch[name] = Object.keys(action)
-            .map(function (key) {
-            var _a;
-            return (_a = {},
-                _a[key] = function (payload, meta) { return dispatch(action[key](payload, meta)); },
-                _a);
-        })
-            .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    };
-}
-function createEffectsMiddleware(allModel, plugins, warpDispatchFuncs) {
+function createEffectsMiddleware(allModel, plugins) {
     var _this = this;
     //聚合effects
     var rootEffects = Object.keys(allModel)
         .map(function (name) { return extractEffects(name, allModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     var intercepts = plugins.filter(function (p) { return p.intercept; }).map(function (p) { return p.intercept; });
+    var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
     return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
-        //新的dispatch
-        function dispatch(action) {
-            return store.dispatch(action);
-        }
+        var dispatch, select;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    //绑定action
-                    warpDispatchFuncs.forEach(function (fn) { return fn(dispatch); });
                     if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
+                    dispatch = store.dispatch;
+                    select = function (fn) { return fn(clone_1.default(store.getState())); };
                     //前置拦截器
-                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.before(action, dispatch); });
+                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.before(action, store.dispatch); });
                     //执行effect
                     return [4 /*yield*/, rootEffects[action.type]({
                             dispatch: dispatch,
-                            getState: function () { return clone_1.default(store.getState()); },
+                            select: select,
+                            delay: delay,
                             action: action
                         })];
                 case 1:
                     //执行effect
                     _a.sent();
                     //后置拦截器
-                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.after(action, dispatch); });
+                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.after(action, store.dispatch); });
                     _a.label = 2;
                 case 2: return [2 /*return*/, next(action)];
             }
@@ -194,22 +162,46 @@ function onModel(config) {
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
 }
 function create(config) {
-    var _a = config.initialState, initialState = _a === void 0 ? {} : _a, _b = config.plugins, plugins = _b === void 0 ? [] : _b;
+    var initialState = config.initialState, _a = config.plugins, plugins = _a === void 0 ? [] : _a;
     var allModel = onModel(config);
     var allModelKeys = Object.keys(allModel);
-    var warpDispatchFuncs = Object.keys(allModel).map(function (name) { return extractActionCreator(name, allModel[name]); });
     //聚合reducers
     var rootReducers = allModelKeys
         .map(function (name) { return extractReducers(name, allModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     //创建effects的中间件
-    var effectMiddleware = createEffectsMiddleware(allModel, plugins, warpDispatchFuncs);
+    var effectMiddleware = createEffectsMiddleware(allModel, plugins);
     //store增强器
     var storeEnhancer = redux_1.compose(redux_1.applyMiddleware(effectMiddleware));
     //创建redux-store
-    var reduxStore = redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer);
-    warpDispatchFuncs.forEach(function (fn) { return fn(reduxStore.dispatch); });
+    var reduxStore = (initialState
+        ? redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
+        : redux_1.createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
     return reduxStore;
 }
 exports.create = create;
+function createModelAction(name, model) {
+    var _a;
+    var _b = model.reducers, reducers = _b === void 0 ? {} : _b, _c = model.effects, effects = _c === void 0 ? {} : _c;
+    var reducerKeys = Object.keys(reducers);
+    var effectKeys = Object.keys(effects);
+    var merge = function (prev, next) { return (__assign({}, prev, next)); };
+    var createActionMap = function (key) {
+        var _a;
+        return (_a = {},
+            _a[key] = function (payload, meta) {
+                return redux_actions_1.createAction(name + "/" + key, function (payload) { return payload; }, function (payload, meta) { return meta; })(payload, meta);
+            },
+            _a);
+    };
+    var action = reducerKeys.concat(effectKeys).map(createActionMap).reduce(merge, {});
+    return _a = {}, _a[name] = action, _a;
+}
+function createActionCreator(models) {
+    var merge = function (prev, next) { return (__assign({}, prev, next)); };
+    return Object.keys(models)
+        .map(function (name) { return createModelAction(name, models[name]); })
+        .reduce(merge, {});
+}
+exports.createActionCreator = createActionCreator;
 //# sourceMappingURL=index.js.map

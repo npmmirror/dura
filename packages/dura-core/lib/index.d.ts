@@ -1,3 +1,4 @@
-import { Config, DuraStore } from "@dura/types";
-declare function create(config: Config): DuraStore<any, any>;
-export { create };
+import { Config, DuraStore, RootModel } from "@dura/types";
+declare function create(config: Config): DuraStore;
+declare function createActionCreator(models: RootModel): any;
+export { create, createActionCreator };
