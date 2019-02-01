@@ -15,6 +15,7 @@
     "@dura/core": "^1.0.0-alpha.13"
   },
   "dependencies": {
+    "@dura/async": "^1.0.0-alpha.13",
     "@dura/types": "^1.0.0-alpha.13"
   }
 }

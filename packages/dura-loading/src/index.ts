@@ -3,6 +3,7 @@
  */
 import { RootModel,  Model,  Meta } from "@dura/types";
 
+
 export const createLoadingPlugin = function(rootModel: RootModel) {
   const extractEffect = (model: Model) =>
     Object.keys(model["effects"] || {})
