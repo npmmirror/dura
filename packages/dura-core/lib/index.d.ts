@@ -1,5 +1,7 @@
-import { Dispatch } from "redux";
-import { Config, DuraStore, RootModel } from "@dura/types";
+import { Config, DuraStore } from "@dura/types";
+/**
+ * 创建store
+ * @param config
+ */
 declare function create(config: Config): DuraStore;
-declare function createActionCreator(models: RootModel, dispatch: Dispatch): any;
-export { create, createActionCreator };
+export { create };

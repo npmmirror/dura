@@ -1,5 +1,5 @@
 import { create } from "../src/index";
-import { ExtractRootState, EffectAPI, ExtractRootActionRunner, DuraStore, Model } from "@dura/types";
+import { ExtractRootState, EffectAPI, ExtractRootActionRunner, DuraStore, Model, RootModel } from "@dura/types";
 
 describe("单元测试", function() {
   it("测试reducers", function(done) {
@@ -32,7 +32,6 @@ describe("单元测试", function() {
           return async function(request: EffectAPI<RootState>) {
             await request.delay(1500);
             console.log("onAsyncChangeName");
-
             actionRunner.user.onChangeName(payload);
           };
         }
@@ -46,36 +45,49 @@ describe("单元测试", function() {
     type RootState = ExtractRootState<typeof initModel>;
     type RootAction = ExtractRootActionRunner<typeof initModel>;
 
+    /**
+     * 提取effects
+     * @param name
+     * @param model
+     */
+    function extractEffects(name: string, model: Model<any>) {
+      const effects = model.effects || {};
+      const effectKeys = Object.keys(effects);
+      const nextEffects = effectKeys
+        .map((effectName: string) => ({ [`${name}/${effectName}`]: effects[effectName] }))
+        .reduce((prev, next) => ({ ...prev, ...next }), {});
+      return nextEffects;
+    }
+
+    const duraAsyncPlugin = {
+      name: "asyncPlugin",
+      createMiddleware(rootModel: RootModel) {
+        //聚合effects
+        const rootEffects = Object.keys(rootModel)
+          .map((name: string) => extractEffects(name, rootModel[name]))
+          .reduce((prev, next) => ({ ...prev, ...next }), {});
+        const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
+        return store => next => async action => {
+          let result = next(action);
+          if (typeof rootEffects[action.type] === "function") {
+            const dispatch = store.dispatch;
+            const getState = () => store.getState();
+            //执行effect
+            const effect = rootEffects[action.type](action.payload, action.meta);
+            result = await effect({
+              dispatch,
+              getState,
+              delay
+            });
+          }
+          return result;
+        };
+      }
+    };
+
     const store = create({
       initialModel: initModel,
-      plugins: [
-        {
-          name: "loading",
-          wrapModel(name: string, model: Model): Model {
-            const { state, reducers, effects } = model;
-
-            const nextEffects = Object.keys(effects)
-              .map((key: string) => ({
-                [key]: (payload?: any, meta?: any) => async (request: EffectAPI) => {
-                  console.log("开始");
-
-                  await effects[key](payload, meta)(request);
-
-                  console.log("结束");
-                }
-              }))
-              .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-            console.log(nextEffects);
-
-            return {
-              state,
-              reducers,
-              effects: nextEffects
-            };
-          }
-        }
-      ]
+      plugins: [duraAsyncPlugin]
     }) as DuraStore<RootState, RootAction>;
 
     const actionRunner = store.actionRunner;

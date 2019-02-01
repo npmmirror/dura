@@ -33,13 +33,11 @@ function extractEffects(name: string, model: Model<any>) {
   return nextEffects;
 }
 
-function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
+function createEffectsMiddleware(allModel) {
   //聚合effects
   const rootEffects = Object.keys(allModel)
     .map((name: string) => extractEffects(name, allModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-  const intercepts = plugins.filter(p => p.intercept).map(p => p.intercept);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
 
@@ -48,8 +46,6 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
     if (typeof rootEffects[action.type] === "function") {
       const dispatch = store.dispatch;
       const getState = () => clone(store.getState());
-      //前置拦截器
-      intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, store.dispatch));
       //执行effect
       const effect = rootEffects[action.type](action.payload, action.meta);
       result = await effect({
@@ -57,8 +53,6 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
         getState,
         delay
       });
-      //后置拦截器
-      intercepts.filter(i => i.pre(action)).forEach(i => i.after(action, store.dispatch));
     }
     return result;
   };
@@ -70,70 +64,81 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
  * @param name
  * @param model
  */
-function onWrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>): RootModel {
+function wrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>): RootModel {
   if (plugins && plugins.length === 0) {
     return { [name]: model };
   }
   const firstPlugin = plugins.shift();
   const nextModel = firstPlugin.wrapModel(name, model);
-  return onWrapModel(plugins, name, nextModel);
+  return wrapModel(plugins, name, nextModel);
 }
 
 /**
  * 获取插件里面的model
  * @param plugins
  */
-function getPluginModel(plugins: Array<Plugin<any>>) {
+function getPluginModel(plugins: Array<Plugin>) {
   return plugins
-    .map(({ name, model }: Plugin<any>) => ({ [name]: model }))
+    .filter(p => p.model)
+    .map(({ name, model }: Plugin) => ({
+      [name]: model
+    }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-function onModel(config: Config): RootModel {
+//合并所有的model
+function mergeModel(config: Config) {
   const { initialModel = {}, plugins = [] } = config;
-  //追加插件model
-  const pluginModel = getPluginModel(plugins.filter(p => p.model));
+  const pluginModel = getPluginModel(plugins);
+  return { ...initialModel, ...pluginModel };
+}
 
-  //全部的model
-  const models = { ...initialModel, ...pluginModel };
-
-  const modelKeys = Object.keys(models);
-
+//包装根model
+function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
+  const wrapModelPlugins = plugin.filter(p => p.wrapModel);
   //包装已有的model
-  return modelKeys
-    .map((name: string) => onWrapModel(plugins.filter(p => p.wrapModel), name, models[name]))
+  return Object.keys(rootModel)
+    .map((name: string) => wrapModel(wrapModelPlugins, name, rootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
+/**
+ * 创建store
+ * @param config
+ */
 function create(config: Config): DuraStore {
   const { initialState, plugins = [] } = config;
 
-  const allModel = onModel(config);
+  //merge plugin 的model
+  const rootModel = mergeModel(config);
 
-  const allModelKeys = Object.keys(allModel);
+  //包装model
+  const nextRootModel = wrapRootModel(rootModel, plugins);
 
   //聚合reducers
-  const rootReducers = allModelKeys
-    .map((name: string) => extractReducers(name, allModel[name]))
+  const rootReducers = Object.keys(nextRootModel)
+    .map((name: string) => extractReducers(name, nextRootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
+  const middlewares = plugins.filter(p => p.createMiddleware).map(p => p.createMiddleware(nextRootModel));
+
   //创建effects的中间件
-  const effectMiddleware = createEffectsMiddleware(allModel, plugins);
+  // const effectMiddleware = createEffectsMiddleware(nextRootModel);
 
   //store增强器
-  const storeEnhancer = compose(applyMiddleware(effectMiddleware));
+  const storeEnhancer = compose(applyMiddleware(...middlewares));
 
   //创建redux-store
   const reduxStore = (initialState
     ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
 
-  const actionRunner = createActionCreator(allModel, reduxStore.dispatch);
+  const actionRunner = createActionRunner(nextRootModel, reduxStore.dispatch);
 
   return { ...reduxStore, actionRunner };
 }
 
-function createModelAction(name: string, model: Model, dispatch: Dispatch) {
+function createModelActionRunner(name: string, model: Model, dispatch: Dispatch) {
   const { reducers = {}, effects = {} } = model;
   const reducerKeys = Object.keys(reducers);
   const effectKeys = Object.keys(effects);
@@ -148,11 +153,11 @@ function createModelAction(name: string, model: Model, dispatch: Dispatch) {
   return { [name]: action };
 }
 
-function createActionCreator(models: RootModel, dispatch: Dispatch) {
+function createActionRunner(models: RootModel, dispatch: Dispatch) {
   const merge = (prev, next) => ({ ...prev, ...next });
   return Object.keys(models)
-    .map((name: string) => createModelAction(name, models[name], dispatch))
+    .map((name: string) => createModelActionRunner(name, models[name], dispatch))
     .reduce(merge, {});
 }
 
-export { create, createActionCreator };
+export { create };

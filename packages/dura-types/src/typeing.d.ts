@@ -1,4 +1,4 @@
-import { Dispatch, Store, AnyAction, DeepPartial } from "redux";
+import { Dispatch, Store, AnyAction, DeepPartial, Middleware, applyMiddleware } from "redux";
 
 export type Payload = {
   [name: string]: any;
@@ -30,8 +30,6 @@ export type Effects<RootState = any> = {
   [name: string]: (payload?: Payload, meta?: Meta) => Effect<RootState>;
 };
 
-export type Select<RootState = any, R = any> = (state: RootState) => R;
-
 export type EffectAPI<RootState = any> = {
   dispatch: Dispatch;
   getState: () => RootState;
@@ -52,17 +50,11 @@ export interface RootModel {
   [name: string]: Model;
 }
 
-type EffectIntercept = {
-  pre: (action: DuraAction) => boolean;
-  before: (action: DuraAction, dispatch: Dispatch) => void;
-  after: (action: DuraAction, dispatch: Dispatch) => void;
-};
-
 export type Plugin<S = any> = {
   name: string;
   model?: Model<S>;
-  wrapModel?: (name:string,model: Model<any>) => Model<any>;
-  intercept?: EffectIntercept;
+  wrapModel?: (name: string, model: Model<any>) => Model<any>;
+  createMiddleware?: (rootModel: RootModel) => Middleware<any, S, any>;
 };
 
 export type Config = {
@@ -73,7 +65,8 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ExtractRootActionRunner<M extends RootModel> = ExtractReducersActionRunner<M> & ExtractEffectsActionRunner<M>;
+export type ExtractRootActionRunner<M extends RootModel> = ExtractReducersActionRunner<M> &
+  ExtractEffectsActionRunner<M>;
 
 export type ExtractReducersActionRunner<M extends RootModel> = { [key in keyof M]: M[key]["reducers"] };
 

@@ -2,10 +2,14 @@
  * 自动loading
  */
 import { RootModel, Effects, Model } from "@dura/types";
-declare const _default: {
+export declare const createLoadingPlugin: (rootModel: RootModel) => {
     name: string;
     model: {
-        state: {};
+        state: {
+            [x: string]: {
+                [x: string]: boolean;
+            };
+        };
         reducers: {
             start(payload: {
                 modelName: string;
@@ -19,7 +23,6 @@ declare const _default: {
     };
     wrapModel: (name: string, model: Model<any, any>) => Model<any, any>;
 };
-export default _default;
 declare type ConvertFnToBoolean<E extends Effects> = {
     [key in keyof E]: boolean;
 };
@@ -31,3 +34,4 @@ export declare type ExtractLoadingState<RMT extends RootModel> = {
 export declare type LoadingMeta = {
     loading: boolean;
 };
+export {};

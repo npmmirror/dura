@@ -87,13 +87,12 @@ function extractEffects(name, model) {
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     return nextEffects;
 }
-function createEffectsMiddleware(allModel, plugins) {
+function createEffectsMiddleware(allModel) {
     var _this = this;
     //聚合effects
     var rootEffects = Object.keys(allModel)
         .map(function (name) { return extractEffects(name, allModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    var intercepts = plugins.filter(function (p) { return p.intercept; }).map(function (p) { return p.intercept; });
     var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
     return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
         var result, dispatch, getState, effect;
@@ -104,8 +103,6 @@ function createEffectsMiddleware(allModel, plugins) {
                     if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
                     dispatch = store.dispatch;
                     getState = function () { return clone_1.default(store.getState()); };
-                    //前置拦截器
-                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.before(action, store.dispatch); });
                     effect = rootEffects[action.type](action.payload, action.meta);
                     return [4 /*yield*/, effect({
                             dispatch: dispatch,
@@ -114,8 +111,6 @@ function createEffectsMiddleware(allModel, plugins) {
                         })];
                 case 1:
                     result = _a.sent();
-                    //后置拦截器
-                    intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.after(action, store.dispatch); });
                     _a.label = 2;
                 case 2: return [2 /*return*/, result];
             }
@@ -128,14 +123,14 @@ function createEffectsMiddleware(allModel, plugins) {
  * @param name
  * @param model
  */
-function onWrapModel(plugins, name, model) {
+function wrapModel(plugins, name, model) {
     var _a;
     if (plugins && plugins.length === 0) {
         return _a = {}, _a[name] = model, _a;
     }
     var firstPlugin = plugins.shift();
     var nextModel = firstPlugin.wrapModel(name, model);
-    return onWrapModel(plugins, name, nextModel);
+    return wrapModel(plugins, name, nextModel);
 }
 /**
  * 获取插件里面的model
@@ -143,46 +138,58 @@ function onWrapModel(plugins, name, model) {
  */
 function getPluginModel(plugins) {
     return plugins
+        .filter(function (p) { return p.model; })
         .map(function (_a) {
         var name = _a.name, model = _a.model;
         var _b;
-        return (_b = {}, _b[name] = model, _b);
+        return (_b = {},
+            _b[name] = model,
+            _b);
     })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
 }
-function onModel(config) {
+//合并所有的model
+function mergeModel(config) {
     var _a = config.initialModel, initialModel = _a === void 0 ? {} : _a, _b = config.plugins, plugins = _b === void 0 ? [] : _b;
-    //追加插件model
-    var pluginModel = getPluginModel(plugins.filter(function (p) { return p.model; }));
-    //全部的model
-    var models = __assign({}, initialModel, pluginModel);
-    var modelKeys = Object.keys(models);
+    var pluginModel = getPluginModel(plugins);
+    return __assign({}, initialModel, pluginModel);
+}
+//包装根model
+function wrapRootModel(rootModel, plugin) {
+    var wrapModelPlugins = plugin.filter(function (p) { return p.wrapModel; });
     //包装已有的model
-    return modelKeys
-        .map(function (name) { return onWrapModel(plugins.filter(function (p) { return p.wrapModel; }), name, models[name]); })
+    return Object.keys(rootModel)
+        .map(function (name) { return wrapModel(wrapModelPlugins, name, rootModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
 }
+/**
+ * 创建store
+ * @param config
+ */
 function create(config) {
     var initialState = config.initialState, _a = config.plugins, plugins = _a === void 0 ? [] : _a;
-    var allModel = onModel(config);
-    var allModelKeys = Object.keys(allModel);
+    //merge plugin 的model
+    var rootModel = mergeModel(config);
+    //包装model
+    var nextRootModel = wrapRootModel(rootModel, plugins);
     //聚合reducers
-    var rootReducers = allModelKeys
-        .map(function (name) { return extractReducers(name, allModel[name]); })
+    var rootReducers = Object.keys(nextRootModel)
+        .map(function (name) { return extractReducers(name, nextRootModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
+    var middlewares = plugins.filter(function (p) { return p.createMiddleware; }).map(function (p) { return p.createMiddleware(nextRootModel); });
     //创建effects的中间件
-    var effectMiddleware = createEffectsMiddleware(allModel, plugins);
+    // const effectMiddleware = createEffectsMiddleware(nextRootModel);
     //store增强器
-    var storeEnhancer = redux_1.compose(redux_1.applyMiddleware(effectMiddleware));
+    var storeEnhancer = redux_1.compose(redux_1.applyMiddleware.apply(void 0, middlewares));
     //创建redux-store
     var reduxStore = (initialState
         ? redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
         : redux_1.createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
-    var actionRunner = createActionCreator(allModel, reduxStore.dispatch);
+    var actionRunner = createActionRunner(nextRootModel, reduxStore.dispatch);
     return __assign({}, reduxStore, { actionRunner: actionRunner });
 }
 exports.create = create;
-function createModelAction(name, model, dispatch) {
+function createModelActionRunner(name, model, dispatch) {
     var _a;
     var _b = model.reducers, reducers = _b === void 0 ? {} : _b, _c = model.effects, effects = _c === void 0 ? {} : _c;
     var reducerKeys = Object.keys(reducers);
@@ -199,11 +206,10 @@ function createModelAction(name, model, dispatch) {
     var action = reducerKeys.concat(effectKeys).map(createActionMap).reduce(merge, {});
     return _a = {}, _a[name] = action, _a;
 }
-function createActionCreator(models, dispatch) {
+function createActionRunner(models, dispatch) {
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     return Object.keys(models)
-        .map(function (name) { return createModelAction(name, models[name], dispatch); })
+        .map(function (name) { return createModelActionRunner(name, models[name], dispatch); })
         .reduce(merge, {});
 }
-exports.createActionCreator = createActionCreator;
 //# sourceMappingURL=index.js.map
