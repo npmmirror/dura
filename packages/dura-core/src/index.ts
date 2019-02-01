@@ -75,7 +75,7 @@ function onWrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any
     return { [name]: model };
   }
   const firstPlugin = plugins.shift();
-  const nextModel = firstPlugin.wrapModel.call(name, model);
+  const nextModel = firstPlugin.wrapModel(name, model);
   return onWrapModel(plugins, name, nextModel);
 }
 

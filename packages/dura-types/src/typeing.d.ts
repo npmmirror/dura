@@ -61,7 +61,7 @@ type EffectIntercept = {
 export type Plugin<S = any> = {
   name: string;
   model?: Model<S>;
-  wrapModel?: (model: Model<any>) => Model<any>;
+  wrapModel?: (name:string,model: Model<any>) => Model<any>;
   intercept?: EffectIntercept;
 };
 

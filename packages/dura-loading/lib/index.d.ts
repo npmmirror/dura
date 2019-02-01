@@ -1,24 +1,28 @@
 /**
  * 自动loading
  */
-import { RootModel, Effects } from "@dura/types";
+import { RootModel, Effects, Model, EffectAPI } from "@dura/types";
 declare const _default: {
     name: string;
     model: {
         state: {};
         reducers: {
-            onChangeLoading(payload: {
-                name: string;
-                fnName: string;
-                loading: true;
+            start(payload: {
+                modelName: string;
+                effectName: string;
+            }): (state: any) => any;
+            end(payload: {
+                modelName: string;
+                effectName: string;
             }): (state: any) => any;
         };
     };
-    wrapModel: (model: any) => any;
-    intercept: {
-        pre: (action: any) => any;
-        before: (action: any, dispatch: any) => void;
-        after: (action: any, dispatch: any) => void;
+    wrapModel: (name: string, model: Model<any, any>) => {
+        state: import("@dura/types").State;
+        reducers: import("@dura/types").Reducers<any>;
+        effects: {
+            [x: string]: (payload?: any, meta?: any) => (request: EffectAPI<any>) => Promise<void>;
+        };
     };
 };
 export default _default;

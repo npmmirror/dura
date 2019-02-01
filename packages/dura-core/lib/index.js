@@ -134,7 +134,7 @@ function onWrapModel(plugins, name, model) {
         return _a = {}, _a[name] = model, _a;
     }
     var firstPlugin = plugins.shift();
-    var nextModel = firstPlugin.wrapModel.call(name, model);
+    var nextModel = firstPlugin.wrapModel(name, model);
     return onWrapModel(plugins, name, nextModel);
 }
 /**

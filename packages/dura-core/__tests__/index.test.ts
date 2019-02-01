@@ -1,18 +1,8 @@
-import { create, createActionCreator } from "../src/index";
-import {
-  ExtractRootState,
-  EffectAPI,
-  Plugin,
-  Model,
-  DuraAction,
-  ExtractRootActionRunner,
-  DuraStore,
-  Payload,
-  Reducers
-} from "@dura/types";
+import { create } from "../src/index";
+import { ExtractRootState, EffectAPI, ExtractRootActionRunner, DuraStore, Model } from "@dura/types";
 
 describe("单元测试", function() {
-  it("测试reducers", function() {
+  it("测试reducers", function(done) {
     const initialState = {
       name: undefined,
       sex: undefined
@@ -40,7 +30,10 @@ describe("单元测试", function() {
          */
         onAsyncChangeName(payload: { name: string }) {
           return async function(request: EffectAPI<RootState>) {
-            actionCreator.user.onChangeName(payload);
+            await request.delay(1500);
+            console.log("onAsyncChangeName");
+
+            actionRunner.user.onChangeName(payload);
           };
         }
       }
@@ -54,17 +47,46 @@ describe("单元测试", function() {
     type RootAction = ExtractRootActionRunner<typeof initModel>;
 
     const store = create({
-      initialModel: initModel
+      initialModel: initModel,
+      plugins: [
+        {
+          name: "loading",
+          wrapModel(name: string, model: Model): Model {
+            const { state, reducers, effects } = model;
+
+            const nextEffects = Object.keys(effects)
+              .map((key: string) => ({
+                [key]: (payload?: any, meta?: any) => async (request: EffectAPI) => {
+                  console.log("开始");
+
+                  await effects[key](payload, meta)(request);
+
+                  console.log("结束");
+                }
+              }))
+              .reduce((prev, next) => ({ ...prev, ...next }), {});
+
+            console.log(nextEffects);
+
+            return {
+              state,
+              reducers,
+              effects: nextEffects
+            };
+          }
+        }
+      ]
     }) as DuraStore<RootState, RootAction>;
 
-    const actionCreator = store.actionRunner;
+    const actionRunner = store.actionRunner;
 
     expect(store.getState().user).toEqual(initialState);
 
-    actionCreator.user.onAsyncChangeName({ name: "李四" });
+    actionRunner.user.onAsyncChangeName({ name: "李四" });
 
-    console.log(store.getState().user);
-
-    expect(store.getState().user.name).toEqual("李四");
+    setTimeout(() => {
+      expect(store.getState().user.name).toEqual("李四");
+      done();
+    }, 3000);
   });
 });
