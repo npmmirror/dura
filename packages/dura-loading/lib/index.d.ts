@@ -2,7 +2,7 @@
  * 自动loading
  */
 import { RootModel, Effects, Model } from "@dura/types";
-export declare const createLoadingPlugin: (rootModel: RootModel) => {
+export declare const createLoadingPlugin: (rootModel: RootModel<Model<any, any>>) => {
     name: string;
     model: {
         state: {

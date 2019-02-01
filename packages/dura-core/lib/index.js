@@ -98,15 +98,16 @@ function create(config) {
     var reduxStore = (initialState
         ? redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
         : redux_1.createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
-    var actionRunner = createActionRunner(nextRootModel, reduxStore.dispatch);
-    return __assign({}, reduxStore, { actionRunner: actionRunner });
+    var reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
+    plugins.filter(function (p) { return p.onStoreCreated; }).forEach(function (p) { return p.onStoreCreated(reduxStore); });
+    return __assign({}, reduxStore, { reducerRunner: reducerRunner });
 }
 exports.create = create;
-function createModelActionRunner(name, model, dispatch) {
+//创建单个model 的action runner
+function createModelReducerRunner(name, model, dispatch) {
     var _a;
     var _b = model.reducers, reducers = _b === void 0 ? {} : _b, _c = model.effects, effects = _c === void 0 ? {} : _c;
     var reducerKeys = Object.keys(reducers);
-    var effectKeys = Object.keys(effects);
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     var createActionMap = function (key) {
         var _a;
@@ -116,13 +117,14 @@ function createModelActionRunner(name, model, dispatch) {
             },
             _a);
     };
-    var action = reducerKeys.concat(effectKeys).map(createActionMap).reduce(merge, {});
+    var action = reducerKeys.slice().map(createActionMap).reduce(merge, {});
     return _a = {}, _a[name] = action, _a;
 }
-function createActionRunner(models, dispatch) {
+//创建全局的action  runner
+function createReducerRunner(models, dispatch) {
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     return Object.keys(models)
-        .map(function (name) { return createModelActionRunner(name, models[name], dispatch); })
+        .map(function (name) { return createModelReducerRunner(name, models[name], dispatch); })
         .reduce(merge, {});
 }
 //# sourceMappingURL=index.js.map

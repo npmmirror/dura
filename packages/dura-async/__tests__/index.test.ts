@@ -1,6 +1,6 @@
 import { create } from "@dura/core";
-import { EffectAPI, ExtractRootState, ExtractRootActionRunner, DuraStore } from "@dura/types";
-import { createAsyncPlugin } from "../src/index";
+import { EffectAPI, ExtractRootState, DuraStore } from "@dura/types";
+import { createAsyncPlugin, AsyncDuraStore } from "../src/index";
 
 describe("单元测试", function() {
   it("测试effects", function(done) {
@@ -32,7 +32,7 @@ describe("单元测试", function() {
         onAsyncChangeName(payload: { name: string }) {
           return async function(request: EffectAPI<RootState>) {
             await request.delay(1500);
-            actionRunner.user.onChangeName(payload);
+            reducerRunner.user.onChangeName(payload);
           };
         }
       }
@@ -46,22 +46,22 @@ describe("单元测试", function() {
     };
 
     type RootState = ExtractRootState<typeof initModel>;
-    type RootAction = ExtractRootActionRunner<typeof initModel>;
 
     const store = create({
       initialModel: initModel,
       plugins: [createAsyncPlugin(initModel)]
-    }) as DuraStore<RootState, RootAction>;
+    }) as DuraStore<typeof initModel> & AsyncDuraStore<typeof initModel>;
 
-    const actionRunner = store.actionRunner;
+    const reducerRunner = store.reducerRunner;
+    const effectRunner = store.effectRunner;
 
     expect(store.getState().user).toEqual(initialState);
 
-    actionRunner.user.onChangeName({ name: "张三" });
+    reducerRunner.user.onChangeName({ name: "张三" });
 
     expect(store.getState().user.name).toEqual("张三");
 
-    actionRunner.user.onAsyncChangeName({ name: "李四" });
+    effectRunner.user.onAsyncChangeName({ name: "李四" });
 
     setTimeout(() => {
       expect(store.getState().user.name).toEqual("李四");

@@ -90,15 +90,17 @@ function create(config: Config): DuraStore {
     ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
 
-  const actionRunner = createActionRunner(nextRootModel, reduxStore.dispatch);
+  const reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
 
-  return { ...reduxStore, actionRunner };
+  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(reduxStore));
+
+  return { ...reduxStore, reducerRunner };
 }
 
-function createModelActionRunner(name: string, model: Model, dispatch: Dispatch) {
+//创建单个model 的action runner
+function createModelReducerRunner(name: string, model: Model, dispatch: Dispatch) {
   const { reducers = {}, effects = {} } = model;
   const reducerKeys = Object.keys(reducers);
-  const effectKeys = Object.keys(effects);
   const merge = (prev, next) => ({ ...prev, ...next });
 
   const createActionMap = (key: string) => ({
@@ -106,14 +108,15 @@ function createModelActionRunner(name: string, model: Model, dispatch: Dispatch)
       dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
   });
 
-  const action = [...reducerKeys, ...effectKeys].map(createActionMap).reduce(merge, {});
+  const action = [...reducerKeys].map(createActionMap).reduce(merge, {});
   return { [name]: action };
 }
 
-function createActionRunner(models: RootModel, dispatch: Dispatch) {
+//创建全局的action  runner
+function createReducerRunner(models: RootModel, dispatch: Dispatch) {
   const merge = (prev, next) => ({ ...prev, ...next });
   return Object.keys(models)
-    .map((name: string) => createModelActionRunner(name, models[name], dispatch))
+    .map((name: string) => createModelReducerRunner(name, models[name], dispatch))
     .reduce(merge, {});
 }
 

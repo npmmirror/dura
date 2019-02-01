@@ -15,9 +15,9 @@ export type DuraAction<P extends Payload = any, M extends Meta = any> = {
   error?: boolean;
 };
 
-export type DuraStore<RootState = any, ActionRunner = any> = Store<RootState> & {
+export type DuraStore<RM extends RootModel = any> = Store<ExtractRootState<RM>> & {
   dispatch: Dispatch;
-  actionRunner: ActionRunner;
+  reducerRunner: ExtractReducersRunner<RM>;
 };
 
 export type Reducers<S = any> = {
@@ -46,8 +46,8 @@ export interface Model<ModelState = any, RootState = any> {
   effects?: Effects<RootState>;
 }
 
-export interface RootModel {
-  [name: string]: Model;
+export interface RootModel<M extends Model = Model> {
+  [name: string]: M;
 }
 
 export type Plugin<S = any> = {
@@ -55,6 +55,7 @@ export type Plugin<S = any> = {
   model?: Model<S>;
   wrapModel?: (name: string, model: Model<any>) => Model<any>;
   middleware?: Middleware<any, S, any>;
+  onStoreCreated?: (store: DuraStore) => void;
 };
 
 export type Config = {
@@ -65,9 +66,4 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ExtractRootActionRunner<M extends RootModel> = ExtractReducersActionRunner<M> &
-  ExtractEffectsActionRunner<M>;
-
-export type ExtractReducersActionRunner<M extends RootModel> = { [key in keyof M]: M[key]["reducers"] };
-
-export type ExtractEffectsActionRunner<M extends RootModel> = { [key in keyof M]: M[key]["effects"] };
+export type ExtractReducersRunner<M extends RootModel> = { [key in keyof M]: M[key]["reducers"] };

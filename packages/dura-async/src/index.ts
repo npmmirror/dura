@@ -1,4 +1,5 @@
-import { RootModel, Model } from "@dura/types";
+import { RootModel, Model, Plugin, DuraStore } from "@dura/types";
+import { createAction } from "redux-actions";
 
 /**
  * 提取effects
@@ -14,7 +15,30 @@ function extractEffects(name: string, model: Model) {
   return nextEffects;
 }
 
-export const createAsyncPlugin = function(rootModel: RootModel) {
+//创建单个model 的action runner
+function createModelEffectRunner(name: string, model: Model, dispatch) {
+  const { effects = {} } = model;
+  const effectKeys = Object.keys(effects);
+  const merge = (prev, next) => ({ ...prev, ...next });
+
+  const createActionMap = (key: string) => ({
+    [key]: (payload: any, meta: any) =>
+      dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
+  });
+
+  const action = effectKeys.map(createActionMap).reduce(merge, {});
+  return { [name]: action };
+}
+
+//创建全局的action  runner
+function createEffectRunner(models: RootModel, dispatch) {
+  const merge = (prev, next) => ({ ...prev, ...next });
+  return Object.keys(models)
+    .map((name: string) => createModelEffectRunner(name, models[name], dispatch))
+    .reduce(merge, {});
+}
+
+export const createAsyncPlugin = function(rootModel: RootModel): Plugin {
   //聚合effects
   const rootEffects = Object.keys(rootModel)
     .map((name: string) => extractEffects(name, rootModel[name]))
@@ -38,6 +62,15 @@ export const createAsyncPlugin = function(rootModel: RootModel) {
         }
         return result;
       };
+    },
+    onStoreCreated(store: DuraStore & AsyncDuraStore) {
+      store.effectRunner = createEffectRunner(rootModel, store.dispatch);
     }
   };
+};
+
+export type ExtractEffectsRunner<M extends RootModel> = { [key in keyof M]: M[key]["effects"] };
+
+export type AsyncDuraStore<M extends RootModel = any> = {
+  effectRunner: ExtractEffectsRunner<M>;
 };
