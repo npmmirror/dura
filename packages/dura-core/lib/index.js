@@ -44,7 +44,7 @@ function wrapModel(plugins, name, model) {
         return _a = {}, _a[name] = model, _a;
     }
     var firstPlugin = plugins.shift();
-    var nextModel = firstPlugin.wrapModel(name, model);
+    var nextModel = firstPlugin.onWrapModel(name, model);
     return wrapModel(plugins, name, nextModel);
 }
 /**
@@ -71,7 +71,7 @@ function mergeModel(config) {
 }
 //包装根model
 function wrapRootModel(rootModel, plugin) {
-    var wrapModelPlugins = plugin.filter(function (p) { return p.wrapModel; });
+    var wrapModelPlugins = plugin.filter(function (p) { return p.onWrapModel; });
     //包装已有的model
     return Object.keys(rootModel)
         .map(function (name) { return wrapModel(wrapModelPlugins, name, rootModel[name]); })
@@ -91,7 +91,7 @@ function create(config) {
     var rootReducers = Object.keys(nextRootModel)
         .map(function (name) { return extractReducers(name, nextRootModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    var middlewares = plugins.filter(function (p) { return p.middleware; }).map(function (p) { return p.middleware; });
+    var middlewares = plugins.filter(function (p) { return p.onCreateMiddleware; }).map(function (p) { return p.onCreateMiddleware(nextRootModel); });
     //store增强器
     var storeEnhancer = redux_1.compose(redux_1.applyMiddleware.apply(void 0, middlewares));
     //创建redux-store
@@ -99,7 +99,7 @@ function create(config) {
         ? redux_1.createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
         : redux_1.createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
     var reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
-    plugins.filter(function (p) { return p.onStoreCreated; }).forEach(function (p) { return p.onStoreCreated(reduxStore); });
+    plugins.filter(function (p) { return p.onStoreCreated; }).forEach(function (p) { return p.onStoreCreated(reduxStore, nextRootModel); });
     return __assign({}, reduxStore, { reducerRunner: reducerRunner });
 }
 exports.create = create;

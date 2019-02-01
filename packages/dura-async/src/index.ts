@@ -38,16 +38,16 @@ function createEffectRunner(models: RootModel, dispatch: Dispatch) {
     .reduce(merge, {});
 }
 
-export const createAsyncPlugin = function(rootModel: RootModel): Plugin {
-  //聚合effects
-  const rootEffects = Object.keys(rootModel)
-    .map((name: string) => extractEffects(name, rootModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-  const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
+export const createAsyncPlugin = function(): Plugin {
   return {
     name: "asyncPlugin",
-    middleware(store) {
-      return next => async action => {
+    onCreateMiddleware(rootModel: RootModel) {
+      //聚合effects
+      const rootEffects = Object.keys(rootModel)
+        .map((name: string) => extractEffects(name, rootModel[name]))
+        .reduce((prev, next) => ({ ...prev, ...next }), {});
+      const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
+      return store => next => async action => {
         let result = next(action);
         if (typeof rootEffects[action.type] === "function") {
           const dispatch = store.dispatch;
@@ -63,7 +63,7 @@ export const createAsyncPlugin = function(rootModel: RootModel): Plugin {
         return result;
       };
     },
-    onStoreCreated(store: DuraStore & AsyncDuraStore) {
+    onStoreCreated(store: DuraStore & AsyncDuraStore, rootModel: RootModel) {
       store.effectRunner = createEffectRunner(rootModel, store.dispatch);
     }
   };

@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var immer_1 = __importDefault(require("immer"));
 exports.default = {
     name: "immer",
-    wrapModel: function (name, model) {
+    onWrapModel: function (name, model) {
         var reducers = model.reducers;
         var nextReducers = Object.keys(reducers)
             .map(function (name) {

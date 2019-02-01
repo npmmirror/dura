@@ -29,7 +29,7 @@ function wrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>)
     return { [name]: model };
   }
   const firstPlugin = plugins.shift();
-  const nextModel = firstPlugin.wrapModel(name, model);
+  const nextModel = firstPlugin.onWrapModel(name, model);
   return wrapModel(plugins, name, nextModel);
 }
 
@@ -55,7 +55,7 @@ function mergeModel(config: Config) {
 
 //包装根model
 function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
-  const wrapModelPlugins = plugin.filter(p => p.wrapModel);
+  const wrapModelPlugins = plugin.filter(p => p.onWrapModel);
   //包装已有的model
   return Object.keys(rootModel)
     .map((name: string) => wrapModel(wrapModelPlugins, name, rootModel[name]))
@@ -80,7 +80,7 @@ function create(config: Config): DuraStore {
     .map((name: string) => extractReducers(name, nextRootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
-  const middlewares = plugins.filter(p => p.middleware).map(p => p.middleware);
+  const middlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
   //store增强器
   const storeEnhancer = compose(applyMiddleware(...middlewares));
@@ -92,7 +92,7 @@ function create(config: Config): DuraStore {
 
   const reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
 
-  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(reduxStore));
+  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(reduxStore, nextRootModel));
 
   return { ...reduxStore, reducerRunner };
 }

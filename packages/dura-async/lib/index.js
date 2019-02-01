@@ -87,17 +87,17 @@ function createEffectRunner(models, dispatch) {
         .map(function (name) { return createModelEffectRunner(name, models[name], dispatch); })
         .reduce(merge, {});
 }
-exports.createAsyncPlugin = function (rootModel) {
-    //聚合effects
-    var rootEffects = Object.keys(rootModel)
-        .map(function (name) { return extractEffects(name, rootModel[name]); })
-        .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
+exports.createAsyncPlugin = function () {
     return {
         name: "asyncPlugin",
-        middleware: function (store) {
+        onCreateMiddleware: function (rootModel) {
             var _this = this;
-            return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
+            //聚合effects
+            var rootEffects = Object.keys(rootModel)
+                .map(function (name) { return extractEffects(name, rootModel[name]); })
+                .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
+            var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
+            return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
                 var result, dispatch, getState, effect;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -118,9 +118,9 @@ exports.createAsyncPlugin = function (rootModel) {
                         case 2: return [2 /*return*/, result];
                     }
                 });
-            }); }; };
+            }); }; }; };
         },
-        onStoreCreated: function (store) {
+        onStoreCreated: function (store, rootModel) {
             store.effectRunner = createEffectRunner(rootModel, store.dispatch);
         }
     };

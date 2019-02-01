@@ -15,9 +15,11 @@ export type DuraAction<P extends Payload = any, M extends Meta = any> = {
   error?: boolean;
 };
 
-export type Dispatch = Dispatch
+export type Dispatch = Dispatch;
 
-export type DuraStore<RM extends RootModel = any> = Store<ExtractRootState<RM>> & {
+export type DuraStore<RM extends RootModel = any, ExtensionState = any> = Store<
+  ExtractRootState<RM> & ExtensionState
+> & {
   dispatch: Dispatch;
   reducerRunner: ExtractReducersRunner<RM>;
 };
@@ -42,9 +44,10 @@ export interface RootModel<M extends Model = Model> {
 export type Plugin<S = any> = {
   name: string;
   model?: Model<S>;
-  wrapModel?: (name: string, model: Model<any>) => Model<any>;
+  onWrapModel?: (name: string, model: Model<any>) => Model<any>;
   middleware?: Middleware<any, S, any>;
-  onStoreCreated?: (store: DuraStore) => void;
+  onCreateMiddleware?: (rootModel: RootModel) => Middleware;
+  onStoreCreated?: (store: DuraStore, rootModel: RootModel) => void;
 };
 
 export type Config = {

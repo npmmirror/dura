@@ -49,7 +49,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createLoadingPlugin = function (rootModel) {
     var _this = this;
     var extractEffect = function (model) {
-        return Object.keys(model["effects"] || {})
+        return Object.keys(model.effects || {})
             .map(function (effectName) {
             var _a;
             return (_a = {}, _a[effectName] = false, _a);
@@ -87,26 +87,27 @@ exports.createLoadingPlugin = function (rootModel) {
                 }
             }
         },
-        wrapModel: function (name, model) {
+        onWrapModel: function (name, model) {
             if (name === "loading") {
                 return model;
             }
-            var state = model.state, reducers = model.reducers;
+            var _a = model.effects, effects = _a === void 0 ? {} : _a;
             var start = function (effectName) { return ({ type: "loading/start", payload: { modelName: name, effectName: effectName } }); };
             var end = function (effectName) { return ({ type: "loading/end", payload: { modelName: name, effectName: effectName } }); };
-            var nextEffects = Object.keys(model["effects"] || {})
+            var nextEffects = Object.keys(effects)
                 .map(function (key) {
                 var _a;
-                return (_a = {},
+                return _a = {},
                     _a[key] = function (payload, meta) { return function (request) { return __awaiter(_this, void 0, void 0, function () {
                         var effectFn, loadingHoc;
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
+                                    console.log("来了，老弟");
                                     effectFn = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, model["effects"][key](payload, meta)(request)];
+                                            case 0: return [4 /*yield*/, effects[key](payload, meta)(request)];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); };
@@ -134,22 +135,11 @@ exports.createLoadingPlugin = function (rootModel) {
                             }
                         });
                     }); }; },
-                    _a);
+                    _a;
             })
                 .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-            return {
-                state: state,
-                reducers: reducers,
-                effects: nextEffects
-            };
+            return __assign({}, model, { effects: nextEffects });
         }
     };
 };
-// type ConvertFnToBoolean<E extends Effects> = { [key in keyof E]: boolean };
-// export type ExtractLoadingState<RMT extends RootModel> = {
-//   loading: { [key in keyof RMT]: ConvertFnToBoolean<RMT[key]["effects"]> };
-// };
-// export type LoadingMeta = {
-//   loading: boolean;
-// };
 //# sourceMappingURL=index.js.map

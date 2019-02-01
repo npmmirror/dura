@@ -1,5 +1,5 @@
 import { RootModel, Model, Plugin, Payload, Meta, ExtractRootState } from "@dura/types";
-export declare const createAsyncPlugin: (rootModel: RootModel<Model<any, any>>) => Plugin<any>;
+export declare const createAsyncPlugin: () => Plugin<any>;
 export declare type AsyncModel = {
     effects?: any;
 };
