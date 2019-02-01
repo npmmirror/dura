@@ -28,7 +28,6 @@ describe("测试loading 插件", function() {
         onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
           return async function(request: EffectAPI) {
             await request.delay(1000);
-            console.log("onAsyncChangeName");
             store.reducerRunner.user.onChangeName(payload);
           };
         }
@@ -50,8 +49,6 @@ describe("测试loading 插件", function() {
     expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
 
     store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
-
-    console.log(store.getState());
 
     setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
 
