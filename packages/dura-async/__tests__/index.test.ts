@@ -3,7 +3,7 @@ import { EffectAPI, ExtractRootState, ExtractRootActionRunner, DuraStore } from 
 import { createAsyncPlugin } from "../src/index";
 
 describe("单元测试", function() {
-  it("测试effect", function(done) {
+  it("测试effects", function(done) {
     const initialState = {
       name: undefined,
       sex: undefined
