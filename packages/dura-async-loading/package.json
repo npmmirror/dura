@@ -1,5 +1,5 @@
 {
-  "name": "@dura/loading",
+  "name": "@dura/async-loading",
   "version": "1.0.0-alpha.16",
   "description": "",
   "main": "./lib/index.js",
