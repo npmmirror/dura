@@ -18,7 +18,7 @@ var immer_1 = __importDefault(require("immer"));
 exports.default = {
     name: "immer",
     wrapModel: function (name, model) {
-        var state = model.state, reducers = model.reducers, effects = model.effects;
+        var reducers = model.reducers;
         var nextReducers = Object.keys(reducers)
             .map(function (name) {
             var _a;
@@ -29,11 +29,7 @@ exports.default = {
                 _a);
         })
             .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-        return {
-            state: state,
-            effects: effects,
-            reducers: nextReducers
-        };
+        return __assign({}, model, { reducers: nextReducers });
     }
 };
 //# sourceMappingURL=index.js.map

@@ -99,7 +99,7 @@ function create(config: Config): DuraStore {
 
 //创建单个model 的action runner
 function createModelReducerRunner(name: string, model: Model, dispatch: Dispatch) {
-  const { reducers = {}, effects = {} } = model;
+  const { reducers = {} } = model;
   const reducerKeys = Object.keys(reducers);
   const merge = (prev, next) => ({ ...prev, ...next });
 

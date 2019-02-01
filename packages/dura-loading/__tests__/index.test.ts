@@ -1,5 +1,5 @@
-import { create, createActionCreator } from "@dura/core";
-import { EffectAPI, ExtractRootState, ExtractRootActionRunner, DuraStore } from "@dura/types";
+import { create } from "@dura/core";
+import {  ExtractRootState,  DuraStore } from "@dura/types";
 import { ExtractLoadingState, LoadingMeta, createLoadingPlugin } from "../src/index";
 
 describe("测试loading 插件", function() {

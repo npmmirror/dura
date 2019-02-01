@@ -1,4 +1,4 @@
-import { RootModel, Model, Plugin, DuraStore } from "@dura/types";
+import { RootModel, Model, Plugin, DuraStore, Payload, Meta, ExtractRootState, Dispatch } from "@dura/types";
 import { createAction } from "redux-actions";
 
 /**
@@ -6,7 +6,7 @@ import { createAction } from "redux-actions";
  * @param name
  * @param model
  */
-function extractEffects(name: string, model: Model) {
+function extractEffects(name: string, model: Model & AsyncModel) {
   const effects = model.effects || {};
   const effectKeys = Object.keys(effects);
   const nextEffects = effectKeys
@@ -16,7 +16,7 @@ function extractEffects(name: string, model: Model) {
 }
 
 //创建单个model 的action runner
-function createModelEffectRunner(name: string, model: Model, dispatch) {
+function createModelEffectRunner(name: string, model: Model & AsyncModel, dispatch: Dispatch) {
   const { effects = {} } = model;
   const effectKeys = Object.keys(effects);
   const merge = (prev, next) => ({ ...prev, ...next });
@@ -31,7 +31,7 @@ function createModelEffectRunner(name: string, model: Model, dispatch) {
 }
 
 //创建全局的action  runner
-function createEffectRunner(models: RootModel, dispatch) {
+function createEffectRunner(models: RootModel, dispatch: Dispatch) {
   const merge = (prev, next) => ({ ...prev, ...next });
   return Object.keys(models)
     .map((name: string) => createModelEffectRunner(name, models[name], dispatch))
@@ -69,8 +69,24 @@ export const createAsyncPlugin = function(rootModel: RootModel): Plugin {
   };
 };
 
-export type ExtractEffectsRunner<M extends RootModel> = { [key in keyof M]: M[key]["effects"] };
+export type AsyncModel = {
+  effects?: any;
+};
+
+export type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = { [key in keyof M]: M[key]["effects"] };
 
 export type AsyncDuraStore<M extends RootModel = any> = {
   effectRunner: ExtractEffectsRunner<M>;
+};
+
+export type Effect<RM extends RootModel<Model> = any> = (request: EffectAPI<RM>) => void;
+
+export type Effects<RM extends RootModel<Model> = any> = {
+  [name: string]: (payload?: Payload, meta?: Meta) => Effect<RM>;
+};
+
+export type EffectAPI<RM extends RootModel<Model & AsyncModel> = any> = {
+  dispatch: any;
+  getState: () => ExtractRootState<RM>;
+  delay: (ms: number) => Promise<{}>;
 };

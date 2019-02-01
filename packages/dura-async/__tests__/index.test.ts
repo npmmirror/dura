@@ -1,6 +1,6 @@
 import { create } from "@dura/core";
-import { EffectAPI, ExtractRootState, DuraStore } from "@dura/types";
-import { createAsyncPlugin, AsyncDuraStore } from "../src/index";
+import { ExtractRootState, DuraStore } from "@dura/types";
+import { createAsyncPlugin, AsyncDuraStore, EffectAPI } from "../src/index";
 
 describe("单元测试", function() {
   it("测试effects", function(done) {
@@ -30,8 +30,9 @@ describe("单元测试", function() {
          * @param payload
          */
         onAsyncChangeName(payload: { name: string }) {
-          return async function(request: EffectAPI<RootState>) {
+          return async function(request: EffectAPI<typeof initModel>) {
             await request.delay(1500);
+
             reducerRunner.user.onChangeName(payload);
           };
         }
@@ -44,8 +45,6 @@ describe("单元测试", function() {
         state: {}
       }
     };
-
-    type RootState = ExtractRootState<typeof initModel>;
 
     const store = create({
       initialModel: initModel,

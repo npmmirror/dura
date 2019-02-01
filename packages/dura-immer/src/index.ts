@@ -4,8 +4,7 @@ import produce from "immer";
 export default {
   name: "immer",
   wrapModel(name: string, model: Model) {
-    const { state, reducers, effects } = model;
-
+    const { reducers } = model;
     const nextReducers = Object.keys(reducers)
       .map((name: string) => ({
         [name]: (payload?: any, meta?: any) => (baseState: any) =>
@@ -14,8 +13,7 @@ export default {
       .reduce((prev, next) => ({ ...prev, ...next }), {});
 
     return {
-      state,
-      effects,
+      ...model,
       reducers: nextReducers
     };
   }

@@ -106,7 +106,7 @@ exports.create = create;
 //创建单个model 的action runner
 function createModelReducerRunner(name, model, dispatch) {
     var _a;
-    var _b = model.reducers, reducers = _b === void 0 ? {} : _b, _c = model.effects, effects = _c === void 0 ? {} : _c;
+    var _b = model.reducers, reducers = _b === void 0 ? {} : _b;
     var reducerKeys = Object.keys(reducers);
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     var createActionMap = function (key) {
