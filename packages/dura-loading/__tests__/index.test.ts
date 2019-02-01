@@ -43,7 +43,7 @@ describe("测试loading 插件", function() {
 
     const store = create({
       initialModel,
-      plugins: [createLoadingPlugin(initialModel), createAsyncPlugin(initialModel)]
+      plugins: [createLoadingPlugin(initialModel), createAsyncPlugin()]
     }) as DuraStore<typeof initialModel, ExtractLoadingState<typeof initialModel>> &
       AsyncDuraStore<typeof initialModel>;
 
@@ -53,11 +53,11 @@ describe("测试loading 插件", function() {
 
     console.log(store.getState());
 
-    // setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
+    setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
 
     setTimeout(() => {
       expect(store.getState().user.name).toEqual("张三");
-      // expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
+      expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
       done();
     }, 1500);
   });
@@ -103,7 +103,7 @@ describe("测试loading 插件", function() {
 
     const store = create({
       initialModel,
-      plugins: [createLoadingPlugin(initialModel), createAsyncPlugin(initialModel)]
+      plugins: [createLoadingPlugin(initialModel), createAsyncPlugin()]
     }) as DuraStore<typeof initialModel, ExtractLoadingState<typeof initialModel>> &
       AsyncDuraStore<typeof initialModel>;
 

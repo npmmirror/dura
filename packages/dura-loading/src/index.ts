@@ -53,26 +53,22 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
       const end = (effectName: string) => ({ type: `loading/end`, payload: { modelName: name, effectName } });
 
       const nextEffects = Object.keys(effects)
-        .map((key: string) => {
-          return {
-            [key]: (payload?: Payload, meta?: Meta & LoadingMeta) => async (request: EffectAPI) => {
-              console.log("来了，老弟");
+        .map((key: string) => ({
+          [key]: (payload?: Payload, meta?: Meta & LoadingMeta) => async (request: EffectAPI) => {
+            const effectFn = async () => await effects[key](payload, meta)(request);
+            const loadingHoc = async effectFn => {
+              request.dispatch(start(key));
+              await effectFn();
+              request.dispatch(end(key));
+            };
 
-              const effectFn = async () => await effects[key](payload, meta)(request);
-              const loadingHoc = async effectFn => {
-                request.dispatch(start(key));
-                await effectFn();
-                request.dispatch(end(key));
-              };
-
-              if (meta.loading) {
-                loadingHoc(effectFn);
-              } else {
-                await effectFn();
-              }
+            if (meta.loading) {
+              loadingHoc(effectFn);
+            } else {
+              await effectFn();
             }
-          };
-        })
+          }
+        }))
         .reduce((prev, next) => ({ ...prev, ...next }), {});
 
       return {

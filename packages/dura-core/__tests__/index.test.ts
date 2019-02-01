@@ -1,5 +1,5 @@
 import { create } from "../src/index";
-import { ExtractRootState, EffectAPI, ExtractReducersRunner, Plugin, DuraStore, RootModel, Model } from "@dura/types";
+import { ExtractRootState, Plugin, DuraStore, RootModel, Model } from "@dura/types";
 import { createSelector } from "reselect";
 
 describe("单元测试", function() {
@@ -21,18 +21,6 @@ describe("单元测试", function() {
         onChangeName(payload: { name: string }) {
           return function(state: IState) {
             return { ...state, ...payload };
-          };
-        }
-      },
-      effects: {
-        /**
-         * 异步的修改用户姓名
-         * @param payload
-         */
-        onAsyncChangeName(payload: { name: string }) {
-          return async function(request: EffectAPI<RootState>) {
-            await request.delay(1500);
-            reducerRunner.user.onChangeName(payload);
           };
         }
       },
