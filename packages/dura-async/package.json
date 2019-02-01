@@ -1,6 +1,6 @@
 {
   "name": "@dura/async",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -16,7 +16,7 @@
     "redux-actions": "^2.6.4"
   },
   "devDependencies": {
-    "@dura/core": "^1.0.0-alpha.16",
-    "@dura/types": "^1.0.0-alpha.16"
+    "@dura/core": "^1.0.0-alpha.17",
+    "@dura/types": "^1.0.0-alpha.17"
   }
 }
