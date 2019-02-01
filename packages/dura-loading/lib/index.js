@@ -97,14 +97,13 @@ exports.createLoadingPlugin = function (rootModel) {
             var nextEffects = Object.keys(effects)
                 .map(function (key) {
                 var _a;
-                return _a = {},
+                return (_a = {},
                     _a[key] = function (payload, meta) { return function (request) { return __awaiter(_this, void 0, void 0, function () {
                         var effectFn, loadingHoc;
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    console.log("来了，老弟");
                                     effectFn = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
                                             case 0: return [4 /*yield*/, effects[key](payload, meta)(request)];
@@ -135,7 +134,7 @@ exports.createLoadingPlugin = function (rootModel) {
                             }
                         });
                     }); }; },
-                    _a;
+                    _a);
             })
                 .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
             return __assign({}, model, { effects: nextEffects });
