@@ -1,6 +1,6 @@
 import { create } from "@dura/core";
 import { EffectAPI, ExtractRootState, ExtractRootActionRunner, DuraStore } from "@dura/types";
-import duraAsyncPlugin from "../src/index";
+import { createAsyncPlugin } from "../src/index";
 
 describe("单元测试", function() {
   it("测试effect", function(done) {
@@ -50,7 +50,7 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initModel,
-      plugins: [duraAsyncPlugin]
+      plugins: [createAsyncPlugin(initModel)]
     }) as DuraStore<RootState, RootAction>;
 
     const actionRunner = store.actionRunner;

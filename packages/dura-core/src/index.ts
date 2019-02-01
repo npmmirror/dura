@@ -1,6 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware, Dispatch } from "redux";
 import { handleActions, createAction } from "redux-actions";
-import clone from "clone";
 import { Model, Plugin, Config, DuraStore, RootModel } from "@dura/types";
 
 /**
@@ -17,45 +16,6 @@ function extractReducers(name: string, model: Model<any>) {
     }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
   return { [name]: handleActions(nextReducer, model.state) };
-}
-
-/**
- * 提取effects
- * @param name
- * @param model
- */
-function extractEffects(name: string, model: Model<any>) {
-  const effects = model.effects || {};
-  const effectKeys = Object.keys(effects);
-  const nextEffects = effectKeys
-    .map((effectName: string) => ({ [`${name}/${effectName}`]: effects[effectName] }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-  return nextEffects;
-}
-
-function createEffectsMiddleware(allModel) {
-  //聚合effects
-  const rootEffects = Object.keys(allModel)
-    .map((name: string) => extractEffects(name, allModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-  const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve(), ms));
-
-  return store => next => async action => {
-    let result = next(action);
-    if (typeof rootEffects[action.type] === "function") {
-      const dispatch = store.dispatch;
-      const getState = () => clone(store.getState());
-      //执行effect
-      const effect = rootEffects[action.type](action.payload, action.meta);
-      result = await effect({
-        dispatch,
-        getState,
-        delay
-      });
-    }
-    return result;
-  };
 }
 
 /**
@@ -120,10 +80,7 @@ function create(config: Config): DuraStore {
     .map((name: string) => extractReducers(name, nextRootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
-  const middlewares = plugins.filter(p => p.createMiddleware).map(p => p.createMiddleware(nextRootModel));
-
-  //创建effects的中间件
-  // const effectMiddleware = createEffectsMiddleware(nextRootModel);
+  const middlewares = plugins.filter(p => p.middleware).map(p => p.middleware);
 
   //store增强器
   const storeEnhancer = compose(applyMiddleware(...middlewares));

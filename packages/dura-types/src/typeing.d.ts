@@ -54,7 +54,7 @@ export type Plugin<S = any> = {
   name: string;
   model?: Model<S>;
   wrapModel?: (name: string, model: Model<any>) => Model<any>;
-  createMiddleware?: (rootModel: RootModel) => Middleware<any, S, any>;
+  middleware?: Middleware<any, S, any>;
 };
 
 export type Config = {
