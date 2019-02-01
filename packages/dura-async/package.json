@@ -1,6 +1,6 @@
 {
   "name": "@dura/async",
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-alpha.10",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "clone": "^2.1.2"
   },
   "devDependencies": {
-    "@dura/core": "^1.0.0-alpha.9",
-    "@dura/types": "^1.0.0-alpha.9"
+    "@dura/core": "^1.0.0-alpha.10",
+    "@dura/types": "^1.0.0-alpha.10"
   }
 }
