@@ -71,34 +71,51 @@ exports.default = {
         }
     },
     wrapModel: function (name, model) {
-        var state = model.state, reducers = model.reducers, effects = model.effects;
+        if (name === "loading") {
+            return model;
+        }
+        var state = model.state, reducers = model.reducers, _a = model.effects, effects = _a === void 0 ? {} : _a;
+        var start = function (effectName) { return ({ type: "loading/start", payload: { modelName: name, effectName: effectName } }); };
+        var end = function (effectName) { return ({ type: "loading/end", payload: { modelName: name, effectName: effectName } }); };
         var nextEffects = Object.keys(effects)
             .map(function (key) {
             var _a;
             return (_a = {},
                 _a[key] = function (payload, meta) { return function (request) { return __awaiter(_this, void 0, void 0, function () {
+                    var effectFn, loadingHoc;
+                    var _this = this;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                request.dispatch({
-                                    type: "loading/start",
-                                    payload: {
-                                        modelName: name,
-                                        effectName: key
+                                console.log("payload", payload);
+                                console.log("meta", meta);
+                                effectFn = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, effects[key](payload, meta)(request)];
+                                        case 1: return [2 /*return*/, _a.sent()];
                                     }
-                                });
-                                return [4 /*yield*/, effects[key](payload, meta)(request)];
-                            case 1:
+                                }); }); };
+                                loadingHoc = function (effectFn) { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                request.dispatch(start(key));
+                                                return [4 /*yield*/, effectFn()];
+                                            case 1:
+                                                _a.sent();
+                                                request.dispatch(end(key));
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); };
+                                if (!meta.loading) return [3 /*break*/, 1];
+                                loadingHoc(effectFn);
+                                return [3 /*break*/, 3];
+                            case 1: return [4 /*yield*/, effectFn()];
+                            case 2:
                                 _a.sent();
-                                request.dispatch({
-                                    type: "loading/end",
-                                    payload: {
-                                        modelName: name,
-                                        effectName: key
-                                    }
-                                });
-                                console.log("结束");
-                                return [2 /*return*/];
+                                _a.label = 3;
+                            case 3: return [2 /*return*/];
                         }
                     });
                 }); }; },

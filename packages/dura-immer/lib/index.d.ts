@@ -1,7 +1,7 @@
 import { Model } from "@dura/types";
 declare const _default: {
     name: string;
-    wrapModel(model: Model<any, any>): {
+    wrapModel(name: string, model: Model<any, any>): {
         state: import("@dura/types").State;
         effects: import("@dura/types").Effects<any>;
         reducers: {

@@ -51,7 +51,7 @@ function createEffectsMiddleware(allModel, plugins: Array<Plugin>) {
       //前置拦截器
       intercepts.filter(i => i.pre(action)).forEach(i => i.before(action, store.dispatch));
       //执行effect
-      const effect = rootEffects[action.type](action.payload);
+      const effect = rootEffects[action.type](action.payload, action.meta);
       result = await effect({
         dispatch,
         getState,

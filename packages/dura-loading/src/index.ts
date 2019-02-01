@@ -1,7 +1,7 @@
 /**
  * 自动loading
  */
-import { RootModel, Effects, Model, EffectAPI } from "@dura/types";
+import { RootModel, Effects, Model, EffectAPI, Meta } from "@dura/types";
 
 export default {
   name: "loading",
@@ -31,26 +31,34 @@ export default {
     }
   },
   wrapModel: (name: string, model: Model) => {
-    const { state, reducers, effects } = model;
+    if (name === "loading") {
+      return model;
+    }
+    const { state, reducers, effects = {} } = model;
+
+    const start = (effectName: string) => ({ type: `loading/start`, payload: { modelName: name, effectName } });
+
+    const end = (effectName: string) => ({ type: `loading/end`, payload: { modelName: name, effectName } });
+
     const nextEffects = Object.keys(effects)
       .map((key: string) => ({
-        [key]: (payload?: any, meta?: any) => async (request: EffectAPI) => {
-          request.dispatch({
-            type: `loading/start`,
-            payload: {
-              modelName: name,
-              effectName: key
-            }
-          });
-          await effects[key](payload, meta)(request);
-          request.dispatch({
-            type: `loading/end`,
-            payload: {
-              modelName: name,
-              effectName: key
-            }
-          });
-          console.log("结束");
+        [key]: (payload?: any, meta?: LoadingMeta & Meta) => async (request: EffectAPI) => {
+          console.log("payload", payload);
+          console.log("meta", meta);
+
+          const effectFn = async () => await effects[key](payload, meta)(request);
+
+          const loadingHoc = async effectFn => {
+            request.dispatch(start(key));
+            await effectFn();
+            request.dispatch(end(key));
+          };
+
+          if (meta.loading) {
+            loadingHoc(effectFn);
+          } else {
+            await effectFn();
+          }
         }
       }))
       .reduce((prev, next) => ({ ...prev, ...next }), {});

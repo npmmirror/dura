@@ -106,7 +106,7 @@ function createEffectsMiddleware(allModel, plugins) {
                     getState = function () { return clone_1.default(store.getState()); };
                     //前置拦截器
                     intercepts.filter(function (i) { return i.pre(action); }).forEach(function (i) { return i.before(action, store.dispatch); });
-                    effect = rootEffects[action.type](action.payload);
+                    effect = rootEffects[action.type](action.payload, action.meta);
                     return [4 /*yield*/, effect({
                             dispatch: dispatch,
                             getState: getState,

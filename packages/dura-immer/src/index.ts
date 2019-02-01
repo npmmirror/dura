@@ -3,7 +3,7 @@ import produce from "immer";
 
 export default {
   name: "immer",
-  wrapModel(model: Model) {
+  wrapModel(name: string, model: Model) {
     const { state, reducers, effects } = model;
 
     const nextReducers = Object.keys(reducers)

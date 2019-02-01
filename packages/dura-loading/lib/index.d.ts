@@ -1,7 +1,7 @@
 /**
  * 自动loading
  */
-import { RootModel, Effects, Model, EffectAPI } from "@dura/types";
+import { RootModel, Effects, Model } from "@dura/types";
 declare const _default: {
     name: string;
     model: {
@@ -17,13 +17,7 @@ declare const _default: {
             }): (state: any) => any;
         };
     };
-    wrapModel: (name: string, model: Model<any, any>) => {
-        state: import("@dura/types").State;
-        reducers: import("@dura/types").Reducers<any>;
-        effects: {
-            [x: string]: (payload?: any, meta?: any) => (request: EffectAPI<any>) => Promise<void>;
-        };
-    };
+    wrapModel: (name: string, model: Model<any, any>) => Model<any, any>;
 };
 export default _default;
 declare type ConvertFnToBoolean<E extends Effects> = {

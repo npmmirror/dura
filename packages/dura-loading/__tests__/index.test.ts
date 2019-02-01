@@ -24,7 +24,7 @@ describe("测试loading 插件", function() {
          * 异步获取用户信息
          * @param param0
          */
-        onAsyncChangeName(payload: { name: string }, meta: { loading: boolean }) {
+        onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
           return async function(request: EffectAPI) {
             await request.delay(1500);
             store.actionRunner.user.onChangeName(payload);
@@ -49,9 +49,6 @@ describe("测试loading 插件", function() {
     }) as DuraStore<RootState, RootAction>;
 
     expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
-
-    console.log(store);
-    
 
     store.actionRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
 
