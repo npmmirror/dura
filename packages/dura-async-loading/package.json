@@ -1,6 +1,6 @@
 {
   "name": "@dura/async-loading",
-  "version": "1.0.0-alpha.23",
+  "version": "1.0.0-alpha.24",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@dura/core": "^1.0.0-alpha.23"
+    "@dura/core": "^1.0.0-alpha.24"
   },
   "dependencies": {
-    "@dura/async": "^1.0.0-alpha.23",
-    "@dura/types": "^1.0.0-alpha.23"
+    "@dura/async": "^1.0.0-alpha.24",
+    "@dura/types": "^1.0.0-alpha.24"
   }
 }
