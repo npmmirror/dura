@@ -55,10 +55,10 @@ function mergeModel(config: Config) {
 
 //包装根model
 function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
-  const wrapModelPlugins = [...plugin.filter(p => p.onWrapModel)];
+  const wrapModelPlugins = plugin.filter(p => p.onWrapModel);
   //包装已有的model
   return Object.keys(rootModel)
-    .map((name: string) => wrapModel(wrapModelPlugins, name, rootModel[name]))
+    .map((name: string) => wrapModel(wrapModelPlugins.slice(), name, rootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 

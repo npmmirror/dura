@@ -71,10 +71,10 @@ function mergeModel(config) {
 }
 //包装根model
 function wrapRootModel(rootModel, plugin) {
-    var wrapModelPlugins = plugin.filter(function (p) { return p.onWrapModel; }).slice();
+    var wrapModelPlugins = plugin.filter(function (p) { return p.onWrapModel; });
     //包装已有的model
     return Object.keys(rootModel)
-        .map(function (name) { return wrapModel(wrapModelPlugins, name, rootModel[name]); })
+        .map(function (name) { return wrapModel(wrapModelPlugins.slice(), name, rootModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
 }
 /**
