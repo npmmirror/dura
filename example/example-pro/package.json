@@ -1,0 +1,42 @@
+{
+  "name": "example-pro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dura/async": "^1.0.0-alpha.23",
+    "@dura/async-loading": "^1.0.0-alpha.23",
+    "@dura/core": "^1.0.0-alpha.23",
+    "@dura/immer": "^1.0.0-alpha.23",
+    "@dura/selectors": "^1.0.0-alpha.23",
+    "antd": "^3.13.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.7.20",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-redux": "^7.0.0",
+    "@types/react-router-dom": "^4.3.1",
+    "css-loader": "^2.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "reactotron-react-js": "^2.1.4",
+    "style-loader": "^0.23.1",
+    "ts-import-plugin": "^1.5.5",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "typescript-plugin-styled-components": "^1.0.0",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
