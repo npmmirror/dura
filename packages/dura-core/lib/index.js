@@ -104,7 +104,7 @@ function create(config) {
     return __assign({}, reduxStore, { reducerRunner: reducerRunner });
 }
 exports.create = create;
-//创建单个model 的action runner
+//创建单个model 的reducer runner
 function createModelReducerRunner(name, model, dispatch) {
     var _a;
     var _b = model.reducers, reducers = _b === void 0 ? {} : _b;
@@ -121,7 +121,7 @@ function createModelReducerRunner(name, model, dispatch) {
     var action = reducerKeys.slice().map(createActionMap).reduce(merge, {});
     return _a = {}, _a[name] = action, _a;
 }
-//创建全局的action  runner
+//创建全局的reducer  runner
 function createReducerRunner(models, dispatch) {
     var merge = function (prev, next) { return (__assign({}, prev, next)); };
     return Object.keys(models)

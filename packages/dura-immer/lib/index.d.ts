@@ -1,5 +1,5 @@
 import { Model } from "@dura/types";
-declare const _default: {
+export declare const createImmerPlugin: () => {
     name: string;
     onWrapModel(name: string, model: Model<any, any>): {
         reducers: {
@@ -8,4 +8,3 @@ declare const _default: {
         state: import("@dura/types").State;
     };
 };
-export default _default;

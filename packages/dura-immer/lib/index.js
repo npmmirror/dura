@@ -15,21 +15,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var immer_1 = __importDefault(require("immer"));
-exports.default = {
-    name: "immer",
-    onWrapModel: function (name, model) {
-        var reducers = model.reducers;
-        var nextReducers = Object.keys(reducers)
-            .map(function (name) {
-            var _a;
-            return (_a = {},
-                _a[name] = function (payload, meta) { return function (baseState) {
-                    return immer_1.default(baseState, function (draftState) { return reducers[name](payload, meta)(draftState); });
-                }; },
-                _a);
-        })
-            .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-        return __assign({}, model, { reducers: nextReducers });
-    }
+exports.createImmerPlugin = function () {
+    return {
+        name: "immer",
+        onWrapModel: function (name, model) {
+            var reducers = model.reducers;
+            var nextReducers = Object.keys(reducers)
+                .map(function (name) {
+                var _a;
+                return (_a = {},
+                    _a[name] = function (payload, meta) { return function (baseState) {
+                        return immer_1.default(baseState, function (draftState) { return reducers[name](payload, meta)(draftState); });
+                    }; },
+                    _a);
+            })
+                .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
+            return __assign({}, model, { reducers: nextReducers });
+        }
+    };
 };
 //# sourceMappingURL=index.js.map
