@@ -30,10 +30,9 @@
 ### rematch
 
 - 对于 [typescript](https://github.com/Microsoft/TypeScript) 的支持还不错，但是不够精细
-- 作者似乎在偷懒，很多官方插件 尽然没有 [typescript](https://github.com/Microsoft/TypeScript) 的类型系统
+- 很多官方插件 没有 [typescript](https://github.com/Microsoft/TypeScript) 的类型系统
 - 对于 reducer、effect 的参数提示完全没有
 - api 的设计并不是很喜欢，有些时候用起来觉得很奇怪
-- 😂 我给他提 PR 没采纳，当然也确实我的实现逻辑有很大的问题
 
 ## dura 拥有哪些能力？
 
