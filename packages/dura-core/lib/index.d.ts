@@ -5,3 +5,4 @@ import { Config, DuraStore } from "@dura/types";
  */
 declare function create(config: Config): DuraStore;
 export { create };
+export * from "@dura/types";

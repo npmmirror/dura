@@ -56,8 +56,9 @@
 ## 例子
 
 - [example-count](https://github.com/CN-YUANYU/dura/tree/master/example/example-count) 一个最简单的计数器 demo，没有使用任何插件
+- [example-pro](https://github.com/CN-YUANYU/dura/tree/master/example/example-pro) 演示了 dura 全家桶的使用方式
 
-  征集更过的基于 dura 的项目案例， 可直接提供在 issue 当中
+**征集更过的基于 dura 的项目案例， 可直接提供在 issue 当中**
 
 ## 一个简单的教程
 
