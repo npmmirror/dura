@@ -11,4 +11,5 @@ script:
   - npm run build
 
 branches:
-  only: -master
+  only:
+    - master
