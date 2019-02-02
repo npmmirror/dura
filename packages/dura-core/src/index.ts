@@ -82,8 +82,10 @@ function create(config: Config): DuraStore {
 
   const middlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
+  const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
+
   //store增强器
-  const storeEnhancer = compose(applyMiddleware(...middlewares));
+  const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares));
 
   //创建redux-store
   const reduxStore = (initialState
