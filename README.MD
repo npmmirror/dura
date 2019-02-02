@@ -40,11 +40,18 @@
 - ❓ **提示系统**：强大到你怀疑人生的提示系统、你只需要不停的的鼠标点下去就好。
 - 🔥 **逃离重构火葬场**：项目重构时，代码想删就删，不用去担心未知的引用。
 - 🔌 **插件机制**：基本上能够兼容整个 redux 生态中的常用库。
-- 💰 **上手成本**：如果你掌握上面任何一个框架，那么对你来说 dura 几乎零成本
+- 💰 ** 上手成本**：如果你掌握上面任何一个框架，那么对你来说 dura 几乎零成本
 
 ## 文档
 
 //TODO
+
+### 官方插件
+
+- [dura-async](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-async) 异步请求处理方案
+- [dura-async-loading](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-async-loading) 依赖 [dura-async](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-async) 主要实现 auto-loading
+- [dura-immer](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-immer) 支持 [immer](https://github.com/mweststrate/immer)
+- [dura-selectors](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-selectors) 支持 [reselect](https://github.com/reduxjs/reselect)
 
 ## 例子
 
