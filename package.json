@@ -1,7 +1,8 @@
 {
   "name": "dura",
   "scripts": {
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
