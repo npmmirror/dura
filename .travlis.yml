@@ -1,0 +1,14 @@
+landuage: node_js
+node_js:
+  - "11.3.0"
+cache:
+  directories:
+    - node_modules
+install:
+  - npm install
+
+script:
+  - npm run build
+
+branches:
+  only: -master
