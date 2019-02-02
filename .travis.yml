@@ -8,3 +8,5 @@ before_script:
   - npm run bootstrap
 script:
   - npm run build
+after_success:
+  - npm run coveralls
