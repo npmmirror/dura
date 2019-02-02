@@ -42,7 +42,7 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
       }
     },
     onWrapModel: (name: string, model: Model & AsyncModel) => {
-      console.log("name-->", name);
+      console.log("plugin-->", name);
 
       if (name === "loading") {
         return model;
