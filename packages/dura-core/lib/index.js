@@ -65,7 +65,7 @@ function getPluginModel(plugins) {
 }
 //合并所有的model
 function mergeModel(config) {
-    var _a = config.initialModel, initialModel = _a === void 0 ? {} : _a, _b = config.plugins, plugins = _b === void 0 ? [] : _b;
+    var initialModel = config.initialModel, _a = config.plugins, plugins = _a === void 0 ? [] : _a;
     var pluginModel = getPluginModel(plugins);
     return __assign({}, initialModel, pluginModel);
 }

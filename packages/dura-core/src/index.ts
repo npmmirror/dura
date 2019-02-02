@@ -48,7 +48,7 @@ function getPluginModel(plugins: Array<Plugin>) {
 
 //合并所有的model
 function mergeModel(config: Config) {
-  const { initialModel = {}, plugins = [] } = config;
+  const { initialModel, plugins = [] } = config;
   const pluginModel = getPluginModel(plugins);
   return { ...initialModel, ...pluginModel };
 }
