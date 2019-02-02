@@ -1,5 +1,6 @@
 import { RootModel, Model, Plugin, DuraStore, Payload, Meta, ExtractRootState, Dispatch } from "@dura/types";
 import { createAction } from "redux-actions";
+import clone from "clone";
 
 /**
  * 提取effects
@@ -51,7 +52,7 @@ export const createAsyncPlugin = function(): Plugin {
         let result = next(action);
         if (typeof rootEffects[action.type] === "function") {
           const dispatch = store.dispatch;
-          const getState = () => store.getState();
+          const getState = () => clone(store.getState());
           //执行effect
           const effect = rootEffects[action.type](action.payload, action.meta);
           result = await effect({

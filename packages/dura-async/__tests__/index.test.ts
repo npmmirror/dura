@@ -5,7 +5,7 @@ import { createAsyncPlugin, AsyncDuraStore, EffectAPI } from "../src/index";
 describe("单元测试", function() {
   it("测试effects", function(done) {
     const initialState = {
-      name: undefined,
+      name: "默认",
       sex: undefined
     };
 
@@ -32,8 +32,7 @@ describe("单元测试", function() {
         onAsyncChangeName(payload: { name: string }) {
           return async function(request: EffectAPI<typeof initModel>) {
             await request.delay(1500);
-
-            reducerRunner.user.onChangeName(payload);
+            reducerRunner.user.onChangeName({ name: `${payload.name}-${request.getState().user.name}` });
           };
         }
       }
@@ -63,7 +62,7 @@ describe("单元测试", function() {
     effectRunner.user.onAsyncChangeName({ name: "李四" });
 
     setTimeout(() => {
-      expect(store.getState().user.name).toEqual("李四");
+      expect(store.getState().user.name).toEqual("李四-张三");
       done();
     }, 3000);
   });

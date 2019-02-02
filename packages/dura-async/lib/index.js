@@ -45,8 +45,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_actions_1 = require("redux-actions");
+var clone_1 = __importDefault(require("clone"));
 /**
  * 提取effects
  * @param name
@@ -105,7 +109,7 @@ exports.createAsyncPlugin = function () {
                             result = next(action);
                             if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
                             dispatch = store.dispatch;
-                            getState = function () { return store.getState(); };
+                            getState = function () { return clone_1.default(store.getState()); };
                             effect = rootEffects[action.type](action.payload, action.meta);
                             return [4 /*yield*/, effect({
                                     dispatch: dispatch,

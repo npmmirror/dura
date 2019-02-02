@@ -88,7 +88,6 @@ exports.createLoadingPlugin = function (rootModel) {
             }
         },
         onWrapModel: function (name, model) {
-            console.log("plugin-->", name);
             if (name === "loading") {
                 return model;
             }

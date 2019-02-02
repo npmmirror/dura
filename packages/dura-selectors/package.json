@@ -1,0 +1,19 @@
+{
+  "name": "@dura/selectors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@dura/core": "^1.0.0-alpha.22",
+    "@dura/types": "^1.0.0-alpha.22",
+    "reselect": "^4.0.0"
+  }
+}
