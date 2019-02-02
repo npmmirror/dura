@@ -4,9 +4,10 @@ node_js:
 cache:
   directories:
     - node_modules
-before_install:
-  - npm install typescript && npm run lerna && lerna bootstrap
+
 install:
   - npm install
+after_install:
+  - lerna bootstrap
 script:
   - npm run build
