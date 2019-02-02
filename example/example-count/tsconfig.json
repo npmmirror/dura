@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": false,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "module": "ESNext",
+    "target": "es6",
+    "jsx": "react",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@models/*": ["./models/*"],
+      "@store": ["./src/store.ts"]
+    }
+  }
+}
