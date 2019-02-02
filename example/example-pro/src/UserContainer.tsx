@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Input } from "antd";
-import { RootState, effectRunner, reducerRunner } from "./store";
+import { RootState, effectRunner, reducerRunner, selectorRunner } from "./store";
 
 function mapState(state: RootState) {
   return {
     name: state.user.name,
-    loading: state.loading.user.onAsyncChangeName
+    loading: state.loading.user.onAsyncChangeName,
+    chinaName: selectorRunner.user.chinaName(state)
   };
 }
 
@@ -27,6 +28,7 @@ class UserContainer extends Component {
     return (
       <div>
         <h1>{this.props.name}</h1>
+        <h1>{this.props.chinaName}</h1>
         <Input onChange={e => this.props.onChangeName(e.target.value)} />
         <Button
           loading={this.props.loading}

@@ -1,6 +1,7 @@
 import { EffectAPI } from "@dura/async";
 import { LoadingMeta } from "@dura/async-loading";
-import { RootModel, reducerRunner } from "../src/store";
+import { RootModel, reducerRunner, RootState } from "../src/store";
+import { createSelector } from "reselect";
 
 const initialState = {
   /**
@@ -43,6 +44,14 @@ export default {
         await effectApi.delay(5500);
         reducerRunner.user.onChangeName(payload);
       };
+    }
+  },
+  selectors: {
+    chinaName() {
+      return createSelector(
+        (state: RootState) => state.user.name,
+        name => `【${name}】`
+      );
     }
   }
 };
