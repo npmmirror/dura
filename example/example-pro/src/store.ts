@@ -8,6 +8,9 @@ import { createSelectorsPlugin, SelectorsDuraStore } from "@dura/selectors";
 import { DuraStore, ExtractRootState } from "@dura/types";
 
 const initialModel = {
+  /**
+   * 用户模块
+   */
   user: UserModel
 };
 

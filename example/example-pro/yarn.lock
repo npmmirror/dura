@@ -19,23 +19,23 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@dura/async-loading@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.23.tgz#3971f11fb57cff0eb2328a74e68ac56dc5dab412"
+"@dura/async-loading@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.24.tgz#4f5d03687199e1eb09434bb16ff92c0b25c139ba"
   dependencies:
-    "@dura/async" "^1.0.0-alpha.23"
-    "@dura/types" "^1.0.0-alpha.23"
+    "@dura/async" "^1.0.0-alpha.24"
+    "@dura/types" "^1.0.0-alpha.24"
 
-"@dura/async@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.23.tgz#f981a92842802bd132af39a600ac415e4c3d55f1"
+"@dura/async@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.24.tgz#abaee582c85a63270a8ce6bbe9943fb8491f3761"
   dependencies:
     clone "^2.1.2"
     redux-actions "^2.6.4"
 
-"@dura/core@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.23.tgz#69669f22deb57e4ee03d74195c1c3dfc3e412430"
+"@dura/core@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.24.tgz#d0ef0975ac781a7db49893ee51bb4b60b0bcdc60"
   dependencies:
     clone "^2.1.2"
     immer "^1.12.0"
@@ -43,20 +43,20 @@
     redux-actions "^2.6.4"
     reselect "^4.0.0"
 
-"@dura/immer@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.23.tgz#fb214c8811d19d72ec3b511d50c6f5216089f948"
+"@dura/immer@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.24.tgz#4fa30bc3e070631b9a9bc93a1b8d6809ffb7ce68"
   dependencies:
-    "@dura/types" "^1.0.0-alpha.23"
+    "@dura/types" "^1.0.0-alpha.24"
     immer "^1.12.1"
 
-"@dura/selectors@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.23.tgz#460cef4f0311ec19bab7397993a1b9386a750cb2"
+"@dura/selectors@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.24.tgz#c30977e26e1510bd92ac3ab35eaadd56c0edaf7e"
 
-"@dura/types@^1.0.0-alpha.23":
-  version "1.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.23.tgz#748ee5e8cba5f4f41482bb6a265555232c91b149"
+"@dura/types@^1.0.0-alpha.24":
+  version "1.0.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.24.tgz#981e75ecd759928738f851a37579da2302df9caf"
   dependencies:
     "@types/redux" "^3.6.0"
 

@@ -29,7 +29,7 @@ export default {
      */
     onChangeName(payload: { newName: string }) {
       return function(state: State): State {
-        state.name = payload.newName;
+        state.name = payload.newName + "9";
         return state;
       };
     }
@@ -50,7 +50,7 @@ export default {
     chinaName() {
       return createSelector(
         (state: RootState) => state.user.name,
-        name => `【${name}】`
+        name => `【${name}8】`
       );
     }
   }
