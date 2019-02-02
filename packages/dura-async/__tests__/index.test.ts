@@ -1,5 +1,5 @@
 import { create } from "@dura/core";
-import { ExtractRootState, DuraStore } from "@dura/types";
+import { DuraStore } from "@dura/types";
 import { createAsyncPlugin, AsyncDuraStore, EffectAPI } from "../src/index";
 
 describe("单元测试", function() {
