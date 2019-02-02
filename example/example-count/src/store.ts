@@ -1,8 +1,5 @@
+import { create, DuraStore, ExtractRootState } from "@dura/core";
 import CountModel from "@models/CountModel";
-
-import { create } from "@dura/core";
-
-import { DuraStore, ExtractRootState } from "@dura/types";
 
 const initialModel = {
   /**

@@ -19,19 +19,17 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@dura/core@^1.0.0-alpha.25":
-  version "1.0.0-alpha.25"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.25.tgz#77aa539fa49358e00f169de315ffa6be0a18aa84"
+"@dura/core@^1.0.0-alpha.26":
+  version "1.0.0-alpha.26"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.26.tgz#d7f9b7ee709f4ed40c5cdcb24b73f9f8c108c786"
   dependencies:
-    clone "^2.1.2"
-    immer "^1.12.0"
+    "@dura/types" "^1.0.0-alpha.26"
     redux "^4.0.0"
     redux-actions "^2.6.4"
-    reselect "^4.0.0"
 
-"@dura/types@^1.0.0-alpha.25":
-  version "1.0.0-alpha.25"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.25.tgz#a1a889b5c072ff0d18da2a3bd915c6d0a0bae6f0"
+"@dura/types@^1.0.0-alpha.26":
+  version "1.0.0-alpha.26"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.26.tgz#3a5492402bbb9041e3cc9d558db979a8b1cdd965"
   dependencies:
     "@types/redux" "^3.6.0"
 
@@ -2047,10 +2045,6 @@ ignore-walk@^3.0.1:
 image-size@~0.5.0:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
-
-immer@^1.12.0:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.1.tgz#40c6e5b292c00560836c2993bda3a24379d466f5"
 
 immutable@^3.7.4:
   version "3.8.2"

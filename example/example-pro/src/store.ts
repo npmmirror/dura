@@ -1,11 +1,10 @@
 import UserModel from "@models/UserModel";
 
-import { create } from "@dura/core";
+import { create, DuraStore, ExtractRootState } from "@dura/core";
 import { createAsyncPlugin, AsyncDuraStore } from "@dura/async";
 import { createLoadingPlugin, ExtractLoadingState } from "@dura/async-loading";
 import { createImmerPlugin } from "@dura/immer";
 import { createSelectorsPlugin, SelectorsDuraStore } from "@dura/selectors";
-import { DuraStore, ExtractRootState } from "@dura/types";
 
 const initialModel = {
   /**
