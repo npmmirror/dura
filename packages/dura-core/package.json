@@ -1,6 +1,6 @@
 {
   "name": "@dura/core",
-  "version": "1.0.0-alpha.25",
+  "version": "1.0.0-alpha.26",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -17,9 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dura/types": "^1.0.0-alpha.26",
     "redux": "^4.0.0",
-    "redux-actions": "^2.6.4",
-    "@dura/types": "^1.0.0-alpha.25"
+    "redux-actions": "^2.6.4"
   },
   "devDependencies": {
     "@types/redux": "^3.6.0",
