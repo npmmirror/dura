@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Input } from "antd";
-import { RootState, effectRunner, reducerRunner, selectorRunner } from "./store";
+import { RootState, effectRunner, reducerRunner, selectorRunner } from "@store";
 
 function mapState(state: RootState) {
   return {

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "sourceMap": false,
     "noImplicitAny": false,
     "experimentalDecorators": true,
@@ -14,7 +14,9 @@
     "target": "es6",
     "jsx": "react",
     "paths": {
-      "@components/*": ["./components/*"]
+      "@components/*": ["./components/*"],
+      "@models/*": ["./models/*"],
+      "@store": ["./src/store.ts"]
     }
   }
 }

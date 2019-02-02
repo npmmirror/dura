@@ -1,4 +1,4 @@
-import UserModel from "../models/UserModel";
+import UserModel from "@models/UserModel";
 
 import { create } from "@dura/core";
 import { createAsyncPlugin, AsyncDuraStore } from "@dura/async";
