@@ -1,0 +1,19 @@
+{
+  "name": "@dura/types",
+  "version": "1.0.0-alpha.23",
+  "types": "./src/typeing.d.ts",
+  "typings": "./src/typeing.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/redux": "^3.6.0"
+  },
+  "main": "index.js",
+  "description": ""
+}

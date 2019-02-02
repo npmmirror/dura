@@ -1,0 +1,21 @@
+{
+  "name": "@dura/async-loading",
+  "version": "1.0.0-alpha.23",
+  "description": "",
+  "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@dura/core": "^1.0.0-alpha.23"
+  },
+  "dependencies": {
+    "@dura/async": "^1.0.0-alpha.23",
+    "@dura/types": "^1.0.0-alpha.23"
+  }
+}
