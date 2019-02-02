@@ -45,7 +45,6 @@ export type Plugin<S = any> = {
   name: string;
   model?: Model<S>;
   onWrapModel?: (name: string, model: Model<any>) => Model<any>;
-  middleware?: Middleware<any, S, any>;
   onCreateMiddleware?: (rootModel: RootModel) => Middleware;
   onStoreCreated?: (store: DuraStore, rootModel: RootModel) => void;
 };

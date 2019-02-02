@@ -48,7 +48,7 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initModel,
-      plugins: [createAsyncPlugin(initModel)]
+      plugins: [createAsyncPlugin()]
     }) as DuraStore<typeof initModel> & AsyncDuraStore<typeof initModel>;
 
     const reducerRunner = store.reducerRunner;
