@@ -1,6 +1,6 @@
 {
   "name": "@dura/selectors",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.23",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@dura/core": "^1.0.0-alpha.22",
-    "@dura/types": "^1.0.0-alpha.22",
+    "@dura/core": "^1.0.0-alpha.23",
+    "@dura/types": "^1.0.0-alpha.23",
     "reselect": "^4.0.0"
   }
 }
