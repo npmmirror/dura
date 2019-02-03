@@ -80,7 +80,7 @@ describe("测试loading 插件", function() {
          * 异步获取用户信息
          * @param param0
          */
-        onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
+        onAsyncChangeName(payload: { name: string }, meta?: LoadingMeta) {
           return async function(request: EffectAPI) {
             await request.delay(1000);
             store.reducerRunner.user.onChangeName(payload);
@@ -106,7 +106,7 @@ describe("测试loading 插件", function() {
 
     expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
 
-    store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: false });
+    store.effectRunner.user.onAsyncChangeName({ name: "张三" });
 
     setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(false), 300);
 

@@ -2,6 +2,8 @@ import { create, DuraStore, RootModel, Model } from "../src/index";
 
 describe("单元测试", function() {
   it("测试reducers", function() {
+
+
     const initialState = {
       name: undefined,
       sex: undefined
