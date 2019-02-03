@@ -30,7 +30,7 @@ function mapDispatch() {
       reducerRunner.count.onChangeCount({ count: -1 });
     },
     onAsyncPlus() {
-      effectRunner.count.onAsyncChangeCount({ count: 1 });
+      effectRunner.count.onAsyncChangeCount({ count: 1 }, { loading: true });
     }
   };
 }
