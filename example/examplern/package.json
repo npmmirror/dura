@@ -1,0 +1,41 @@
+{
+  "name": "examplern",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@ant-design/react-native": "^3.1.1",
+    "@dura/async": "^1.0.0-alpha.26",
+    "@dura/async-loading": "^1.0.0-alpha.26",
+    "@dura/core": "^1.0.0-alpha.26",
+    "@dura/immer": "^1.0.0-alpha.26",
+    "@dura/selectors": "^1.0.0-alpha.26",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-native": "0.58.3",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "reselect": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "24.0.0",
+    "jest": "24.0.0",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.6.3",
+    "@types/react": "^16.7.20",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-redux": "^7.0.0",
+    "@types/react-router-dom": "^4.3.1",
+    "reactotron-react-js": "^2.1.4",
+    "style-loader": "^0.23.1",
+    "ts-import-plugin": "^1.5.5",
+    "typescript": "^3.2.4"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
