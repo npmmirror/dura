@@ -118,4 +118,49 @@ describe("单元测试", function() {
       ]
     }) as DuraStore<typeof initModel>;
   });
+
+  it("测试middlewares", function() {
+    const initialState = {
+      name: undefined,
+      sex: undefined
+    };
+
+    type IState = typeof initialState;
+
+    const user = {
+      state: initialState,
+      reducers: {
+        /**
+         * 修改用户姓名
+         * @param payload
+         */
+        onChangeName(payload: { name: string }) {
+          return function(state: IState) {
+            return { ...state, ...payload };
+          };
+        }
+      }
+    };
+
+    const initModel = {
+      user
+    };
+
+    const middleware = store => next => action => {
+      next({ ...action, payload: { name: "middleware" } });
+    };
+
+    const store = create({
+      initialModel: initModel,
+      middlewares: [middleware]
+    }) as DuraStore<typeof initModel>;
+
+    const reducerRunner = store.reducerRunner;
+
+    expect(store.getState().user.name).toBeUndefined();
+
+    reducerRunner.user.onChangeName({ name: "李四" });
+
+    expect(store.getState().user.name).toEqual("middleware");
+  });
 });

@@ -52,6 +52,7 @@ export type Plugin<S = any> = {
 export type Config = {
   initialModel?: RootModel;
   initialState?: any;
+  middlewares?: Array<Middleware>;
   plugins?: Array<Plugin<any>>;
 };
 

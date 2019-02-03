@@ -67,7 +67,7 @@ function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
  * @param config
  */
 function create(config: Config): DuraStore {
-  const { initialState, plugins = [] } = config;
+  const { initialState, plugins = [], middlewares = [] } = config;
 
   //merge plugin 的model
   const rootModel = mergeModel(config);
@@ -80,12 +80,12 @@ function create(config: Config): DuraStore {
     .map((name: string) => extractReducers(name, nextRootModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
-  const middlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
+  const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
   const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
 
   //store增强器
-  const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares));
+  const storeEnhancer = composeEnhancers(applyMiddleware(...pluginMiddlewares, ...middlewares));
 
   //创建redux-store
   const reduxStore = (initialState
