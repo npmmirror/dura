@@ -32,12 +32,12 @@ export type State = {
   [name: string]: number | string | object | undefined | null;
 };
 
-export interface Model<ModelState = any, RootState = any> {
+export interface Model<ModelState = {}, RootState = {}> {
   state: State;
   reducers?: Reducers<ModelState>;
 }
 
-export interface RootModel<M extends Model = Model> {
+export interface RootModel<M extends Model = any> {
   [name: string]: M;
 }
 
