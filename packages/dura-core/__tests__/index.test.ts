@@ -153,7 +153,7 @@ describe("单元测试", function() {
     const store = create({
       initialModel: initModel,
       middlewares: [middleware]
-    }) as DuraStore<typeof initModel>;
+    }) as DuraStore<typeof initModel, {}>;
 
     const reducerRunner = store.reducerRunner;
 

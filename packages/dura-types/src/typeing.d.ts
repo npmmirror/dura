@@ -17,7 +17,7 @@ export type DuraAction<P extends Payload = any, M extends Meta = any> = {
 
 export type Dispatch = Dispatch;
 
-export type DuraStore<RM extends RootModel = any, ExtensionState = any> = Store<
+export type DuraStore<RM extends RootModel = {}, ExtensionState extends RootModel = {}> = Store<
   ExtractRootState<RM> & ExtensionState
 > & {
   dispatch: Dispatch;
