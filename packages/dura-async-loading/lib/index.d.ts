@@ -3,7 +3,7 @@
  */
 import { RootModel, Model } from "@dura/types";
 import { Effects, AsyncModel } from "@dura/async";
-export declare const createLoadingPlugin: (rootModel: RootModel<Model<any, any>>) => {
+export declare const createLoadingPlugin: (rootModel: RootModel<any>) => {
     name: string;
     model: {
         state: {
@@ -22,7 +22,7 @@ export declare const createLoadingPlugin: (rootModel: RootModel<Model<any, any>>
             }): (state: any) => any;
         };
     };
-    onWrapModel: (name: string, model: Model<any, any> & AsyncModel) => Model<any, any> & AsyncModel;
+    onWrapModel: (name: string, model: Model<{}, {}> & AsyncModel) => Model<{}, {}> & AsyncModel;
 };
 declare type ConvertFnToBoolean<E extends Effects> = {
     [key in keyof E]: boolean;

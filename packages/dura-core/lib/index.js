@@ -92,7 +92,8 @@ function create(config) {
         .map(function (name) { return extractReducers(name, nextRootModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     var pluginMiddlewares = plugins.filter(function (p) { return p.onCreateMiddleware; }).map(function (p) { return p.onCreateMiddleware(nextRootModel); });
-    var composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || redux_1.compose;
+    //兼容一下没有window对象的情况
+    var composeEnhancers = (window || {})["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || redux_1.compose;
     //store增强器
     var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, pluginMiddlewares.concat(middlewares)));
     //创建redux-store

@@ -82,7 +82,8 @@ function create(config: Config): DuraStore {
 
   const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
-  const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
+  //兼容一下没有window对象的情况
+  const composeEnhancers = (window || {})["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
 
   //store增强器
   const storeEnhancer = composeEnhancers(applyMiddleware(...pluginMiddlewares, ...middlewares));
