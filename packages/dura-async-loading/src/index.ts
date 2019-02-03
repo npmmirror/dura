@@ -62,7 +62,8 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
               request.dispatch(end(key));
             };
 
-            if (meta.loading) {
+            //兼容
+            if ((meta || { loading: false }).loading) {
               loadingHoc(effectFn);
             } else {
               await effectFn();

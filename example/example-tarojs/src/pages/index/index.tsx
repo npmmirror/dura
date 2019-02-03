@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { RootState, reducerRunner } from "../../store/index";
+import { RootState, reducerRunner, effectRunner } from "../../store/index";
 import "./index.scss";
 import { ReactNode } from "react";
 // #region 书写注意
@@ -16,24 +16,27 @@ import { ReactNode } from "react";
 
 function mapState(state: RootState) {
   return {
-    count: state.count.count || 0
+    count: state.count.count || 0,
+    loading: state.loading.count.onAsyncChangeCount
   };
 }
 
 function mapDispatch() {
   return {
     onPlus() {
-      console.log("window", window);
       reducerRunner.count.onChangeCount({ count: 1 });
     },
     onMin() {
       reducerRunner.count.onChangeCount({ count: -1 });
+    },
+    onAsyncPlus() {
+      effectRunner.count.onAsyncChangeCount({ count: 1 });
     }
   };
 }
 
 class Index extends Component {
-  props: Readonly<Partial<ReturnType<typeof mapState>>> & Readonly<Partial<ReturnType<typeof mapDispatch>>> & any;
+  props: Readonly<Partial<ReturnType<typeof mapState>>> & Readonly<Partial<ReturnType<typeof mapDispatch>>>;
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -67,7 +70,7 @@ class Index extends Component {
         <Button className="dec_btn" onClick={this.props.onMin}>
           -
         </Button>
-        <Button className="dec_btn" onClick={this.props.onPlus}>
+        <Button className="dec_btn" loading={this.props.loading} onClick={this.props.onAsyncPlus}>
           async
         </Button>
         <View>

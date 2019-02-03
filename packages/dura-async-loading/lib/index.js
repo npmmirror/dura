@@ -123,7 +123,7 @@ exports.createLoadingPlugin = function (rootModel) {
                                             }
                                         });
                                     }); };
-                                    if (!meta.loading) return [3 /*break*/, 1];
+                                    if (!(meta || { loading: false }).loading) return [3 /*break*/, 1];
                                     loadingHoc(effectFn);
                                     return [3 /*break*/, 3];
                                 case 1: return [4 /*yield*/, effectFn()];

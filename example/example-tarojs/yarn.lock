@@ -87,48 +87,48 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@dura/async-loading@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.28.tgz#a905279fb6c75819c25640cbccf533e40b248c8b"
-  integrity sha512-zDdGv8lZd91UnuRWbNSJqDBXmlVm96zMxW8rnEOI6NoH+bBF/EiC08dVKfSX5vfrmlGZc4BdJQCF5RKhryE/tQ==
+"@dura/async-loading@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.29.tgz#aa968e5a0f6c0bea5ea480f95490fd5c31e61047"
+  integrity sha512-bQnwaBqnLi/iELy88I43vi60ipwC8K8/yux7BzDJqhrN8SwifL0ZtTpI0j39kWUbUDLEJQt1vEmnPUeXKwnyJw==
   dependencies:
-    "@dura/async" "^1.0.0-alpha.28"
-    "@dura/types" "^1.0.0-alpha.28"
+    "@dura/async" "^1.0.0-alpha.29"
+    "@dura/types" "^1.0.0-alpha.29"
 
-"@dura/async@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.28.tgz#ea3873b82b121b696955d2737704b7c5f7308919"
-  integrity sha512-yF3mXK1MZ5V2HVc+HkzkEY1wD1qOQdfo80cscaxJdWmoF67tA23d0cmpjbfwvim2fObipMmp3QH5yEQeyBpmaQ==
+"@dura/async@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.29.tgz#be7a21b482ab0d2f7b3ecf21eeeea87a71d50bea"
+  integrity sha512-HWZd9zDuy4zVUmBVcC9Hs+INtj4bL5h8dCJN+noV1ZxG6LvFgkQNWS7YYCGSC4fICAauk+j8lsZpA7hoaGiEng==
   dependencies:
     clone "^2.1.2"
     redux-actions "^2.6.4"
 
-"@dura/core@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.28.tgz#f3800bc406907e73d4859d07a3ab412169a7d4ac"
-  integrity sha512-E0WDNWz9M4Vn2/gNpRysQyhoZxq7q7Ud0XCPMXY6e32k3LaUwkniGo6w9IHCsO2IS9WnrKSl8MTSSQqf3ulqDg==
+"@dura/core@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.29.tgz#e86798b5ba410b3745c37c07c6bf4a1370decd99"
+  integrity sha512-13cEAifnAxOK9FySCJGIQyPc03d572/aL5u2qE3PdCPooyx7sD4HBKfTH+R/Je9otYnXrhTGBTEelikLS6jPNA==
   dependencies:
-    "@dura/types" "^1.0.0-alpha.28"
+    "@dura/types" "^1.0.0-alpha.29"
     redux "^4.0.0"
     redux-actions "^2.6.4"
 
-"@dura/immer@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.28.tgz#bd79926a3ab064059b5740b69781f51b0bb0ddb8"
-  integrity sha512-F8R7B7XohIYbi7vjq50FuUJDs/FCMNT2KxtBYRXvH4YTCxrp+ZhZdvqa9/Hh0KZOyQU7HsYh42HYBtFnkLHCYg==
+"@dura/immer@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.29.tgz#83a4deacda9f01642d5a3ba381d9f68c5a28de44"
+  integrity sha512-JCd+89VoCpAqC0q1LCsdjdr3h537pcgCTdfuv4xdcsAkHCnL32dL0R558KflSYJZn8ErpDOXngH+NotVdPyFsg==
   dependencies:
-    "@dura/types" "^1.0.0-alpha.28"
+    "@dura/types" "^1.0.0-alpha.29"
     immer "^1.12.1"
 
-"@dura/selectors@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.28.tgz#6fcd84c3e97560728f96669b44721622edb55615"
-  integrity sha512-4UY6gKK53ijyHkKfQFX62maN616XOjUqtSgiVK143FpMhzapfPxa38dUWb5oZ38J+8nIrgKRnfTdvAmeGF8lQQ==
+"@dura/selectors@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.29.tgz#0ba7dfae15c5438c41e8890d25d2885684cb67fb"
+  integrity sha512-8K9FNipXXNnZPFvugmRSQugQWqQct3LuNciVDwxItMwdII+6RcSs8LD38FCM9tdsT4nOM4inBNHQObzRgqeDhA==
 
-"@dura/types@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.28.tgz#cf3ac474554b20a7fa8e6262baee7b06e4dc0eb5"
-  integrity sha512-gUBzXGEWKy+PRo24Xl+HPMFVpFJ7ZElBB+mA/IvE6leAKUbav4bgIZuqXhnYLEVb6FwfF7hrx/DO3sQmVHRmPQ==
+"@dura/types@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.29.tgz#9f5329c1ff27a89b93e28543bfbe191b4a7b0d24"
+  integrity sha512-AlgxkSX56RaAR18okp56eQTt4pnrAFs8ierhD3IPD1uP8fHIDaxf+8YU20gQ9igyt3c5dW7rxiujI/7cHAN6/A==
   dependencies:
     "@types/redux" "^3.6.0"
 
