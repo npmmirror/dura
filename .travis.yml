@@ -1,6 +1,12 @@
 landuage: node_js
 node_js:
   - "11"
+notifications:
+  email:
+    recipients:
+      - 519495771@qq.com
+  on_success: change
+  on_failure: always
 cache:
   directories:
     - node_modules
