@@ -16,7 +16,7 @@ script:
   - npm run build
   - npm run test
 after_success:
-  - cat ./coverage/lcov.info | coveralls -repotoken $COVERALLS_TOKEN 
+  - npm run test
 git:
   depth: 5
 env:
