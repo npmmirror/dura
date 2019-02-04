@@ -26,7 +26,7 @@ export const createSelectorsPlugin = function(): Plugin {
   };
 };
 
-export type SelectorsDuraStore<RM extends RootModel<SelectorModel> = any> = {
+export type SelectorsDuraStore<RM extends RootModel<SelectorModel & Model> = any> = {
   selectorRunner: ExtractRootSelectorRunner<RM>;
 };
 
@@ -34,14 +34,14 @@ type Selectors = {
   [name: string]: any;
 };
 
-type SelectorModel = {
+export type SelectorModel = {
   selectors?: Selectors;
-} & Model;
+};
 
 type ExtractSelectorRunner<S extends Selectors, M extends RootModel> = {
   [key in keyof S]: (state: ExtractRootState<M>) => S[key]
 };
 
-export type ExtractRootSelectorRunner<M extends RootModel<SelectorModel>> = {
+export type ExtractRootSelectorRunner<M extends RootModel<SelectorModel & Model>> = {
   [key in keyof M]: ExtractSelectorRunner<M[key]["selectors"], M>
 };

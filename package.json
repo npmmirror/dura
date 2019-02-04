@@ -3,7 +3,8 @@
   "scripts": {
     "build": "lerna run build",
     "test": "jest --coverage",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "cov": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
