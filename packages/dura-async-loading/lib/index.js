@@ -94,7 +94,7 @@ exports.createLoadingPlugin = function (rootModel) {
             var _a = model.effects, effects = _a === void 0 ? {} : _a;
             var start = function (effectName) { return ({ type: "loading/start", payload: { modelName: name, effectName: effectName } }); };
             var end = function (effectName) { return ({ type: "loading/end", payload: { modelName: name, effectName: effectName } }); };
-            var nextEffects = Object.keys(effects || {})
+            var nextEffects = Object.keys(effects)
                 .map(function (key) {
                 var _a;
                 return (_a = {},

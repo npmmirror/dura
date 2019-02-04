@@ -8,6 +8,8 @@ export type Meta = {
   [name: string]: any;
 };
 
+export type Middleware = Middleware;
+
 export type DuraAction<P extends Payload = any, M extends Meta = any> = {
   type: string;
   payload?: P;

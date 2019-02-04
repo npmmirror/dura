@@ -1,4 +1,4 @@
-import * as core from "@dura/core";
+import { RootModel, Model, DuraStore, ExtractRootState, create, Middleware, Plugin } from "@dura/core";
 import { createAsyncPlugin, AsyncDuraStore, AsyncModel, EffectAPI } from "@dura/async";
 import { createLoadingPlugin, ExtractLoadingState, LoadingMeta } from "@dura/async-loading";
 import { createImmerPlugin } from "@dura/immer";
@@ -10,24 +10,37 @@ export type Config = {
   middlewares?: Array<any>;
 };
 
-export type PlusDuraStore<RM extends core.RootModel<core.Model & AsyncModel & SelectorModel>> = core.DuraStore<
+export type PlusDuraStore<RM extends RootModel<Model & AsyncModel & SelectorModel>> = DuraStore<
   RM,
   ExtractLoadingState<RM>
 > &
   AsyncDuraStore<RM> &
   SelectorsDuraStore<RM>;
 
-export type PlusRootState<RM extends core.RootModel<core.Model & AsyncModel & SelectorModel>> = core.ExtractRootState<RM> &
+export type PlusRootState<RM extends RootModel<Model & AsyncModel & SelectorModel>> = ExtractRootState<RM> &
   ExtractLoadingState<RM>;
 
 export type EffectAPI<RootState = any> = EffectAPI<RootState>;
 
 export type LoadingMeta = LoadingMeta;
 
-export const create = function(initialRootModel: core.RootModel<core.Model & AsyncModel>, config?) {
-  return core.create({
+export type DuraConfig = {
+  initialState?: any;
+  middlewares?: Array<Middleware>;
+  plugins?: Array<Plugin>;
+};
+
+export const createDura = function(initialRootModel: RootModel<Model & AsyncModel>, config?: DuraConfig) {
+  return create({
     initialModel: initialRootModel,
-    plugins: [createAsyncPlugin(), createLoadingPlugin(initialRootModel), createImmerPlugin(), createSelectorsPlugin()],
-    ...config
+    plugins: [
+      createAsyncPlugin(),
+      createLoadingPlugin(initialRootModel),
+      createImmerPlugin(),
+      createSelectorsPlugin(),
+      ...(config.plugins || [])
+    ],
+    initialState: config.initialState || {},
+    middlewares: config.middlewares || []
   });
 };
