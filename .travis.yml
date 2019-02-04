@@ -16,7 +16,7 @@ script:
   - npm run build
   - npm run test
 after_success:
-  - npm run coveralls
+  - npm run coveralls -repotoken $COVERALLS_TOKEN
 git:
   depth: 5
 env:
