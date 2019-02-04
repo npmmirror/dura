@@ -2,7 +2,7 @@
   "name": "dura",
   "scripts": {
     "build": "lerna run build",
-    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "jest --coverage",
     "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
