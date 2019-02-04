@@ -25,19 +25,19 @@ export type DuraStore<RM extends RootModel = {}, ExtensionState extends RootMode
 };
 
 export type Reducers<S = any> = {
-  [name: string]: (payload?: Payload, meta?: Meta) => (state: S) => S;
+  [name: string]: (payload?: Payload, meta?: Meta) => (state: S) => S | void;
 };
 
 export type State = {
   [name: string]: number | string | object | undefined | null;
 };
 
-export interface Model<ModelState = {}, RootState = {}> {
+export interface Model<ModelState = {}> {
   state: State;
   reducers?: Reducers<ModelState>;
 }
 
-export interface RootModel<M extends Model = any> {
+export interface RootModel<M = any> {
   [name: string]: M;
 }
 

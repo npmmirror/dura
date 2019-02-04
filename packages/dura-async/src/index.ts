@@ -71,7 +71,9 @@ export const createAsyncPlugin = function(): Plugin {
 };
 
 export type AsyncModel = {
-  effects?: any;
+  effects?: {
+    [name: string]: any;
+  };
 };
 
 export type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = { [key in keyof M]: M[key]["effects"] };
@@ -86,8 +88,8 @@ export type Effects<RM extends RootModel<Model> = any> = {
   [name: string]: (payload?: Payload, meta?: Meta) => Effect<RM>;
 };
 
-export type EffectAPI<RM extends RootModel<Model & AsyncModel> = any> = {
+export type EffectAPI<RootState = any> = {
   dispatch: any;
-  getState: () => ExtractRootState<RM>;
+  getState: () => RootState;
   delay: (ms: number) => Promise<{}>;
 };

@@ -20,7 +20,6 @@ var async_loading_1 = require("@dura/async-loading");
 var immer_1 = require("@dura/immer");
 var selectors_1 = require("@dura/selectors");
 exports.create = function (initialRootModel, config) {
-    var RootModel = typeof initialRootModel;
     return core_1.default.create(__assign({ initialModel: initialRootModel, plugins: [async_1.createAsyncPlugin(), async_loading_1.createLoadingPlugin(initialRootModel), immer_1.createImmerPlugin(), selectors_1.createSelectorsPlugin()] }, config));
 };
 //# sourceMappingURL=index.js.map

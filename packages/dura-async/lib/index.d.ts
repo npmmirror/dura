@@ -1,7 +1,9 @@
-import { RootModel, Model, Plugin, Payload, Meta, ExtractRootState } from "@dura/types";
+import { RootModel, Model, Plugin, Payload, Meta } from "@dura/types";
 export declare const createAsyncPlugin: () => Plugin<any>;
 export declare type AsyncModel = {
-    effects?: any;
+    effects?: {
+        [name: string]: any;
+    };
 };
 export declare type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = {
     [key in keyof M]: M[key]["effects"];
@@ -13,8 +15,8 @@ export declare type Effect<RM extends RootModel<Model> = any> = (request: Effect
 export declare type Effects<RM extends RootModel<Model> = any> = {
     [name: string]: (payload?: Payload, meta?: Meta) => Effect<RM>;
 };
-export declare type EffectAPI<RM extends RootModel<Model & AsyncModel> = any> = {
+export declare type EffectAPI<RootState = any> = {
     dispatch: any;
-    getState: () => ExtractRootState<RM>;
+    getState: () => RootState;
     delay: (ms: number) => Promise<{}>;
 };

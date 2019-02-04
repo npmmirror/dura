@@ -22,7 +22,7 @@ export declare const createLoadingPlugin: (rootModel: RootModel<any>) => {
             }): (state: any) => any;
         };
     };
-    onWrapModel: (name: string, model: Model<{}, {}> & AsyncModel) => Model<{}, {}> & AsyncModel;
+    onWrapModel: (name: string, model: Model<{}> & AsyncModel) => Model<{}> & AsyncModel;
 };
 declare type ConvertFnToBoolean<E extends Effects> = {
     [key in keyof E]: boolean;
