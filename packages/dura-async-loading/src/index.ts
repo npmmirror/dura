@@ -52,7 +52,7 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
 
       const end = (effectName: string) => ({ type: `loading/end`, payload: { modelName: name, effectName } });
 
-      const nextEffects = Object.keys(effects)
+      const nextEffects = Object.keys(effects || {})
         .map((key: string) => ({
           [key]: (payload?: Payload, meta?: Meta & LoadingMeta) => async (request: EffectAPI) => {
             const effectFn = async () => await effects[key](payload, meta)(request);

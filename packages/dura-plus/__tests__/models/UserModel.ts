@@ -1,5 +1,5 @@
 import { LoadingMeta, EffectAPI } from "../../src/index";
-import { RootState, initialModel } from "../store/store";
+import { RootState, reducerRunner, effectRunner } from "../store/store";
 
 const initialState = {
   name: undefined as string,
@@ -21,7 +21,10 @@ export default {
   },
   effects: {
     onAsyncChangeName(payload: { name: string }, meta?: LoadingMeta) {
-      return async function(effectApi: EffectAPI<typeof initialModel>) {};
+      return async function(effectApi: EffectAPI<RootState>) {
+        await effectApi.delay(1000);
+        reducerRunner.user.onChangeName(payload);
+      };
     }
   }
 };

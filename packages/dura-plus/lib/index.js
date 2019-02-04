@@ -10,16 +10,20 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __importDefault(require("@dura/core"));
+var core = __importStar(require("@dura/core"));
 var async_1 = require("@dura/async");
 var async_loading_1 = require("@dura/async-loading");
 var immer_1 = require("@dura/immer");
 var selectors_1 = require("@dura/selectors");
 exports.create = function (initialRootModel, config) {
-    return core_1.default.create(__assign({ initialModel: initialRootModel, plugins: [async_1.createAsyncPlugin(), async_loading_1.createLoadingPlugin(initialRootModel), immer_1.createImmerPlugin(), selectors_1.createSelectorsPlugin()] }, config));
+    return core.create(__assign({ initialModel: initialRootModel, plugins: [async_1.createAsyncPlugin(), async_loading_1.createLoadingPlugin(initialRootModel), immer_1.createImmerPlugin(), selectors_1.createSelectorsPlugin()] }, config));
 };
 //# sourceMappingURL=index.js.map
