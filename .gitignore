@@ -2,3 +2,6 @@ packages/**/coverage
 node_modules
 coverage
 .coveralls.yml
+packages/example-pro/dist
+packages/example-pro/dist
+
