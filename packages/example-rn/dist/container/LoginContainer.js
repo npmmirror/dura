@@ -47,7 +47,12 @@ class LoginContainer extends Component {
             </Button>
           </Flex.Item>
           <Flex.Item style={{ paddingLeft: 10, paddingRight: 10 }}>
-            <Button size="large" onPress={this.props.onChangeName}>
+            <Button size="large" onPress={() => {
+            console.log(this.props.navigation.dismiss);
+            this.props.onChangeName();
+            this.props.navigation.push("User");
+            // this.props.navigation.replace("User");
+        }}>
               同步修改
             </Button>
           </Flex.Item>

@@ -24,7 +24,7 @@ function mapDispatch() {
   };
 }
 
-class LoginContainer extends Component {
+class UserContainer extends Component {
   props: Partial<ReturnType<typeof mapState>> & Partial<ReturnType<typeof mapDispatch>> & NavigationInjectedProps;
 
   render() {
@@ -38,35 +38,6 @@ class LoginContainer extends Component {
             <Text style={{ fontSize: 18, color: "red" }}>{this.props.name}</Text>
           </Flex.Item>
         </Flex>
-        <Flex>
-          <Flex.Item>
-            <Text style={{ fontSize: 24 }}>装饰数据：</Text>
-          </Flex.Item>
-          <Flex.Item>
-            <Text style={{ fontSize: 18, color: "red" }}>{this.props.chinaName}</Text>
-          </Flex.Item>
-        </Flex>
-        <View style={{ height: 80 }} />
-        <Flex>
-          <Flex.Item style={{ paddingLeft: 10, paddingRight: 10 }}>
-            <Button size="large" type="primary" onPress={this.props.onAsyncChangeName} loading={this.props.loading}>
-              异步修改
-            </Button>
-          </Flex.Item>
-          <Flex.Item style={{ paddingLeft: 10, paddingRight: 10 }}>
-            <Button
-              size="large"
-              onPress={() => {
-                console.log(this.props.navigation.dismiss);
-
-                this.props.onChangeName();
-                this.props.navigation.push("User");
-                // this.props.navigation.replace("User");
-              }}>
-              同步修改
-            </Button>
-          </Flex.Item>
-        </Flex>
       </View>
     );
   }
@@ -75,4 +46,4 @@ class LoginContainer extends Component {
 export default connect(
   mapState,
   mapDispatch
-)(LoginContainer);
+)(UserContainer);
