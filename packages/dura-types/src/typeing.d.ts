@@ -31,7 +31,7 @@ export type Reducers<S = any> = {
 };
 
 export type State = {
-  [name: string]: number | string | object | undefined | null;
+  [name: string]: any;
 };
 
 export interface Model<ModelState = {}> {
