@@ -1,6 +1,6 @@
 {
   "name": "example-tarojs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "example-tarojs",
   "scripts": {
@@ -24,7 +24,7 @@
     "@dura/async-loading": "^1.0.1",
     "@dura/core": "^1.0.1",
     "@dura/immer": "^1.0.1",
-    "@dura/selectors": "^1.0.1",
+    "@dura/selectors": "^1.0.2",
     "@tarojs/async-await": "1.2.12",
     "@tarojs/components": "1.2.12",
     "@tarojs/redux": "1.2.12",

@@ -1,6 +1,6 @@
 {
   "name": "examplern",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
@@ -11,7 +11,7 @@
     "@dura/async-loading": "^1.0.1",
     "@dura/core": "^1.0.1",
     "@dura/immer": "^1.0.1",
-    "@dura/selectors": "^1.0.1",
+    "@dura/selectors": "^1.0.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-native": "0.58.3",
