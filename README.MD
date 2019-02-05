@@ -292,3 +292,4 @@ it("简单的测试", function(done) {
 
 - **【2019.02.06】** 1.0.0 主体功能上线
 - **【2019.02.06】** 1.0.1 修复关于 State 类型系统不支持 boolean 的问题 [511492c](https://github.com/CN-YUANYU/dura/commit/511492c1a17cc0688af62a09f3f154c7d17a3366)
+- **【2019.02.06】** 1.0.2 修复关于 Selector 类型系统不正确 的问题 [e41f5f2](https://github.com/CN-YUANYU/dura/commit/e41f5f2c6f709410c1a0687857b903ac1b190e51)
