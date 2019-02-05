@@ -291,4 +291,4 @@ it("简单的测试", function(done) {
 ## 版本更新日志
 
 - **【2019.02.06】** 1.0.0 主体功能上线
-- **【2019.02.06】** 1.0.1 修复关于 State 类型系统不支持 boolean 的 Bug [511492c](https://github.com/CN-YUANYU/dura/commit/511492c1a17cc0688af62a09f3f154c7d17a3366)
+- **【2019.02.06】** 1.0.1 修复关于 State 类型系统不支持 boolean 的问题 [511492c](https://github.com/CN-YUANYU/dura/commit/511492c1a17cc0688af62a09f3f154c7d17a3366)
