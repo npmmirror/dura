@@ -39,7 +39,7 @@ export type SelectorModel = {
 };
 
 type ExtractSelectorRunner<S extends Selectors, M extends RootModel> = {
-  [key in keyof S]: (state: ExtractRootState<M>) => S[key]
+  [key in keyof S]: ReturnType<S[key]>
 };
 
 export type ExtractRootSelectorRunner<M extends RootModel<SelectorModel & Model>> = {
