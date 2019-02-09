@@ -298,9 +298,13 @@ it("简单的测试", function(done) {
 
   考虑到其实集成 selector 方案并没有太大的意义，反而会增加新手对于 dura 的理解成本，所以决定将该方案从[@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus)中进行移除，后续其实也不推荐使用 [@dura/selectors](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-selectors) 插件，并且该插件将不会提供版本迭代维护，建议直接使用 [reselect](https://github.com/reduxjs/reselect)
 
-## 版本计划
+## 小版本计划
 
 - **other reducers**支持普通的 reducer，例如： redux-form 等框架体系
 - **继承** model 的继承，虽然我觉得没有太大必要，不过还是会做一些业务背景调查，来看一下是否需要做支持
-- **validation** 机制（摸索阶段），虽然说我们鼓励扁平的数据格式，但是免不了总会存在数据嵌套，这里主要需要摸索在数据嵌套，尤其是列表的大背景下，如果使用 **验证机制** 更为友好
+
+## 大版本计划
+
+- **沙盒环境** 用于主动快速定位线上 bug
+- **validation** 机制（摸索阶段），虽然说我们鼓励扁平的数据格式，但是免不了总会存在数据嵌套，这里主要需要摸索在数据嵌套，尤其是列表的大背景下，如何使用 **验证机制** 更为友好
 - **脚手架工程**
