@@ -12,6 +12,9 @@
 
 ---
 
+## 技术支持
+[![kavZhF.md.jpg](https://s2.ax1x.com/2019/02/11/kavZhF.md.jpg)](https://imgchr.com/i/kavZhF)
+
 ## 为什么会有 dura ?
 
 在业务开发当中，我尝试过很多流行的前端数据流的管理方案，例如：[dva](https://github.com/dvajs/dva) 、 [mirror](https://github.com/mirrorjs/mirror) 和 [rematch](https://github.com/rematch/rematch) ，但是实际的使用效果并不如意 。
