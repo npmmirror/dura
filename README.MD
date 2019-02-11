@@ -13,7 +13,7 @@
 ---
 
 ## 技术支持
-![kavT4U.jpg](https://s2.ax1x.com/2019/02/11/kavT4U.jpg)
+![kavLv9.jpg](https://s2.ax1x.com/2019/02/11/kavLv9.jpg)
 
 ## 为什么会有 dura ?
 
