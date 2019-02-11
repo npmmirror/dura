@@ -13,6 +13,7 @@
 ---
 
 ## 技术支持
+
 ![kavLv9.jpg](https://s2.ax1x.com/2019/02/11/kavLv9.jpg)
 
 ## 为什么会有 dura ?
@@ -42,7 +43,7 @@
 - ❓ **提示系统**：强大到你怀疑人生的提示系统、你只需要不停的的鼠标点下去就好。
 - 🔥 **逃离重构火葬场**：项目重构时，代码想删就删，不用去担心未知的引用。
 - 🔌 **插件机制**：基本上能够兼容整个 redux 生态中的常用库。
-- 💰 **上手成本**：如果你掌握上面任何一个框架，那么对你来说 dura 的成本很低廉
+- 💰 ** 上手成本**：如果你掌握上面任何一个框架，那么对你来说 dura 的成本很低廉
 
 ## 为什么 不支持动态 model ？
 
@@ -297,9 +298,16 @@ it("简单的测试", function(done) {
 - **【2019.02.06】** 1.0.0 主体功能上线
 - **【2019.02.06】** 1.0.1 修复关于 State 类型系统不支持 boolean 的问题 [511492c](https://github.com/CN-YUANYU/dura/commit/511492c1a17cc0688af62a09f3f154c7d17a3366)
 - **【2019.02.06】** 1.0.2 修复关于 Selector 类型系统不正确 的问题 [e41f5f2](https://github.com/CN-YUANYU/dura/commit/e41f5f2c6f709410c1a0687857b903ac1b190e51)
-- **【2019.02.09】** 1.0.3 [@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus) 中移除了 selector 方案 [f249a6a](https://github.com/CN-YUANYU/dura/commit/f249a6ac6165954808199fe047cd0e93e48d16c8)
+- **【2019.02.09】** 1.0.3
 
-  考虑到其实集成 selector 方案并没有太大的意义，反而会增加新手对于 dura 的理解成本，所以决定将该方案从[@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus)中进行移除，后续其实也不推荐使用 [@dura/selectors](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-selectors) 插件，并且该插件将不会提供版本迭代维护，建议直接使用 [reselect](https://github.com/reduxjs/reselect)
+  1.  [@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus) 中移除了 selector 方案 [f249a6a](https://github.com/CN-YUANYU/dura/commit/f249a6ac6165954808199fe047cd0e93e48d16c8)
+      考虑到其实集成 selector 方案并没有太大的意义，反而会增加新手对于 dura 的理解成本，所以决定将该方案从[@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus)中进行移除，后续其实也不推荐使用 [@dura/selectors](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-selectors) 插件，并且该插件将不会提供版本迭代维护，建议直接使用 [reselect](https://github.com/reduxjs/reselect)
+
+- **【2019.02.11】** 1.1.0
+  1. 解耦 compose
+  2. 支持外部传入 compose 用以覆盖 [redux](https://github.com/reduxjs/redux) compose
+  3. 支持外部传入 createStore 用以覆盖 [redux](https://github.com/reduxjs/redux) createStore
+  4. 为了尽可能的自由度，移除 [@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus) 中默认装载的 [@dura/immer](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-immer)
 
 ## 小版本计划
 
