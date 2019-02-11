@@ -82,12 +82,12 @@ function create(config: Config): DuraStore {
 
   const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
-  const composeEnhancers = config.compose || compose;
+  const composeEnhancers = config.compose ? config.compose : compose;
 
   //store增强器
   const storeEnhancer = composeEnhancers(applyMiddleware(...pluginMiddlewares, ...middlewares));
 
-  const _createStore = config.createStore || createStore;
+  const _createStore = config.createStore ? config.createStore : createStore;
 
   //创建redux-store
   const reduxStore = (initialState
