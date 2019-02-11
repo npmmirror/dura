@@ -3,17 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@dura/core");
 var async_1 = require("@dura/async");
 var async_loading_1 = require("@dura/async-loading");
-var immer_1 = require("@dura/immer");
 exports.createDura = function (initialRootModel, config) {
+    var otherPlugins = config.plugins || [];
     return core_1.create({
         initialModel: initialRootModel,
-        plugins: [
-            async_1.createAsyncPlugin(),
-            async_loading_1.createLoadingPlugin(initialRootModel),
-            immer_1.createImmerPlugin()
-        ].concat((config.plugins || [])),
+        plugins: [async_1.createAsyncPlugin(), async_loading_1.createLoadingPlugin(initialRootModel)].concat(otherPlugins),
         initialState: config.initialState || {},
-        middlewares: config.middlewares || []
+        middlewares: config.middlewares || [],
+        compose: config.compose,
+        createStore: config.createStore
     });
 };
 //# sourceMappingURL=index.js.map
