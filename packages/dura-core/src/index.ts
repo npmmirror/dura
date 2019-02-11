@@ -82,6 +82,7 @@ function create(config: Config): DuraStore {
 
   const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
+  //获取外部传入的 compose
   const composeEnhancers = config.compose ? config.compose : compose;
 
   //store增强器
