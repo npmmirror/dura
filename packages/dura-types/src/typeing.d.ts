@@ -1,4 +1,4 @@
-import { Dispatch, Store, AnyAction, DeepPartial, Middleware, applyMiddleware } from "redux";
+import { Dispatch, Store, AnyAction, DeepPartial, Middleware, applyMiddleware, compose, createStore } from "redux";
 
 export type Payload = {
   [name: string]: any;
@@ -56,6 +56,8 @@ export type Config = {
   initialState?: any;
   middlewares?: Array<Middleware>;
   plugins?: Array<Plugin<any>>;
+  compose?: typeof compose;
+  createStore?: typeof createStore;
 };
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };

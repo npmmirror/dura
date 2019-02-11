@@ -82,16 +82,17 @@ function create(config: Config): DuraStore {
 
   const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
-  //兼容一下没有window对象的情况
-  const composeEnhancers = (window || {})["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] || compose;
+  const composeEnhancers = config.compose || compose;
 
   //store增强器
   const storeEnhancer = composeEnhancers(applyMiddleware(...pluginMiddlewares, ...middlewares));
 
+  const _createStore = config.createStore || createStore;
+
   //创建redux-store
   const reduxStore = (initialState
-    ? createStore(combineReducers(rootReducers), initialState, storeEnhancer)
-    : createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
+    ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
+    : _createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
 
   const reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
 
