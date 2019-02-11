@@ -13,7 +13,7 @@
 ---
 
 ## 技术支持
-[![kavZhF.md.jpg](https://s2.ax1x.com/2019/02/11/kavZhF.md.jpg)](https://imgchr.com/i/kavZhF)
+![kavl0x.jpg](https://s2.ax1x.com/2019/02/11/kavl0x.jpg)
 
 ## 为什么会有 dura ?
 
