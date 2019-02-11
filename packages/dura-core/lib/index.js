@@ -96,6 +96,7 @@ function create(config) {
     var composeEnhancers = config.compose || redux_1.compose;
     //store增强器
     var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, pluginMiddlewares.concat(middlewares)));
+    //获取外部传入的 createStore
     var _createStore = config.createStore || redux_1.createStore;
     //创建redux-store
     var reduxStore = (initialState

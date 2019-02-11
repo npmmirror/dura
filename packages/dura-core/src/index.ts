@@ -88,6 +88,7 @@ function create(config: Config): DuraStore {
   //store增强器
   const storeEnhancer = composeEnhancers(applyMiddleware(...pluginMiddlewares, ...middlewares));
 
+  //获取外部传入的 createStore
   const _createStore = config.createStore || createStore;
 
   //创建redux-store
