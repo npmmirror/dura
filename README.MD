@@ -308,6 +308,7 @@ it("简单的测试", function(done) {
   - 支持外部传入 compose 用以覆盖 [redux](https://github.com/reduxjs/redux) compose
   - 支持外部传入 createStore 用以覆盖 [redux](https://github.com/reduxjs/redux) createStore
   - 为了尽可能的自由度，移除 [@dura/plus](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-plus) 中默认装载的 [@dura/immer](https://github.com/CN-YUANYU/dura/tree/master/packages/dura-immer)
+- **【2019.02.11】** 1.1.1 放宽 reducer 的类型校验[7cb21af](https://github.com/CN-YUANYU/dura/commit/7cb21af7ba75a4ce0cbc3edea0c916d8811092ff)
 
 ## 小版本计划
 
