@@ -76,13 +76,17 @@ export type AsyncModel = {
   };
 };
 
-export type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = { [key in keyof M]: M[key]["effects"] };
+export type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = {
+  [key in keyof M]: ReviewEffects<M[key]["effects"]>
+};
 
 export type AsyncDuraStore<M extends RootModel = any> = {
   effectRunner: ExtractEffectsRunner<M>;
 };
 
 export type Effect<RM extends RootModel<Model> = any> = (request: EffectAPI<RM>) => void;
+
+export type ReviewEffects<E extends Effects> = { [key in keyof E]: (...args: Parameters<E[key]>) => void };
 
 export type Effects<RM extends RootModel<Model> = any> = {
   [name: string]: (payload?: Payload, meta?: Meta) => Effect<RM>;

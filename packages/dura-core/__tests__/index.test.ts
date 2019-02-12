@@ -1,10 +1,7 @@
 import { create, DuraStore, RootModel, Model } from "../src/index";
 
-
-
 describe("单元测试", function() {
-
-  it("测试传入第三方createStore",function(){
+  it("测试传入第三方createStore", function() {
     const initialState = {
       name: undefined,
       sex: undefined
@@ -19,7 +16,7 @@ describe("单元测试", function() {
          * 修改用户姓名
          * @param payload
          */
-        onChangeName(payload: { name: string }) {
+        onChangeName(payload?: { name: string }) {
           return function(state: IState) {
             return { ...state, ...payload };
           };
@@ -33,12 +30,11 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initModel,
-      createStore:() => false
+      createStore: () => false
     }) as DuraStore<typeof initModel>;
 
-    expect(store.getState).toBeUndefined()
-
-  })
+    expect(store.getState).toBeUndefined();
+  });
 
   it("测试传入第三方的compose", function() {
     const initialState = {
@@ -69,7 +65,7 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initModel,
-      compose: (...a) => a[2],
+      compose: (...a) => a[2]
     }) as DuraStore<typeof initModel>;
 
     const reducerRunner = store.reducerRunner;

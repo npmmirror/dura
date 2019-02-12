@@ -62,4 +62,6 @@ export type Config = {
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ExtractReducersRunner<M extends RootModel> = { [key in keyof M]: M[key]["reducers"] };
+export type ReviewReducders<R extends Reducers> = { [key in keyof R]: (...args: Parameters<R[key]>) => void };
+
+export type ExtractReducersRunner<M extends RootModel> = { [key in keyof M]: ReviewReducders<M[key]["reducers"]> };
