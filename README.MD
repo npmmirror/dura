@@ -311,7 +311,7 @@ it("简单的测试", function(done) {
 - **【2019.02.11】** 1.1.1 放宽 reducer 的类型校验[7cb21af](https://github.com/CN-YUANYU/dura/commit/7cb21af7ba75a4ce0cbc3edea0c916d8811092ff)
 - **【2019.02.11】** 1.1.2 发布卡住了更新内容同 1.1.1
 - **【2019.02.11】** 1.1.3 发布卡住了更新内容同 1.1.1
-- **【2019.02.12】** 1.2.0 更精准、友好的 reducer、effect 调用提示
+- **【2019.02.12】** 1.2.0 更精准、友好的 reducer、effect 调用提示 [7c9c54e](https://github.com/CN-YUANYU/dura/commit/7c9c54e3d31a8ab9a553ad68f11b1a3dcb840ef8)
 
 ## 小版本计划
 
