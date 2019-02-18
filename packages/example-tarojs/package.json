@@ -1,6 +1,6 @@
 {
   "name": "example-tarojs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "example-tarojs",
   "scripts": {
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@dura/async": "^1.2.0",
-    "@dura/async-loading": "^1.2.0",
+    "@dura/async-loading": "^1.2.1",
     "@dura/core": "^1.2.0",
     "@dura/immer": "^1.2.0",
     "@dura/selectors": "^1.2.0",
