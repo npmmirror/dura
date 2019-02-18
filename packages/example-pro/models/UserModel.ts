@@ -27,7 +27,7 @@ export default {
      *
      * @param payload 同步修改姓名
      */
-    onChangeName(payload: { newName: string }) {
+    onChangeName(payload?: { newName: string }) {
       return function(state: State): State {
         state.name = payload.newName + "9";
         return state;

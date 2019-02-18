@@ -67,5 +67,68 @@ describe("单元测试", function() {
       expect(store.getState().user.name).toEqual("李四-张三");
       done();
     }, 3000);
+
+    type OptionalKnownKeys<T> = {
+      [K in keyof T]: string extends K ? never : number extends K ? never : {} extends Pick<T, K> ? K : never
+    } extends { [_ in keyof T]: infer U }
+      ? ({} extends U ? never : U)
+      : never;
+
+    type Action = {
+      payload:{
+        [name:string]:any
+      },
+      meta:{
+        [name:string]:any
+      }
+    };
+
+   
+    type M = {
+
+    }
+
+
+    type P = OptionalKnownKeys<{
+      payload:{
+
+      },
+      meta:{
+        
+      }
+    }>
+
+    type Pack<T extends Action> = 
+      "paylaod" | "meta" extends keyof T ? 
+          "payload" extends OptionalKnownKeys<T> ? 
+                "meta" extends OptionalKnownKeys<T> ? [T["payload"]?, T["meta"]?] : [T["payload"] | null, T["meta"]]
+        : [T["payload"], T["meta"]]
+                  : "payload" extends keyof T
+                  ? "payload" extends OptionalKnownKeys<T>
+                    ? [T["payload"]?]
+                    : [T["payload"]]
+                  : "meta" extends keyof T
+                  ? "meta" extends OptionalKnownKeys<T>
+                    ? [T["meta"]?]
+                    : [T["meta"]]
+      : [];
+
+      
+
+    const onChangeName = function(state: IState, action: { payload: { name: string }; meta: { loading: true } }) {
+      return { ...state, ...action.payload };
+    };
+
+    type ParamType = Pack<Parameters<typeof onChangeName>[1]>;
+
+    type Fn = (...args: ParamType) => void;
+
+    let fns: Fn;
+
+    fns({ name: "张三" });
+
+
+    
+
   });
 });

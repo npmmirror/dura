@@ -12,6 +12,20 @@
 
 ---
 
+## X
+
+```typescript
+type RequiredKnownKeys<T> = { [K in keyof T]: {} extends Pick<T, K> ? never : K } extends { [_ in keyof T]: infer U }
+  ? ({} extends U ? never : U)
+  : never;
+
+type OptionalKnownKeys<T> = {
+  [K in keyof T]: string extends K ? never : number extends K ? never : {} extends Pick<T, K> ? K : never
+} extends { [_ in keyof T]: infer U }
+  ? ({} extends U ? never : U)
+  : never;
+```
+
 ## 技术支持
 
 ![kavLv9.jpg](https://s2.ax1x.com/2019/02/11/kavLv9.jpg)
