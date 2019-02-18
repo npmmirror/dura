@@ -58,8 +58,12 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
             const effectFn = async () => await effects[key](payload, meta)(request);
             const loadingHoc = async effectFn => {
               request.dispatch(start(key));
-              await effectFn();
-              request.dispatch(end(key));
+              try {
+                await effectFn();
+                request.dispatch(end(key));
+              } catch (error) {
+                request.dispatch(end(key));
+              }
             };
 
             //兼容

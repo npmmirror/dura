@@ -116,4 +116,60 @@ describe("测试loading 插件", function() {
       done();
     }, 1500);
   });
+
+  it("测试loading 插件,启用loading，并且抛出异常！", function(done) {
+    const user = {
+      state: {
+        /**
+         * 姓名
+         */
+        name: undefined,
+        sex: undefined
+      },
+      reducers: {
+        onChangeName(payload: { name: string }): any {
+          return function(state) {
+            return { ...state, ...payload };
+          };
+        }
+      },
+      effects: {
+        /**
+         * 异步获取用户信息
+         * @param param0
+         */
+        onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
+          return async function(request: EffectAPI) {
+            await request.delay(1000);
+            store.reducerRunner.user.onChangeName(payload);
+            throw new Error("异常异常异常异常");
+          };
+        }
+      }
+    };
+    const initialModel = {
+      /**
+       * 用户模块
+       */
+      user
+    };
+
+    const store = create({
+      initialModel,
+      plugins: [createLoadingPlugin(initialModel), createAsyncPlugin()]
+    }) as DuraStore<typeof initialModel, ExtractLoadingState<typeof initialModel>> &
+      AsyncDuraStore<typeof initialModel>;
+
+    expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
+
+    store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
+
+    setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
+
+    setTimeout(() => {
+      expect(store.getState().user.name).toEqual("张三");
+      expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
+      done();
+    }, 1500);
+  });
 });

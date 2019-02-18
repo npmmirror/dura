@@ -111,15 +111,24 @@ exports.createLoadingPlugin = function (rootModel) {
                                         }
                                     }); }); };
                                     loadingHoc = function (effectFn) { return __awaiter(_this, void 0, void 0, function () {
+                                        var error_1;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0:
                                                     request.dispatch(start(key));
-                                                    return [4 /*yield*/, effectFn()];
+                                                    _a.label = 1;
                                                 case 1:
+                                                    _a.trys.push([1, 3, , 4]);
+                                                    return [4 /*yield*/, effectFn()];
+                                                case 2:
                                                     _a.sent();
                                                     request.dispatch(end(key));
-                                                    return [2 /*return*/];
+                                                    return [3 /*break*/, 4];
+                                                case 3:
+                                                    error_1 = _a.sent();
+                                                    request.dispatch(end(key));
+                                                    return [3 /*break*/, 4];
+                                                case 4: return [2 /*return*/];
                                             }
                                         });
                                     }); };
