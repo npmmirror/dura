@@ -112,7 +112,7 @@ exports.createAsyncPlugin = function () {
                             getState_1 = function () { return clone_1.default(store.getState()); };
                             select = function (_select) { return _select(getState_1()); };
                             effect = rootEffects[action.type];
-                            return [4 /*yield*/, effect({
+                            return [4 /*yield*/, effect(action, {
                                     dispatch: dispatch,
                                     getState: getState_1,
                                     select: select,
