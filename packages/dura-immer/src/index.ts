@@ -8,8 +8,7 @@ export const createImmerPlugin = function() {
       const { reducers } = model;
       const nextReducers = Object.keys(reducers)
         .map((name: string) => ({
-          [name]: (payload?: any, meta?: any) => (baseState: any) =>
-            produce(baseState, draftState => reducers[name](payload, meta)(draftState))
+          [name]: (baseState, action) => produce(baseState, draftState => reducers[name](draftState, action))
         }))
         .reduce((prev, next) => ({ ...prev, ...next }), {});
 

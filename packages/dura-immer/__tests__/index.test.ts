@@ -11,10 +11,8 @@ describe("测试immer插件", function() {
     const user = {
       state: initialState,
       reducers: {
-        onChangeName(payload: { name: string }) {
-          return function(state) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       }
     };

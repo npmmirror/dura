@@ -14,10 +14,8 @@ describe("测试loading 插件", function() {
         sex: undefined
       },
       reducers: {
-        onChangeName(payload: { name: string }): any {
-          return function(state) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state, action: { payload: { name: string } }): any {
+          return { ...state, ...action.payload };
         }
       },
       effects: {
@@ -25,11 +23,9 @@ describe("测试loading 插件", function() {
          * 异步获取用户信息
          * @param param0
          */
-        onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
-          return async function(request: EffectAPI) {
-            await request.delay(1000);
-            store.reducerRunner.user.onChangeName(payload);
-          };
+        async onAsyncChangeName(action: { payload: { name: string }; meta: LoadingMeta }, request: EffectAPI) {
+          await request.delay(1000);
+          store.reducerRunner.user.onChangeName(action.payload);
         }
       }
     };
@@ -69,10 +65,8 @@ describe("测试loading 插件", function() {
         sex: undefined
       },
       reducers: {
-        onChangeName(payload: { name: string }): any {
-          return function(state) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state, action: { payload: { name: string } }): any {
+          return { ...state, ...action.payload };
         }
       },
       effects: {
@@ -80,11 +74,9 @@ describe("测试loading 插件", function() {
          * 异步获取用户信息
          * @param param0
          */
-        onAsyncChangeName(payload: { name: string }, meta?: LoadingMeta) {
-          return async function(request: EffectAPI) {
-            await request.delay(1000);
-            store.reducerRunner.user.onChangeName(payload);
-          };
+        async onAsyncChangeName(action: { payload: { name: string }; meta?: LoadingMeta }, request: EffectAPI) {
+          await request.delay(1000);
+          store.reducerRunner.user.onChangeName(action.payload);
         }
       }
     };
@@ -106,7 +98,7 @@ describe("测试loading 插件", function() {
 
     expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
 
-    store.effectRunner.user.onAsyncChangeName({ name: "张三" });
+    store.effectRunner.user.onAsyncChangeName({ name: "张三" }, {});
 
     setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(false), 300);
 

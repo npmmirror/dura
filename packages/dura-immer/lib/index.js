@@ -24,9 +24,7 @@ exports.createImmerPlugin = function () {
                 .map(function (name) {
                 var _a;
                 return (_a = {},
-                    _a[name] = function (payload, meta) { return function (baseState) {
-                        return immer_1.default(baseState, function (draftState) { return reducers[name](payload, meta)(draftState); });
-                    }; },
+                    _a[name] = function (baseState, action) { return immer_1.default(baseState, function (draftState) { return reducers[name](draftState, action); }); },
                     _a);
             })
                 .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});

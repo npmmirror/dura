@@ -12,14 +12,18 @@ export declare const createLoadingPlugin: (rootModel: RootModel<any>) => {
             };
         };
         reducers: {
-            start(payload: {
-                modelName: string;
-                effectName: string;
-            }): (state: any) => any;
-            end(payload: {
-                modelName: string;
-                effectName: string;
-            }): (state: any) => any;
+            start(state: any, action: {
+                payload: {
+                    modelName: string;
+                    effectName: string;
+                };
+            }): any;
+            end(state: any, action: {
+                payload: {
+                    modelName: string;
+                    effectName: string;
+                };
+            }): any;
         };
     };
     onWrapModel: (name: string, model: Model<{}> & AsyncModel) => Model<{}> & AsyncModel;
@@ -33,6 +37,6 @@ export declare type ExtractLoadingState<RMT extends RootModel<Model & AsyncModel
     };
 };
 export declare type LoadingMeta = {
-    loading: boolean;
+    loading?: boolean;
 };
 export {};

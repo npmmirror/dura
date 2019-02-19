@@ -69,21 +69,17 @@ exports.createLoadingPlugin = function (rootModel) {
         model: {
             state: state,
             reducers: {
-                start: function (payload) {
-                    return function (state) {
-                        var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
-                            _b[payload.effectName] = true,
-                            _b), _a));
-                    };
+                start: function (state, action) {
+                    var _a, _b;
+                    return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
+                        _b[action.payload.effectName] = true,
+                        _b), _a));
                 },
-                end: function (payload) {
-                    return function (state) {
-                        var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
-                            _b[payload.effectName] = false,
-                            _b), _a));
-                    };
+                end: function (state, action) {
+                    var _a, _b;
+                    return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
+                        _b[action.payload.effectName] = false,
+                        _b), _a));
                 }
             }
         },
@@ -98,7 +94,7 @@ exports.createLoadingPlugin = function (rootModel) {
                 .map(function (key) {
                 var _a;
                 return (_a = {},
-                    _a[key] = function (payload, meta) { return function (request) { return __awaiter(_this, void 0, void 0, function () {
+                    _a[key] = function (action, request) { return __awaiter(_this, void 0, void 0, function () {
                         var effectFn, loadingHoc;
                         var _this = this;
                         return __generator(this, function (_a) {
@@ -106,7 +102,7 @@ exports.createLoadingPlugin = function (rootModel) {
                                 case 0:
                                     effectFn = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                                         switch (_a.label) {
-                                            case 0: return [4 /*yield*/, effects[key](payload, meta)(request)];
+                                            case 0: return [4 /*yield*/, effects[key](action, request)];
                                             case 1: return [2 /*return*/, _a.sent()];
                                         }
                                     }); }); };
@@ -123,7 +119,7 @@ exports.createLoadingPlugin = function (rootModel) {
                                             }
                                         });
                                     }); };
-                                    if (!(meta || { loading: false }).loading) return [3 /*break*/, 1];
+                                    if (!(action && action.meta && action.meta.loading)) return [3 /*break*/, 1];
                                     loadingHoc(effectFn);
                                     return [3 /*break*/, 3];
                                 case 1: return [4 /*yield*/, effectFn()];
@@ -133,7 +129,7 @@ exports.createLoadingPlugin = function (rootModel) {
                                 case 3: return [2 /*return*/];
                             }
                         });
-                    }); }; },
+                    }); },
                     _a);
             })
                 .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});

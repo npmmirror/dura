@@ -14,29 +14,26 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
       [modelName]: extractEffect(rootModel[modelName])
     }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
+
   return {
     name: "loading",
     model: {
       state,
       reducers: {
-        start(payload: { modelName: string; effectName: string }) {
-          return function(state) {
-            return {
-              ...state,
-              [payload.modelName]: {
-                [payload.effectName]: true
-              }
-            };
+        start(state, action: { payload: { modelName: string; effectName: string } }) {
+          return {
+            ...state,
+            [action.payload.modelName]: {
+              [action.payload.effectName]: true
+            }
           };
         },
-        end(payload: { modelName: string; effectName: string }) {
-          return function(state) {
-            return {
-              ...state,
-              [payload.modelName]: {
-                [payload.effectName]: false
-              }
-            };
+        end(state, action: { payload: { modelName: string; effectName: string } }) {
+          return {
+            ...state,
+            [action.payload.modelName]: {
+              [action.payload.effectName]: false
+            }
           };
         }
       }
@@ -54,8 +51,8 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
 
       const nextEffects = Object.keys(effects)
         .map((key: string) => ({
-          [key]: (payload?: Payload, meta?: Meta & LoadingMeta) => async (request: EffectAPI) => {
-            const effectFn = async () => await effects[key](payload, meta)(request);
+          [key]: async (action, request: EffectAPI) => {
+            const effectFn = async () => await effects[key](action, request);
             const loadingHoc = async effectFn => {
               request.dispatch(start(key));
               await effectFn();
@@ -63,7 +60,7 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
             };
 
             //兼容
-            if ((meta || { loading: false }).loading) {
+            if (action && action.meta && action.meta.loading) {
               loadingHoc(effectFn);
             } else {
               await effectFn();
@@ -87,5 +84,5 @@ export type ExtractLoadingState<RMT extends RootModel<Model & AsyncModel>> = {
 };
 
 export type LoadingMeta = {
-  loading: boolean;
+  loading?: boolean;
 };
