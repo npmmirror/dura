@@ -1,6 +1,6 @@
 {
   "name": "example-tarojs",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "private": true,
   "description": "example-tarojs",
   "scripts": {
@@ -20,11 +20,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/async": "^2.0.0-alpha.1",
-    "@dura/async-loading": "^2.0.0-alpha.1",
-    "@dura/core": "^2.0.0-alpha.1",
-    "@dura/immer": "^2.0.0-alpha.1",
-    "@dura/selectors": "^2.0.0-alpha.1",
+    "@dura/async": "^2.0.0-alpha.2",
+    "@dura/async-loading": "^2.0.0-alpha.2",
+    "@dura/core": "^2.0.0-alpha.2",
+    "@dura/immer": "^2.0.0-alpha.2",
+    "@dura/selectors": "^2.0.0-alpha.2",
     "@tarojs/async-await": "1.2.12",
     "@tarojs/components": "1.2.12",
     "@tarojs/redux": "1.2.12",
