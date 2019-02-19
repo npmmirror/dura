@@ -51,10 +51,8 @@ describe("单元测试", function() {
          * 修改用户姓名
          * @param payload
          */
-        onChangeName(payload: { name: string }) {
-          return function(state: IState) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state: IState, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       }
     };
@@ -96,10 +94,8 @@ describe("单元测试", function() {
          * 修改用户姓名
          * @param payload
          */
-        onChangeName(payload: { name: string }) {
-          return function(state: IState) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state: IState, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       }
     };
@@ -214,10 +210,8 @@ describe("单元测试", function() {
          * 修改用户姓名
          * @param payload
          */
-        onChangeName(payload: { name: string }) {
-          return function(state: IState) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state: IState, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       }
     };

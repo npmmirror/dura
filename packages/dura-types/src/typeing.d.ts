@@ -60,8 +60,16 @@ export type Config = {
   createStore?: typeof createStore;
 };
 
+type Pack<T extends { payload?: {}; meta?: {} }> = "payload" | "meta" extends keyof T
+  ? (payload: T["payload"], meta: T["meta"]) => void
+  : "payload" extends keyof T
+  ? (payload: T["payload"]) => void
+  : "meta" extends keyof T
+  ? (payload: null, meta: T["meta"]) => void
+  : [];
+
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ReviewReducders<R extends Reducers> = { [key in keyof R]: (...args: Parameters<R[key]>) => void };
+export type ReviewReducders<R extends Reducers> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
 
 export type ExtractReducersRunner<M extends RootModel> = { [key in keyof M]: ReviewReducders<M[key]["reducers"]> };

@@ -11,35 +11,35 @@ describe("单元测试", function() {
 
     type IState = typeof initialState;
 
-    const user = {
-      state: initialState,
-      reducers: {
-        /**
-         * 修改用户姓名
-         * @param payload
-         */
-        onChangeName(payload: { name: string }) {
-          return function(state: IState) {
-            return { ...state, ...payload };
-          };
-        }
-      },
-      effects: {
-        /**
-         * 异步的修改用户姓名
-         * @param payload
-         */
-        onAsyncChangeName(payload: { name: string }) {
-          return async function(request: EffectAPI<RootState>) {
+    const createUser = function() {
+      const user = {
+        state: initialState,
+        reducers: {
+          /**
+           * 修改用户姓名
+           * @param payload
+           */
+          onChangeName(state: IState, action: { payload: { name: string } }) {
+            return { ...state, ...action.payload };
+          }
+        },
+        effects: {
+          /**
+           * 异步的修改用户姓名
+           * @param payload
+           */
+          async onAsyncChangeName(action: { payload: { name: string } }, request: EffectAPI) {
             await request.delay(1500);
-            reducerRunner.user.onChangeName({ name: `${payload.name}-${request.getState().user.name}` });
-          };
+            const oldName = request.select((state: RootState) => state.user.name);
+            reducerRunner.user.onChangeName({ name: oldName });
+          }
         }
-      }
+      };
+      return user;
     };
 
     const initModel = {
-      user,
+      user: createUser(),
       x: {
         state: {}
       }
@@ -75,60 +75,58 @@ describe("单元测试", function() {
       : never;
 
     type Action = {
-      payload:{
-        [name:string]:any
-      },
-      meta:{
-        [name:string]:any
-      }
+      payload?: {};
+      meta?: {};
     };
 
-   
-    type M = {
-
-    }
-
-
-    type P = OptionalKnownKeys<{
-      payload:{
-
-      },
-      meta:{
-        
-      }
-    }>
-
-    type Pack<T extends Action> = 
-      "paylaod" | "meta" extends keyof T ? 
-          "payload" extends OptionalKnownKeys<T> ? 
-                "meta" extends OptionalKnownKeys<T> ? [T["payload"]?, T["meta"]?] : [T["payload"] | null, T["meta"]]
+    type Pack<T extends Action> = "payload" | "meta" extends keyof T
+      ? "payload" extends OptionalKnownKeys<T>
+        ? "meta" extends OptionalKnownKeys<T>
+          ? [T["payload"], T["meta"]?] | [null, T["meta"]?]
+          : [T["payload"], T["meta"]] | [null, T["meta"]?]
+        : "meta" extends OptionalKnownKeys<T>
+        ? [T["payload"], T["meta"]?]
         : [T["payload"], T["meta"]]
-                  : "payload" extends keyof T
-                  ? "payload" extends OptionalKnownKeys<T>
-                    ? [T["payload"]?]
-                    : [T["payload"]]
-                  : "meta" extends keyof T
-                  ? "meta" extends OptionalKnownKeys<T>
-                    ? [T["meta"]?]
-                    : [T["meta"]]
+      : "payload" extends keyof T
+      ? "payload" extends OptionalKnownKeys<T>
+        ? [T["payload"]?]
+        : [T["payload"]]
+      : "meta" extends keyof T
+      ? "meta" extends OptionalKnownKeys<T>
+        ? [null, T["meta"]?]
+        : [null, T["meta"]]
       : [];
 
-      
+    type PackFn<T extends Action> = "payload" | "meta" extends keyof T
+      ? (payload: T["payload"], meta: T["meta"]) => void
+      : "payload" extends keyof T
+      ? (payload: T["payload"]) => void
+      : "meta" extends keyof T
+      ? (payload: null, meta: T["meta"]) => void
+      : [];
 
-    const onChangeName = function(state: IState, action: { payload: { name: string }; meta: { loading: true } }) {
+    interface OnChangeNameRequest {
+      payload?: {
+        name?: string;
+      };
+    }
+
+    const onChangeName = function(state: IState, action: OnChangeNameRequest) {
       return { ...state, ...action.payload };
     };
 
-    type ParamType = Pack<Parameters<typeof onChangeName>[1]>;
+    type ParamOne = Parameters<typeof onChangeName>[1];
 
-    type Fn = (...args: ParamType) => void;
+    type s = "payload" extends OptionalKnownKeys<OnChangeNameRequest> ? "1" : "0";
 
-    let fns: Fn;
+    type p = PackFn<OnChangeNameRequest>;
 
-    fns({ name: "张三" });
+    let fns: p;
 
+    // fns(null,{})
 
-    
+    fns({});
 
+    fns({});
   });
 });

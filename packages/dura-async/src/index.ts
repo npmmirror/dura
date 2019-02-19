@@ -1,4 +1,4 @@
-import { RootModel, Model, Plugin, DuraStore, Payload, Meta, ExtractRootState, Dispatch } from "@dura/types";
+import { RootModel, Model, Plugin, DuraStore, Payload, Meta, Dispatch, Pack } from "@dura/types";
 import { createAction } from "redux-actions";
 import clone from "clone";
 
@@ -53,11 +53,13 @@ export const createAsyncPlugin = function(): Plugin {
         if (typeof rootEffects[action.type] === "function") {
           const dispatch = store.dispatch;
           const getState = () => clone(store.getState());
+          const select = (_select: (state: any) => any) => _select(getState());
           //执行effect
-          const effect = rootEffects[action.type](action.payload, action.meta);
+          const effect = rootEffects[action.type];
           result = await effect({
             dispatch,
             getState,
+            select,
             delay
           });
         }
@@ -84,16 +86,16 @@ export type AsyncDuraStore<M extends RootModel = any> = {
   effectRunner: ExtractEffectsRunner<M>;
 };
 
-export type Effect<RM extends RootModel<Model> = any> = (request: EffectAPI<RM>) => void;
+export type Effect = (request: EffectAPI) => void;
 
-export type ReviewEffects<E extends Effects> = { [key in keyof E]: (...args: Parameters<E[key]>) => void };
+export type ReviewEffects<E extends Effects> = { [key in keyof E]: Pack<Parameters<E[key]>[0]> };
 
-export type Effects<RM extends RootModel<Model> = any> = {
-  [name: string]: (payload?: Payload, meta?: Meta) => Effect<RM>;
+export type Effects = {
+  [name: string]: (payload?: Payload, meta?: Meta) => Effect;
 };
 
-export type EffectAPI<RootState = any> = {
+export type EffectAPI = {
   dispatch: any;
-  getState: () => RootState;
   delay: (ms: number) => Promise<{}>;
+  select: (fn: (state) => any) => any;
 };

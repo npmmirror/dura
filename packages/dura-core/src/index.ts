@@ -12,7 +12,7 @@ function extractReducers(name: string, model: Model<any>) {
   const reducerKeys = Object.keys(reducers);
   const nextReducer = reducerKeys
     .map((reducerName: string) => ({
-      [`${name}/${reducerName}`]: (state, action) => reducers[reducerName](action.payload, action.meta)(state)
+      [`${name}/${reducerName}`]: reducers[reducerName]
     }))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
   return { [name]: handleActions(nextReducer, model.state) };
