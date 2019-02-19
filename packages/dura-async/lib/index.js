@@ -114,7 +114,6 @@ exports.createAsyncPlugin = function () {
                             effect = rootEffects[action.type];
                             return [4 /*yield*/, effect(action, {
                                     dispatch: dispatch,
-                                    getState: getState_1,
                                     select: select,
                                     delay: delay
                                 })];

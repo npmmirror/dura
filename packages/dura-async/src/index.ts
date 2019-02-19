@@ -56,9 +56,8 @@ export const createAsyncPlugin = function(): Plugin {
           const select = (_select: (state: any) => any) => _select(getState());
           //执行effect
           const effect = rootEffects[action.type];
-          result = await effect(action,{
+          result = await effect(action, {
             dispatch,
-            getState,
             select,
             delay
           });
