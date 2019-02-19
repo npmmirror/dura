@@ -1,13 +1,13 @@
 {
   "name": "example-count",
   "private": true,
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "",
   "main": "index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/core": "^2.0.0-alpha.0",
+    "@dura/core": "^2.0.0-alpha.1",
     "antd": "^3.13.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
