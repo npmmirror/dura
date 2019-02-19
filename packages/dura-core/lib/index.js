@@ -26,7 +26,7 @@ function extractReducers(name, model) {
         .map(function (reducerName) {
         var _a;
         return (_a = {},
-            _a[name + "/" + reducerName] = function (state, action) { return reducers[reducerName](action.payload, action.meta)(state); },
+            _a[name + "/" + reducerName] = reducers[reducerName],
             _a);
     })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});

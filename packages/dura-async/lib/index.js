@@ -102,18 +102,20 @@ exports.createAsyncPlugin = function () {
                 .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
             var delay = function (ms) { return new Promise(function (resolve) { return setTimeout(function () { return resolve(); }, ms); }); };
             return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
-                var result, dispatch, getState, effect;
+                var result, dispatch, getState_1, select, effect;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             result = next(action);
                             if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
                             dispatch = store.dispatch;
-                            getState = function () { return clone_1.default(store.getState()); };
-                            effect = rootEffects[action.type](action.payload, action.meta);
+                            getState_1 = function () { return clone_1.default(store.getState()); };
+                            select = function (_select) { return _select(getState_1()); };
+                            effect = rootEffects[action.type];
                             return [4 /*yield*/, effect({
                                     dispatch: dispatch,
-                                    getState: getState,
+                                    getState: getState_1,
+                                    select: select,
                                     delay: delay
                                 })];
                         case 1:

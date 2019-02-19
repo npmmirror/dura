@@ -14,7 +14,7 @@ export type PlusDuraStore<RM extends RootModel<Model & AsyncModel>> = DuraStore<
 
 export type PlusRootState<RM extends RootModel<Model & AsyncModel>> = ExtractRootState<RM> & ExtractLoadingState<RM>;
 
-export type EffectAPI<RootState = any> = EffectAPI<RootState>;
+export type EffectAPI = EffectAPI;
 
 export type LoadingMeta = LoadingMeta;
 

@@ -11,35 +11,32 @@ describe("单元测试", function() {
 
     type IState = typeof initialState;
 
-    const createUser = function() {
-      const user = {
-        state: initialState,
-        reducers: {
-          /**
-           * 修改用户姓名
-           * @param payload
-           */
-          onChangeName(state: IState, action: { payload: { name: string } }) {
-            return { ...state, ...action.payload };
-          }
-        },
-        effects: {
-          /**
-           * 异步的修改用户姓名
-           * @param payload
-           */
-          async onAsyncChangeName(action: { payload: { name: string } }, request: EffectAPI) {
-            await request.delay(1500);
-            const oldName = request.select((state: RootState) => state.user.name);
-            reducerRunner.user.onChangeName({ name: oldName });
-          }
+    const user = {
+      state: initialState,
+      reducers: {
+        /**
+         * 修改用户姓名
+         * @param payload
+         */
+        onChangeName(state: IState, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
-      };
-      return user;
+      },
+      effects: {
+        /**
+         * 异步的修改用户姓名
+         * @param payload
+         */
+        async onAsyncChangeName(action: { payload: { name: string } }, request: EffectAPI) {
+          await request.delay(1500);
+          const oldName = request.select((state: RootState) => state.user.name);
+          reducerRunner.user.onChangeName({ name: oldName });
+        }
+      }
     };
 
     const initModel = {
-      user: createUser(),
+      user: user,
       x: {
         state: {}
       }
