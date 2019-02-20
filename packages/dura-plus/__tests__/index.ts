@@ -13,20 +13,15 @@ describe("测试plus", function() {
     const UserModel = {
       state: initialState,
       reducers: {
-        onChangeName(payload: { name: string }) {
-          return function(state: State) {
-            state.name = payload.name;
-            return state;
-          };
+        onChangeName(state: State, action: { payload: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       },
       effects: {
-        onAsyncChangeName(payload: { name: string }, meta?: LoadingMeta) {
-          return async function(effectApi: EffectAPI<RootState>) {
-            await effectApi.delay(1000);
-            await effectRunner.address.onAsyncChangeCity({ city: "南京" });
-            reducerRunner.user.onChangeName(payload);
-          };
+        async onAsyncChangeName(action: { payload: { name: string }; meta?: LoadingMeta }, effectApi: EffectAPI) {
+          await effectApi.delay(1000);
+          await effectRunner.address.onAsyncChangeCity({ city: "南京" });
+          reducerRunner.user.onChangeName(action.payload);
         }
       }
     };
@@ -41,19 +36,14 @@ describe("测试plus", function() {
     const AddresModel = {
       state: initialAddressState,
       reducers: {
-        onChangeCity(payload: { city: string }) {
-          return function(state: AddressState) {
-            state.city = payload.city;
-            return state;
-          };
+        onChangeCity(state: AddressState, action: { payload: { city: string } }) {
+          return { ...state, ...action.payload };
         }
       },
       effects: {
-        onAsyncChangeCity(payload: { city: string }) {
-          return async function(effectApi: EffectAPI<RootState>) {
-            await effectApi.delay(1000);
-            reducerRunner.address.onChangeCity(payload);
-          };
+        async onAsyncChangeCity(action: { payload: { city: string } }, effectApi: EffectAPI) {
+          await effectApi.delay(1000);
+          reducerRunner.address.onChangeCity(action.payload);
         }
       }
     };

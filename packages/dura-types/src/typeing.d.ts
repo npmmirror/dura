@@ -27,7 +27,7 @@ export type DuraStore<RM extends RootModel = {}, ExtensionState extends RootMode
 };
 
 export type Reducers<S = any> = {
-  [name: string]: (payload?: any, meta?: any) => (state: S) => S | void;
+  [name: string]: (state: S, action) => S;
 };
 
 export type State = {
