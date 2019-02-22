@@ -10,10 +10,12 @@ function mapState(state: RootState) {
   };
 }
 
-function mapDispatch() {
+function mapDispatch(dispatch) {
   return {
     onAsyncChangeName(newName: string) {
       effectRunner.user.onAsyncChangeName({ newName }, { loading: true });
+
+      dispatch(effectRunner.user.onAsyncChangeName({ newName }, { loading: true }));
     },
     onChangeName(newName: string) {
       reducerRunner.user.onChangeName({ newName });

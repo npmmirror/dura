@@ -1,21 +1,23 @@
-import { createStore, combineReducers, compose, applyMiddleware, Dispatch } from "redux";
+import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { handleActions, createAction } from "redux-actions";
-import { Model, Plugin, Config, DuraStore, RootModel } from "@dura/types";
+import { Model, Plugin, Config, RootModel, Store, ExtractReducerActions } from "@dura/types";
+import _ from "lodash";
 
 /**
  * 提取reducers
  * @param name
  * @param model
  */
-function extractReducers(name: string, model: Model<any>) {
-  const reducers = model.reducers || {};
-  const reducerKeys = Object.keys(reducers);
-  const nextReducer = reducerKeys
-    .map((reducerName: string) => ({
-      [`${name}/${reducerName}`]: reducers[reducerName]
-    }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-  return { [name]: handleActions(nextReducer, model.state) };
+function extractReducers<S>(name: string, model: Model<S>): ReducersMapObject {
+  const { reducers = {} } = model;
+  return {
+    [name]: handleActions(
+      _.keys(reducers)
+        .map((reducerKey: string) => ({ [`${name}/${reducerKey}`]: reducers[reducerKey] }))
+        .reduce(_.merge, {}),
+      model.state
+    )
+  };
 }
 
 /**
@@ -66,7 +68,7 @@ function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
  * 创建store
  * @param config
  */
-function create(config: Config): DuraStore {
+function create<C extends Config>(config: C): Store<C["initialModel"]> {
   const { initialState, plugins = [], middlewares = [] } = config;
 
   //merge plugin 的model
@@ -92,38 +94,32 @@ function create(config: Config): DuraStore {
   const _createStore = config.createStore || createStore;
 
   //创建redux-store
-  const reduxStore = (initialState
+  const reduxStore = initialState
     ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
-    : _createStore(combineReducers(rootReducers), storeEnhancer)) as DuraStore;
+    : _createStore(combineReducers(rootReducers), storeEnhancer);
 
-  const reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
+  const store = { ...reduxStore, actions: extractActions(nextRootModel) };
 
-  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(reduxStore, nextRootModel));
+  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(store, nextRootModel));
 
-  return { ...reduxStore, reducerRunner };
+  return { ...store };
 }
 
-//创建单个model 的reducer runner
-function createModelReducerRunner(name: string, model: Model, dispatch: Dispatch) {
+function extractActions<RM extends RootModel>(models: RM): ExtractReducerActions<RM> {
+  return _.keys(models)
+    .map((name: string) => extractAction(name, models[name]))
+    .reduce(_.merge, {});
+}
+
+function extractAction(name: string, model: Model<any>) {
   const { reducers = {} } = model;
-  const reducerKeys = Object.keys(reducers);
-  const merge = (prev, next) => ({ ...prev, ...next });
-
-  const createActionMap = (key: string) => ({
-    [key]: (payload: any, meta: any) =>
-      dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
-  });
-
-  const action = [...reducerKeys].map(createActionMap).reduce(merge, {});
-  return { [name]: action };
-}
-
-//创建全局的reducer  runner
-function createReducerRunner(models: RootModel, dispatch: Dispatch) {
-  const merge = (prev, next) => ({ ...prev, ...next });
-  return Object.keys(models)
-    .map((name: string) => createModelReducerRunner(name, models[name], dispatch))
-    .reduce(merge, {});
+  return {
+    [name]: _.keys(reducers)
+      .map((reducerKey: string) => ({
+        [reducerKey]: createAction(`${name}/${reducerKey}`, payload => payload, (payload, meta) => meta)
+      }))
+      .reduce(_.merge, {})
+  };
 }
 
 export { create };

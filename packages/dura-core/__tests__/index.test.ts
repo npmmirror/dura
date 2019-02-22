@@ -1,4 +1,4 @@
-import { create, DuraStore, RootModel, Model } from "../src/index";
+import { create, RootModel, Model } from "../src/index";
 
 describe("单元测试", function() {
   it("测试传入第三方createStore", function() {
@@ -16,10 +16,8 @@ describe("单元测试", function() {
          * 修改用户姓名
          * @param payload
          */
-        onChangeName(payload?: { name: string }) {
-          return function(state: IState) {
-            return { ...state, ...payload };
-          };
+        onChangeName(state: IState, action: { payload?: { name: string } }) {
+          return { ...state, ...action.payload };
         }
       }
     };
@@ -31,7 +29,7 @@ describe("单元测试", function() {
     const store = create({
       initialModel: initModel,
       createStore: () => false
-    }) as DuraStore<typeof initModel>;
+    });
 
     expect(store.getState).toBeUndefined();
   });
@@ -64,17 +62,17 @@ describe("单元测试", function() {
     const store = create({
       initialModel: initModel,
       compose: (...a) => a[2]
-    }) as DuraStore<typeof initModel>;
+    });
 
-    const reducerRunner = store.reducerRunner;
+    const { dispatch, actions } = store;
 
     expect(store.getState().user.name).toBeUndefined();
 
-    reducerRunner.user.onChangeName({ name: "李四" });
+    dispatch(actions.user.onChangeName({ name: "李四" }));
 
     expect(store.getState().user.name).toEqual("李四");
 
-    reducerRunner.user.onChangeName({ name: "张三" });
+    dispatch(actions.user.onChangeName({ name: "张三" }));
 
     expect(store.getState().user.name).toEqual("张三");
   });
@@ -106,17 +104,17 @@ describe("单元测试", function() {
 
     const store = create({
       initialModel: initModel
-    }) as DuraStore<typeof initModel>;
-
-    const reducerRunner = store.reducerRunner;
+    });
 
     expect(store.getState().user.name).toBeUndefined();
 
-    reducerRunner.user.onChangeName({ name: "李四" });
+    const { dispatch, actions } = store;
+
+    dispatch(actions.user.onChangeName({ name: "李四" }));
 
     expect(store.getState().user.name).toEqual("李四");
 
-    reducerRunner.user.onChangeName({ name: "张三" });
+    dispatch(actions.user.onChangeName({ name: "张三" }));
 
     expect(store.getState().user.name).toEqual("张三");
   });
@@ -147,7 +145,7 @@ describe("单元测试", function() {
     const store = create({
       initialModel: initModel,
       initialState: { user: { name: "张三", sex: undefined } }
-    }) as DuraStore<typeof initModel>;
+    });
 
     expect(store.getState().user.name).toEqual("张三");
   });
@@ -189,10 +187,10 @@ describe("单元测试", function() {
           },
           onWrapModel: (name: string, model: Model<any>) => model,
           onCreateMiddleware: (rootModel: RootModel) => store => next => action => next(action),
-          onStoreCreated: (store: DuraStore, rootModel: RootModel) => false
+          onStoreCreated: (store, rootModel) => false
         }
       ]
-    }) as DuraStore<typeof initModel>;
+    });
   });
 
   it("测试middlewares", function() {
@@ -227,13 +225,13 @@ describe("单元测试", function() {
     const store = create({
       initialModel: initModel,
       middlewares: [middleware]
-    }) as DuraStore<typeof initModel, {}>;
+    });
 
-    const reducerRunner = store.reducerRunner;
+    const { actions, dispatch } = store;
 
     expect(store.getState().user.name).toBeUndefined();
 
-    reducerRunner.user.onChangeName({ name: "李四" });
+    dispatch(actions.user.onChangeName({ name: "李四" }));
 
     expect(store.getState().user.name).toEqual("middleware");
   });
