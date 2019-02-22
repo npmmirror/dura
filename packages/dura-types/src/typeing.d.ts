@@ -56,9 +56,9 @@ export type Config = {
 };
 
 type Pack<T extends { payload?: {}; meta?: {} }> = "payload" | "meta" extends keyof T
-  ? (payload: T["payload"], meta: T["meta"]) => void
+  ? (payload: T["payload"], meta: T["meta"]) => AnyAction
   : "payload" extends keyof T
-  ? (payload: T["payload"]) => void
+  ? (payload: T["payload"]) => AnyAction
   : "meta" extends keyof T
-  ? (payload: null, meta: T["meta"]) => void
+  ? (payload: null, meta: T["meta"]) => AnyAction
   : [];
