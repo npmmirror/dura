@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text } from "react-native";
-import { RootState, effectRunner, reducerRunner, selectorRunner } from "../store";
+import { RootState, effectRunner, reducerRunner } from "../store";
 import { Flex, Button } from "@ant-design/react-native";
 import { NavigationInjectedProps } from "react-navigation";
 
 function mapState(state: RootState) {
   return {
     name: state.user.name,
-    loading: state.loading.user.onAsyncChangeName,
-    chinaName: selectorRunner.user.chinaName(state)
+    loading: state.loading.user.onAsyncChangeName
   };
 }
 

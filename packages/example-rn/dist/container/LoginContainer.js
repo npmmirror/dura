@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text } from "react-native";
-import { effectRunner, reducerRunner, selectorRunner } from "../store";
+import { effectRunner, reducerRunner } from "../store";
 import { Flex, Button } from "@ant-design/react-native";
 function mapState(state) {
     return {
         name: state.user.name,
-        loading: state.loading.user.onAsyncChangeName,
-        chinaName: selectorRunner.user.chinaName(state)
+        loading: state.loading.user.onAsyncChangeName
     };
 }
 function mapDispatch() {
@@ -31,14 +30,7 @@ class LoginContainer extends Component {
             <Text style={{ fontSize: 18, color: "red" }}>{this.props.name}</Text>
           </Flex.Item>
         </Flex>
-        <Flex>
-          <Flex.Item>
-            <Text style={{ fontSize: 24 }}>装饰数据：</Text>
-          </Flex.Item>
-          <Flex.Item>
-            <Text style={{ fontSize: 18, color: "red" }}>{this.props.chinaName}</Text>
-          </Flex.Item>
-        </Flex>
+
         <View style={{ height: 80 }}/>
         <Flex>
           <Flex.Item style={{ paddingLeft: 10, paddingRight: 10 }}>

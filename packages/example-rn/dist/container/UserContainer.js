@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text } from "react-native";
-import { effectRunner, reducerRunner, selectorRunner } from "../store";
+import { effectRunner, reducerRunner } from "../store";
 import { Flex } from "@ant-design/react-native";
 function mapState(state) {
     return {
         name: state.user.name,
-        loading: state.loading.user.onAsyncChangeName,
-        chinaName: selectorRunner.user.chinaName(state)
+        loading: state.loading.user.onAsyncChangeName
     };
 }
 function mapDispatch() {

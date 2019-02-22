@@ -1,6 +1,6 @@
 import { EffectAPI } from "@dura/async";
 import { LoadingMeta } from "@dura/async-loading";
-import { RootModel, reducerRunner, RootState } from "../store";
+import { reducerRunner, RootState } from "../store";
 import { createSelector } from "reselect";
 
 const initialState = {
@@ -27,11 +27,9 @@ export default {
      *
      * @param payload 同步修改姓名
      */
-    onChangeName(payload: { newName: string }) {
-      return function(state: State): State {
-        state.name = payload.newName;
-        return state;
-      };
+    onChangeName(state: State, action: { payload: { newName: string } }): State {
+      state.name = action.payload.newName;
+      return state;
     }
   },
   effects: {
@@ -39,19 +37,9 @@ export default {
      * 异步修改姓名
      * @param payload
      */
-    onAsyncChangeName(payload: { newName: string }, meta: LoadingMeta) {
-      return async function(effectApi: EffectAPI<RootModel>) {
-        await effectApi.delay(2000);
-        reducerRunner.user.onChangeName(payload);
-      };
-    }
-  },
-  selectors: {
-    chinaName() {
-      return createSelector(
-        (state: RootState) => state.user.name,
-        name => `【${name}】`
-      );
+    async onAsyncChangeName(action: { payload: { newName: string }; meta: LoadingMeta }, effectApi: EffectAPI) {
+      await effectApi.delay(2000);
+      reducerRunner.user.onChangeName(action.payload);
     }
   }
 };
