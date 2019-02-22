@@ -10,9 +10,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = require("redux");
 var redux_actions_1 = require("redux-actions");
+var lodash_1 = __importDefault(require("lodash"));
 /**
  * 提取reducers
  * @param name
@@ -20,17 +24,15 @@ var redux_actions_1 = require("redux-actions");
  */
 function extractReducers(name, model) {
     var _a;
-    var reducers = model.reducers || {};
-    var reducerKeys = Object.keys(reducers);
-    var nextReducer = reducerKeys
-        .map(function (reducerName) {
-        var _a;
-        return (_a = {},
-            _a[name + "/" + reducerName] = reducers[reducerName],
-            _a);
-    })
-        .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    return _a = {}, _a[name] = redux_actions_1.handleActions(nextReducer, model.state), _a;
+    var _b = model.reducers, reducers = _b === void 0 ? {} : _b;
+    return _a = {},
+        _a[name] = redux_actions_1.handleActions(lodash_1.default.keys(reducers)
+            .map(function (reducerKey) {
+            var _a;
+            return (_a = {}, _a[name + "/" + reducerKey] = reducers[reducerKey], _a);
+        })
+            .reduce(lodash_1.default.merge, {}), model.state),
+        _a;
 }
 /**
  * 包装原始model
@@ -99,36 +101,31 @@ function create(config) {
     //获取外部传入的 createStore
     var _createStore = config.createStore || redux_1.createStore;
     //创建redux-store
-    var reduxStore = (initialState
+    var reduxStore = initialState
         ? _createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
-        : _createStore(redux_1.combineReducers(rootReducers), storeEnhancer));
-    var reducerRunner = createReducerRunner(nextRootModel, reduxStore.dispatch);
-    plugins.filter(function (p) { return p.onStoreCreated; }).forEach(function (p) { return p.onStoreCreated(reduxStore, nextRootModel); });
-    return __assign({}, reduxStore, { reducerRunner: reducerRunner });
+        : _createStore(redux_1.combineReducers(rootReducers), storeEnhancer);
+    var store = __assign({}, reduxStore, { actions: extractActions(nextRootModel) });
+    plugins.filter(function (p) { return p.onStoreCreated; }).forEach(function (p) { return p.onStoreCreated(store, nextRootModel); });
+    return __assign({}, store);
 }
 exports.create = create;
-//创建单个model 的reducer runner
-function createModelReducerRunner(name, model, dispatch) {
+function extractActions(models) {
+    return lodash_1.default.keys(models)
+        .map(function (name) { return extractAction(name, models[name]); })
+        .reduce(lodash_1.default.merge, {});
+}
+function extractAction(name, model) {
     var _a;
     var _b = model.reducers, reducers = _b === void 0 ? {} : _b;
-    var reducerKeys = Object.keys(reducers);
-    var merge = function (prev, next) { return (__assign({}, prev, next)); };
-    var createActionMap = function (key) {
-        var _a;
-        return (_a = {},
-            _a[key] = function (payload, meta) {
-                return dispatch(redux_actions_1.createAction(name + "/" + key, function (payload) { return payload; }, function (payload, meta) { return meta; })(payload, meta));
-            },
-            _a);
-    };
-    var action = reducerKeys.slice().map(createActionMap).reduce(merge, {});
-    return _a = {}, _a[name] = action, _a;
-}
-//创建全局的reducer  runner
-function createReducerRunner(models, dispatch) {
-    var merge = function (prev, next) { return (__assign({}, prev, next)); };
-    return Object.keys(models)
-        .map(function (name) { return createModelReducerRunner(name, models[name], dispatch); })
-        .reduce(merge, {});
+    return _a = {},
+        _a[name] = lodash_1.default.keys(reducers)
+            .map(function (reducerKey) {
+            var _a;
+            return (_a = {},
+                _a[reducerKey] = redux_actions_1.createAction(name + "/" + reducerKey, function (payload) { return payload; }, function (payload, meta) { return meta; }),
+                _a);
+        })
+            .reduce(lodash_1.default.merge, {}),
+        _a;
 }
 //# sourceMappingURL=index.js.map
