@@ -1,6 +1,6 @@
 {
   "name": "@dura/plus",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/async": "^2.0.0-alpha.4",
-    "@dura/async-loading": "^2.0.0-alpha.4",
-    "@dura/core": "^2.0.0-alpha.4",
-    "@dura/immer": "^2.0.0-alpha.4",
+    "@dura/async": "^2.0.0-alpha.5",
+    "@dura/async-loading": "^2.0.0-alpha.5",
+    "@dura/core": "^2.0.0-alpha.5",
+    "@dura/immer": "^2.0.0-alpha.5",
     "@dura/selectors": "^2.0.0-alpha.2"
   }
 }
