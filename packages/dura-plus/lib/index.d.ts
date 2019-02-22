@@ -11,4 +11,4 @@ export declare type PlusRootState<RM extends RootModel<Model & AsyncModel>> = Ex
 export declare type EffectAPI = EffectAPI;
 export declare type LoadingMeta = LoadingMeta;
 export declare type DuraConfig = Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">;
-export declare const createDura: (initialRootModel: RootModel<Model<{}> & AsyncModel>, config?: Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">) => DuraStore<{}, {}>;
+export declare const create: (initialRootModel: RootModel<Model<{}> & AsyncModel>, config?: Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">) => DuraStore<{}, {}>;

@@ -3,7 +3,7 @@ export declare const createImmerPlugin: () => {
     name: string;
     onWrapModel(name: string, model: Model<{}>): {
         reducers: {
-            [x: string]: (baseState: any, action: any) => (state: {}) => void | {};
+            [x: string]: (baseState: any, action: any) => {};
         };
         state: import("@dura/types").State;
     };

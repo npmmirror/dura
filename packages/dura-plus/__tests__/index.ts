@@ -1,4 +1,4 @@
-import { createDura, PlusDuraStore, EffectAPI, PlusRootState, LoadingMeta } from "../src";
+import { create, PlusDuraStore, EffectAPI, PlusRootState, LoadingMeta } from "../src";
 
 describe("测试plus", function() {
   it("简单的测试", function(done) {
@@ -55,7 +55,7 @@ describe("测试plus", function() {
 
     type RootState = PlusRootState<typeof initialModel>;
 
-    const store = createDura(initialModel, {}) as PlusDuraStore<typeof initialModel>;
+    const store = create(initialModel, {}) as PlusDuraStore<typeof initialModel>;
 
     const { reducerRunner, effectRunner } = store;
 
