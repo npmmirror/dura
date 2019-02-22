@@ -27,11 +27,9 @@ export default {
      *
      * @param payload 同步修改姓名
      */
-    onChangeName(payload?: { newName: string }) {
-      return function(state: State): State {
-        state.name = payload.newName + "9";
-        return state;
-      };
+    onChangeName(state: State, action: { payload?: { newName: string } }): State {
+      state.name = action.payload.newName + "9";
+      return state;
     }
   },
   effects: {
@@ -39,11 +37,9 @@ export default {
      * 异步修改姓名
      * @param payload
      */
-    onAsyncChangeName(payload: { newName: string }, meta: LoadingMeta) {
-      return async function(effectApi: EffectAPI<RootModel>) {
-        await effectApi.delay(5500);
-        reducerRunner.user.onChangeName(payload);
-      };
+    async onAsyncChangeName(action: { payload: { newName: string }; meta: LoadingMeta }, effectApi: EffectAPI) {
+      await effectApi.delay(5500);
+      reducerRunner.user.onChangeName(action.payload);
     }
   },
   selectors: {

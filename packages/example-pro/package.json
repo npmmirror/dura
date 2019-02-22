@@ -7,11 +7,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/async": "^2.0.0-alpha.4",
-    "@dura/async-loading": "^2.0.0-alpha.4",
-    "@dura/core": "^2.0.0-alpha.4",
     "@dura/immer": "^2.0.0-alpha.4",
-    "@dura/selectors": "^2.0.0-alpha.2",
+    "@dura/plus": "^2.0.0-alpha.4",
     "antd": "^3.13.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
