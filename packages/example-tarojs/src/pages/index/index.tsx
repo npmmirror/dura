@@ -3,7 +3,7 @@ import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { RootState, reducerRunner, effectRunner } from "../../store/index";
 import "./index.scss";
-import { ReactNode } from "react";
+
 // #region 书写注意
 //
 // 目前 typescript 版本还无法在装饰器模式下将 Props 注入到 Taro.Component 中的 props 属性

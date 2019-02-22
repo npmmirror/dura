@@ -87,48 +87,59 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@dura/async-loading@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.30.tgz#fb3c2de4510c6b0ecb0b27664c567dd91075a008"
-  integrity sha512-bLJeGQt3CG1EdnsPpfxI3ozDU+P+dg002PycaZN4mnm3Rq/AW369tLcciQU1xlnWMJNgZMSdB47Q96X4PgC6JA==
+"@dura/async-loading@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-2.0.0-alpha.4.tgz#4d2dabe9302e3ce228ae142261fde28608bf7165"
+  integrity sha512-KeqN0m/+F+jApduJ4qCdufTFH8fHtCul7fniMUtvWVNoQb4arNrI4pH5zIJvPTg8asC5PR3dzyVdNSNV5UTV0g==
   dependencies:
-    "@dura/async" "^1.0.0-alpha.30"
-    "@dura/types" "^1.0.0-alpha.30"
+    "@dura/async" "^2.0.0-alpha.4"
+    "@dura/types" "^2.0.0-alpha.4"
 
-"@dura/async@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.30.tgz#e474a6417155ec76829e8dda4ddb2b742eacba6e"
-  integrity sha512-iEO+PBE44GiZSrGi7JMbp0/XJEgSal92TB/38KjrSFmhmy1wQG+3OH7a71YwbFOWLCaSqK18q+3La/0bhcJE2g==
+"@dura/async@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/async/-/async-2.0.0-alpha.4.tgz#8a92f9bca2153ea98b16e2c5971f2ad43a696bea"
+  integrity sha512-iVbCCefzfCCG/+HHdOGXY0jv+BPVBUz9rmjpS4jMpSD+yWyCTE8XNFSMmgk7aqvZNFBYecoS6fy2QW4hjaZ5uA==
   dependencies:
     clone "^2.1.2"
     redux-actions "^2.6.4"
 
-"@dura/core@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.30.tgz#14f77c2b124e2f8de432ca00f90a13818fe6bb34"
-  integrity sha512-D42GQhkA9at2QsQgCbZ3CBM9cWUfWB+emxghV79dR2qpcoXKKEqeWQ86t3nkpPn+FTcfzdqc10PIBRhCil3jrQ==
+"@dura/core@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.4.tgz#8b603187ba42822f880184971e4f1cb5a1515d9c"
+  integrity sha512-PSzfOSm10MgPxzRa+coY6emhKDLOaUD2WKJMiEcmPVd/tZniAgVbHsH3DuxBBbvZwztwSqUc1aLmrfQ6BcYmfA==
   dependencies:
-    "@dura/types" "^1.0.0-alpha.30"
+    "@dura/types" "^2.0.0-alpha.4"
     redux "^4.0.0"
     redux-actions "^2.6.4"
 
-"@dura/immer@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.30.tgz#35c886dc0a2d550c07d8f2f5fe42749b774826ef"
-  integrity sha512-Q+x4DqEfh8Kbqyc0CgM0SSVhQXtHefMFc9+bhIbFf+W0jBqA+JT0/NbV3p66PGNvsO1P3EurQqfZZVshgsPOsQ==
+"@dura/immer@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.4.tgz#a54638b928788de25fbd59168ccad4d125532917"
+  integrity sha512-ylnpDp5875a1jYyvNqm8DHIn3gfIKZMCcgZ4HE01DRbgMovjicvasA9GKw+EMI3yBaPZQDZDTPsDbZNtQ9VotA==
   dependencies:
-    "@dura/types" "^1.0.0-alpha.30"
+    "@dura/types" "^2.0.0-alpha.4"
     immer "^1.12.1"
 
-"@dura/selectors@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.30.tgz#025c24e5fb69c527a422ef63379a5fad9259f903"
-  integrity sha512-hek6+3BjWQ2qa8zkiK6DzkkNoxSNegIhSaamQ07I0Lr9L583nfE9I2+IV7WmXcsVS1yOwwCGCKvC0QytT9DaUg==
+"@dura/plus@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.4.tgz#97f0223629391541e781f928415b2742b283e8f7"
+  integrity sha512-wkrMdrcW4HIgNW8CGuJSQCY3//GwKTFZikTJ1kbUSe/BGEUYMDwYM8sGLMcbki/cViZXv0eJ1MCtXQtiJfeTog==
+  dependencies:
+    "@dura/async" "^2.0.0-alpha.4"
+    "@dura/async-loading" "^2.0.0-alpha.4"
+    "@dura/core" "^2.0.0-alpha.4"
+    "@dura/immer" "^2.0.0-alpha.4"
+    "@dura/selectors" "^2.0.0-alpha.2"
 
-"@dura/types@^1.0.0-alpha.30":
-  version "1.0.0-alpha.30"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.30.tgz#60af4ccd8094cde55a16f5f6b10c4a1be4348ae0"
-  integrity sha512-YZd+QmJvT0uyuh57ylVTLDg0gPR4OE2orh27KXF+EYfwiJbb/8cwE+9htzOV6OLdnbF7OegPcNwMaC27hu1dWA==
+"@dura/selectors@^2.0.0-alpha.2":
+  version "2.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-2.0.0-alpha.2.tgz#c50cfb5679b37d82280108d8cf66491b140a2ca6"
+  integrity sha512-6VWpsSwI9D5b2GfopvtYBpk+2pTbig8p9fup7qAi38e13ANE9Hxb0Cr5kRzBRlSqQXxaeS9rbBmkjmBERqBIMg==
+
+"@dura/types@^2.0.0-alpha.4":
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.4.tgz#ec2b6997bd04d0353287bf5fe76bdee2c476912d"
+  integrity sha512-+v83quA4vbrYOM9Bc8MP31XFnHpIhjXESO8Pekxy0b92x7v7+kds9CxK5mi+WOje0qpI+3mWf7dmjz4f7Vhfmw==
   dependencies:
     "@types/redux" "^3.6.0"
 

@@ -1,5 +1,5 @@
 import { EffectAPI } from "@dura/async";
-import { RootModel, reducerRunner } from "../store/index";
+import { reducerRunner } from "../store/index";
 
 const initialState = {
   count: 0 as number
@@ -10,18 +10,17 @@ type State = typeof initialState;
 export default {
   state: initialState,
   reducers: {
-    onChangeCount(payload: { count: number }) {
-      return function(state: State) {
-        return { ...state, count: state.count + payload.count };
-      };
+    onChangeCount(state: State, action: { payload: { count: number } }): State {
+      return { ...state, count: state.count + action.payload.count };
     }
   },
   effects: {
-    onAsyncChangeCount(payload: { count: number }, meta?: { loading: boolean }) {
-      return async function(effectApi: EffectAPI<RootModel>) {
-        await effectApi.delay(2000);
-        reducerRunner.count.onChangeCount(payload);
-      };
+    async onAsyncChangeCount(
+      action: { payload: { count: number }; meta?: { loading: boolean } },
+      effectApi: EffectAPI
+    ) {
+      await effectApi.delay(2000);
+      reducerRunner.count.onChangeCount(action.payload);
     }
   }
 };
