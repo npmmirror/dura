@@ -1,24 +1,29 @@
 /**
  * 自动loading
  */
-import { RootModel, Model, Meta, Payload } from "@dura/types";
-import { EffectAPI, Effects, AsyncModel } from "@dura/async";
+import { RootModel, Model, EffectAPI, ExcludeTypeAction, EffectMap } from "@dura/types";
+
+import _ from "lodash";
+
+function extractLoadingModelInitialStateByEffect<S extends Model<any>>(
+  model: S
+): { [k in keyof S["effects"]]: boolean } {
+  return _.keys(model.effects || {})
+    .map((effectName: string) => ({ [effectName]: false }))
+    .reduce(_.merge, {});
+}
 
 export const createLoadingPlugin = function(rootModel: RootModel) {
-  const extractEffect = (model: Model & AsyncModel) =>
-    Object.keys(model.effects || {})
-      .map((effectName: string) => ({ [effectName]: false }))
-      .reduce((prev, next) => ({ ...prev, ...next }), {});
-  const state = Object.keys(rootModel)
+  const initialState = _.keys(rootModel)
     .map((modelName: string) => ({
-      [modelName]: extractEffect(rootModel[modelName])
+      [modelName]: extractLoadingModelInitialStateByEffect(rootModel[modelName])
     }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
+    .reduce(_.merge, {});
 
   return {
     name: "loading",
     model: {
-      state,
+      state: initialState,
       reducers: {
         start(state, action: { payload: { modelName: string; effectName: string } }) {
           return {
@@ -38,7 +43,7 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
         }
       }
     },
-    onWrapModel: (name: string, model: Model & AsyncModel) => {
+    onWrapModel: (name: string, model: Model<any>) => {
       if (name === "loading") {
         return model;
       }
@@ -51,19 +56,14 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
 
       const nextEffects = Object.keys(effects)
         .map((key: string) => ({
-          [key]: async (action, request: EffectAPI) => {
-            const effectFn = async () => await effects[key](action, request);
-            const loadingHoc = async effectFn => {
-              request.dispatch(start(key));
-              await effectFn();
-              request.dispatch(end(key));
-            };
-
+          [key]: async (request: EffectAPI, action: ExcludeTypeAction) => {
             //兼容
             if (action && action.meta && action.meta.loading) {
-              loadingHoc(effectFn);
+              request.dispatch(start(key));
+              await effects[key](request, action);
+              request.dispatch(end(key));
             } else {
-              await effectFn();
+              await effects[key](request, action);
             }
           }
         }))
@@ -77,9 +77,9 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
   };
 };
 
-type ConvertFnToBoolean<E extends Effects> = { [key in keyof E]: boolean };
+type ConvertFnToBoolean<E extends EffectMap> = { [key in keyof E]: boolean };
 
-export type ExtractLoadingState<RMT extends RootModel<Model & AsyncModel>> = {
+export type ExtractLoadingState<RMT extends RootModel> = {
   loading: { [key in keyof RMT]: ConvertFnToBoolean<RMT[key]["effects"]> };
 };
 

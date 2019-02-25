@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { handleActions, createAction } from "redux-actions";
-import { Model, Plugin, Config, RootModel, Store, EffectAPI } from "@dura/types";
+import { Model, Plugin, Config, RootModel, Store } from "@dura/types";
 import _ from "lodash";
 
 /**
@@ -37,35 +37,6 @@ function wrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>)
 }
 
 /**
- * 获取插件里面的model
- * @param plugins
- */
-function getPluginModel(plugins: Array<Plugin>) {
-  return plugins
-    .filter(p => p.model)
-    .map(({ name, model }: Plugin) => ({
-      [name]: model
-    }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-}
-
-//合并所有的model
-function mergeModel(config: Config) {
-  const { initialModel, plugins = [] } = config;
-  const pluginModel = getPluginModel(plugins);
-  return { ...initialModel, ...pluginModel };
-}
-
-//包装根model
-function wrapRootModel(rootModel: RootModel, plugin: Array<Plugin>) {
-  const wrapModelPlugins = plugin.filter(p => p.onWrapModel);
-  //包装已有的model
-  return Object.keys(rootModel)
-    .map((name: string) => wrapModel(wrapModelPlugins.slice(), name, rootModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-}
-
-/**
  * 提取effects
  * @param name
  * @param model
@@ -89,7 +60,6 @@ function getAsyncMiddleware(rootModel: RootModel) {
     let result = next(action);
     if (typeof rootEffects[action.type] === "function") {
       const dispatch = store.dispatch;
-
       const getState = () => _.cloneDeep(store.getState());
       const select = (_select: (state) => any) => _select(getState());
       //执行effect
@@ -112,31 +82,21 @@ function getAsyncMiddleware(rootModel: RootModel) {
  * @param config
  */
 function create<C extends Config>(config: C): Store<C["initialModel"]> {
-  const { initialState, plugins = [], middlewares = [] } = config;
-
-  //merge plugin 的model
-  const rootModel = mergeModel(config);
-
-  //包装model
-  const nextRootModel = wrapRootModel(rootModel, plugins);
+  const { initialModel, initialState, middlewares = [] } = config;
 
   //actions
-  const actions = extractActions(nextRootModel);
+  const actions = extractActions(initialModel);
 
   //聚合reducers
-  const rootReducers = Object.keys(nextRootModel)
-    .map((name: string) => extractReducers(name, nextRootModel[name]))
+  const rootReducers = Object.keys(initialModel)
+    .map((name: string) => extractReducers(name, initialModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-  const pluginMiddlewares = plugins.filter(p => p.onCreateMiddleware).map(p => p.onCreateMiddleware(nextRootModel));
 
   //获取外部传入的 compose
   const composeEnhancers = config.compose || compose;
 
   //store增强器
-  const storeEnhancer = composeEnhancers(
-    applyMiddleware(...pluginMiddlewares, ...middlewares, getAsyncMiddleware(nextRootModel))
-  );
+  const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares, getAsyncMiddleware(initialModel)));
 
   //获取外部传入的 createStore
   const _createStore = config.createStore || createStore;
@@ -147,8 +107,6 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
     : _createStore(combineReducers(rootReducers), storeEnhancer);
 
   const store = { ...reduxStore, actions: actions };
-
-  plugins.filter(p => p.onStoreCreated).forEach(p => p.onStoreCreated(store, nextRootModel));
 
   return { ...store };
 }

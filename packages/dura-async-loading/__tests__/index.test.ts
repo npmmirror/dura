@@ -1,6 +1,5 @@
 import { create } from "@dura/core";
-import { DuraStore } from "@dura/types";
-import { EffectAPI, AsyncDuraStore, createAsyncPlugin } from "@dura/async";
+
 import { ExtractLoadingState, LoadingMeta, createLoadingPlugin } from "../src/index";
 
 describe("测试loading 插件", function() {
