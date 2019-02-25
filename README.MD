@@ -119,6 +119,27 @@ type OptionalKnownKeys<T> = {
 } extends { [_ in keyof T]: infer U }
   ? ({} extends U ? never : U)
   : never;
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+type Prepend<P, T> = T extends any
+  ? ((x: P, ...rest: T) => void) extends ((...rest: infer R) => void)
+    ? R
+    : never
+  : never;
+
+type Path<T> = T extends { readonly _: unique symbol }
+  ? never
+  : T extends any[]
+  ? never
+  : { [P in keyof T]: (Prepend<P, T[P] extends {} ? Path<T[P]> : never>) | [P, T[P]] }[keyof T];
+
+function read<T extends { name: string }, P extends Path<T>>(targetObject: T, path: P) {
+  console.log(targetObject);
+  console.log(path);
+}
+
+read({ address: { name: "ss" }, name: "dd" }, ["address", undefined]);
 ```
 
 ## 版本更新日志

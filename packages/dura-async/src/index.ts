@@ -1,42 +1,36 @@
-import { RootModel, Model, Plugin, DuraStore, Payload, Meta, Dispatch, Pack } from "@dura/types";
+import { RootModel, Model, Plugin, Pack, ExcludeTypeAction, Store } from "@dura/types";
 import { createAction } from "redux-actions";
 import clone from "clone";
-
+import _ from "lodash";
 /**
  * 提取effects
  * @param name
  * @param model
  */
-function extractEffects(name: string, model: Model & AsyncModel) {
-  const effects = model.effects || {};
-  const effectKeys = Object.keys(effects);
-  const nextEffects = effectKeys
+function extractEffects(name: string, model: Model<any> & AsyncModel) {
+  const { effects = {} } = model;
+  return _.keys(effects)
     .map((effectName: string) => ({ [`${name}/${effectName}`]: effects[effectName] }))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
-  return nextEffects;
+    .reduce(_.merge, {});
 }
 
 //创建单个model 的action runner
-function createModelEffectRunner(name: string, model: Model & AsyncModel, dispatch: Dispatch) {
+function createModelEffectRunner(name: string, model: Model<any> & AsyncModel) {
   const { effects = {} } = model;
-  const effectKeys = Object.keys(effects);
-  const merge = (prev, next) => ({ ...prev, ...next });
-
-  const createActionMap = (key: string) => ({
-    [key]: (payload: any, meta: any) =>
-      dispatch(createAction(`${name}/${key}`, payload => payload, (payload, meta) => meta)(payload, meta))
-  });
-
-  const action = effectKeys.map(createActionMap).reduce(merge, {});
-  return { [name]: action };
+  return {
+    [name]: _.keys(effects)
+      .map((effectKey: string) => ({
+        [effectKey]: createAction(`${name}/${effectKey}`, payload => payload, (payload, meta) => meta)
+      }))
+      .reduce(_.merge, {})
+  };
 }
 
 //创建全局的action  runner
-function createEffectRunner(models: RootModel, dispatch: Dispatch) {
-  const merge = (prev, next) => ({ ...prev, ...next });
-  return Object.keys(models)
-    .map((name: string) => createModelEffectRunner(name, models[name], dispatch))
-    .reduce(merge, {});
+function createEffectRunner(models: RootModel) {
+  return _.keys(models)
+    .map((name: string) => createModelEffectRunner(name, models[name]))
+    .reduce(_.merge, {});
 }
 
 export const createAsyncPlugin = function(): Plugin {
@@ -65,32 +59,28 @@ export const createAsyncPlugin = function(): Plugin {
         return result;
       };
     },
-    onStoreCreated(store: DuraStore & AsyncDuraStore, rootModel: RootModel) {
-      store.effectRunner = createEffectRunner(rootModel, store.dispatch);
+    extraActions<RM extends RootModel>(rootModel: RM): ExtractEffectsRunner<RM> {
+      return createEffectRunner(rootModel);
     }
   };
 };
 
 export type AsyncModel = {
   effects?: {
-    [name: string]: any;
+    [name: string]: (action: ExcludeTypeAction, effectApi: EffectAPI) => void;
   };
 };
 
-export type ExtractEffectsRunner<M extends RootModel<Model & AsyncModel>> = {
-  [key in keyof M]: ReviewEffects<M[key]["effects"]>
+export type ExtractEffectsRunner<M extends RootModel> = {
+  [key in keyof M]: "effects" extends keyof M[key] ? ReviewEffects<M[key]["effects"]> : never
 };
 
-export type AsyncDuraStore<M extends RootModel = any> = {
-  effectRunner: ExtractEffectsRunner<M>;
-};
+export type Effect = (action: ExcludeTypeAction, request: EffectAPI) => void;
 
-export type Effect = (request: EffectAPI) => void;
+export type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[0]> };
 
-export type ReviewEffects<E extends Effects> = { [key in keyof E]: Pack<Parameters<E[key]>[0]> };
-
-export type Effects = {
-  [name: string]: (payload?: Payload, meta?: Meta) => Effect;
+export type EffectMap = {
+  [name: string]: Effect;
 };
 
 export type EffectAPI = {

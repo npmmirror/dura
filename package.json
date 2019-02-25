@@ -8,12 +8,17 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
+    "@types/lodash": "^4.14.121",
+    "@types/redux-actions": "^2.3.2",
     "coveralls": "^3.0.2",
     "jest": "^23.6.0",
     "lerna": "^3.1.4",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "redux-actions": "^2.6.4"
+  },
   "resolutions": {}
 }

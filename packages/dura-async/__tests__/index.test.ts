@@ -1,6 +1,5 @@
 import { create, ExtractRootState } from "@dura/core";
-import { DuraStore } from "@dura/types";
-import { createAsyncPlugin, AsyncDuraStore, EffectAPI } from "../src/index";
+import { createAsyncPlugin, EffectAPI } from "../src/index";
 
 describe("单元测试", function() {
   it("测试effects", function(done) {
@@ -27,7 +26,7 @@ describe("单元测试", function() {
          * 异步的修改用户姓名
          * @param payload
          */
-        async onAsyncChangeName(action: { payload: { name: string } }, request: EffectAPI) {
+        async onAsyncChangeName(request: EffectAPI, action: { payload: { name: string } }) {
           await request.delay(1500);
           const oldName = request.select((state: RootState) => state.user.name);
           reducerRunner.user.onChangeName({ name: `${action.payload.name}-${oldName}` });
