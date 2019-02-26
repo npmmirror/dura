@@ -121,8 +121,6 @@ function getAsyncMiddleware(rootModel) {
  */
 function create(config) {
     var initialModel = config.initialModel, initialState = config.initialState, _a = config.middlewares, middlewares = _a === void 0 ? [] : _a;
-    //actions
-    var actions = extractActions(initialModel);
     //聚合reducers
     var rootReducers = Object.keys(initialModel)
         .map(function (name) { return extractReducers(name, initialModel[name]); })
@@ -140,27 +138,4 @@ function create(config) {
     return reduxStore;
 }
 exports.create = create;
-function createActionCreator(rootModel) {
-    return extractActions(rootModel);
-}
-exports.createActionCreator = createActionCreator;
-function extractActions(models) {
-    return lodash_1.default.keys(models)
-        .map(function (name) { return extractAction(name, models[name]); })
-        .reduce(lodash_1.default.merge, {});
-}
-function extractAction(name, model) {
-    var _a;
-    var _b = lodash_1.default.cloneDeep(model), reducers = _b.reducers, effects = _b.effects;
-    return _a = {},
-        _a[name] = lodash_1.default.keys(lodash_1.default.merge(reducers, effects))
-            .map(function (reducerKey) {
-            var _a;
-            return (_a = {},
-                _a[reducerKey] = redux_actions_1.createAction(name + "/" + reducerKey, function (payload) { return payload; }, function (payload, meta) { return meta; }),
-                _a);
-        })
-            .reduce(lodash_1.default.merge, {}),
-        _a;
-}
 //# sourceMappingURL=index.js.map

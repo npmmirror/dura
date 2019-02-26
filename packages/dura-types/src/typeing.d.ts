@@ -38,20 +38,6 @@ export type Store<RM extends RootModel = any> = _Store<ExtractRootState<RM>>;
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
-export type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
-
-export type ExtractActions<M extends RootModel> = ExtractReducerActions<M> & ExtractEffectActions<M>;
-
-export type ExtractEffectActions<M extends RootModel> = {
-  [key in keyof M]: "effects" extends keyof M[key] ? ReviewEffects<M[key]["effects"]> : never
-};
-
-export type ReviewReducders<R extends ReducerMap<S>, S> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
-
-export type ExtractReducerActions<M extends RootModel> = {
-  [key in keyof M]: ReviewReducders<M[key]["reducers"], M[key]["state"]>
-};
-
 export type Config = {
   initialModel: RootModel;
   initialState?: any;

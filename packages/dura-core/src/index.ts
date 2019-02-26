@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
-import { handleActions, createAction } from "redux-actions";
-import { Model, Config, RootModel, Store, ExtractActions } from "@dura/types";
+import { handleActions } from "redux-actions";
+import { Model, Config, RootModel, Store } from "@dura/types";
 import _ from "lodash";
 
 /**
