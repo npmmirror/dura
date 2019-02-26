@@ -1,0 +1,22 @@
+{
+  "name": "dura-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@dura/types": "^2.0.0-alpha.5"
+  }
+}

@@ -1,8 +1,9 @@
-import { Config, Store } from "@dura/types";
+import { Config, RootModel, Store, ExtractActions } from "@dura/types";
 /**
  * 创建store
  * @param config
  */
 declare function create<C extends Config>(config: C): Store<C["initialModel"]>;
-export { create };
-export * from "@dura/types";
+declare function createActionCreator<S extends RootModel>(rootModel: S): ExtractActions<S>;
+export { create, createActionCreator };
+export { EffectApi, ExtractRootState } from "@dura/types";
