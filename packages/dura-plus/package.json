@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/async": "^2.0.0-alpha.5",
-    "@dura/async-loading": "^2.0.0-alpha.7",
-    "@dura/core": "^2.0.0-alpha.7",
-    "@dura/immer": "^2.0.0-alpha.7",
-    "@dura/selectors": "^2.0.0-alpha.2"
+    "@dura/actions": "^2.0.0-alpha.7",
+    "@dura/core": "^2.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "@dura/types": "^2.0.0-alpha.7"
   }
 }

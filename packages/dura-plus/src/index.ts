@@ -1,32 +1,49 @@
-import { RootModel, Model, DuraStore, ExtractRootState, create as _create, Plugin, Config } from "@dura/core";
-import { createAsyncPlugin, AsyncDuraStore, AsyncModel, EffectAPI } from "@dura/async";
-import { createLoadingPlugin, ExtractLoadingState, LoadingMeta } from "@dura/async-loading";
+import { create as _create } from "@dura/core";
+import _ from "lodash";
+import { Config as _Config, Model, Middleware, Store, ExtractRootState, UnionToIntersection } from "@dura/types";
+import { actionCreator } from "@dura/actions";
 
-export type Config = {
-  plugins: Array<Plugin>;
-  initialState?: any;
-  middlewares?: Array<any>;
+type ExtraConfig = {
+  plugins?: Plugin[];
 };
 
-export type PlusDuraStore<RM extends RootModel<Model & AsyncModel>> = DuraStore<RM, ExtractLoadingState<RM>> &
-  AsyncDuraStore<RM>;
+type ConfigPlus = _Config & ExtraConfig;
 
-export type PlusRootState<RM extends RootModel<Model & AsyncModel>> = ExtractRootState<RM> & ExtractLoadingState<RM>;
+export type Plugin = {
+  name: string;
+  extraModels?: {
+    [name: string]: Model<any>;
+  };
+  onModel?: (model: Model<any>) => Model<any>;
+  initialState?: any;
+  middlewares?: Middleware[];
+};
 
-export type EffectAPI = EffectAPI;
+const create = function<C extends ConfigPlus>(
+  config: C
+): Store<C["initialModel"] & UnionToIntersection<ExtractRootState<C["plugins"][number]["extraModels"]>>> {
+  const { initialModel = {}, plugins = [], initialState } = config;
 
-export type LoadingMeta = LoadingMeta;
+  const finalModels = _.merge(
+    initialModel,
+    plugins
+      .filter(p => p.extraModels)
+      .map(p => p.extraModels)
+      .reduce(_.merge, {})
+  );
 
-export type DuraConfig = Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">;
+  const finalMiddlewares = plugins
+    .filter(p => p.middlewares)
+    .map(p => p.middlewares)
+    .reduce(_.merge, {});
 
-export const create = function(initialRootModel, config) {
-  const otherPlugins = config.plugins || [];
   return _create({
-    initialModel: initialRootModel,
-    plugins: [createAsyncPlugin(), createLoadingPlugin(initialRootModel), ...otherPlugins],
-    initialState: config.initialState || {},
-    middlewares: config.middlewares || [],
+    initialModel: finalModels,
+    initialState: initialState,
+    middlewares: finalMiddlewares,
     compose: config.compose,
     createStore: config.createStore
   });
 };
+
+export { create, actionCreator };

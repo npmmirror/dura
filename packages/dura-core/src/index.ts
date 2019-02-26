@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { handleActions } from "redux-actions";
-import { Model, Config, RootModel, Store } from "@dura/types";
+import { Model, Config, RootModel, Store, ExtractRootState } from "@dura/types";
 import _ from "lodash";
 
 /**
@@ -66,7 +66,7 @@ function getAsyncMiddleware(rootModel: RootModel) {
  * 创建store
  * @param config
  */
-function create<C extends Config>(config: C): Store<C["initialModel"]> {
+function create<C extends Config>(config: C): Store<ExtractRootState<C["initialModel"]>> {
   const { initialModel, initialState, middlewares = [] } = config;
 
   //聚合reducers

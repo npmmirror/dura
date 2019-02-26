@@ -1,5 +1,7 @@
 import { Dispatch, Store as _Store, AnyAction, Middleware, applyMiddleware, compose, createStore } from "redux";
 
+export { Middleware };
+
 export type ExcludeTypeAction = {
   [name: string]: any;
 };
@@ -32,9 +34,7 @@ export type RootModel = {
   [name: string]: Model<any>;
 };
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
-
-export type Store<RM extends RootModel = any> = _Store<ExtractRootState<RM>>;
+export type Store<S> = _Store<S>;
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
@@ -46,7 +46,7 @@ export type Config = {
   createStore?: typeof createStore;
 };
 
-type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof T
+export type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof T
   ? (payload: T["payload"], meta: T["meta"]) => AnyAction
   : "payload" extends keyof T
   ? (payload: T["payload"]) => AnyAction

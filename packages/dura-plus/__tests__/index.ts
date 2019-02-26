@@ -1,73 +1,51 @@
-import { create, PlusDuraStore, EffectAPI, PlusRootState, LoadingMeta } from "../src";
+import { create } from "../src";
+import { Config as _Config, Model, Middleware, Store, RootModel, ExtractRootState } from "@dura/types";
 
 describe("测试plus", function() {
   it("简单的测试", function(done) {
-    const initialState = {
-      name: undefined as string,
-      sex: undefined as "男" | "女",
-      age: undefined as number
-    };
-
-    type State = typeof initialState;
-
-    const UserModel = {
-      state: initialState,
-      reducers: {
-        onChangeName(state: State, action: { payload: { name: string } }) {
-          return { ...state, ...action.payload };
+    const plugins = [
+      {
+        name: "loading",
+        extraModels: {
+          loading: {
+            state: {
+              nameLoading: undefined
+            },
+            reducers: {},
+            effects: {}
+          }
         }
       },
-      effects: {
-        async onAsyncChangeName(action: { payload: { name: string }; meta?: LoadingMeta }, effectApi: EffectAPI) {
-          await effectApi.delay(1000);
-          await effectRunner.address.onAsyncChangeCity({ city: "南京" });
-          reducerRunner.user.onChangeName(action.payload);
+      {
+        name: "immer",
+        extraModels: {
+          immer: {
+            state: {
+              nameLoading: undefined
+            },
+            reducers: {},
+            effects: {}
+          }
         }
       }
-    };
+    ];
 
-    const initialAddressState = {
-      detailName: undefined as string,
-      city: undefined as string
-    };
+    type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-    type AddressState = typeof initialAddressState;
-
-    const AddresModel = {
-      state: initialAddressState,
-      reducers: {
-        onChangeCity(state: AddressState, action: { payload: { city: string } }) {
-          return { ...state, ...action.payload };
+    const store = create({
+      initialModel: {
+        user: {
+          state: {
+            name: undefined
+          },
+          reducers: {},
+          effects: {}
         }
       },
-      effects: {
-        async onAsyncChangeCity(action: { payload: { city: string } }, effectApi: EffectAPI) {
-          await effectApi.delay(1000);
-          reducerRunner.address.onChangeCity(action.payload);
-        }
-      }
-    };
+      plugins
+    });
 
-    const initialModel = {
-      user: UserModel,
-      address: AddresModel
-    };
+    store.getState().loading
 
-    type RootState = PlusRootState<typeof initialModel>;
-
-    const store = create(initialModel, {}) as PlusDuraStore<typeof initialModel>;
-
-    const { reducerRunner, effectRunner } = store;
-
-    effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
-
-    expect(store.getState().loading.user.onAsyncChangeName).toEqual(true);
-
-    setTimeout(() => {
-      expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
-      expect(store.getState().user.name).toEqual("张三");
-      expect(store.getState().address.city).toEqual("南京");
-      done();
-    }, 3000);
   });
 });
