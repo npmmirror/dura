@@ -4,7 +4,7 @@ export type ExcludeTypeAction = {
   [name: string]: any;
 };
 
-export type EffectAPI = {
+export type EffectApi = {
   dispatch: any;
   delay: (ms: number) => Promise<{}>;
   select: (fn: (state) => any) => any;
@@ -12,7 +12,7 @@ export type EffectAPI = {
 
 export type Reducer<S, A extends ExcludeTypeAction> = (state: S, action: A) => S;
 
-export type Effect = (effectApi: EffectAPI, action: ExcludeTypeAction) => Promise<void>;
+export type Effect = (effectApi: EffectApi, action: ExcludeTypeAction) => Promise<void>;
 
 export type ReducerMap<S> = {
   [name: string]: Reducer<S, ExcludeTypeAction>;
@@ -24,8 +24,8 @@ export type EffectMap = {
 
 export type Model<S> = {
   state: S;
-  reducers?: ReducerMap<S>;
-  effects?: EffectMap;
+  reducers: ReducerMap<S>;
+  effects: EffectMap;
 };
 
 export type RootModel = {
@@ -34,9 +34,7 @@ export type RootModel = {
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-export type Store<RM extends RootModel = any> = _Store<ExtractRootState<RM>> & {
-  actions: ExtractActions<RM>;
-};
+export type Store<RM extends RootModel = any> = _Store<ExtractRootState<RM>>;
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 
@@ -54,20 +52,10 @@ export type ExtractReducerActions<M extends RootModel> = {
   [key in keyof M]: ReviewReducders<M[key]["reducers"], M[key]["state"]>
 };
 
-export type Plugin<S = any, EA = any> = {
-  name: string;
-  model?: Model<S>;
-  onWrapModel?: (name: string, model: Model<any>) => Model<any>;
-  onCreateMiddleware?: (rootModel: RootModel) => Middleware;
-  onStoreCreated?: (store: Store, rootModel: RootModel) => void;
-  extraActions?: (rootModel: RootModel) => EA;
-};
-
 export type Config = {
-  initialModel?: RootModel;
+  initialModel: RootModel;
   initialState?: any;
   middlewares?: Array<Middleware>;
-  plugins?: Array<Plugin<any>>;
   compose?: typeof compose;
   createStore?: typeof createStore;
 };

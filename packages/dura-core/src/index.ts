@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { handleActions, createAction } from "redux-actions";
-import { Model, Plugin, Config, RootModel, Store } from "@dura/types";
+import { Model, Config, RootModel, Store, ExtractActions } from "@dura/types";
 import _ from "lodash";
 
 /**
@@ -9,7 +9,7 @@ import _ from "lodash";
  * @param model
  */
 function extractReducers<S>(name: string, model: Model<S>): ReducersMapObject {
-  const { reducers = {} } = model;
+  const { reducers } = model;
 
   return {
     [name]: handleActions(
@@ -22,27 +22,12 @@ function extractReducers<S>(name: string, model: Model<S>): ReducersMapObject {
 }
 
 /**
- * 包装原始model
- * @param plugins
- * @param name
- * @param model
- */
-function wrapModel(plugins: Array<Plugin<any>>, name: string, model: Model<any>): RootModel {
-  if (plugins && plugins.length === 0) {
-    return { [name]: model };
-  }
-  const firstPlugin = plugins.shift();
-  const nextModel = firstPlugin.onWrapModel(name, model);
-  return wrapModel(plugins, name, nextModel);
-}
-
-/**
  * 提取effects
  * @param name
  * @param model
  */
 function extractEffects(name: string, model: Model<any>) {
-  const { effects = {} } = model;
+  const { effects } = model;
   return _.keys(effects)
     .map((effectName: string) => ({ [`${name}/${effectName}`]: effects[effectName] }))
     .reduce(_.merge, {});
@@ -106,9 +91,11 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
     ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : _createStore(combineReducers(rootReducers), storeEnhancer);
 
-  const store = { ...reduxStore, actions: actions };
+  return reduxStore;
+}
 
-  return { ...store };
+function createActionCreator<S extends RootModel>(rootModel: S): ExtractActions<S> {
+  return extractActions(rootModel);
 }
 
 function extractActions<RM extends RootModel>(models: RM) {
@@ -118,7 +105,7 @@ function extractActions<RM extends RootModel>(models: RM) {
 }
 
 function extractAction(name: string, model: Model<any>) {
-  const { reducers = {}, effects = {} } = _.cloneDeep(model);
+  const { reducers, effects } = _.cloneDeep(model);
   return {
     [name]: _.keys(_.merge(reducers, effects))
       .map((reducerKey: string) => ({
@@ -128,6 +115,6 @@ function extractAction(name: string, model: Model<any>) {
   };
 }
 
-export { create };
+export { create, createActionCreator };
 
-export * from "@dura/types";
+export { EffectApi, ExtractRootState } from "@dura/types";

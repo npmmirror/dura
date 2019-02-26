@@ -19,7 +19,7 @@ export type LoadingMeta = LoadingMeta;
 
 export type DuraConfig = Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">;
 
-export const create = function(initialRootModel: RootModel<Model & AsyncModel>, config?: DuraConfig) {
+export const create = function(initialRootModel, config) {
   const otherPlugins = config.plugins || [];
   return _create({
     initialModel: initialRootModel,
