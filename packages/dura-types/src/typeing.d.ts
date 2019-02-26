@@ -24,6 +24,8 @@ export type EffectMap = {
   [name: string]: Effect;
 };
 
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
 export type Model<S> = {
   state: S;
   reducers: ReducerMap<S>;
@@ -34,7 +36,7 @@ export type RootModel = {
   [name: string]: Model<any>;
 };
 
-export type Store<S> = _Store<S>;
+export type Store<S = any> = _Store<S>;
 
 export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
 

@@ -1,7 +1,15 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import { Config as _Config, Model, Middleware, Store, ExtractRootState, UnionToIntersection } from "@dura/types";
-import { actionCreator } from "@dura/actions";
+import {
+  Config as _Config,
+  Model,
+  Middleware,
+  Store,
+  ExtractRootState,
+  UnionToIntersection,
+  RootModel
+} from "@dura/types";
+import { actionCreator as _actionCreator } from "@dura/actions";
 
 type ExtraConfig = {
   plugins?: Plugin[];
@@ -19,10 +27,8 @@ export type Plugin = {
   middlewares?: Middleware[];
 };
 
-const create = function<C extends ConfigPlus>(
-  config: C
-): Store<C["initialModel"] & UnionToIntersection<ExtractRootState<C["plugins"][number]["extraModels"]>>> {
-  const { initialModel = {}, plugins = [], initialState } = config;
+const create = function<C extends ConfigPlus>(config: C) {
+  const { initialModel = {}, plugins = [], initialState } = _.cloneDeep(config);
 
   const finalModels = _.merge(
     initialModel,
@@ -37,13 +43,22 @@ const create = function<C extends ConfigPlus>(
     .map(p => p.middlewares)
     .reduce(_.merge, {});
 
-  return _create({
-    initialModel: finalModels,
-    initialState: initialState,
-    middlewares: finalMiddlewares,
-    compose: config.compose,
-    createStore: config.createStore
-  });
+  return {
+    startStore: function() {
+      return _create({
+        initialModel: finalModels,
+        initialState: initialState,
+        middlewares: finalMiddlewares,
+        compose: config.compose,
+        createStore: config.createStore
+      }) as Store<
+        ExtractRootState<C["initialModel"]> & UnionToIntersection<ExtractRootState<C["plugins"][number]["extraModels"]>>
+      >;
+    },
+    getActionCreator: function() {
+      return _actionCreator(finalModels);
+    }
+  };
 };
 
-export { create, actionCreator };
+export { create };

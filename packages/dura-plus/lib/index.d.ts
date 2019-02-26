@@ -1,14 +1,17 @@
-import { RootModel, Model, DuraStore, ExtractRootState, Plugin, Config } from "@dura/core";
-import { AsyncDuraStore, AsyncModel, EffectAPI } from "@dura/async";
-import { ExtractLoadingState, LoadingMeta } from "@dura/async-loading";
-export declare type Config = {
-    plugins: Array<Plugin>;
-    initialState?: any;
-    middlewares?: Array<any>;
+import { Config as _Config, Model, Middleware, ExtractRootState } from "@dura/types";
+import { actionCreator } from "@dura/actions";
+declare type ExtraConfig = {
+    plugins?: Plugin[];
 };
-export declare type PlusDuraStore<RM extends RootModel<Model & AsyncModel>> = DuraStore<RM, ExtractLoadingState<RM>> & AsyncDuraStore<RM>;
-export declare type PlusRootState<RM extends RootModel<Model & AsyncModel>> = ExtractRootState<RM> & ExtractLoadingState<RM>;
-export declare type EffectAPI = EffectAPI;
-export declare type LoadingMeta = LoadingMeta;
-export declare type DuraConfig = Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">;
-export declare const create: (initialRootModel: RootModel<Model<{}> & AsyncModel>, config?: Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">) => DuraStore<{}, {}>;
+declare type ConfigPlus = _Config & ExtraConfig;
+export declare type Plugin = {
+    name: string;
+    extraModels?: {
+        [name: string]: Model<any>;
+    };
+    onModel?: (model: Model<any>) => Model<any>;
+    initialState?: any;
+    middlewares?: Middleware[];
+};
+declare const create: <C extends ConfigPlus>(config: C) => import("redux").Store<ExtractRootState<C["initialModel"]> & ExtractRootState<C["plugins"][number]["extraModels"]>, import("redux").AnyAction>;
+export { create, actionCreator };

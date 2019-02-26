@@ -21,7 +21,7 @@ describe("测试plus", function() {
         extraModels: {
           immer: {
             state: {
-              nameLoading: undefined
+              nameLoading: undefined as string
             },
             reducers: {},
             effects: {}
@@ -45,7 +45,8 @@ describe("测试plus", function() {
       plugins
     });
 
-    store.getState().loading
+    store.startStore();
 
+    store.getActionCreator();
   });
 });

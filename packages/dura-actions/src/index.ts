@@ -23,18 +23,18 @@ function extractAction(name: string, model: Model<any>) {
   };
 }
 
-type ExtractActions<M extends RootModel> = ExtractReducerActions<M> & ExtractEffectActions<M>;
+export type ExtractActions<M extends RootModel> = ExtractReducerActions<M> & ExtractEffectActions<M>;
 
-type ExtractReducerActions<M extends RootModel> = {
+export type ExtractReducerActions<M extends RootModel> = {
   [key in keyof M]: ReviewReducders<M[key]["reducers"], M[key]["state"]>
 };
 
-type ReviewReducders<R extends ReducerMap<S>, S> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
+export type ReviewReducders<R extends ReducerMap<S>, S> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
 
-type ExtractEffectActions<M extends RootModel> = {
+export type ExtractEffectActions<M extends RootModel> = {
   [key in keyof M]: "effects" extends keyof M[key] ? ReviewEffects<M[key]["effects"]> : never
 };
 
-type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
+export type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
 
 export { actionCreator };
