@@ -1,4 +1,4 @@
-import { create, createActionCreator } from "../src/index";
+import { create } from "../src/index";
 
 function getUserModel() {
   return {
@@ -50,13 +50,16 @@ describe("测试配置信息", function() {
       middlewares: [store => next => action => next({ ...action, type: "h" })]
     });
 
-    const actions = createActionCreator(rootModel);
-
     const { dispatch, getState } = store;
 
     expect(getState().user.name).toBeUndefined();
 
-    dispatch(actions.user.onChangeName({ newName: "张三" }));
+    dispatch({
+      type: "user/onChangeName",
+      payload: {
+        newName: "张三"
+      }
+    });
 
     expect(getState().user.name).toBeUndefined();
   });

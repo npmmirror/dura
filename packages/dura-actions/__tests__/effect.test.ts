@@ -1,4 +1,5 @@
-import { create, EffectApi, createActionCreator, ExtractRootState } from "../src/index";
+import { actionCreator } from "../src/index";
+import { create, EffectApi, ExtractRootState } from "@dura/core";
 
 describe("测试effect", function() {
   it("测试effect", function(done) {
@@ -48,7 +49,7 @@ describe("测试effect", function() {
       initialModel: rootModels
     });
 
-    const actions = createActionCreator(rootModels);
+    const actions = actionCreator(rootModels);
 
     const { dispatch, getState } = store;
 

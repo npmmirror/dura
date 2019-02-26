@@ -1,4 +1,4 @@
-import { create, EffectApi, createActionCreator, ExtractRootState } from "../src/index";
+import { create, EffectApi, ExtractRootState } from "../src/index";
 
 describe("测试effect", function() {
   it("测试effect", function(done) {
@@ -34,7 +34,12 @@ describe("测试effect", function() {
           await effectApi.delay(500);
           const name = effectApi.select((state: ExtractRootState<typeof rootModels>) => state.user.name);
           if (!name) {
-            effectApi.dispatch(actions.user.onChangeName({ newName: action.payload.nextName }));
+            dispatch({
+              type: "user/onChangeName",
+              payload: {
+                newName: action.payload.nextName
+              }
+            });
           }
         }
       }
@@ -48,13 +53,16 @@ describe("测试effect", function() {
       initialModel: rootModels
     });
 
-    const actions = createActionCreator(rootModels);
-
     const { dispatch, getState } = store;
 
     expect(getState().user.name).toBeUndefined();
 
-    dispatch(actions.user.onAsyncChangeName({ nextName: "张三" }));
+    dispatch({
+      type: "user/onAsyncChangeName",
+      payload: {
+        nextName: "张三"
+      }
+    });
 
     setTimeout(() => {
       expect(getState().user.name).toEqual("张三");

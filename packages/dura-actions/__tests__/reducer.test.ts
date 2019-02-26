@@ -1,4 +1,5 @@
-import { create, createActionCreator } from "../src/index";
+import { actionCreator } from "../src/index";
+import { create } from "@dura/core";
 
 function getUserModel() {
   return {
@@ -26,7 +27,7 @@ describe("测试reducers", function() {
       initialModel: rootModel
     });
 
-    const actions = createActionCreator(rootModel);
+    const actions = actionCreator(rootModel);
 
     const { dispatch, getState } = store;
 

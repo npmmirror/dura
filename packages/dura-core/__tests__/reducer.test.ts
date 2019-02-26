@@ -1,4 +1,4 @@
-import { create, createActionCreator } from "../src/index";
+import { create } from "../src/index";
 
 function getUserModel() {
   return {
@@ -26,13 +26,16 @@ describe("测试reducers", function() {
       initialModel: rootModel
     });
 
-    const actions = createActionCreator(rootModel);
-
     const { dispatch, getState } = store;
 
     expect(getState().user.name).toBeUndefined();
 
-    dispatch(actions.user.onChangeName({ newName: "张三" }));
+    dispatch({
+      type: "user/onChangeName",
+      payload: {
+        newName: "张三"
+      }
+    });
 
     expect(getState().user.name).toEqual("张三");
   });

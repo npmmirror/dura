@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@dura/core": "^2.0.0-alpha.6",
     "@dura/types": "^2.0.0-alpha.6"
   }
 }

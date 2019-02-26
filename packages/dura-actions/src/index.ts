@@ -36,3 +36,5 @@ type ExtractEffectActions<M extends RootModel> = {
 };
 
 type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
+
+export { actionCreator };

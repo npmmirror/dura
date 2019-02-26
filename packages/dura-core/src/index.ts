@@ -69,9 +69,6 @@ function getAsyncMiddleware(rootModel: RootModel) {
 function create<C extends Config>(config: C): Store<C["initialModel"]> {
   const { initialModel, initialState, middlewares = [] } = config;
 
-  //actions
-  const actions = extractActions(initialModel);
-
   //聚合reducers
   const rootReducers = Object.keys(initialModel)
     .map((name: string) => extractReducers(name, initialModel[name]))
@@ -94,27 +91,6 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
   return reduxStore;
 }
 
-function createActionCreator<S extends RootModel>(rootModel: S): ExtractActions<S> {
-  return extractActions(rootModel);
-}
-
-function extractActions<RM extends RootModel>(models: RM) {
-  return _.keys(models)
-    .map((name: string) => extractAction(name, models[name]))
-    .reduce(_.merge, {});
-}
-
-function extractAction(name: string, model: Model<any>) {
-  const { reducers, effects } = _.cloneDeep(model);
-  return {
-    [name]: _.keys(_.merge(reducers, effects))
-      .map((reducerKey: string) => ({
-        [reducerKey]: createAction(`${name}/${reducerKey}`, payload => payload, (payload, meta) => meta)
-      }))
-      .reduce(_.merge, {})
-  };
-}
-
-export { create, createActionCreator };
+export { create };
 
 export { EffectApi, ExtractRootState } from "@dura/types";
