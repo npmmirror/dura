@@ -1,36 +1,61 @@
 import { create } from "../src";
-import { Config as _Config, Model, Middleware, Store, RootModel, ExtractRootState } from "@dura/types";
+import { ExtractActions } from "@dura/actions";
+import {
+  Config as _Config,
+  Model,
+  Middleware,
+  Store,
+  RootModel,
+
+  UnionToIntersection
+} from "@dura/types";
 
 describe("测试plus", function() {
-  it("简单的测试", function(done) {
-    const plugins = [
-      {
-        name: "loading",
+  it("简单的测试", function() {
+    const plugins = {
+      loadingPlugin: {
         extraModels: {
           loading: {
             state: {
-              nameLoading: undefined
+              loadingState: undefined
             },
-            reducers: {},
+            reducers: {
+              onChangeLoad(state, action) {
+                return state;
+              }
+            },
             effects: {}
           }
         }
       },
-      {
-        name: "immer",
+      immerPlugin: {
         extraModels: {
           immer: {
             state: {
-              nameLoading: undefined as string
+              immerState: undefined as string
             },
-            reducers: {},
+            reducers: {
+              onChangeLoad(state, action) {
+                return state;
+              }
+            },
             effects: {}
           }
         }
       }
-    ];
+    };
 
-    type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+    type L<F extends { [name: string]: { extraModels?: RootModel } }> = { [key in keyof F]: F[key]["extraModels"] };
+
+    type S = L<typeof plugins>;
+
+    type Merge<U> = { [key in keyof U]: U[key] };
+
+    type N = Merge<UnionToIntersection<S[keyof S]>>;
+
+    let fn: ExtractActions<N>;
+
+    fn.immer.onChangeLoad;
 
     const store = create({
       initialModel: {
@@ -38,15 +63,18 @@ describe("测试plus", function() {
           state: {
             name: undefined
           },
-          reducers: {},
+          reducers: {
+            onChangeLoad(state, action) {
+              return state;
+            }
+          },
           effects: {}
         }
       },
       plugins
     });
-
-    store.startStore();
-
-    store.getActionCreator();
   });
+
+  
+
 });

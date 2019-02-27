@@ -24,7 +24,9 @@ export type EffectMap = {
   [name: string]: Effect;
 };
 
-export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void)
+  ? I
+  : never;
 
 export type Model<S> = {
   state: S;
@@ -32,20 +34,35 @@ export type Model<S> = {
   effects: EffectMap;
 };
 
-export type RootModel = {
+export type ModelMap = {
   [name: string]: Model<any>;
 };
 
-export type Store<S = any> = _Store<S>;
+export type Store<RM extends ModelMap, PM extends PluginMap> = _Store<ExtractState<RM & ExtractPluginsModels<PM>>> & {
+  actionCreator: ExtractActions<RM & ExtractPluginsModels<PM>>;
+};
 
-export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
+export type ExtractState<M extends ModelMap> = { [key in keyof M]: M[key]["state"] };
+
+export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> & ExtractEffectActions<M>;
+
+export type ExtractReducerActions<M extends ModelMap> = {
+  [key in keyof M]: ReviewReducders<M[key]["reducers"], M[key]["state"]>
+};
+
+export type ReviewReducders<R extends ReducerMap<S>, S> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
+
+export type ExtractEffectActions<M extends ModelMap> = { [key in keyof M]: ReviewEffects<M[key]["effects"]> };
+
+export type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
 
 export type Config = {
-  initialModel: RootModel;
+  initialModel: ModelMap;
   initialState?: any;
   middlewares?: Array<Middleware>;
   compose?: typeof compose;
   createStore?: typeof createStore;
+  plugins?: PluginMap;
 };
 
 export type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof T
@@ -54,4 +71,22 @@ export type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof
   ? (payload: T["payload"]) => AnyAction
   : "meta" extends keyof T
   ? (payload: null, meta: T["meta"]) => AnyAction
-  : [];
+  : () => AnyAction;
+
+export type Plugin = {
+  extraModels?: ModelMap;
+  middlewares?: Middleware[];
+  onModel?: OnModelFunc;
+};
+
+export type OnModelFunc = (model: Model<any>) => Model<any>;
+
+export type PluginMap = {
+  [name: string]: Plugin;
+};
+
+export type ExtractPluginModels<T extends PluginMap> = { [key in keyof T]: T[key]["extraModels"] };
+
+export type ExtractPluginsModels<T extends PluginMap> = UnionToIntersection<
+  ExtractPluginModels<T>[keyof ExtractPluginModels<T>]
+>;

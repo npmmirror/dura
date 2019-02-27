@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
-import { handleActions } from "redux-actions";
-import { Model, Config, RootModel, Store, ExtractRootState } from "@dura/types";
+import { handleActions, createAction } from "redux-actions";
+import { Model, Config, ModelMap, Store, Plugin, OnModelFunc } from "@dura/types";
 import _ from "lodash";
 
 /**
@@ -10,7 +10,6 @@ import _ from "lodash";
  */
 function extractReducers<S>(name: string, model: Model<S>): ReducersMapObject {
   const { reducers } = model;
-
   return {
     [name]: handleActions(
       _.keys(reducers)
@@ -37,7 +36,7 @@ function delay(ms: number) {
   return new Promise(resolve => setTimeout(() => resolve(), ms));
 }
 
-function getAsyncMiddleware(rootModel: RootModel) {
+function getAsyncMiddleware(rootModel: ModelMap) {
   const rootEffects = _.keys(rootModel)
     .map((name: string) => extractEffects(name, rootModel[name]))
     .reduce(_.merge, {});
@@ -62,23 +61,63 @@ function getAsyncMiddleware(rootModel: RootModel) {
   };
 }
 
+function recursiveOnModel(modelName: string, model: Model<any>, onModelList: OnModelFunc[]) {
+  if (onModelList && onModelList.length === 0) {
+    return { [modelName]: model };
+  }
+  const nextModel = onModelList.shift()(model);
+
+  return recursiveOnModel(modelName, nextModel, onModelList);
+}
+
 /**
  * 创建store
  * @param config
  */
-function create<C extends Config>(config: C): Store<ExtractRootState<C["initialModel"]>> {
-  const { initialModel, initialState, middlewares = [] } = config;
+function create<C extends Config>(config: C): Store<C["initialModel"], C["plugins"]> {
+  const { initialModel, initialState, middlewares = [], plugins = {} } = _.cloneDeep(config);
+
+  const berforeOnModelFuncModelMap = _.keys(initialModel)
+    .map((modelName: string) =>
+      recursiveOnModel(
+        modelName,
+        initialModel[modelName],
+        _.values(plugins)
+          .filter((value: Plugin) => value.onModel)
+          .map((value: Plugin) => value.onModel)
+          .slice()
+      )
+    )
+    .reduce(_.merge, {});
+
+  const initialAndPluginModelMap = _.merge(
+    berforeOnModelFuncModelMap,
+    _.values(plugins)
+      .filter((value: Plugin) => value.extraModels)
+      .map((value: Plugin) => value.extraModels)
+      .reduce(_.merge, {})
+  );
+
+  const initialAndPluginModdlewares = _.merge(
+    middlewares,
+    _.values(plugins)
+      .filter((value: Plugin) => value.middlewares)
+      .map((value: Plugin) => value.middlewares)
+      .reduce(_.merge, [])
+  );
 
   //聚合reducers
-  const rootReducers = Object.keys(initialModel)
-    .map((name: string) => extractReducers(name, initialModel[name]))
+  const rootReducers = Object.keys(initialAndPluginModelMap)
+    .map((name: string) => extractReducers(name, initialAndPluginModelMap[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 
   //获取外部传入的 compose
   const composeEnhancers = config.compose || compose;
 
   //store增强器
-  const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares, getAsyncMiddleware(initialModel)));
+  const storeEnhancer = composeEnhancers(
+    applyMiddleware(...initialAndPluginModdlewares, getAsyncMiddleware(initialAndPluginModelMap))
+  );
 
   //获取外部传入的 createStore
   const _createStore = config.createStore || createStore;
@@ -88,9 +127,26 @@ function create<C extends Config>(config: C): Store<ExtractRootState<C["initialM
     ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
     : _createStore(combineReducers(rootReducers), storeEnhancer);
 
-  return reduxStore;
+  return { ...reduxStore, actionCreator: extractActions(initialAndPluginModelMap) };
+}
+
+function extractActions<RM extends ModelMap>(models: RM) {
+  return _.keys(models)
+    .map((name: string) => extractAction(name, models[name]))
+    .reduce(_.merge, {});
+}
+
+function extractAction(name: string, model: Model<any>) {
+  const { reducers, effects } = _.cloneDeep(model);
+  return {
+    [name]: _.keys(_.merge(reducers, effects))
+      .map((reducerKey: string) => ({
+        [reducerKey]: createAction(`${name}/${reducerKey}`, payload => payload, (payload, meta) => meta)
+      }))
+      .reduce(_.merge, {})
+  };
 }
 
 export { create };
 
-export { EffectApi, ExtractRootState } from "@dura/types";
+export * from "@dura/types";

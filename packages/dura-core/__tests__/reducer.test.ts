@@ -26,16 +26,11 @@ describe("测试reducers", function() {
       initialModel: rootModel
     });
 
-    const { dispatch, getState } = store;
+    const { dispatch, getState, actionCreator } = store;
 
     expect(getState().user.name).toBeUndefined();
 
-    dispatch({
-      type: "user/onChangeName",
-      payload: {
-        newName: "张三"
-      }
-    });
+    dispatch(actionCreator.user.onChangeName({ newName: "张三" }));
 
     expect(getState().user.name).toEqual("张三");
   });

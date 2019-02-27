@@ -115,27 +115,70 @@ function getAsyncMiddleware(rootModel) {
         });
     }); }; }; };
 }
+function recursiveOnModel(modelName, model, onModelList) {
+    var _a;
+    if (onModelList && onModelList.length === 0) {
+        return _a = {}, _a[modelName] = model, _a;
+    }
+    var nextModel = onModelList.shift()(model);
+    return recursiveOnModel(modelName, nextModel, onModelList);
+}
 /**
  * 创建store
  * @param config
  */
 function create(config) {
-    var initialModel = config.initialModel, initialState = config.initialState, _a = config.middlewares, middlewares = _a === void 0 ? [] : _a;
+    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.plugins, plugins = _c === void 0 ? {} : _c;
+    var berforeOnModelFuncModelMap = lodash_1.default.keys(initialModel)
+        .map(function (modelName) {
+        return recursiveOnModel(modelName, initialModel[modelName], lodash_1.default.values(plugins)
+            .filter(function (value) { return value.onModel; })
+            .map(function (value) { return value.onModel; })
+            .slice());
+    })
+        .reduce(lodash_1.default.merge, {});
+    var initialAndPluginModelMap = lodash_1.default.merge(berforeOnModelFuncModelMap, lodash_1.default.values(plugins)
+        .filter(function (value) { return value.extraModels; })
+        .map(function (value) { return value.extraModels; })
+        .reduce(lodash_1.default.merge, {}));
+    var initialAndPluginModdlewares = lodash_1.default.merge(middlewares, lodash_1.default.values(plugins)
+        .filter(function (value) { return value.middlewares; })
+        .map(function (value) { return value.middlewares; })
+        .reduce(lodash_1.default.merge, []));
     //聚合reducers
-    var rootReducers = Object.keys(initialModel)
-        .map(function (name) { return extractReducers(name, initialModel[name]); })
+    var rootReducers = Object.keys(initialAndPluginModelMap)
+        .map(function (name) { return extractReducers(name, initialAndPluginModelMap[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
     //获取外部传入的 compose
     var composeEnhancers = config.compose || redux_1.compose;
     //store增强器
-    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, middlewares.concat([getAsyncMiddleware(initialModel)])));
+    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, initialAndPluginModdlewares.concat([getAsyncMiddleware(initialAndPluginModelMap)])));
     //获取外部传入的 createStore
     var _createStore = config.createStore || redux_1.createStore;
     //创建redux-store
     var reduxStore = initialState
         ? _createStore(redux_1.combineReducers(rootReducers), initialState, storeEnhancer)
         : _createStore(redux_1.combineReducers(rootReducers), storeEnhancer);
-    return reduxStore;
+    return __assign({}, reduxStore, { actionCreator: extractActions(initialAndPluginModelMap) });
 }
 exports.create = create;
+function extractActions(models) {
+    return lodash_1.default.keys(models)
+        .map(function (name) { return extractAction(name, models[name]); })
+        .reduce(lodash_1.default.merge, {});
+}
+function extractAction(name, model) {
+    var _a;
+    var _b = lodash_1.default.cloneDeep(model), reducers = _b.reducers, effects = _b.effects;
+    return _a = {},
+        _a[name] = lodash_1.default.keys(lodash_1.default.merge(reducers, effects))
+            .map(function (reducerKey) {
+            var _a;
+            return (_a = {},
+                _a[reducerKey] = redux_actions_1.createAction(name + "/" + reducerKey, function (payload) { return payload; }, function (payload, meta) { return meta; }),
+                _a);
+        })
+            .reduce(lodash_1.default.merge, {}),
+        _a;
+}
 //# sourceMappingURL=index.js.map

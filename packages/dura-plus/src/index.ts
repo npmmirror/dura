@@ -1,24 +1,17 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import {
-  Config as _Config,
-  Model,
-  Middleware,
-  Store,
-  ExtractRootState,
-  UnionToIntersection,
-  RootModel
-} from "@dura/types";
+import { Config as _Config, Model, Middleware, Store, UnionToIntersection } from "@dura/types";
 import { actionCreator as _actionCreator } from "@dura/actions";
 
 type ExtraConfig = {
-  plugins?: Plugin[];
+  plugins?: {
+    [name: string]: Plugin;
+  };
 };
 
 type ConfigPlus = _Config & ExtraConfig;
 
 export type Plugin = {
-  name: string;
   extraModels?: {
     [name: string]: Model<any>;
   };
@@ -27,38 +20,36 @@ export type Plugin = {
   middlewares?: Middleware[];
 };
 
-const create = function<C extends ConfigPlus>(config: C) {
-  const { initialModel = {}, plugins = [], initialState } = _.cloneDeep(config);
+const create = function<C extends ConfigPlus>(
+  config: C
+) {
+  const { initialModel = {}, plugins = {}, initialState, middlewares } = _.cloneDeep(config);
 
   const finalModels = _.merge(
     initialModel,
-    plugins
-      .filter(p => p.extraModels)
-      .map(p => p.extraModels)
+    _.keys(plugins)
+      .map((k: string) => plugins[k].extraModels || {})
       .reduce(_.merge, {})
   );
 
-  const finalMiddlewares = plugins
-    .filter(p => p.middlewares)
-    .map(p => p.middlewares)
-    .reduce(_.merge, {});
+  _.keys(plugins)
+    .map((k: string) => plugins[k].middlewares || [])
+    .reduce(_.merge, []);
 
-  return {
-    startStore: function() {
-      return _create({
-        initialModel: finalModels,
-        initialState: initialState,
-        middlewares: finalMiddlewares,
-        compose: config.compose,
-        createStore: config.createStore
-      }) as Store<
-        ExtractRootState<C["initialModel"]> & UnionToIntersection<ExtractRootState<C["plugins"][number]["extraModels"]>>
-      >;
-    },
-    getActionCreator: function() {
-      return _actionCreator(finalModels);
-    }
-  };
+  const finalMiddlewares = _.merge(
+    middlewares,
+    _.keys(plugins)
+      .map((k: string) => plugins[k].middlewares || [])
+      .reduce(_.merge, [])
+  );
+
+  return _create({
+    initialModel: finalModels,
+    initialState: initialState,
+    middlewares: finalMiddlewares,
+    compose: config.compose,
+    createStore: config.createStore
+  }) ;
 };
 
 export { create };
