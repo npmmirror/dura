@@ -79,7 +79,7 @@ export type Plugin = {
   onModel?: OnModelFunc;
 };
 
-export type OnModelFunc = (model: Model<any>) => Model<any>;
+export type OnModelFunc = (modelName: string, model: Model<any>) => Model<any>;
 
 export type PluginMap = {
   [name: string]: Plugin;

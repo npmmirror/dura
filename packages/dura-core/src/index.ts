@@ -65,7 +65,7 @@ function recursiveOnModel(modelName: string, model: Model<any>, onModelList: OnM
   if (onModelList && onModelList.length === 0) {
     return { [modelName]: model };
   }
-  const nextModel = onModelList.shift()(model);
+  const nextModel = onModelList.shift()(modelName,model);
 
   return recursiveOnModel(modelName, nextModel, onModelList);
 }

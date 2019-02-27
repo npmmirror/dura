@@ -93,13 +93,13 @@ describe("测试插件模块", function() {
 
   it("测试插件的onModel", function() {
     const oPlugin: Plugin = {
-      onModel: model => {
+      onModel: (name, model) => {
         return { ...model, state: { ...model.state, name: "张三" } };
       }
     };
 
     const qPlugin: Plugin = {
-      onModel: model => {
+      onModel: (name, model) => {
         return { ...model, state: { ...model.state, sex: "男" } };
       }
     };
