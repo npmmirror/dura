@@ -46,9 +46,6 @@ describe("测试loading 插件", function() {
 
     const { actionCreator, getState, dispatch } = store;
 
-    
-    
-
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
     dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));

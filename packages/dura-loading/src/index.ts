@@ -38,7 +38,7 @@ export const createLoading = function<MM extends ModelMap>(modelMap: MM): Plugin
       }
     },
     onModel: (name, model) => {
-      const { effects = {} } = model;
+      const { effects } = model;
 
       const start = (effectName: string) => ({ type: `loading/start`, payload: { modelName: name, effectName } });
 
