@@ -5,9 +5,12 @@ import { ModelMap, Model, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from
 
 import _ from "lodash";
 
-export const createLoading = function<MM extends ModelMap>(modelMap: MM): Plugin {
+export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
   return {
     onEffect: (name, effect) => {
+
+      
+
       return effect;
     }
   };

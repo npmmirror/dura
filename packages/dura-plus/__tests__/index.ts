@@ -24,7 +24,7 @@ describe("测试plus", function() {
       },
       [
         {
-          onReducer: (modelName,reducer) => {
+          onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
               console.log("开始");
               const result = reducer(state, action);
@@ -32,14 +32,14 @@ describe("测试plus", function() {
               return result;
             };
           },
-          onEffect: (modelName,effect) => {
+          onEffect: (modelName, effectName, effect) => {
             return async (effectApi, action) => {
               await effect(effectApi, action);
             };
           }
         },
         {
-          onReducer: (modelName,reducer) => {
+          onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
               console.log("开始1");
               const result = reducer(state, action);

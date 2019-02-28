@@ -1,21 +1,26 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import { Config, ExcludeTypeAction, Reducer, Effect, Model, Store, onReducer, Plugin } from "@dura/types";
+import { Config, ExcludeTypeAction, Reducer, Effect, Store, onReducer, Plugin } from "@dura/types";
 
-function recursiveOnReducer(modelName: string, reducer: Reducer<any, ExcludeTypeAction>, onReducerList: onReducer[]) {
+function recursiveOnReducer(
+  modelName: string,
+  reducerName: string,
+  reducer: Reducer<any, ExcludeTypeAction>,
+  onReducerList: onReducer[]
+): Reducer<any, ExcludeTypeAction> {
   if (onReducerList && onReducerList.length === 0) {
     return reducer;
   }
-  const nextReducer = onReducerList.shift()(modelName, reducer);
-  return recursiveOnReducer(modelName, nextReducer, onReducerList);
+  const nextReducer = onReducerList.shift()(modelName, reducerName, reducer);
+  return recursiveOnReducer(modelName, reducerName, nextReducer, onReducerList);
 }
 
-function recursiveOnEffect(modelName: string, effect: Effect, onEffectList: onReducer[]) {
+function recursiveOnEffect(modelName: string, effectName: string, effect: Effect, onEffectList: onReducer[]): Effect {
   if (onEffectList && onEffectList.length === 0) {
     return effect;
   }
-  const nextEffect = onEffectList.shift()(modelName, effect);
-  return recursiveOnEffect(modelName, nextEffect, onEffectList);
+  const nextEffect = onEffectList.shift()(modelName, effectName, effect);
+  return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
 const create = function<C extends Config, P extends Plugin>(config: C, plugins: P[]): Store<C["initialModel"]> {
@@ -25,24 +30,25 @@ const create = function<C extends Config, P extends Plugin>(config: C, plugins: 
 
   const onEffectList = plugins.filter(plugin => plugin.onEffect).map(plugin => plugin.onEffect);
 
-  const initialModelMap = _.keys(initialModel)
-    .map((name: string) => {
-      const model: Model<any> = initialModel[name];
-
+  const initialModelMap = _.entries(initialModel)
+    .map(([modelName, model]) => {
       const reducers = _.entries(model.reducers)
-        .map(([name, reducer]) => ({
-          [name]: recursiveOnReducer(name, reducer, onReducerList)
+        .map(([reducerName, reducer]) => ({
+          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, onReducerList)
         }))
         .reduce(_.merge, {});
 
       const effects = _.entries(model.effects)
-        .map(([name, effect]) => ({
-          [name]: recursiveOnEffect(name, effect, onEffectList)
+        .map(([effectName, effects]) => ({
+          [effectName]: recursiveOnEffect(modelName, effectName, effects, onEffectList)
         }))
         .reduce(_.merge, {});
-
       return {
-        [name]: _.merge(model, { reducers, effects })
+        [modelName]: {
+          ...model,
+          reducers,
+          effects
+        }
       };
     })
     .reduce(_.merge, {});

@@ -8,10 +8,11 @@ export type ExcludeTypeAction = {
 
 export type onReducer = (
   modelName: string,
+  reducerName: string,
   reducer: Reducer<any, ExcludeTypeAction>
 ) => Reducer<any, ExcludeTypeAction>;
 
-export type onEffect = (modelName: string, effect: Effect) => Effect;
+export type onEffect = (modelName: string, effectName: string, effect: Effect) => Effect;
 
 export type Plugin = {
   onReducer?: onReducer;
