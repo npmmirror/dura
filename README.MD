@@ -10,7 +10,7 @@
 
 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架 (灵感来源于 [dva](https://github.com/dvajs/dva) 、 [mirror](https://github.com/mirrorjs/mirror) 和 [rematch](https://github.com/rematch/rematch) ) 。 专为 [typescript](https://github.com/Microsoft/TypeScript) 而生
 
-遵循[Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 语义化版本规范1。
+遵循[Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 语义化版本规范11。
 
 ---
 
