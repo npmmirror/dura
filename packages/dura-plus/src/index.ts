@@ -2,20 +2,20 @@ import { create as _create } from "@dura/core";
 import _ from "lodash";
 import { Config, ExcludeTypeAction, Reducer, Effect, Model, Store, onReducer, Plugin } from "@dura/types";
 
-function recursiveOnReducer(reducer: Reducer<any, ExcludeTypeAction>, onReducerList: onReducer[]) {
+function recursiveOnReducer(modelName: string, reducer: Reducer<any, ExcludeTypeAction>, onReducerList: onReducer[]) {
   if (onReducerList && onReducerList.length === 0) {
     return reducer;
   }
-  const nextReducer = onReducerList.shift()(reducer);
-  return recursiveOnReducer(nextReducer, onReducerList);
+  const nextReducer = onReducerList.shift()(modelName, reducer);
+  return recursiveOnReducer(modelName, nextReducer, onReducerList);
 }
 
-function recursiveOnEffect(effect: Effect, onEffectList: onReducer[]) {
+function recursiveOnEffect(modelName: string, effect: Effect, onEffectList: onReducer[]) {
   if (onEffectList && onEffectList.length === 0) {
     return effect;
   }
-  const nextEffect = onEffectList.shift()(effect);
-  return recursiveOnEffect(nextEffect, onEffectList);
+  const nextEffect = onEffectList.shift()(modelName, effect);
+  return recursiveOnEffect(modelName, nextEffect, onEffectList);
 }
 
 const create = function<C extends Config, P extends Plugin>(config: C, plugins: P[]): Store<C["initialModel"]> {
@@ -31,13 +31,13 @@ const create = function<C extends Config, P extends Plugin>(config: C, plugins: 
 
       const reducers = _.entries(model.reducers)
         .map(([name, reducer]) => ({
-          [name]: recursiveOnReducer(reducer, onReducerList)
+          [name]: recursiveOnReducer(name, reducer, onReducerList)
         }))
         .reduce(_.merge, {});
 
       const effects = _.entries(model.effects)
         .map(([name, effect]) => ({
-          [name]: recursiveOnEffect(effect, onEffectList)
+          [name]: recursiveOnEffect(name, effect, onEffectList)
         }))
         .reduce(_.merge, {});
 

@@ -6,9 +6,12 @@ export type ExcludeTypeAction = {
   [name: string]: any;
 };
 
-export type onReducer = (reducer: Reducer<any, ExcludeTypeAction>) => Reducer<any, ExcludeTypeAction>;
+export type onReducer = (
+  modelName: string,
+  reducer: Reducer<any, ExcludeTypeAction>
+) => Reducer<any, ExcludeTypeAction>;
 
-export type onEffect = (effect: Effect) => Effect;
+export type onEffect = (modelName: string, effect: Effect) => Effect;
 
 export type Plugin = {
   onReducer?: onReducer;

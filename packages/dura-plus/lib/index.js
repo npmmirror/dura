@@ -5,19 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@dura/core");
 var lodash_1 = __importDefault(require("lodash"));
-function recursiveOnReducer(reducer, onReducerList) {
+function recursiveOnReducer(modelName, reducer, onReducerList) {
     if (onReducerList && onReducerList.length === 0) {
         return reducer;
     }
-    var nextReducer = onReducerList.shift()(reducer);
-    return recursiveOnReducer(nextReducer, onReducerList);
+    var nextReducer = onReducerList.shift()(modelName, reducer);
+    return recursiveOnReducer(modelName, nextReducer, onReducerList);
 }
-function recursiveOnEffect(effect, onEffectList) {
+function recursiveOnEffect(modelName, effect, onEffectList) {
     if (onEffectList && onEffectList.length === 0) {
         return effect;
     }
-    var nextEffect = onEffectList.shift()(effect);
-    return recursiveOnEffect(nextEffect, onEffectList);
+    var nextEffect = onEffectList.shift()(modelName, effect);
+    return recursiveOnEffect(modelName, nextEffect, onEffectList);
 }
 var create = function (config, plugins) {
     var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares;
@@ -32,7 +32,7 @@ var create = function (config, plugins) {
             var name = _a[0], reducer = _a[1];
             var _b;
             return (_b = {},
-                _b[name] = recursiveOnReducer(reducer, onReducerList),
+                _b[name] = recursiveOnReducer(name, reducer, onReducerList),
                 _b);
         })
             .reduce(lodash_1.default.merge, {});
@@ -41,7 +41,7 @@ var create = function (config, plugins) {
             var name = _a[0], effect = _a[1];
             var _b;
             return (_b = {},
-                _b[name] = recursiveOnEffect(effect, onEffectList),
+                _b[name] = recursiveOnEffect(name, effect, onEffectList),
                 _b);
         })
             .reduce(lodash_1.default.merge, {});
