@@ -1,14 +1,14 @@
 {
   "name": "examplern",
-  "version": "2.0.0-alpha.16",
+  "version": "2.0.0-alpha.17",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
     "@ant-design/react-native": "^3.1.1",
-    "@dura/immer": "^2.0.0-alpha.16",
-    "@dura/plus": "^2.0.0-alpha.16",
+    "@dura/immer": "^2.0.0-alpha.17",
+    "@dura/plus": "^2.0.0-alpha.17",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-native": "0.58.3",

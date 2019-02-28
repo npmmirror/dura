@@ -1,6 +1,6 @@
 {
   "name": "@dura/loading",
-  "version": "2.0.0-alpha.16",
+  "version": "2.0.0-alpha.17",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@dura/core": "^2.0.0-alpha.16"
+    "@dura/core": "^2.0.0-alpha.17"
   },
   "dependencies": {
-    "@dura/types": "^2.0.0-alpha.16"
+    "@dura/types": "^2.0.0-alpha.17"
   }
 }
