@@ -1,7 +1,7 @@
 /**
  * 自动loading
  */
-import { ModelMap, Model, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from "@dura/types";
+import { ModelMap, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from "@dura/types";
 
 import _ from "lodash";
 
@@ -56,21 +56,25 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
   return {
     onEffect: (modelName, effectName, effect) => {
       return async (effectApi: EffectApi, action: ExcludeTypeAction) => {
-        effectApi.dispatch({
-          type: "loading/startLoading",
-          payload: {
-            modelName,
-            effectName
-          }
-        });
-        await effect(effectApi, action);
-        effectApi.dispatch({
-          type: "loading/endLoading",
-          payload: {
-            modelName,
-            effectName
-          }
-        });
+        if (action.meta && action.meta.loading) {
+          effectApi.dispatch({
+            type: "loading/startLoading",
+            payload: {
+              modelName,
+              effectName
+            }
+          });
+          await effect(effectApi, action);
+          effectApi.dispatch({
+            type: "loading/endLoading",
+            payload: {
+              modelName,
+              effectName
+            }
+          });
+        } else {
+          await effect(effectApi, action);
+        }
       };
     }
   };

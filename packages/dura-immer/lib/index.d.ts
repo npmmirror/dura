@@ -1,4 +1,2 @@
-export declare const createImmerPlugin: () => {
-    name: string;
-    onWrapModel(name: string, model: any): any;
-};
+import { Plugin } from "@dura/types";
+export declare const createImmerPlugin: () => Plugin;

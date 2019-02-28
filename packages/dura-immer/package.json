@@ -16,6 +16,6 @@
     "immer": "^1.12.1"
   },
   "devDependencies": {
-    "@dura/core": "^2.0.0-alpha.19"
+    "@dura/plus": "^2.0.0-alpha.19"
   }
 }

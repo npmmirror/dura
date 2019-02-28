@@ -19,59 +19,46 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@dura/async-loading@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-2.0.0-alpha.4.tgz#4d2dabe9302e3ce228ae142261fde28608bf7165"
-  integrity sha512-KeqN0m/+F+jApduJ4qCdufTFH8fHtCul7fniMUtvWVNoQb4arNrI4pH5zIJvPTg8asC5PR3dzyVdNSNV5UTV0g==
-  dependencies:
-    "@dura/async" "^2.0.0-alpha.4"
-    "@dura/types" "^2.0.0-alpha.4"
+"@dura/actions@^2.0.0-alpha.10":
+  version "2.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-2.0.0-alpha.10.tgz#463a1e01d33365718b132f4ce548f31db6db2532"
+  integrity sha512-2TgjkCyLu2PSAo+6xHHwu/cVvfvR69VIiUQf/8Vc7Aw/U+1jEG+l44uLOEtFq2jg3SyfUWHrg75NHY5bb8REbg==
 
-"@dura/async@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-2.0.0-alpha.4.tgz#8a92f9bca2153ea98b16e2c5971f2ad43a696bea"
-  integrity sha512-iVbCCefzfCCG/+HHdOGXY0jv+BPVBUz9rmjpS4jMpSD+yWyCTE8XNFSMmgk7aqvZNFBYecoS6fy2QW4hjaZ5uA==
+"@dura/core@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.19.tgz#5ce383f7dd55b2cd66883d1e0f4d0c397287059c"
+  integrity sha512-/WQtR9Ax34Ph519u06c7Yzj+7MAVNqnG+dbiS5/UqxRwZZ1VNPVud/LRDaCluMU/FI91oCd5ZvF6/07FoAHF1Q==
   dependencies:
-    clone "^2.1.2"
-    redux-actions "^2.6.4"
-
-"@dura/core@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.4.tgz#8b603187ba42822f880184971e4f1cb5a1515d9c"
-  integrity sha512-PSzfOSm10MgPxzRa+coY6emhKDLOaUD2WKJMiEcmPVd/tZniAgVbHsH3DuxBBbvZwztwSqUc1aLmrfQ6BcYmfA==
-  dependencies:
-    "@dura/types" "^2.0.0-alpha.4"
+    "@dura/types" "^2.0.0-alpha.19"
     redux "^4.0.0"
-    redux-actions "^2.6.4"
 
-"@dura/immer@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.4.tgz#a54638b928788de25fbd59168ccad4d125532917"
-  integrity sha512-ylnpDp5875a1jYyvNqm8DHIn3gfIKZMCcgZ4HE01DRbgMovjicvasA9GKw+EMI3yBaPZQDZDTPsDbZNtQ9VotA==
+"@dura/immer@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.19.tgz#f1a6acc0c31db365c04dc305c285a4c822ad0530"
+  integrity sha512-hkxQq5/Ucoj6WyOeu4kofoyiQazS4Tdf2cib1gwxjiVCZPn2XHCIASGQJwEmEZ2tdFkqyr0lMdsh84DGZdpJ8g==
   dependencies:
-    "@dura/types" "^2.0.0-alpha.4"
+    "@dura/types" "^2.0.0-alpha.19"
     immer "^1.12.1"
 
-"@dura/plus@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.4.tgz#97f0223629391541e781f928415b2742b283e8f7"
-  integrity sha512-wkrMdrcW4HIgNW8CGuJSQCY3//GwKTFZikTJ1kbUSe/BGEUYMDwYM8sGLMcbki/cViZXv0eJ1MCtXQtiJfeTog==
+"@dura/loading@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-2.0.0-alpha.19.tgz#8b8f1687ce1e3ba7ae326b01fb92623eb85d8eac"
+  integrity sha512-ELPy+ISgmg+MK/HE3diYo25qSKeQQh66EFP7DN3jDDxfux5G0dMNBjPwzPbzV2BfDDrXxJ6eR9KNMENfInatEA==
   dependencies:
-    "@dura/async" "^2.0.0-alpha.4"
-    "@dura/async-loading" "^2.0.0-alpha.4"
-    "@dura/core" "^2.0.0-alpha.4"
-    "@dura/immer" "^2.0.0-alpha.4"
-    "@dura/selectors" "^2.0.0-alpha.2"
+    "@dura/types" "^2.0.0-alpha.19"
 
-"@dura/selectors@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-2.0.0-alpha.2.tgz#c50cfb5679b37d82280108d8cf66491b140a2ca6"
-  integrity sha512-6VWpsSwI9D5b2GfopvtYBpk+2pTbig8p9fup7qAi38e13ANE9Hxb0Cr5kRzBRlSqQXxaeS9rbBmkjmBERqBIMg==
+"@dura/plus@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.19.tgz#9292cb93f267208b2128b31e0b49e6ed397ec4ce"
+  integrity sha512-H8RJQtq1JWXQewjcGEbXvzfBX3D0EGgppPfPhEKyUkCRdeRqPuVzAz5+qtHGSJSMGTe19uXJIAAj9eE6KyAu4Q==
+  dependencies:
+    "@dura/actions" "^2.0.0-alpha.10"
+    "@dura/core" "^2.0.0-alpha.19"
 
-"@dura/types@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.4.tgz#ec2b6997bd04d0353287bf5fe76bdee2c476912d"
-  integrity sha512-+v83quA4vbrYOM9Bc8MP31XFnHpIhjXESO8Pekxy0b92x7v7+kds9CxK5mi+WOje0qpI+3mWf7dmjz4f7Vhfmw==
+"@dura/types@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.19.tgz#af96317cedec7b1871910fdb617f00aeff79578a"
+  integrity sha512-Lb3RAkPnx/QuYq8c2K5uY533lVyZU4waIAiuar0rFAy1h/NclAJ6jNGskP9jlZp/MbHPvtAzESr60y0x1tAGNQ==
   dependencies:
     "@types/redux" "^3.6.0"
 
@@ -2423,11 +2410,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-just-curry-it@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/just-curry-it/-/just-curry-it-3.1.0.tgz#ab59daed308a58b847ada166edd0a2d40766fbc5"
-  integrity sha512-mjzgSOFzlrurlURaHVjnQodyPNvrHrf1TbQP2XU9NSqBtHQPuHZ+Eb6TAJP7ASeJN9h9K0KXoRTs8u6ouHBKvg==
-
 killable@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -3884,22 +3866,6 @@ readdirp@^2.0.0:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
-reduce-reducers@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
-  integrity sha512-+CNMnI8QhgVMtAt54uQs3kUxC3Sybpa7Y63HR14uGLgI9/QR5ggHvpxwhGGe3wmx5V91YwqQIblN9k5lspAmGw==
-
-redux-actions@^2.6.4:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-2.6.4.tgz#e1d9d7d987d274071b0134b707365d3e25ba3b26"
-  integrity sha512-Gho+gnsvyR5h0pApoMdHLYssVEu4I0DNqyC91u43Xy/BvLrEddEMtukLF8oL3WXUy7DjxqKOKZHKmpKyN6hxlQ==
-  dependencies:
-    invariant "^2.2.4"
-    just-curry-it "^3.1.0"
-    loose-envify "^1.4.0"
-    reduce-reducers "^0.4.3"
-    to-camel-case "^1.0.0"
-
 redux@*, redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
@@ -4574,18 +4540,6 @@ to-arraybuffer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
 
-to-camel-case@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-camel-case/-/to-camel-case-1.0.0.tgz#1a56054b2f9d696298ce66a60897322b6f423e46"
-  integrity sha1-GlYFSy+daWKYzmamCJcyK29CPkY=
-  dependencies:
-    to-space-case "^1.0.0"
-
-to-no-case@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/to-no-case/-/to-no-case-1.0.2.tgz#c722907164ef6b178132c8e69930212d1b4aa16a"
-  integrity sha1-xyKQcWTvaxeBMsjmmTAhLRtKoWo=
-
 to-object-path@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/to-object-path/-/to-object-path-0.3.0.tgz#297588b7b0e7e0ac08e04e672f85c1f4999e17af"
@@ -4607,13 +4561,6 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
-
-to-space-case@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-space-case/-/to-space-case-1.0.0.tgz#b052daafb1b2b29dc770cea0163e5ec0ebc9fc17"
-  integrity sha1-sFLar7Gysp3HcM6gFj5ewOvJ/Bc=
-  dependencies:
-    to-no-case "^1.0.0"
 
 toposort@^1.0.0:
   version "1.0.7"

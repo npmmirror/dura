@@ -1,37 +1,32 @@
 /**
  * 自动loading
  */
-import { RootModel, Model } from "@dura/types";
-import { Effects, AsyncModel } from "@dura/async";
-export declare const createLoadingPlugin: (rootModel: RootModel<any>) => {
-    name: string;
-    model: {
-        state: {
-            [x: string]: {
-                [x: string]: boolean;
-            };
-        };
+import { ModelMap, Plugin, EffectMap } from "@dura/types";
+export declare const createLoadingModel: (modelMap: ModelMap) => {
+    loading: {
+        state: any;
         reducers: {
-            start(state: any, action: {
+            startLoading(state: any, action: {
                 payload: {
                     modelName: string;
                     effectName: string;
                 };
             }): any;
-            end(state: any, action: {
+            endLoading(state: any, action: {
                 payload: {
                     modelName: string;
                     effectName: string;
                 };
             }): any;
         };
+        effects: {};
     };
-    onWrapModel: (name: string, model: Model<{}> & AsyncModel) => Model<{}> & AsyncModel;
 };
-declare type ConvertFnToBoolean<E extends Effects> = {
+export declare const createLoadingPlugin: <MM extends ModelMap>(modelMap: MM) => Plugin;
+declare type ConvertFnToBoolean<E extends EffectMap> = {
     [key in keyof E]: boolean;
 };
-export declare type ExtractLoadingState<RMT extends RootModel<Model & AsyncModel>> = {
+export declare type ExtractLoadingState<RMT extends ModelMap> = {
     loading: {
         [key in keyof RMT]: ConvertFnToBoolean<RMT[key]["effects"]>;
     };

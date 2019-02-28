@@ -8,6 +8,7 @@
   "license": "ISC",
   "dependencies": {
     "@dura/immer": "^2.0.0-alpha.19",
+    "@dura/loading": "^2.0.0-alpha.19",
     "@dura/plus": "^2.0.0-alpha.19",
     "antd": "^3.13.0",
     "react": "^16.7.0",

@@ -1,21 +1,10 @@
-import { Model } from "@dura/types";
+import { Plugin } from "@dura/types";
 import produce from "immer";
 
-export const createImmerPlugin = function() {
+export const createImmerPlugin = function(): Plugin {
   return {
-    name: "immer",
-    onWrapModel(name: string, model: Model) {
-      const { reducers } = model;
-      const nextReducers = Object.keys(reducers)
-        .map((name: string) => ({
-          [name]: (baseState, action) => produce(baseState, draftState => reducers[name](draftState, action))
-        }))
-        .reduce((prev, next) => ({ ...prev, ...next }), {});
-
-      return {
-        ...model,
-        reducers: nextReducers
-      };
+    onReducer(modelName, reducerName, reducer) {
+      return (baseState, action) => produce(baseState, draftState => reducer(draftState, action));
     }
   };
 };

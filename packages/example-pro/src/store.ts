@@ -1,7 +1,8 @@
 import UserModel from "@models/UserModel";
 
-import { create, PlusDuraStore , PlusRootState } from "@dura/plus";
+import { create } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
+import { createLoadingModel, createLoadingPlugin } from "@dura/loading";
 
 const initialModel = {
   /**
@@ -12,10 +13,9 @@ const initialModel = {
 
 export type RootModel = typeof initialModel;
 
-export type RootState = PlusRootState<RootModel>;
+export const store = create({ initialModel: { ...initialModel, ...createLoadingModel(initialModel) } }, [
+  createImmerPlugin(),
+  createLoadingPlugin(initialModel)
+]);
 
-export const store = create(initialModel, {
-  plugins: [createImmerPlugin()]
-}) as PlusDuraStore<RootModel>;
-
-export const { reducerRunner, effectRunner } = store;
+export const { actionCreator } = store;

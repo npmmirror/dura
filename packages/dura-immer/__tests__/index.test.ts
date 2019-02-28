@@ -1,30 +1,47 @@
-import { DuraStore, RootModel } from "@dura/types";
-import { create } from "@dura/core";
+import { ModelMap } from "@dura/types";
+import { create } from "@dura/plus";
 import { createImmerPlugin } from "../src/index";
 
 describe("测试immer插件", function() {
   it("测试immer插件", function() {
     const initialState = {
       name: undefined,
-      sex: undefined
+      sex: undefined,
+      addressList: [
+        {
+          province: undefined
+        },
+        {
+          province: "安徽"
+        }
+      ]
     };
     const user = {
       state: initialState,
       reducers: {
-        onChangeName(state, action: { payload: { name: string } }) {
-          return { ...state, ...action.payload };
+        onChangeName(state: typeof initialState, action: { payload: { provinceName: string } }) {
+          state.addressList[0].province = action.payload.provinceName;
+          return state;
         }
-      }
+      },
+      effects: {}
     };
     const initialModel = {
       user
     };
-    const store = create({
-      initialModel,
-      plugins: [createImmerPlugin()]
-    }) as DuraStore<typeof initialModel>;
-    expect(store.getState().user.name).toBeUndefined();
-    store.reducerRunner.user.onChangeName({ name: "张三" });
-    expect(store.getState().user.name).toEqual("张三");
+    const store = create(
+      {
+        initialModel
+      },
+      [createImmerPlugin()]
+    );
+
+    const { getState, actionCreator, dispatch } = store;
+
+    expect(getState().user.addressList[0].province).toBeUndefined();
+
+    dispatch(actionCreator.user.onChangeName({ provinceName: "江苏" }));
+
+    expect(getState().user.addressList[0].province).toEqual("江苏");
   });
 });

@@ -45,95 +45,82 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createLoadingPlugin = function (rootModel) {
-    var _this = this;
-    var extractEffect = function (model) {
-        return Object.keys(model.effects || {})
-            .map(function (effectName) {
-            var _a;
-            return (_a = {}, _a[effectName] = false, _a);
-        })
-            .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    };
-    var state = Object.keys(rootModel)
-        .map(function (modelName) {
-        var _a;
-        return (_a = {},
-            _a[modelName] = extractEffect(rootModel[modelName]),
-            _a);
+var lodash_1 = __importDefault(require("lodash"));
+exports.createLoadingModel = function (modelMap) {
+    var initialState = lodash_1.default.entries(modelMap)
+        .map(function (_a) {
+        var modelName = _a[0], model = _a[1];
+        var _b;
+        return (_b = {},
+            _b[modelName] = lodash_1.default.keys(model.effects)
+                .map(function (effectName) {
+                var _a;
+                return (_a = {}, _a[effectName] = false, _a);
+            })
+                .reduce(lodash_1.default.merge, {}),
+            _b);
     })
-        .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
+        .reduce(lodash_1.default.merge, {});
     return {
-        name: "loading",
-        model: {
-            state: state,
+        loading: {
+            state: initialState,
             reducers: {
-                start: function (state, action) {
+                startLoading: function (state, action) {
                     var _a, _b;
                     return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
                         _b[action.payload.effectName] = true,
                         _b), _a));
                 },
-                end: function (state, action) {
+                endLoading: function (state, action) {
                     var _a, _b;
                     return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
                         _b[action.payload.effectName] = false,
                         _b), _a));
                 }
-            }
-        },
-        onWrapModel: function (name, model) {
-            if (name === "loading") {
-                return model;
-            }
-            var _a = model.effects, effects = _a === void 0 ? {} : _a;
-            var start = function (effectName) { return ({ type: "loading/start", payload: { modelName: name, effectName: effectName } }); };
-            var end = function (effectName) { return ({ type: "loading/end", payload: { modelName: name, effectName: effectName } }); };
-            var nextEffects = Object.keys(effects)
-                .map(function (key) {
-                var _a;
-                return (_a = {},
-                    _a[key] = function (action, request) { return __awaiter(_this, void 0, void 0, function () {
-                        var effectFn, loadingHoc;
-                        var _this = this;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    effectFn = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, effects[key](action, request)];
-                                            case 1: return [2 /*return*/, _a.sent()];
-                                        }
-                                    }); }); };
-                                    loadingHoc = function (effectFn) { return __awaiter(_this, void 0, void 0, function () {
-                                        return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0:
-                                                    request.dispatch(start(key));
-                                                    return [4 /*yield*/, effectFn()];
-                                                case 1:
-                                                    _a.sent();
-                                                    request.dispatch(end(key));
-                                                    return [2 /*return*/];
-                                            }
-                                        });
-                                    }); };
-                                    if (!(action && action.meta && action.meta.loading)) return [3 /*break*/, 1];
-                                    loadingHoc(effectFn);
-                                    return [3 /*break*/, 3];
-                                case 1: return [4 /*yield*/, effectFn()];
-                                case 2:
-                                    _a.sent();
-                                    _a.label = 3;
-                                case 3: return [2 /*return*/];
-                            }
-                        });
-                    }); },
-                    _a);
-            })
-                .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-            return __assign({}, model, { effects: nextEffects });
+            },
+            effects: {}
+        }
+    };
+};
+exports.createLoadingPlugin = function (modelMap) {
+    var _this = this;
+    return {
+        onEffect: function (modelName, effectName, effect) {
+            return function (effectApi, action) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(action.meta && action.meta.loading)) return [3 /*break*/, 2];
+                            effectApi.dispatch({
+                                type: "loading/startLoading",
+                                payload: {
+                                    modelName: modelName,
+                                    effectName: effectName
+                                }
+                            });
+                            return [4 /*yield*/, effect(effectApi, action)];
+                        case 1:
+                            _a.sent();
+                            effectApi.dispatch({
+                                type: "loading/endLoading",
+                                payload: {
+                                    modelName: modelName,
+                                    effectName: effectName
+                                }
+                            });
+                            return [3 /*break*/, 4];
+                        case 2: return [4 /*yield*/, effect(effectApi, action)];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            }); };
         }
     };
 };
