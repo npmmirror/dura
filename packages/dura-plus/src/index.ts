@@ -1,16 +1,54 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import { Config, ExcludeTypeAction, Reducer, Effect } from "@dura/types";
+import { Config, ExcludeTypeAction, Reducer, Effect, Model, Store, onReducer, Plugin } from "@dura/types";
 
-export type Plugin = {
-  onReducer: (reducer: Reducer<any, ExcludeTypeAction>) => Reducer<any, ExcludeTypeAction>;
-  onEffect: (effect: Effect) => Effect;
-};
+function recursiveOnReducer(reducer: Reducer<any, ExcludeTypeAction>, onReducerList: onReducer[]) {
+  if (onReducerList && onReducerList.length === 0) {
+    return reducer;
+  }
+  const nextReducer = onReducerList.shift()(reducer);
+  return recursiveOnReducer(nextReducer, onReducerList);
+}
 
-const create = function<C extends Config, P extends Plugin>(config: C, plugin: P) {
-  const { initialModel = {}, initialState, middlewares } = _.cloneDeep(config);
+function recursiveOnEffect(effect: Effect, onEffectList: onReducer[]) {
+  if (onEffectList && onEffectList.length === 0) {
+    return effect;
+  }
+  const nextEffect = onEffectList.shift()(effect);
+  return recursiveOnEffect(nextEffect, onEffectList);
+}
+
+const create = function<C extends Config, P extends Plugin>(config: C, plugins: P[]): Store<C["initialModel"]> {
+  const { initialModel, initialState, middlewares } = _.cloneDeep(config);
+
+  const onReducerList = plugins.filter(plugin => plugin.onReducer).map(plugin => plugin.onReducer);
+
+  const onEffectList = plugins.filter(plugin => plugin.onEffect).map(plugin => plugin.onEffect);
+
+  const initialModelMap = _.keys(initialModel)
+    .map((name: string) => {
+      const model: Model<any> = initialModel[name];
+
+      const reducers = _.entries(model.reducers)
+        .map(([name, reducer]) => ({
+          [name]: recursiveOnReducer(reducer, onReducerList)
+        }))
+        .reduce(_.merge, {});
+
+      const effects = _.entries(model.effects)
+        .map(([name, effect]) => ({
+          [name]: recursiveOnEffect(effect, onEffectList)
+        }))
+        .reduce(_.merge, {});
+
+      return {
+        [name]: _.merge(model, { reducers, effects })
+      };
+    })
+    .reduce(_.merge, {});
+
   return _create({
-    initialModel: initialModel,
+    initialModel: initialModelMap,
     initialState: initialState,
     middlewares: middlewares,
     compose: config.compose,

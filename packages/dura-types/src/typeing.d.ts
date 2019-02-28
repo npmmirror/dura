@@ -6,6 +6,15 @@ export type ExcludeTypeAction = {
   [name: string]: any;
 };
 
+export type onReducer = (reducer: Reducer<any, ExcludeTypeAction>) => Reducer<any, ExcludeTypeAction>;
+
+export type onEffect = (effect: Effect) => Effect;
+
+export type Plugin = {
+  onReducer?: onReducer;
+  onEffect?: onEffect;
+};
+
 export type EffectApi = {
   dispatch: any;
   delay: (ms: number) => Promise<{}>;
