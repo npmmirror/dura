@@ -1,55 +1,21 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import { Config as _Config, Model, Middleware, Store, UnionToIntersection } from "@dura/types";
-import { actionCreator as _actionCreator } from "@dura/actions";
-
-type ExtraConfig = {
-  plugins?: {
-    [name: string]: Plugin;
-  };
-};
-
-type ConfigPlus = _Config & ExtraConfig;
+import { Config, ExcludeTypeAction, Reducer, Effect } from "@dura/types";
 
 export type Plugin = {
-  extraModels?: {
-    [name: string]: Model<any>;
-  };
-  onModel?: (model: Model<any>) => Model<any>;
-  initialState?: any;
-  middlewares?: Middleware[];
+  onReducer: (reducer: Reducer<any, ExcludeTypeAction>) => Reducer<any, ExcludeTypeAction>;
+  onEffect: (effect: Effect) => Effect;
 };
 
-const create = function<C extends ConfigPlus>(
-  config: C
-) {
-  const { initialModel = {}, plugins = {}, initialState, middlewares } = _.cloneDeep(config);
-
-  const finalModels = _.merge(
-    initialModel,
-    _.keys(plugins)
-      .map((k: string) => plugins[k].extraModels || {})
-      .reduce(_.merge, {})
-  );
-
-  _.keys(plugins)
-    .map((k: string) => plugins[k].middlewares || [])
-    .reduce(_.merge, []);
-
-  const finalMiddlewares = _.merge(
-    middlewares,
-    _.keys(plugins)
-      .map((k: string) => plugins[k].middlewares || [])
-      .reduce(_.merge, [])
-  );
-
+const create = function<C extends Config, P extends Plugin>(config: C, plugin: P) {
+  const { initialModel = {}, initialState, middlewares } = _.cloneDeep(config);
   return _create({
-    initialModel: finalModels,
+    initialModel: initialModel,
     initialState: initialState,
-    middlewares: finalMiddlewares,
+    middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore
-  }) ;
+  });
 };
 
 export { create };
