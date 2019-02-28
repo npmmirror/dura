@@ -1,7 +1,7 @@
 import { create } from "../src";
 
 describe("测试plus", function() {
-  it("简单的测试", function() {
+  it("测试插件", function() {
     const UserModel = {
       state: {
         name: undefined
@@ -52,5 +52,29 @@ describe("测试plus", function() {
     );
 
     store.dispatch(store.actionCreator.user.onChangeLoad({}, {}));
+  });
+
+  it("不传任何插件", function() {
+    const UserModel = {
+      state: {
+        name: undefined
+      },
+      reducers: {
+        onChangeLoad(state, action) {
+          return state;
+        }
+      },
+      effects: {
+        async onAsyncChangeName(effectApi, action) {}
+      }
+    };
+
+    const store = create({
+      initialModel: {
+        user: UserModel
+      }
+    });
+
+    expect(store.getState().user.name).toBeUndefined();
   });
 });

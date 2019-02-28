@@ -2,13 +2,59 @@
 # yarn lockfile v1
 
 
-"@dura/types@^2.0.0-alpha.17":
-  version "2.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.17.tgz#396db447ff428281cac80001990c40a6704e64a2"
-  integrity sha512-zX78lxjNZbfG1PA5MFgieZh9U3ADk8m1S4HK/pH6SJij8NOJ0IRIJzAmfczjznNqU7oIQJ5n1NHhSeeFd5wfRw==
+"@dura/actions@^2.0.0-alpha.10":
+  version "2.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-2.0.0-alpha.10.tgz#463a1e01d33365718b132f4ce548f31db6db2532"
+  integrity sha512-2TgjkCyLu2PSAo+6xHHwu/cVvfvR69VIiUQf/8Vc7Aw/U+1jEG+l44uLOEtFq2jg3SyfUWHrg75NHY5bb8REbg==
+
+"@dura/core@^2.0.0-alpha.18":
+  version "2.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.18.tgz#a4d70131943445abe7ec2fe64249a783d5734954"
+  integrity sha512-TiMXlz0OmKntEeh40EnWS7DqDpmFo1PlWJhNx8iRJSktXa62tcaw0R4dnJJBogivYJnCzaxJwkOnBLbnb79Vrg==
+  dependencies:
+    "@dura/types" "^2.0.0-alpha.18"
+    redux "^4.0.0"
+
+"@dura/plus@^2.0.0-alpha.18":
+  version "2.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.18.tgz#4051c794db258e98773e461bab7e024363dcfce3"
+  integrity sha512-h+4rRd3Bw7UoJy5nz1yPDgOxHWe/mOpiFh6CproE+t0NGBhPiyvElojyadLMtivTuDCjeKv6ovDgzIt/ddrepw==
+  dependencies:
+    "@dura/actions" "^2.0.0-alpha.10"
+    "@dura/core" "^2.0.0-alpha.18"
+
+"@dura/types@^2.0.0-alpha.18":
+  version "2.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.18.tgz#ba9400b9d4a9c622522b5c79bd163ab47d739c8b"
+  integrity sha512-B5DDDW47phYO6NzrIbsU55uBtYy/9+61jLBrxuBMSL7W+QREgglcbOJHm7N2faVoblM3EPrL+CJg/MDPIuAF0Q==
   dependencies:
     "@types/redux" "^3.6.0"
 
 "@types/redux@^3.6.0":
   version "3.6.31"
   resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.31.tgz#40eafa7575db36b912ce0059b85de98c205b0708"
+
+"js-tokens@^3.0.0 || ^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
+  integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
+
+loose-envify@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
+  integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
+  dependencies:
+    js-tokens "^3.0.0 || ^4.0.0"
+
+redux@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
+  integrity sha512-R7bAtSkk7nY6O/OYMVR9RiBI+XghjF9rlbl5806HJbQph0LJVHZrU5oaO4q70eUKiqMRqm4y07KLTlMZ2BlVmg==
+  dependencies:
+    loose-envify "^1.4.0"
+    symbol-observable "^1.2.0"
+
+symbol-observable@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
+  integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==

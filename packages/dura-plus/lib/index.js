@@ -35,8 +35,8 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
 }
 var create = function (config, plugins) {
     var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares;
-    var onReducerList = plugins.filter(function (plugin) { return plugin.onReducer; }).map(function (plugin) { return plugin.onReducer; });
-    var onEffectList = plugins.filter(function (plugin) { return plugin.onEffect; }).map(function (plugin) { return plugin.onEffect; });
+    var onReducerList = (plugins || []).filter(function (plugin) { return plugin.onReducer; }).map(function (plugin) { return plugin.onReducer; });
+    var onEffectList = (plugins || []).filter(function (plugin) { return plugin.onEffect; }).map(function (plugin) { return plugin.onEffect; });
     var initialModelMap = lodash_1.default.entries(initialModel)
         .map(function (_a) {
         var modelName = _a[0], model = _a[1];

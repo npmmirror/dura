@@ -27,26 +27,28 @@ export const createLoadingModel = function(modelMap: ModelMap) {
     };
   };
   return {
-    state: initialState,
-    reducers: {
-      startLoading(state: State, action: StartLoadingAction) {
-        return {
-          ...state,
-          [action.payload.modelName]: {
-            [action.payload.effectName]: true
-          }
-        };
+    loading: {
+      state: initialState,
+      reducers: {
+        startLoading(state: State, action: StartLoadingAction) {
+          return {
+            ...state,
+            [action.payload.modelName]: {
+              [action.payload.effectName]: true
+            }
+          };
+        },
+        endLoading(state: State, action: EndLoadingAction) {
+          return {
+            ...state,
+            [action.payload.modelName]: {
+              [action.payload.effectName]: false
+            }
+          };
+        }
       },
-      endLoading(state: State, action: EndLoadingAction) {
-        return {
-          ...state,
-          [action.payload.modelName]: {
-            [action.payload.effectName]: false
-          }
-        };
-      }
-    },
-    effects: {}
+      effects: {}
+    }
   };
 };
 

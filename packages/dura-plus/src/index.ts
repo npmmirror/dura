@@ -23,12 +23,12 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
   return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
-const create = function<C extends Config, P extends Plugin>(config: C, plugins: P[]): Store<C["initialModel"]> {
+const create = function<C extends Config, P extends Plugin>(config: C, plugins?: P[]): Store<C["initialModel"]> {
   const { initialModel, initialState, middlewares } = _.cloneDeep(config);
 
-  const onReducerList = plugins.filter(plugin => plugin.onReducer).map(plugin => plugin.onReducer);
+  const onReducerList = (plugins || []).filter(plugin => plugin.onReducer).map(plugin => plugin.onReducer);
 
-  const onEffectList = plugins.filter(plugin => plugin.onEffect).map(plugin => plugin.onEffect);
+  const onEffectList = (plugins || []).filter(plugin => plugin.onEffect).map(plugin => plugin.onEffect);
 
   const initialModelMap = _.entries(initialModel)
     .map(([modelName, model]) => {
