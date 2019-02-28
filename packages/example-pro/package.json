@@ -1,14 +1,14 @@
 {
   "name": "example-pro",
-  "version": "2.0.0-alpha.13",
+  "version": "2.0.0-alpha.14",
   "description": "",
   "private": true,
   "main": "index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/immer": "^2.0.0-alpha.13",
-    "@dura/plus": "^2.0.0-alpha.13",
+    "@dura/immer": "^2.0.0-alpha.14",
+    "@dura/plus": "^2.0.0-alpha.14",
     "antd": "^3.13.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
