@@ -22,43 +22,37 @@
 "@dura/actions@^2.0.0-alpha.10":
   version "2.0.0-alpha.10"
   resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-2.0.0-alpha.10.tgz#463a1e01d33365718b132f4ce548f31db6db2532"
-  integrity sha512-2TgjkCyLu2PSAo+6xHHwu/cVvfvR69VIiUQf/8Vc7Aw/U+1jEG+l44uLOEtFq2jg3SyfUWHrg75NHY5bb8REbg==
 
-"@dura/core@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.19.tgz#5ce383f7dd55b2cd66883d1e0f4d0c397287059c"
-  integrity sha512-/WQtR9Ax34Ph519u06c7Yzj+7MAVNqnG+dbiS5/UqxRwZZ1VNPVud/LRDaCluMU/FI91oCd5ZvF6/07FoAHF1Q==
+"@dura/core@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.20.tgz#026160ea2c826d51cc8bac22a5b88f8f1fa7ed60"
   dependencies:
-    "@dura/types" "^2.0.0-alpha.19"
+    "@dura/types" "^2.0.0-alpha.20"
     redux "^4.0.0"
 
-"@dura/immer@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.19.tgz#f1a6acc0c31db365c04dc305c285a4c822ad0530"
-  integrity sha512-hkxQq5/Ucoj6WyOeu4kofoyiQazS4Tdf2cib1gwxjiVCZPn2XHCIASGQJwEmEZ2tdFkqyr0lMdsh84DGZdpJ8g==
+"@dura/immer@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.20.tgz#051559e5c0d8e4197332736a22ab4c5fe3a05be8"
   dependencies:
-    "@dura/types" "^2.0.0-alpha.19"
+    "@dura/types" "^2.0.0-alpha.20"
     immer "^1.12.1"
 
-"@dura/loading@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-2.0.0-alpha.19.tgz#8b8f1687ce1e3ba7ae326b01fb92623eb85d8eac"
-  integrity sha512-ELPy+ISgmg+MK/HE3diYo25qSKeQQh66EFP7DN3jDDxfux5G0dMNBjPwzPbzV2BfDDrXxJ6eR9KNMENfInatEA==
+"@dura/loading@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-2.0.0-alpha.20.tgz#4d3ce8e4aa64e1f7cbcdd7fc9b49ce2e7c877b37"
   dependencies:
-    "@dura/types" "^2.0.0-alpha.19"
+    "@dura/types" "^2.0.0-alpha.20"
 
-"@dura/plus@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.19.tgz#9292cb93f267208b2128b31e0b49e6ed397ec4ce"
-  integrity sha512-H8RJQtq1JWXQewjcGEbXvzfBX3D0EGgppPfPhEKyUkCRdeRqPuVzAz5+qtHGSJSMGTe19uXJIAAj9eE6KyAu4Q==
+"@dura/plus@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.20.tgz#b5d06b422b081935b60c318ed92b42472131fb26"
   dependencies:
     "@dura/actions" "^2.0.0-alpha.10"
-    "@dura/core" "^2.0.0-alpha.19"
+    "@dura/core" "^2.0.0-alpha.20"
 
-"@dura/types@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.19.tgz#af96317cedec7b1871910fdb617f00aeff79578a"
-  integrity sha512-Lb3RAkPnx/QuYq8c2K5uY533lVyZU4waIAiuar0rFAy1h/NclAJ6jNGskP9jlZp/MbHPvtAzESr60y0x1tAGNQ==
+"@dura/types@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.20.tgz#94e0898c4372512decf56016015fdc7b2af96151"
   dependencies:
     "@types/redux" "^3.6.0"
 
@@ -108,7 +102,6 @@
 "@types/redux@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
-  integrity sha1-8evh5UEVGAcuT9/KXHbhbnTBOZo=
   dependencies:
     redux "*"
 
@@ -2081,7 +2074,6 @@ image-size@~0.5.0:
 immer@^1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.1.tgz#40c6e5b292c00560836c2993bda3a24379d466f5"
-  integrity sha512-3fmKM6ovaqDt0CdC9daXpNi5x/YCYS3i4cwLdTVkhJdk5jrDXoPs7lCm3IqM3yhfSnz4tjjxbRG2CziQ7m8ztg==
 
 immutable@^3.7.4:
   version "3.8.2"
@@ -3869,7 +3861,6 @@ readdirp@^2.0.0:
 redux@*, redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
-  integrity sha512-R7bAtSkk7nY6O/OYMVR9RiBI+XghjF9rlbl5806HJbQph0LJVHZrU5oaO4q70eUKiqMRqm4y07KLTlMZ2BlVmg==
   dependencies:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"

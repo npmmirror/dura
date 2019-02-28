@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Input } from "antd";
-import { RootState, effectRunner, reducerRunner } from "@store";
+import { actionCreator, RootState } from "@store";
 
 function mapState(state: RootState) {
   return {
@@ -13,12 +13,10 @@ function mapState(state: RootState) {
 function mapDispatch(dispatch) {
   return {
     onAsyncChangeName(newName: string) {
-      effectRunner.user.onAsyncChangeName({ newName }, { loading: true });
-
-      dispatch(effectRunner.user.onAsyncChangeName({ newName }, { loading: true }));
+      dispatch(actionCreator.user.onAsyncChangeName({ newName }, { loading: true }));
     },
     onChangeName(newName: string) {
-      reducerRunner.user.onChangeName({ newName });
+      dispatch(actionCreator.user.onChangeName({ newName }));
     }
   };
 }

@@ -1,8 +1,8 @@
 import UserModel from "@models/UserModel";
 
-import { create } from "@dura/plus";
+import { create, ExtractState } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
-import { createLoadingModel, createLoadingPlugin } from "@dura/loading";
+import { createLoadingModel, createLoadingPlugin, ExtractLoadingState } from "@dura/loading";
 
 const initialModel = {
   /**
@@ -12,6 +12,8 @@ const initialModel = {
 };
 
 export type RootModel = typeof initialModel;
+
+export type RootState = ExtractState<RootModel> & ExtractLoadingState<RootModel>;
 
 export const store = create({ initialModel: { ...initialModel, ...createLoadingModel(initialModel) } }, [
   createImmerPlugin(),
