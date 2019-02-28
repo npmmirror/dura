@@ -63,3 +63,5 @@ const create = function<C extends Config, P extends Plugin>(config: C, plugins: 
 };
 
 export { create };
+
+export * from "@dura/core";

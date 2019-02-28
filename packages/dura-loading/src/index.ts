@@ -5,24 +5,74 @@ import { ModelMap, Model, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from
 
 import _ from "lodash";
 
-export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
+export const createLoadingModel = function(modelMap: ModelMap) {
+  const initialState = _.entries(modelMap)
+    .map(([modelName, model]) => ({
+      [modelName]: _.keys(model.effects)
+        .map((effectName: string) => ({ [effectName]: false }))
+        .reduce(_.merge, {})
+    }))
+    .reduce(_.merge, {});
+  type State = typeof initialState;
+  type StartLoadingAction = {
+    payload: {
+      modelName: string;
+      effectName: string;
+    };
+  };
+  type EndLoadingAction = {
+    payload: {
+      modelName: string;
+      effectName: string;
+    };
+  };
   return {
-    onEffect: (name, effect) => {
-
-      
-
-      return effect;
-    }
+    state: initialState,
+    reducers: {
+      startLoading(state: State, action: StartLoadingAction) {
+        return {
+          ...state,
+          [action.payload.modelName]: {
+            [action.payload.effectName]: true
+          }
+        };
+      },
+      endLoading(state: State, action: EndLoadingAction) {
+        return {
+          ...state,
+          [action.payload.modelName]: {
+            [action.payload.effectName]: false
+          }
+        };
+      }
+    },
+    effects: {}
   };
 };
 
-function extractLoadingModelInitialStateByEffect<S extends Model<any>>(
-  model: S
-): { [k in keyof S["effects"]]: boolean } {
-  return _.keys(model.effects || {})
-    .map((effectName: string) => ({ [effectName]: false }))
-    .reduce(_.merge, {});
-}
+export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
+  return {
+    onEffect: (modelName, effectName, effect) => {
+      return async (effectApi: EffectApi, action: ExcludeTypeAction) => {
+        effectApi.dispatch({
+          type: "loading/startLoading",
+          payload: {
+            modelName,
+            effectName
+          }
+        });
+        await effect(effectApi, action);
+        effectApi.dispatch({
+          type: "loading/endLoading",
+          payload: {
+            modelName,
+            effectName
+          }
+        });
+      };
+    }
+  };
+};
 
 type ConvertFnToBoolean<E extends EffectMap> = { [key in keyof E]: boolean };
 

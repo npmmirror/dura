@@ -10,6 +10,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -71,4 +74,5 @@ var create = function (config, plugins) {
     });
 };
 exports.create = create;
+__export(require("@dura/core"));
 //# sourceMappingURL=index.js.map

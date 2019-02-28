@@ -1,5 +1,5 @@
-import { create, EffectApi } from "@dura/core";
-import { createLoading } from "../src/index";
+import { create, EffectApi } from "@dura/plus";
+import { createLoadingModel, createLoadingPlugin } from "../src/index";
 
 describe("测试loading 插件", function() {
   it("测试loading 插件,启用loading", function(done) {
@@ -37,12 +37,12 @@ describe("测试loading 插件", function() {
       user
     };
 
-    const store = create({
-      initialModel,
-      plugins: {
-        loading: createLoading(initialModel)
-      }
-    });
+    const store = create(
+      {
+        initialModel: { ...initialModel, loading: createLoadingModel(initialModel) }
+      },
+      [createLoadingPlugin(initialModel)]
+    );
 
     const { actionCreator, getState, dispatch } = store;
 
