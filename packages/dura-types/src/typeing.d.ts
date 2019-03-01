@@ -1,67 +1,93 @@
-import { Dispatch, Store, AnyAction, DeepPartial, Middleware, applyMiddleware, compose, createStore } from "redux";
+import { Dispatch, Store as _Store, AnyAction, Middleware, applyMiddleware, compose, createStore } from "redux";
 
-export type Payload = {
+export { Middleware };
+
+export type ExcludeTypeAction = {
   [name: string]: any;
 };
 
-export type Meta = {
-  [name: string]: any;
+export type onReducer = (
+  modelName: string,
+  reducerName: string,
+  reducer: Reducer<any, ExcludeTypeAction>
+) => Reducer<any, ExcludeTypeAction>;
+
+export type onEffect = (modelName: string, effectName: string, effect: Effect) => Effect;
+
+export type Plugin = {
+  onReducer?: onReducer;
+  onEffect?: onEffect;
+  extraModel?: ModelMap;
 };
 
-export type Middleware = Middleware;
-
-export type DuraAction<P extends Payload = any, M extends Meta = any> = {
-  type: string;
-  payload?: P;
-  meta?: M;
-  error?: boolean;
-};
-
-export type Dispatch = Dispatch;
-
-export type DuraStore<RM extends RootModel = {}, ExtensionState extends RootModel = {}> = Store<
-  ExtractRootState<RM> & ExtensionState
-> & {
-  dispatch: Dispatch;
-  reducerRunner: ExtractReducersRunner<RM>;
-};
-
-export type Reducers<S = any> = {
-  [name: string]: (payload?: any, meta?: any) => (state: S) => S | void;
-};
-
-export type State = {
-  [name: string]: any;
-};
-
-export interface Model<ModelState = {}> {
-  state: State;
-  reducers?: Reducers<ModelState>;
+export type PluginMap = {
+  [name:string]:Plugin
 }
 
-export interface RootModel<M = any> {
-  [name: string]: M;
-}
-
-export type Plugin<S = any> = {
-  name: string;
-  model?: Model<S>;
-  onWrapModel?: (name: string, model: Model<any>) => Model<any>;
-  onCreateMiddleware?: (rootModel: RootModel) => Middleware;
-  onStoreCreated?: (store: DuraStore, rootModel: RootModel) => void;
+export type EffectApi = {
+  dispatch: any;
+  delay: (ms: number) => Promise<{}>;
+  select: (fn: (state) => any) => any;
 };
+
+export type Reducer<S, A extends ExcludeTypeAction> = (state: S, action: A) => S;
+
+export type Effect = (effectApi: EffectApi, action: ExcludeTypeAction) => Promise<void>;
+
+export type ReducerMap<S> = {
+  [name: string]: Reducer<S, ExcludeTypeAction>;
+};
+
+export type EffectMap = {
+  [name: string]: Effect;
+};
+
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void)
+  ? I
+  : never;
+
+export type Model<S> = {
+  state: S;
+  reducers: ReducerMap<S>;
+  effects: EffectMap;
+};
+
+export type ModelMap = {
+  [name: string]: Model<any>;
+};
+
+export type Store<RM extends ModelMap> = _Store<ExtractState<RM>> & {
+  actionCreator: ExtractActions<RM>;
+};
+
+export type ExtractState<M extends ModelMap> = { [key in keyof M]: M[key]["state"] };
+
+export type ExtractPluginState<P extends PluginMap> = UnionToIntersection<P[keyof P]["extraModel"]>;
+
+export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> & ExtractEffectActions<M>;
+
+export type ExtractReducerActions<M extends ModelMap> = {
+  [key in keyof M]: ReviewReducders<M[key]["reducers"], M[key]["state"]>
+};
+
+export type ReviewReducders<R extends ReducerMap<S>, S> = { [key in keyof R]: Pack<Parameters<R[key]>[1]> };
+
+export type ExtractEffectActions<M extends ModelMap> = { [key in keyof M]: ReviewEffects<M[key]["effects"]> };
+
+export type ReviewEffects<E extends EffectMap> = { [key in keyof E]: Pack<Parameters<E[key]>[1]> };
 
 export type Config = {
-  initialModel?: RootModel;
+  initialModel: ModelMap;
   initialState?: any;
   middlewares?: Array<Middleware>;
-  plugins?: Array<Plugin<any>>;
   compose?: typeof compose;
   createStore?: typeof createStore;
 };
 
-export type ExtractRootState<M extends RootModel> = { [key in keyof M]: M[key]["state"] };
-
-export type ReviewReducders<R extends Reducers> = { [key in keyof R]: (...args: Parameters<R[key]>) => void };
-
-export type ExtractReducersRunner<M extends RootModel> = { [key in keyof M]: ReviewReducders<M[key]["reducers"]> };
+export type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof T
+  ? (payload: T["payload"], meta: T["meta"]) => AnyAction
+  : "payload" extends keyof T
+  ? (payload: T["payload"]) => AnyAction
+  : "meta" extends keyof T
+  ? (payload: null, meta: T["meta"]) => AnyAction
+  : () => AnyAction;

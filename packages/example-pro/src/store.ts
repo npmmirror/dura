@@ -1,10 +1,8 @@
 import UserModel from "@models/UserModel";
 
-import { create, DuraStore, ExtractRootState } from "@dura/core";
-import { createAsyncPlugin, AsyncDuraStore } from "@dura/async";
-import { createLoadingPlugin, ExtractLoadingState } from "@dura/async-loading";
+import { create, ExtractState } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
-import { createSelectorsPlugin, SelectorsDuraStore } from "@dura/selectors";
+import { createLoadingPlugin, ExtractLoadingState } from "@dura/loading";
 
 const initialModel = {
   /**
@@ -15,11 +13,14 @@ const initialModel = {
 
 export type RootModel = typeof initialModel;
 
-export type RootState = ExtractRootState<RootModel> & ExtractLoadingState<RootModel>;
+export type RootState = ExtractState<RootModel> & ExtractLoadingState<RootModel>;
 
-export const store = create({
-  initialModel,
-  plugins: [createAsyncPlugin(), createLoadingPlugin(initialModel), createImmerPlugin(), createSelectorsPlugin()]
-}) as DuraStore<RootModel> & AsyncDuraStore<RootModel> & SelectorsDuraStore<RootModel>;
+export const store = create(
+  { initialModel },
+  {
+    immer: createImmerPlugin(),
+    loading: createLoadingPlugin(initialModel)
+  }
+);
 
-export const { reducerRunner, effectRunner, selectorRunner } = store;
+export const { actionCreator } = store;

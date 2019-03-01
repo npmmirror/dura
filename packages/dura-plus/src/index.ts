@@ -1,33 +1,90 @@
-import { RootModel, Model, DuraStore, ExtractRootState, create, Middleware, Plugin, Config } from "@dura/core";
-import { createAsyncPlugin, AsyncDuraStore, AsyncModel, EffectAPI } from "@dura/async";
-import { createLoadingPlugin, ExtractLoadingState, LoadingMeta } from "@dura/async-loading";
+import { create as _create } from "@dura/core";
+import _ from "lodash";
+import {
+  Config,
+  ExcludeTypeAction,
+  Reducer,
+  Effect,
+  Store,
+  onReducer,
+  PluginMap,
+  ModelMap,
+  ExtractPluginState
+} from "@dura/types";
 
+function recursiveOnReducer(
+  modelName: string,
+  reducerName: string,
+  reducer: Reducer<any, ExcludeTypeAction>,
+  onReducerList: onReducer[]
+): Reducer<any, ExcludeTypeAction> {
+  if (onReducerList && onReducerList.length === 0) {
+    return reducer;
+  }
+  const nextReducer = onReducerList.shift()(modelName, reducerName, reducer);
+  return recursiveOnReducer(modelName, reducerName, nextReducer, onReducerList);
+}
 
-export type Config = {
-  plugins: Array<Plugin>;
-  initialState?: any;
-  middlewares?: Array<any>;
-};
+function recursiveOnEffect(modelName: string, effectName: string, effect: Effect, onEffectList: onReducer[]): Effect {
+  if (onEffectList && onEffectList.length === 0) {
+    return effect;
+  }
+  const nextEffect = onEffectList.shift()(modelName, effectName, effect);
+  return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
+}
 
-export type PlusDuraStore<RM extends RootModel<Model & AsyncModel>> = DuraStore<RM, ExtractLoadingState<RM>> &
-  AsyncDuraStore<RM>;
+const create = function<C extends Config, P extends PluginMap>(
+  config: C,
+  pluginMap?: P
+): Store<C["initialModel"] & ExtractPluginState<P>> {
+  //clone
+  const { initialModel, initialState, middlewares } = _.cloneDeep(config);
 
-export type PlusRootState<RM extends RootModel<Model & AsyncModel>> = ExtractRootState<RM> & ExtractLoadingState<RM>;
+  const onReducerList = _.values(pluginMap)
+    .filter(plugin => plugin.onReducer)
+    .map(plugin => plugin.onReducer);
 
-export type EffectAPI<RootState = any> = EffectAPI<RootState>;
+  const onEffectList = _.values(pluginMap)
+    .filter(plugin => plugin.onEffect)
+    .map(plugin => plugin.onEffect);
 
-export type LoadingMeta = LoadingMeta;
+  const extraModelMap: ModelMap = _.values(pluginMap)
+    .filter(plugin => plugin.extraModel)
+    .map(plugin => plugin.extraModel)
+    .reduce(_.merge, {});
 
-export type DuraConfig = Pick<Config, "initialState" | "middlewares" | "plugins" | "compose" | "createStore">;
+  const initialModelMap = _.entries(_.merge(initialModel, extraModelMap))
+    .map(([modelName, model]) => {
+      const reducers = _.entries(model.reducers)
+        .map(([reducerName, reducer]) => ({
+          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, onReducerList)
+        }))
+        .reduce(_.merge, {});
 
-export const createDura = function(initialRootModel: RootModel<Model & AsyncModel>, config?: DuraConfig) {
-  const otherPlugins = config.plugins || [];
-  return create({
-    initialModel: initialRootModel,
-    plugins: [createAsyncPlugin(), createLoadingPlugin(initialRootModel), ...otherPlugins],
-    initialState: config.initialState || {},
-    middlewares: config.middlewares || [],
+      const effects = _.entries(model.effects)
+        .map(([effectName, effects]) => ({
+          [effectName]: recursiveOnEffect(modelName, effectName, effects, onEffectList)
+        }))
+        .reduce(_.merge, {});
+      return {
+        [modelName]: {
+          ...model,
+          reducers,
+          effects
+        }
+      };
+    })
+    .reduce(_.merge, {});
+
+  return _create({
+    initialModel: initialModelMap,
+    initialState: initialState,
+    middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore
-  });
+  }) as Store<C["initialModel"] & ExtractPluginState<P>>;
 };
+
+export { create };
+
+export * from "@dura/types";

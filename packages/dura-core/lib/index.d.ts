@@ -1,8 +1,1 @@
-import { Config, DuraStore } from "@dura/types";
-/**
- * 创建store
- * @param config
- */
-declare function create(config: Config): DuraStore;
-export { create };
-export * from "@dura/types";
+export * from "./store";

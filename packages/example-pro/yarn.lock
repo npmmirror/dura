@@ -19,42 +19,41 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@dura/async-loading@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-1.0.0-alpha.26.tgz#5c27883b2f357a43d21033c59c4f9c2a4bc54c29"
+"@dura/core@^2.0.0-alpha.31":
+  version "2.0.0-alpha.31"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.31.tgz#c2d2b209ba85575d1d478325eba160803e698ac2"
+  integrity sha512-cKM7YrmFgofzmpUgVu0v+Udne1ZSA8JcG+b/lHuJJBsZDcItAHxhGQt/vXmxIbu94zUEqFI6KHFas+4IkJmLlw==
   dependencies:
-    "@dura/async" "^1.0.0-alpha.26"
-    "@dura/types" "^1.0.0-alpha.26"
-
-"@dura/async@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-1.0.0-alpha.26.tgz#c7582366e073c8a9e89b2ae924db530fd1a66ec9"
-  dependencies:
-    clone "^2.1.2"
-    redux-actions "^2.6.4"
-
-"@dura/core@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-1.0.0-alpha.26.tgz#d7f9b7ee709f4ed40c5cdcb24b73f9f8c108c786"
-  dependencies:
-    "@dura/types" "^1.0.0-alpha.26"
     redux "^4.0.0"
     redux-actions "^2.6.4"
 
-"@dura/immer@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-1.0.0-alpha.26.tgz#c2ea03a523b9411086b2bd16b0c2022ebebbb0fe"
+"@dura/immer@^2.0.0-alpha.31":
+  version "2.0.0-alpha.31"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.31.tgz#4457857b0f31d60a46b78126a32718204cccb697"
+  integrity sha512-JvOmsEsQT9q1vknM6+Zb2Jz2ihZp8mTqCCtzXX5slXnRQPqPzp8e9MEzpFlfHW72bz06U/JQ7YGE8kzUjNXwQg==
   dependencies:
-    "@dura/types" "^1.0.0-alpha.26"
+    "@dura/types" "^2.0.0-alpha.31"
     immer "^1.12.1"
 
-"@dura/selectors@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-1.0.0-alpha.26.tgz#1e3f778eedc7f69b6d149ab000cd9b994817721f"
+"@dura/loading@^2.0.0-alpha.31":
+  version "2.0.0-alpha.31"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-2.0.0-alpha.31.tgz#8a3e000b7bf19d0eb2bbe9d55fc0557391043a0b"
+  integrity sha512-oNbs9RcAmNiWIlYNT5Tud2nYGjgkJpHtPDqobVll0nwvKk2qVwBT7UK+Qs+kZlPnqLhs5oVCuxD+eOZzeCjtjw==
+  dependencies:
+    "@dura/types" "^2.0.0-alpha.31"
 
-"@dura/types@^1.0.0-alpha.26":
-  version "1.0.0-alpha.26"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-1.0.0-alpha.26.tgz#3a5492402bbb9041e3cc9d558db979a8b1cdd965"
+"@dura/plus@^2.0.0-alpha.31":
+  version "2.0.0-alpha.31"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.31.tgz#33a0de175bf791799659fad644aec6b8ffb0d613"
+  integrity sha512-5Q8oUe+nbMaTviT6UkS4a7tLzUpE32n/rK0H5uyJODlMvrmcUZHAEJtu6VbQmz2UoCKGQEAnzmw0Hmvc8dGCaw==
+  dependencies:
+    "@dura/core" "^2.0.0-alpha.31"
+    "@dura/types" "^2.0.0-alpha.31"
+
+"@dura/types@^2.0.0-alpha.31":
+  version "2.0.0-alpha.31"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.31.tgz#13cfa9339e3d1fef95f9719d6d07ded2d99d200b"
+  integrity sha512-yLIt2EhAwpvdBmyaWarUe6Z5jKZz8/KZB9cPEdLLSrg5GZXSQ4yj9ztcuMJNG+vhsZ4ite2Qv5saraEHBQy7gg==
   dependencies:
     "@types/redux" "^3.6.0"
 
@@ -102,8 +101,10 @@
     csstype "^2.2.0"
 
 "@types/redux@^3.6.0":
-  version "3.6.31"
-  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.31.tgz#40eafa7575db36b912ce0059b85de98c205b0708"
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
+  dependencies:
+    redux "*"
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -2405,6 +2406,7 @@ jsprim@^1.2.2:
 just-curry-it@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/just-curry-it/-/just-curry-it-3.1.0.tgz#ab59daed308a58b847ada166edd0a2d40766fbc5"
+  integrity sha512-mjzgSOFzlrurlURaHVjnQodyPNvrHrf1TbQP2XU9NSqBtHQPuHZ+Eb6TAJP7ASeJN9h9K0KXoRTs8u6ouHBKvg==
 
 killable@^1.0.0:
   version "1.0.1"
@@ -3865,10 +3867,12 @@ readdirp@^2.0.0:
 reduce-reducers@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
+  integrity sha512-+CNMnI8QhgVMtAt54uQs3kUxC3Sybpa7Y63HR14uGLgI9/QR5ggHvpxwhGGe3wmx5V91YwqQIblN9k5lspAmGw==
 
 redux-actions@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-2.6.4.tgz#e1d9d7d987d274071b0134b707365d3e25ba3b26"
+  integrity sha512-Gho+gnsvyR5h0pApoMdHLYssVEu4I0DNqyC91u43Xy/BvLrEddEMtukLF8oL3WXUy7DjxqKOKZHKmpKyN6hxlQ==
   dependencies:
     invariant "^2.2.4"
     just-curry-it "^3.1.0"
@@ -3876,7 +3880,7 @@ redux-actions@^2.6.4:
     reduce-reducers "^0.4.3"
     to-camel-case "^1.0.0"
 
-redux@^4.0.0:
+redux@*, redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
   dependencies:
@@ -4552,12 +4556,14 @@ to-arraybuffer@^1.0.0:
 to-camel-case@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/to-camel-case/-/to-camel-case-1.0.0.tgz#1a56054b2f9d696298ce66a60897322b6f423e46"
+  integrity sha1-GlYFSy+daWKYzmamCJcyK29CPkY=
   dependencies:
     to-space-case "^1.0.0"
 
 to-no-case@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/to-no-case/-/to-no-case-1.0.2.tgz#c722907164ef6b178132c8e69930212d1b4aa16a"
+  integrity sha1-xyKQcWTvaxeBMsjmmTAhLRtKoWo=
 
 to-object-path@^0.3.0:
   version "0.3.0"
@@ -4584,6 +4590,7 @@ to-regex@^3.0.1, to-regex@^3.0.2:
 to-space-case@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/to-space-case/-/to-space-case-1.0.0.tgz#b052daafb1b2b29dc770cea0163e5ec0ebc9fc17"
+  integrity sha1-sFLar7Gysp3HcM6gFj5ewOvJ/Bc=
   dependencies:
     to-no-case "^1.0.0"
 

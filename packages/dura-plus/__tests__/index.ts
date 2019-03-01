@@ -1,83 +1,139 @@
-import { createDura, PlusDuraStore, EffectAPI, PlusRootState, LoadingMeta } from "../src";
+import { create } from "../src";
+import { UnionToIntersection, ExtractState } from "@dura/core";
 
 describe("测试plus", function() {
-  it("简单的测试", function(done) {
-    const initialState = {
-      name: undefined as string,
-      sex: undefined as "男" | "女",
-      age: undefined as number
-    };
-
-    type State = typeof initialState;
-
+  it("测试插件额外的model", function() {
     const UserModel = {
-      state: initialState,
+      state: {
+        name: undefined
+      },
       reducers: {
-        onChangeName(payload: { name: string }) {
-          return function(state: State) {
-            state.name = payload.name;
-            return state;
-          };
+        onChangeLoad(state, action) {
+          return state;
         }
       },
       effects: {
-        onAsyncChangeName(payload: { name: string }, meta?: LoadingMeta) {
-          return async function(effectApi: EffectAPI<RootState>) {
-            await effectApi.delay(1000);
-            await effectRunner.address.onAsyncChangeCity({ city: "南京" });
-            reducerRunner.user.onChangeName(payload);
-          };
-        }
+        async onAsyncChangeName(effectApi, action) {}
       }
     };
 
-    const initialAddressState = {
-      detailName: undefined as string,
-      city: undefined as string
+    const plugins = {
+      loading: {
+        extraModel: {
+          loading: {
+            state: {
+              name: "测试loading"
+            },
+            reducers: {
+              loadingChange(state, action) {
+                return state;
+              }
+            },
+            effects: {}
+          }
+        }
+      },
+      immer: {
+        extraModel: {
+          immer: {
+            state: {
+              name: "测试immer"
+            },
+            reducers: {
+              immerChange(state, action) {
+                return state;
+              }
+            },
+            effects: {}
+          }
+        }
+      }
     };
+    const store = create(
+      {
+        initialModel: {
+          user: UserModel
+        }
+      },
+      plugins
+    );
 
-    type AddressState = typeof initialAddressState;
-
-    const AddresModel = {
-      state: initialAddressState,
+    expect(store.getState().loading.name).toEqual("测试loading");
+  });
+  it("测试插件", function() {
+    const UserModel = {
+      state: {
+        name: undefined
+      },
       reducers: {
-        onChangeCity(payload: { city: string }) {
-          return function(state: AddressState) {
-            state.city = payload.city;
-            return state;
-          };
+        onChangeLoad(state, action) {
+          return state;
         }
       },
       effects: {
-        onAsyncChangeCity(payload: { city: string }) {
-          return async function(effectApi: EffectAPI<RootState>) {
-            await effectApi.delay(1000);
-            reducerRunner.address.onChangeCity(payload);
-          };
-        }
+        async onAsyncChangeName(effectApi, action) {}
       }
     };
 
-    const initialModel = {
-      user: UserModel,
-      address: AddresModel
+    const store = create(
+      {
+        initialModel: {
+          user: UserModel
+        }
+      },
+      {
+        a: {
+          onReducer: (modelName, reducerName, reducer) => {
+            return (state, action) => {
+              console.log("开始");
+              const result = reducer(state, action);
+              console.log("结束");
+              return result;
+            };
+          },
+          onEffect: (modelName, effectName, effect) => {
+            return async (effectApi, action) => {
+              await effect(effectApi, action);
+            };
+          }
+        },
+        b: {
+          onReducer: (modelName, reducerName, reducer) => {
+            return (state, action) => {
+              console.log("开始1");
+              const result = reducer(state, action);
+              console.log("结束1");
+              return result;
+            };
+          }
+        }
+      }
+    );
+
+    store.dispatch(store.actionCreator.user.onChangeLoad({}, {}));
+  });
+
+  it("不传任何插件", function() {
+    const UserModel = {
+      state: {
+        name: undefined
+      },
+      reducers: {
+        onChangeLoad(state, action) {
+          return state;
+        }
+      },
+      effects: {
+        async onAsyncChangeName(effectApi, action) {}
+      }
     };
 
-    type RootState = PlusRootState<typeof initialModel>;
+    const store = create({
+      initialModel: {
+        user: UserModel
+      }
+    });
 
-    const store = createDura(initialModel, {}) as PlusDuraStore<typeof initialModel>;
-
-    const { reducerRunner, effectRunner } = store;
-
-    effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
-
-    expect(store.getState().loading.user.onAsyncChangeName).toEqual(true);
-
-    setTimeout(() => {
-      expect(store.getState().loading.user.onAsyncChangeName).toEqual(false);
-      expect(store.getState().user.name).toEqual("张三");
-      expect(store.getState().address.city).toEqual("南京");
-      done();
-    }, 3000);
+    expect(store.getState().user.name).toBeUndefined();
   });
 });

@@ -1,0 +1,20 @@
+{
+  "name": "@dura/loading",
+  "version": "2.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@dura/plus": "^2.0.0"
+  },
+  "dependencies": {
+    "@dura/types": "^2.0.0"
+  }
+}

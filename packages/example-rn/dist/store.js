@@ -1,9 +1,7 @@
 import UserModel from "./models/UserModel";
-import { create } from "@dura/core";
-import { createAsyncPlugin } from "@dura/async";
-import { createLoadingPlugin } from "@dura/async-loading";
+import { create } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
-import { createSelectorsPlugin } from "@dura/selectors";
+import { createLoadingModel, createLoadingPlugin } from "@dura/loading";
 const initialModel = {
     /**
      * 用户模块
@@ -11,7 +9,6 @@ const initialModel = {
     user: UserModel
 };
 export const store = create({
-    initialModel,
-    plugins: [createAsyncPlugin(), createLoadingPlugin(initialModel), createImmerPlugin(), createSelectorsPlugin()]
-});
-export const { reducerRunner, effectRunner, selectorRunner } = store;
+    initialModel: Object.assign({}, initialModel, createLoadingModel(initialModel))
+}, [createImmerPlugin(), createLoadingPlugin(initialModel)]);
+export const { actionCreator } = store;
