@@ -8,6 +8,8 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
+**让人痛哭流涕、老泪纵横的开发体验**
+
 - 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架。
 
 - 灵感来源于 [dva](https://github.com/dvajs/dva)、[mirror](https://github.com/mirrorjs/mirror)、[rematch](https://github.com/rematch/rematch)
@@ -15,8 +17,6 @@
 - 遵循[Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 语义化版本规范。
 
 - 不想写详细的文档，一切看 demo，本身也没太多复杂的功能
-
-**让人痛哭流涕、老泪纵横的开发体验**
 
 ---
 
