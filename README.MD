@@ -20,7 +20,7 @@
 
 ---
 
-![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
+![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
 
 ## 例子
 
