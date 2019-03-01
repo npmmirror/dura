@@ -1,7 +1,5 @@
-import { EffectAPI } from "@dura/async";
-import { LoadingMeta } from "@dura/async-loading";
-import { reducerRunner, RootState } from "../store";
-import { createSelector } from "reselect";
+import { EffectApi } from "@dura/plus";
+import { actionCreator } from "../store";
 
 const initialState = {
   /**
@@ -37,9 +35,12 @@ export default {
      * 异步修改姓名
      * @param payload
      */
-    async onAsyncChangeName(action: { payload: { newName: string }; meta: LoadingMeta }, effectApi: EffectAPI) {
+    async onAsyncChangeName(
+      effectApi: EffectApi,
+      action: { payload: { newName: string }; meta: { loading: boolean } }
+    ) {
       await effectApi.delay(2000);
-      reducerRunner.user.onChangeName(action.payload);
+      effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
     }
   }
 };

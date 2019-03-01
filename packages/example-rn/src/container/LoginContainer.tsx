@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text } from "react-native";
-import { RootState, effectRunner, reducerRunner } from "../store";
+import { RootState, actionCreator } from "../store";
 import { Flex, Button } from "@ant-design/react-native";
 import { NavigationInjectedProps } from "react-navigation";
 
@@ -12,13 +12,13 @@ function mapState(state: RootState) {
   };
 }
 
-function mapDispatch() {
+function mapDispatch(dispatch) {
   return {
     onAsyncChangeName() {
-      effectRunner.user.onAsyncChangeName({ newName: "async异步张三" }, { loading: true });
+      dispatch(actionCreator.user.onAsyncChangeName({ newName: "async异步张三" }, { loading: true }));
     },
     onChangeName() {
-      reducerRunner.user.onChangeName({ newName: "同步张三" });
+      dispatch(actionCreator.user.onChangeName({ newName: "同步张三" }));
     }
   };
 }

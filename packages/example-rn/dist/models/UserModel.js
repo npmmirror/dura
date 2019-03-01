@@ -1,5 +1,5 @@
 import * as tslib_1 from "tslib";
-import { reducerRunner } from "../store";
+import { actionCreator } from "../store";
 const initialState = {
     /**
      * 姓名
@@ -31,10 +31,10 @@ export default {
          * 异步修改姓名
          * @param payload
          */
-        onAsyncChangeName(action, effectApi) {
+        onAsyncChangeName(effectApi, action) {
             return tslib_1.__awaiter(this, void 0, void 0, function* () {
                 yield effectApi.delay(2000);
-                reducerRunner.user.onChangeName(action.payload);
+                effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
             });
         }
     }

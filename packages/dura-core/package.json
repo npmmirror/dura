@@ -17,10 +17,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/types": "^2.0.0-alpha.20",
+    "redux-actions": "^2.6.4",
     "redux": "^4.0.0"
   },
   "devDependencies": {
-    "@types/redux": "^3.6.0"
+    "@types/redux": "^3.6.0",
+    "@dura/types": "^2.0.0-alpha.20"
   }
 }

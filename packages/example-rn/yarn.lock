@@ -593,52 +593,40 @@
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@bang88/react-native-ultimate-listview/-/react-native-ultimate-listview-3.3.0.tgz#b09199105b942aee4ae05729e4bd229353217ab6"
 
-"@dura/async-loading@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/async-loading/-/async-loading-2.0.0-alpha.4.tgz#4d2dabe9302e3ce228ae142261fde28608bf7165"
-  dependencies:
-    "@dura/async" "^2.0.0-alpha.4"
-    "@dura/types" "^2.0.0-alpha.4"
+"@dura/actions@^2.0.0-alpha.10":
+  version "2.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-2.0.0-alpha.10.tgz#463a1e01d33365718b132f4ce548f31db6db2532"
 
-"@dura/async@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/async/-/async-2.0.0-alpha.4.tgz#8a92f9bca2153ea98b16e2c5971f2ad43a696bea"
+"@dura/core@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.20.tgz#026160ea2c826d51cc8bac22a5b88f8f1fa7ed60"
   dependencies:
-    clone "^2.1.2"
-    redux-actions "^2.6.4"
-
-"@dura/core@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-2.0.0-alpha.4.tgz#8b603187ba42822f880184971e4f1cb5a1515d9c"
-  dependencies:
-    "@dura/types" "^2.0.0-alpha.4"
+    "@dura/types" "^2.0.0-alpha.20"
     redux "^4.0.0"
-    redux-actions "^2.6.4"
 
-"@dura/immer@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.4.tgz#a54638b928788de25fbd59168ccad4d125532917"
+"@dura/immer@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-2.0.0-alpha.20.tgz#051559e5c0d8e4197332736a22ab4c5fe3a05be8"
   dependencies:
-    "@dura/types" "^2.0.0-alpha.4"
+    "@dura/types" "^2.0.0-alpha.20"
     immer "^1.12.1"
 
-"@dura/plus@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.4.tgz#97f0223629391541e781f928415b2742b283e8f7"
+"@dura/loading@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-2.0.0-alpha.20.tgz#4d3ce8e4aa64e1f7cbcdd7fc9b49ce2e7c877b37"
   dependencies:
-    "@dura/async" "^2.0.0-alpha.4"
-    "@dura/async-loading" "^2.0.0-alpha.4"
-    "@dura/core" "^2.0.0-alpha.4"
-    "@dura/immer" "^2.0.0-alpha.4"
-    "@dura/selectors" "^2.0.0-alpha.2"
+    "@dura/types" "^2.0.0-alpha.20"
 
-"@dura/selectors@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@dura/selectors/-/selectors-2.0.0-alpha.2.tgz#c50cfb5679b37d82280108d8cf66491b140a2ca6"
+"@dura/plus@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-2.0.0-alpha.20.tgz#b5d06b422b081935b60c318ed92b42472131fb26"
+  dependencies:
+    "@dura/actions" "^2.0.0-alpha.10"
+    "@dura/core" "^2.0.0-alpha.20"
 
-"@dura/types@^2.0.0-alpha.4":
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.4.tgz#ec2b6997bd04d0353287bf5fe76bdee2c476912d"
+"@dura/types@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.0.0-alpha.20.tgz#94e0898c4372512decf56016015fdc7b2af96151"
   dependencies:
     "@types/redux" "^3.6.0"
 
@@ -1441,10 +1429,6 @@ cliui@^4.0.0:
     string-width "^2.1.1"
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
-
-clone@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
 
 co@^4.6.0:
   version "4.6.0"
@@ -3446,10 +3430,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-just-curry-it@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/just-curry-it/-/just-curry-it-3.1.0.tgz#ab59daed308a58b847ada166edd0a2d40766fbc5"
-
 kind-of@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-1.1.0.tgz#140a3d2d41a36d2efcfa9377b62c24f8495a5c44"
@@ -4953,20 +4933,6 @@ realpath-native@^1.0.0, realpath-native@^1.0.2:
   dependencies:
     util.promisify "^1.0.0"
 
-reduce-reducers@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.4.3.tgz#8e052618801cd8fc2714b4915adaa8937eb6d66c"
-
-redux-actions@^2.6.4:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-2.6.4.tgz#e1d9d7d987d274071b0134b707365d3e25ba3b26"
-  dependencies:
-    invariant "^2.2.4"
-    just-curry-it "^3.1.0"
-    loose-envify "^1.4.0"
-    reduce-reducers "^0.4.3"
-    to-camel-case "^1.0.0"
-
 redux@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
@@ -5688,12 +5654,6 @@ tmpl@1.0.x:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
 
-to-camel-case@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-camel-case/-/to-camel-case-1.0.0.tgz#1a56054b2f9d696298ce66a60897322b6f423e46"
-  dependencies:
-    to-space-case "^1.0.0"
-
 to-fast-properties@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
@@ -5701,10 +5661,6 @@ to-fast-properties@^1.0.3:
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
-
-to-no-case@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/to-no-case/-/to-no-case-1.0.2.tgz#c722907164ef6b178132c8e69930212d1b4aa16a"
 
 to-object-path@^0.3.0:
   version "0.3.0"
@@ -5727,12 +5683,6 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
-
-to-space-case@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-space-case/-/to-space-case-1.0.0.tgz#b052daafb1b2b29dc770cea0163e5ec0ebc9fc17"
-  dependencies:
-    to-no-case "^1.0.0"
 
 tough-cookie@>=2.3.3:
   version "3.0.0"
