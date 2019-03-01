@@ -1,6 +1,6 @@
-import { EffectAPI } from "@dura/async";
 import { actionCreator } from "../src/store";
 import { OnChangeNameAction, OnAsyncChangeName } from "./UserMode";
+import { EffectApi } from "@dura/core";
 
 const initialState = {
   /**
@@ -36,7 +36,7 @@ export default {
      * 异步修改姓名
      * @param payload
      */
-    async onAsyncChangeName(effectApi: EffectAPI, action: OnAsyncChangeName) {
+    async onAsyncChangeName(effectApi: EffectApi, action: OnAsyncChangeName) {
       await effectApi.delay(5500);
       effectApi.dispatch(
         actionCreator.user.onChangeName({
