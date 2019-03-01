@@ -1,6 +1,6 @@
 import UserModel from "@models/UserModel";
 
-import { create } from "@dura/plus";
+import { create, ExtractState } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
 import { createLoadingPlugin, ExtractLoadingState } from "@dura/loading";
 

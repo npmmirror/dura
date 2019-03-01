@@ -2,7 +2,7 @@ import UserModel from "./models/UserModel";
 
 import { create, ExtractState } from "@dura/plus";
 import { createImmerPlugin } from "@dura/immer";
-import { ExtractLoadingState, createLoadingModel, createLoadingPlugin } from "@dura/loading";
+import { ExtractLoadingState, createLoadingPlugin } from "@dura/loading";
 
 const initialModel = {
   /**
@@ -17,12 +17,12 @@ export type RootState = ExtractState<RootModel> & ExtractLoadingState<RootModel>
 
 export const store = create(
   {
-    initialModel: {
-      ...initialModel,
-      ...createLoadingModel(initialModel)
-    }
+    initialModel
   },
-  [createImmerPlugin(), createLoadingPlugin(initialModel)]
+  {
+    immer: createImmerPlugin(),
+    loading: createLoadingPlugin(initialModel)
+  }
 );
 
 export const { actionCreator } = store;
