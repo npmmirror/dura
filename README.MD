@@ -14,9 +14,13 @@
 
 - 遵循[Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 语义化版本规范。
 
+- 不想写详细的文档，一切看 demo，本身也没太多复杂的功能
+
+**让人痛哭流涕、老泪纵横的开发体验**
+
 ---
 
-![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg.gif?raw=true)
+![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg2.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg.gif?raw=true)
 
 ## 例子
 
