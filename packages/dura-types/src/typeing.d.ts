@@ -17,7 +17,12 @@ export type onEffect = (modelName: string, effectName: string, effect: Effect) =
 export type Plugin = {
   onReducer?: onReducer;
   onEffect?: onEffect;
+  extraModel?: ModelMap;
 };
+
+export type PluginMap = {
+  [name:string]:Plugin
+}
 
 export type EffectApi = {
   dispatch: any;
@@ -56,6 +61,8 @@ export type Store<RM extends ModelMap> = _Store<ExtractState<RM>> & {
 };
 
 export type ExtractState<M extends ModelMap> = { [key in keyof M]: M[key]["state"] };
+
+export type ExtractPluginState<P extends PluginMap> = UnionToIntersection<P[keyof P]["extraModel"]>;
 
 export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> & ExtractEffectActions<M>;
 

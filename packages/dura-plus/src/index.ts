@@ -1,6 +1,16 @@
 import { create as _create } from "@dura/core";
 import _ from "lodash";
-import { Config, ExcludeTypeAction, Reducer, Effect, Store, onReducer, Plugin } from "@dura/types";
+import {
+  Config,
+  ExcludeTypeAction,
+  Reducer,
+  Effect,
+  Store,
+  onReducer,
+  PluginMap,
+  ModelMap,
+  ExtractPluginState
+} from "@dura/types";
 
 function recursiveOnReducer(
   modelName: string,
@@ -23,14 +33,26 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
   return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
-const create = function<C extends Config, P extends Plugin>(config: C, plugins?: P[]): Store<C["initialModel"]> {
+const create = function<C extends Config, P extends PluginMap>(
+  config: C,
+  pluginMap?: P
+): Store<C["initialModel"] & ExtractPluginState<P>> {
   const { initialModel, initialState, middlewares } = _.cloneDeep(config);
 
-  const onReducerList = (plugins || []).filter(plugin => plugin.onReducer).map(plugin => plugin.onReducer);
+  const onReducerList = _.values(pluginMap)
+    .filter(plugin => plugin.onReducer)
+    .map(plugin => plugin.onReducer);
 
-  const onEffectList = (plugins || []).filter(plugin => plugin.onEffect).map(plugin => plugin.onEffect);
+  const onEffectList = _.values(pluginMap)
+    .filter(plugin => plugin.onEffect)
+    .map(plugin => plugin.onEffect);
 
-  const initialModelMap = _.entries(initialModel)
+  const extraModelMap: ModelMap = _.values(pluginMap)
+    .filter(plugin => plugin.extraModel)
+    .map(plugin => plugin.extraModel)
+    .reduce(_.merge, {});
+
+  const initialModelMap = _.entries(_.merge(initialModel, extraModelMap))
     .map(([modelName, model]) => {
       const reducers = _.entries(model.reducers)
         .map(([reducerName, reducer]) => ({
@@ -59,7 +81,7 @@ const create = function<C extends Config, P extends Plugin>(config: C, plugins?:
     middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore
-  }) as Store<C["initialModel"]>;
+  }) as Store<C["initialModel"] & ExtractPluginState<P>>;
 };
 
 export { create };

@@ -1,6 +1,65 @@
 import { create } from "../src";
+import { UnionToIntersection, ExtractState } from "@dura/core";
 
 describe("测试plus", function() {
+  it("测试插件额外的model", function() {
+    const UserModel = {
+      state: {
+        name: undefined
+      },
+      reducers: {
+        onChangeLoad(state, action) {
+          return state;
+        }
+      },
+      effects: {
+        async onAsyncChangeName(effectApi, action) {}
+      }
+    };
+
+    const plugins = {
+      loading: {
+        extraModel: {
+          loading: {
+            state: {
+              name: "测试loading"
+            },
+            reducers: {
+              loadingChange(state, action) {
+                return state;
+              }
+            },
+            effects: {}
+          }
+        }
+      },
+      immer: {
+        extraModel: {
+          immer: {
+            state: {
+              name: "测试immer"
+            },
+            reducers: {
+              immerChange(state, action) {
+                return state;
+              }
+            },
+            effects: {}
+          }
+        }
+      }
+    };
+    const store = create(
+      {
+        initialModel: {
+          user: UserModel
+        }
+      },
+      plugins
+    );
+
+    expect(store.getState().loading.name).toEqual("测试loading");
+  });
   it("测试插件", function() {
     const UserModel = {
       state: {
@@ -22,8 +81,8 @@ describe("测试plus", function() {
           user: UserModel
         }
       },
-      [
-        {
+      {
+        a: {
           onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
               console.log("开始");
@@ -38,7 +97,7 @@ describe("测试plus", function() {
             };
           }
         },
-        {
+        b: {
           onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
               console.log("开始1");
@@ -48,7 +107,7 @@ describe("测试plus", function() {
             };
           }
         }
-      ]
+      }
     );
 
     store.dispatch(store.actionCreator.user.onChangeLoad({}, {}));
