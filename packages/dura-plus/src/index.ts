@@ -86,3 +86,5 @@ const create = function<C extends Config, P extends PluginMap>(
 };
 
 export { create };
+
+export * from "@dura/types";
