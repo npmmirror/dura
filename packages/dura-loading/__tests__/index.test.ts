@@ -1,5 +1,5 @@
-import { create, EffectApi, ExtractState } from "@dura/plus";
-import { createLoadingPlugin, ExtractLoadingState } from "../src/index";
+import { create, EffectApi } from "@dura/plus";
+import { createLoadingPlugin } from "../src/index";
 
 describe("测试loading 插件", function() {
   it("测试loading 插件,启用loading", function(done) {
@@ -26,7 +26,7 @@ describe("测试loading 插件", function() {
           action: { payload: { name: string }; meta: { loading: boolean } }
         ) {
           await effectApi.delay(1000);
-          // effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
+          effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
         }
       }
     };
@@ -50,7 +50,7 @@ describe("测试loading 插件", function() {
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
-    // dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));
+    dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));
 
     setTimeout(() => expect(getState().loading.user.onAsyncChangeName).toEqual(true), 300);
 
@@ -85,7 +85,7 @@ describe("测试loading 插件", function() {
           action: { payload: { name: string }; meta: { loading: boolean } }
         ) {
           await effectApi.delay(1000);
-          // effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
+          effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
         }
       }
     };
@@ -114,7 +114,7 @@ describe("测试loading 插件", function() {
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
-    // dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: false }));
+    dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: false }));
 
     setTimeout(() => expect(getState().loading.user.onAsyncChangeName).toEqual(false), 300);
 
