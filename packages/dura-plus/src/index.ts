@@ -37,6 +37,7 @@ const create = function<C extends Config, P extends PluginMap>(
   config: C,
   pluginMap?: P
 ): Store<C["initialModel"] & ExtractPluginState<P>> {
+  //clone
   const { initialModel, initialState, middlewares } = _.cloneDeep(config);
 
   const onReducerList = _.values(pluginMap)
@@ -85,5 +86,3 @@ const create = function<C extends Config, P extends PluginMap>(
 };
 
 export { create };
-
-export * from "@dura/core";

@@ -10,9 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -34,6 +31,7 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 var create = function (config, pluginMap) {
+    //clone
     var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares;
     var onReducerList = lodash_1.default.values(pluginMap)
         .filter(function (plugin) { return plugin.onReducer; })
@@ -82,5 +80,4 @@ var create = function (config, pluginMap) {
     });
 };
 exports.create = create;
-__export(require("@dura/core"));
 //# sourceMappingURL=index.js.map
