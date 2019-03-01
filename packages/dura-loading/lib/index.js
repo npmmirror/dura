@@ -50,7 +50,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
-exports.createLoadingModel = function (modelMap) {
+exports.createLoadingPlugin = function (modelMap) {
+    var _this = this;
     var initialState = lodash_1.default.entries(modelMap)
         .map(function (_a) {
         var modelName = _a[0], model = _a[1];
@@ -65,29 +66,6 @@ exports.createLoadingModel = function (modelMap) {
             _b);
     })
         .reduce(lodash_1.default.merge, {});
-    return {
-        loading: {
-            state: initialState,
-            reducers: {
-                startLoading: function (state, action) {
-                    var _a, _b;
-                    return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                        _b[action.payload.effectName] = true,
-                        _b), _a));
-                },
-                endLoading: function (state, action) {
-                    var _a, _b;
-                    return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                        _b[action.payload.effectName] = false,
-                        _b), _a));
-                }
-            },
-            effects: {}
-        }
-    };
-};
-exports.createLoadingPlugin = function (modelMap) {
-    var _this = this;
     return {
         onEffect: function (modelName, effectName, effect) {
             return function (effectApi, action) { return __awaiter(_this, void 0, void 0, function () {
@@ -121,6 +99,26 @@ exports.createLoadingPlugin = function (modelMap) {
                     }
                 });
             }); };
+        },
+        extraModel: {
+            loading: {
+                state: initialState,
+                reducers: {
+                    startLoading: function (state, action) {
+                        var _a, _b;
+                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
+                            _b[action.payload.effectName] = true,
+                            _b), _a));
+                    },
+                    endLoading: function (state, action) {
+                        var _a, _b;
+                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
+                            _b[action.payload.effectName] = false,
+                            _b), _a));
+                    }
+                },
+                effects: {}
+            }
         }
     };
 };

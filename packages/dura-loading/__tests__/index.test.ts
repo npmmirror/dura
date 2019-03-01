@@ -26,7 +26,7 @@ describe("测试loading 插件", function() {
           action: { payload: { name: string }; meta: { loading: boolean } }
         ) {
           await effectApi.delay(1000);
-          effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
+          // effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
         }
       }
     };
@@ -50,7 +50,7 @@ describe("测试loading 插件", function() {
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
-    dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));
+    // dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true }));
 
     setTimeout(() => expect(getState().loading.user.onAsyncChangeName).toEqual(true), 300);
 
@@ -85,7 +85,7 @@ describe("测试loading 插件", function() {
           action: { payload: { name: string }; meta: { loading: boolean } }
         ) {
           await effectApi.delay(1000);
-          effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
+          // effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
         }
       }
     };
@@ -103,16 +103,18 @@ describe("测试loading 插件", function() {
 
     const store = create(
       {
-        initialModel: { ...initialModel, ...createLoadingModel(initialModel) }
+        initialModel
       },
-      [createLoadingPlugin(initialModel)]
+      {
+        loading: createLoadingPlugin(initialModel)
+      }
     );
 
     const { actionCreator, dispatch, getState } = store;
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
-    dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: false }));
+    // dispatch(actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: false }));
 
     setTimeout(() => expect(getState().loading.user.onAsyncChangeName).toEqual(false), 300);
 
