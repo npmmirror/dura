@@ -32,7 +32,9 @@ describe("测试immer插件", function() {
       {
         initialModel
       },
-      [createImmerPlugin()]
+      {
+        immer: createImmerPlugin()
+      }
     );
 
     const { getState, actionCreator, dispatch } = store;
