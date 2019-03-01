@@ -2,10 +2,9 @@
  * 自动loading
  */
 import { ModelMap, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from "@dura/types";
-
 import _ from "lodash";
 
-export const createLoadingModel = function(modelMap: ModelMap) {
+export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
   const initialState = _.entries(modelMap)
     .map(([modelName, model]) => ({
       [modelName]: _.keys(model.effects)
@@ -26,33 +25,6 @@ export const createLoadingModel = function(modelMap: ModelMap) {
       effectName: string;
     };
   };
-  return {
-    loading: {
-      state: initialState,
-      reducers: {
-        startLoading(state: State, action: StartLoadingAction) {
-          return {
-            ...state,
-            [action.payload.modelName]: {
-              [action.payload.effectName]: true
-            }
-          };
-        },
-        endLoading(state: State, action: EndLoadingAction) {
-          return {
-            ...state,
-            [action.payload.modelName]: {
-              [action.payload.effectName]: false
-            }
-          };
-        }
-      },
-      effects: {}
-    }
-  };
-};
-
-export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
   return {
     onEffect: (modelName, effectName, effect) => {
       return async (effectApi: EffectApi, action: ExcludeTypeAction) => {
@@ -76,6 +48,30 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
           await effect(effectApi, action);
         }
       };
+    },
+    extraModel: {
+      loading: {
+        state: initialState,
+        reducers: {
+          startLoading(state: State, action: StartLoadingAction) {
+            return {
+              ...state,
+              [action.payload.modelName]: {
+                [action.payload.effectName]: true
+              }
+            };
+          },
+          endLoading(state: State, action: EndLoadingAction) {
+            return {
+              ...state,
+              [action.payload.modelName]: {
+                [action.payload.effectName]: false
+              }
+            };
+          }
+        },
+        effects: {}
+      }
     }
   };
 };

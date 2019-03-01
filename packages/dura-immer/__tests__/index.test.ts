@@ -1,4 +1,3 @@
-import { ModelMap } from "@dura/types";
 import { create } from "@dura/plus";
 import { createImmerPlugin } from "../src/index";
 

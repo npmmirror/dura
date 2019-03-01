@@ -33,11 +33,19 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
     var nextEffect = onEffectList.shift()(modelName, effectName, effect);
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
-var create = function (config, plugins) {
+var create = function (config, pluginMap) {
     var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares;
-    var onReducerList = (plugins || []).filter(function (plugin) { return plugin.onReducer; }).map(function (plugin) { return plugin.onReducer; });
-    var onEffectList = (plugins || []).filter(function (plugin) { return plugin.onEffect; }).map(function (plugin) { return plugin.onEffect; });
-    var initialModelMap = lodash_1.default.entries(initialModel)
+    var onReducerList = lodash_1.default.values(pluginMap)
+        .filter(function (plugin) { return plugin.onReducer; })
+        .map(function (plugin) { return plugin.onReducer; });
+    var onEffectList = lodash_1.default.values(pluginMap)
+        .filter(function (plugin) { return plugin.onEffect; })
+        .map(function (plugin) { return plugin.onEffect; });
+    var extraModelMap = lodash_1.default.values(pluginMap)
+        .filter(function (plugin) { return plugin.extraModel; })
+        .map(function (plugin) { return plugin.extraModel; })
+        .reduce(lodash_1.default.merge, {});
+    var initialModelMap = lodash_1.default.entries(lodash_1.default.merge(initialModel, extraModelMap))
         .map(function (_a) {
         var modelName = _a[0], model = _a[1];
         var _b;

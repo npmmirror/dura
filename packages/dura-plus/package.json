@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/actions": "^2.0.0-alpha.10",
     "@dura/core": "^2.0.0-alpha.26"
   },
   "devDependencies": {
