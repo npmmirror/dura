@@ -59,7 +59,7 @@ const create = function<C extends Config, P extends Plugin>(config: C, plugins?:
     middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore
-  });
+  }) as Store<C["initialModel"]>;
 };
 
 export { create };
