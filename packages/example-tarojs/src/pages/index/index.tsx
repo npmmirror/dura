@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { RootState, reducerRunner, effectRunner } from "../../store/index";
+import { RootState, actionCreator } from "../../store/index";
 import "./index.scss";
 
 // #region 书写注意
@@ -21,16 +21,16 @@ function mapState(state: RootState) {
   };
 }
 
-function mapDispatch() {
+function mapDispatch(dispatch) {
   return {
     onPlus() {
-      reducerRunner.count.onChangeCount({ count: 1 });
+      dispatch(actionCreator.count.onChangeCount({ count: 1 }));
     },
     onMin() {
-      reducerRunner.count.onChangeCount({ count: -1 });
+      dispatch(actionCreator.count.onChangeCount({ count: -1 }));
     },
     onAsyncPlus() {
-      effectRunner.count.onAsyncChangeCount({ count: 1 }, { loading: true });
+      dispatch(actionCreator.count.onAsyncChangeCount({ count: 1 }, { loading: true }));
     }
   };
 }
