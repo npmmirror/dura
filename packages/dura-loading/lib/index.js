@@ -69,33 +69,47 @@ exports.createLoadingPlugin = function (modelMap) {
     return {
         onEffect: function (modelName, effectName, effect) {
             return function (effectApi, action) { return __awaiter(_this, void 0, void 0, function () {
+                var start, end, error_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            if (!(action.meta && action.meta.loading)) return [3 /*break*/, 2];
-                            effectApi.dispatch({
-                                type: "loading/startLoading",
-                                payload: {
-                                    modelName: modelName,
-                                    effectName: effectName
-                                }
-                            });
-                            return [4 /*yield*/, effect(effectApi, action)];
+                            start = function () {
+                                return effectApi.dispatch({
+                                    type: "loading/startLoading",
+                                    payload: {
+                                        modelName: modelName,
+                                        effectName: effectName
+                                    }
+                                });
+                            }, end = function () {
+                                return effectApi.dispatch({
+                                    type: "loading/endLoading",
+                                    payload: {
+                                        modelName: modelName,
+                                        effectName: effectName
+                                    }
+                                });
+                            };
+                            if (!(action.meta && action.meta.loading)) return [3 /*break*/, 5];
+                            _a.label = 1;
                         case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            start();
+                            return [4 /*yield*/, effect(effectApi, action)];
+                        case 2:
                             _a.sent();
-                            effectApi.dispatch({
-                                type: "loading/endLoading",
-                                payload: {
-                                    modelName: modelName,
-                                    effectName: effectName
-                                }
-                            });
+                            end();
                             return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, effect(effectApi, action)];
                         case 3:
+                            error_1 = _a.sent();
+                            end();
+                            throw error_1;
+                        case 4: return [3 /*break*/, 7];
+                        case 5: return [4 /*yield*/, effect(effectApi, action)];
+                        case 6:
                             _a.sent();
-                            _a.label = 4;
-                        case 4: return [2 /*return*/];
+                            _a.label = 7;
+                        case 7: return [2 /*return*/];
                     }
                 });
             }); };
