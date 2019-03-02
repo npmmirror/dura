@@ -28,22 +28,32 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
   return {
     onEffect: (modelName, effectName, effect) => {
       return async (effectApi: EffectApi, action: ExcludeTypeAction) => {
+        const start = () =>
+            effectApi.dispatch({
+              type: "loading/startLoading",
+              payload: {
+                modelName,
+                effectName
+              }
+            }),
+          end = () =>
+            effectApi.dispatch({
+              type: "loading/endLoading",
+              payload: {
+                modelName,
+                effectName
+              }
+            });
+
         if (action.meta && action.meta.loading) {
-          effectApi.dispatch({
-            type: "loading/startLoading",
-            payload: {
-              modelName,
-              effectName
-            }
-          });
-          await effect(effectApi, action);
-          effectApi.dispatch({
-            type: "loading/endLoading",
-            payload: {
-              modelName,
-              effectName
-            }
-          });
+          try {
+            start();
+            await effect(effectApi, action);
+            end();
+          } catch (error) {
+            end();
+            throw error;
+          }
         } else {
           await effect(effectApi, action);
         }

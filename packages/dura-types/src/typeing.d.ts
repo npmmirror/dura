@@ -21,8 +21,8 @@ export type Plugin = {
 };
 
 export type PluginMap = {
-  [name:string]:Plugin
-}
+  [name: string]: Plugin;
+};
 
 export type EffectApi = {
   dispatch: any;
