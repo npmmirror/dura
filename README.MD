@@ -8,7 +8,7 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
-**让人痛哭流涕、老泪纵横的开发体验😂😂😂**
+**让人痛哭流涕、老泪纵横的开发体验**
 
 - 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架。
 
