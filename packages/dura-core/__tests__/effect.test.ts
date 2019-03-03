@@ -1,4 +1,5 @@
-import { create, EffectApi, ExtractState } from "../src/index";
+import { create } from "../src/index";
+import {EffectApi, ExtractState} from '@dura/types'
 
 describe("测试effect", function() {
   it("测试effect", function(done) {

@@ -1,5 +1,4 @@
 import { create } from "../src";
-import { UnionToIntersection, ExtractState } from "@dura/core";
 
 describe("测试plus", function() {
   it("测试插件额外的model", function() {
