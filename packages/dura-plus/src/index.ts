@@ -6,13 +6,11 @@ import {
   Reducer,
   Effect,
   Store,
-  ExtractPluginState,
   onReducer,
   PluginMap,
-  ModelMap
+  ModelMap,
+  UnionToIntersection
 } from "@dura/types";
-
-type PlusStore<C extends Config, P extends PluginMap> = Store<C["initialModel"] & ExtractPluginState<P>>;
 
 function recursiveOnReducer(
   modelName: string,
@@ -35,7 +33,10 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
   return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
-const create = function<C extends Config, P extends PluginMap>(config: C, pluginMap?: P): PlusStore<C, P> {
+const create = function<C extends Config, P extends PluginMap>(
+  config: C,
+  pluginMap?: P
+): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
   //clone
   const { initialModel, initialState, middlewares } = _.cloneDeep(config);
 
@@ -81,7 +82,7 @@ const create = function<C extends Config, P extends PluginMap>(config: C, plugin
     middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore
-  }) as PlusStore<C, P>;
+  }) as Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>>;
 };
 
 export { create };
