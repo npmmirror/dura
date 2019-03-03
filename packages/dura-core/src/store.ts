@@ -36,5 +36,3 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
 }
 
 export { create };
-
-export * from "@dura/types";
