@@ -25,6 +25,35 @@ describe("测试配置信息", function() {
     expect(store.getState().user.name).toBeUndefined();
   });
 
+  it("测试额外的reducers", function() {
+    const store = create({
+      initialModel: {
+        user: getUserModel()
+      },
+      extraReducers: {
+        router: function(state = { path: "/home" }, action) {
+          switch (action.type) {
+            case "changePath":
+              return { ...state, path: action.payload.path };
+            default:
+              return state;
+          }
+        }
+      }
+    });
+
+    expect(store.getState()["router"]).toEqual({ path: "/home" });
+
+    store.dispatch({
+      type: "changePath",
+      payload: {
+        path: "/user"
+      }
+    });
+
+    expect(store.getState()["router"]).toEqual({ path: "/user" });
+  });
+
   it("测试initialState", function() {
     const store = create({
       initialModel: {

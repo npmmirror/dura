@@ -1,5 +1,4 @@
-
-import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { Config, Store } from "@dura/types";
 import _ from "lodash";
 import getAsyncMiddleware from "./async";
@@ -11,12 +10,14 @@ import extractReducers from "./reducers";
  * @param config
  */
 function create<C extends Config>(config: C): Store<C["initialModel"]> {
-  const { initialModel, initialState, middlewares = [] } = _.cloneDeep(config);
+  const { initialModel, initialState, middlewares = [], extraReducers = {} } = _.cloneDeep(config);
 
   //聚合reducers
-  const rootReducers = Object.keys(initialModel)
+  const modelReducers = Object.keys(initialModel)
     .map((name: string) => extractReducers(name, initialModel[name]))
     .reduce((prev, next) => ({ ...prev, ...next }), {});
+
+  const rootReducers: ReducersMapObject<any> = { ...modelReducers, ...extraReducers };
 
   //获取外部传入的 compose
   const composeEnhancers = config.compose || compose;

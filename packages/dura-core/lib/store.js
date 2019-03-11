@@ -24,11 +24,12 @@ var reducers_1 = __importDefault(require("./reducers"));
  * @param config
  */
 function create(config) {
-    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b;
+    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c;
     //聚合reducers
-    var rootReducers = Object.keys(initialModel)
+    var modelReducers = Object.keys(initialModel)
         .map(function (name) { return reducers_1.default(name, initialModel[name]); })
         .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
+    var rootReducers = __assign({}, modelReducers, extraReducers);
     //获取外部传入的 compose
     var composeEnhancers = config.compose || redux_1.compose;
     //store增强器

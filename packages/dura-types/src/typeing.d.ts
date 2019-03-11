@@ -82,6 +82,7 @@ export type Config = {
   middlewares?: Array<Middleware>;
   compose?: typeof compose;
   createStore?: typeof createStore;
+  extraReducers?: any;
 };
 
 export type Pack<T extends ExcludeTypeAction> = "payload" | "meta" extends keyof T
