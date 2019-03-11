@@ -38,7 +38,7 @@ const create = function<C extends Config, P extends PluginMap>(
   pluginMap?: P
 ): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
   //clone
-  const { initialModel, initialState, middlewares } = _.cloneDeep(config);
+  const { initialModel, initialState, middlewares, extraReducers } = _.cloneDeep(config);
 
   const onReducerList = _.values(pluginMap)
     .filter(plugin => plugin.onReducer)
@@ -81,7 +81,8 @@ const create = function<C extends Config, P extends PluginMap>(
     initialState: initialState,
     middlewares: middlewares,
     compose: config.compose,
-    createStore: config.createStore
+    createStore: config.createStore,
+    extraReducers: config.extraReducers
   }) as Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>>;
 };
 

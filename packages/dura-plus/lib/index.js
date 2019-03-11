@@ -32,7 +32,7 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
 }
 var create = function (config, pluginMap) {
     //clone
-    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares;
+    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, extraReducers = _a.extraReducers;
     var onReducerList = lodash_1.default.values(pluginMap)
         .filter(function (plugin) { return plugin.onReducer; })
         .map(function (plugin) { return plugin.onReducer; });
@@ -76,7 +76,8 @@ var create = function (config, pluginMap) {
         initialState: initialState,
         middlewares: middlewares,
         compose: config.compose,
-        createStore: config.createStore
+        createStore: config.createStore,
+        extraReducers: config.extraReducers
     });
 };
 exports.create = create;
