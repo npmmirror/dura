@@ -166,7 +166,7 @@ describe("测试loading 插件", function() {
 
     expect(async () => {
       await store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
-    }).toThrowError();
+    }).toThrow();
 
     setTimeout(() => {
       expect(store.getState().user.name).toEqual("张三");
