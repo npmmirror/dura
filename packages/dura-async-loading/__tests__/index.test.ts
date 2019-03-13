@@ -140,7 +140,7 @@ describe("测试loading 插件", function() {
          */
         onAsyncChangeName(payload: { name: string }, meta: LoadingMeta) {
           return async function(request: EffectAPI) {
-            await request.delay(1000);
+            // await request.delay(1000);
             store.reducerRunner.user.onChangeName(payload);
             throw new Error("异常异常异常异常");
           };
@@ -162,9 +162,11 @@ describe("测试loading 插件", function() {
 
     expect(store.getState().user).toEqual({ name: undefined, sex: undefined });
 
-    store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
-
     setTimeout(() => expect(store.getState().loading.user.onAsyncChangeName).toEqual(true), 300);
+
+    expect(async () => {
+      await store.effectRunner.user.onAsyncChangeName({ name: "张三" }, { loading: true });
+    }).toThrowError();
 
     setTimeout(() => {
       expect(store.getState().user.name).toEqual("张三");

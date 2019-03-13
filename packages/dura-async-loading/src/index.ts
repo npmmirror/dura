@@ -63,6 +63,7 @@ export const createLoadingPlugin = function(rootModel: RootModel) {
                 request.dispatch(end(key));
               } catch (error) {
                 request.dispatch(end(key));
+                throw error;
               }
             };
 

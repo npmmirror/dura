@@ -127,7 +127,7 @@ exports.createLoadingPlugin = function (rootModel) {
                                                 case 3:
                                                     error_1 = _a.sent();
                                                     request.dispatch(end(key));
-                                                    return [3 /*break*/, 4];
+                                                    throw error_1;
                                                 case 4: return [2 /*return*/];
                                             }
                                         });
