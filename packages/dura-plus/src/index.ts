@@ -30,6 +30,7 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
     return effect;
   }
   const nextEffect = onEffectList.shift()(modelName, effectName, effect);
+  console.log("nextEffect", nextEffect);
   return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
@@ -57,13 +58,13 @@ const create = function<C extends Config, P extends PluginMap>(
     .map(([modelName, model]) => {
       const reducers = _.entries(model.reducers)
         .map(([reducerName, reducer]) => ({
-          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, onReducerList)
+          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, _.cloneDeep(onReducerList))
         }))
         .reduce(_.merge, {});
 
       const effects = _.entries(model.effects)
         .map(([effectName, effects]) => ({
-          [effectName]: recursiveOnEffect(modelName, effectName, effects, onEffectList)
+          [effectName]: recursiveOnEffect(modelName, effectName, effects, _.cloneDeep(onEffectList))
         }))
         .reduce(_.merge, {});
       return {

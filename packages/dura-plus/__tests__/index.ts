@@ -74,10 +74,27 @@ describe("测试plus", function() {
       }
     };
 
+    const StudentModel = {
+      state: {
+        name: undefined
+      },
+      reducers: {
+        onChangeLoad(state, action) {
+          return state;
+        }
+      },
+      effects: {
+        async onAsyncChangeStudentName(effectApi, action) {
+          console.log("StudentModel-effects");
+        }
+      }
+    };
+
     const store = create(
       {
         initialModel: {
-          user: UserModel
+          user: UserModel,
+          student: StudentModel
         }
       },
       {
@@ -92,7 +109,11 @@ describe("测试plus", function() {
           },
           onEffect: (modelName, effectName, effect) => {
             return async (effectApi, action) => {
+              console.log("effect开始1");
+
               await effect(effectApi, action);
+
+              console.log("effect结束1");
             };
           }
         },
@@ -104,12 +125,21 @@ describe("测试plus", function() {
               console.log("结束1");
               return result;
             };
+          },
+          onEffect: (modelName, effectName, effect) => {
+            return async (effectApi, action) => {
+              console.log("effect开始2");
+
+              await effect(effectApi, action);
+
+              console.log("effect结束2");
+            };
           }
         }
       }
     );
 
-    store.dispatch(store.actionCreator.user.onChangeLoad({}, {}));
+    store.dispatch(store.actionCreator.student.onAsyncChangeStudentName({}, {}));
   });
 
   it("不传任何插件", function() {

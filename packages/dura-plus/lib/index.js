@@ -28,6 +28,7 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
         return effect;
     }
     var nextEffect = onEffectList.shift()(modelName, effectName, effect);
+    console.log("nextEffect", nextEffect);
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 var create = function (config, pluginMap) {
@@ -52,7 +53,7 @@ var create = function (config, pluginMap) {
             var reducerName = _a[0], reducer = _a[1];
             var _b;
             return (_b = {},
-                _b[reducerName] = recursiveOnReducer(modelName, reducerName, reducer, onReducerList),
+                _b[reducerName] = recursiveOnReducer(modelName, reducerName, reducer, lodash_1.default.cloneDeep(onReducerList)),
                 _b);
         })
             .reduce(lodash_1.default.merge, {});
@@ -61,7 +62,7 @@ var create = function (config, pluginMap) {
             var effectName = _a[0], effects = _a[1];
             var _b;
             return (_b = {},
-                _b[effectName] = recursiveOnEffect(modelName, effectName, effects, onEffectList),
+                _b[effectName] = recursiveOnEffect(modelName, effectName, effects, lodash_1.default.cloneDeep(onEffectList)),
                 _b);
         })
             .reduce(lodash_1.default.merge, {});
