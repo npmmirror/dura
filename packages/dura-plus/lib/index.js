@@ -28,7 +28,6 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
         return effect;
     }
     var nextEffect = onEffectList.shift()(modelName, effectName, effect);
-    console.log("nextEffect", nextEffect);
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 var create = function (config, pluginMap) {

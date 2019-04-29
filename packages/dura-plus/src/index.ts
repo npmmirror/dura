@@ -30,7 +30,6 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
     return effect;
   }
   const nextEffect = onEffectList.shift()(modelName, effectName, effect);
-  console.log("nextEffect", nextEffect);
   return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 
