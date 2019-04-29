@@ -10,7 +10,7 @@
 [![NPM version](https://img.shields.io/npm/v/@dura/plus.svg?style=flat)](https://www.npmjs.com/settings/dura/packages)
 [![NPM downloads](http://img.shields.io/npm/dm/@dura/core.svg?style=flat)](https://www.npmjs.com/package/@dura/plus)
 [![Build Status](https://travis-ci.org/ityuany/dura.svg?branch=master)](https://travis-ci.org/ityuany/dura)
-[![Coverage Status](https://img.shields.io/coveralls/ityuany/dura.svg?style=flat)](https://coveralls.io/github/ityuany/dura)
+[![Coverage Status](https://coveralls.io/repos/github/ityuany/dura/badge.svg?branch=v2.x)](https://coveralls.io/github/ityuany/dura)
 [![TypeScript](https://badges.frapsoft.com/typescript/version/typescript-next.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
