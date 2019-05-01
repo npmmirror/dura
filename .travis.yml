@@ -18,7 +18,8 @@ script:
   - npm run build
   - npm run test
 after_success:
-  - npm run cov
+  - jest --coverage --coverageReporters=text-lcov | coveralls
+  - cat ./coverage/lcov.info|./node_modules/coveralls/bin/coveralls.js
 
 
 git:
