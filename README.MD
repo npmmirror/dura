@@ -26,6 +26,11 @@
 
 ---
 
+        如果项目不追求状态的可追溯性，同时React版本又可以即使的升级，那么建议直接使用react-hooks会简单很多。
+        react-hooks 的出现并不意味着 dura 将会被取代 。
+
+---
+
 ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
 
 ## 例子
