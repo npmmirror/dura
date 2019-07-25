@@ -1,6 +1,6 @@
 landuage: node_js
 node_js:
-  - "11"
+  - "8.16.0"
 notifications:
   email:
     recipients:
