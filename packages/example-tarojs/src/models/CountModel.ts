@@ -1,4 +1,4 @@
-import { EffectApi } from "@dura/core";
+import { EffectApi } from "@dura/plus";
 import { actionCreator } from "../store/index";
 
 const initialState = {
