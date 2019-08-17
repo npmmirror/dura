@@ -45,24 +45,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = require("lodash");
+var entries_1 = __importDefault(require("lodash/entries"));
+var keys_1 = __importDefault(require("lodash/keys"));
+var merge_1 = __importDefault(require("lodash/merge"));
 exports.createLoadingPlugin = function (modelMap) {
     var _this = this;
-    var initialState = lodash_1.entries(modelMap)
+    var initialState = entries_1.default(modelMap)
         .map(function (_a) {
-        var _b;
         var modelName = _a[0], model = _a[1];
+        var _b;
         return (_b = {},
-            _b[modelName] = lodash_1.keys(model.effects)
+            _b[modelName] = keys_1.default(model.effects)
                 .map(function (effectName) {
                 var _a;
                 return (_a = {}, _a[effectName] = false, _a);
             })
-                .reduce(lodash_1.merge, {}),
+                .reduce(merge_1.default, {}),
             _b);
     })
-        .reduce(lodash_1.merge, {});
+        .reduce(merge_1.default, {});
     return {
         onEffect: function (modelName, effectName, effect) {
             return function (effectApi, action) { return __awaiter(_this, void 0, void 0, function () {
