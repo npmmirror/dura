@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = require("redux");
-var lodash_1 = __importDefault(require("lodash"));
+var lodash_1 = require("lodash");
 var async_1 = __importDefault(require("./async"));
 var actions_1 = __importDefault(require("./actions"));
 var reducers_1 = __importDefault(require("./reducers"));
@@ -24,7 +24,7 @@ var reducers_1 = __importDefault(require("./reducers"));
  * @param config
  */
 function create(config) {
-    var _a = lodash_1.default.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c;
+    var _a = lodash_1.cloneDeep(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c;
     //聚合reducers
     var modelReducers = Object.keys(initialModel)
         .map(function (name) { return reducers_1.default(name, initialModel[name]); })
