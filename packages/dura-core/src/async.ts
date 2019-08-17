@@ -1,5 +1,7 @@
 import { ModelMap, Model } from "@dura/types";
-import {keys,merge,cloneDeep} from "lodash";
+import keys from "lodash/keys";
+import merge from "lodash/merge";
+import cloneDeep from "lodash/cloneDeep";
 import { delay } from "./util";
 
 export default function getAsyncMiddleware(rootModel: ModelMap) {
