@@ -2,7 +2,9 @@
  * 自动loading
  */
 import { ModelMap, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from "@dura/types";
-import {entries,keys,merge} from "lodash";
+import entries from "lodash/entries";
+import keys from "lodash/keys";
+import merge from "lodash/merge";
 
 export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
   const initialState = entries(modelMap)

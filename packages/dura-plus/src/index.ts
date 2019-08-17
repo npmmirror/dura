@@ -1,5 +1,8 @@
 import { create as _create } from "@dura/core";
-import {merge,cloneDeep,values,entries} from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import values from "lodash/values";
+import merge from "lodash/merge";
+import entries from "lodash/entries";
 import {
   Config,
   ExcludeTypeAction,
