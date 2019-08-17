@@ -16,7 +16,10 @@ export type RootModel = typeof initialModel;
 export type RootState = ExtractState<RootModel> & ExtractLoadingState<RootModel>;
 
 export const store = create(
-  { initialModel },
+  { 
+    initialModel:initialModel ,
+    compose: window['__REDUX_DEVTOOLS_EXTENSION__']
+  },
   {
     immer: createImmerPlugin(),
     loading: createLoadingPlugin(initialModel)

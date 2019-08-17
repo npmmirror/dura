@@ -1,7 +1,7 @@
 import { handleActions } from "redux-actions";
 import { ReducersMapObject } from "redux";
 import { Model } from "@dura/types";
-import _ from "lodash";
+import {keys,merge} from "lodash";
 /**
  * 提取reducers
  * @param name
@@ -11,9 +11,9 @@ export default function extractReducers<S>(name: string, model: Model<S>): Reduc
   const { reducers } = model;
   return {
     [name]: handleActions(
-      _.keys(reducers)
+      keys(reducers)
         .map((reducerKey: string) => ({ [`${name}/${reducerKey}`]: reducers[reducerKey] }))
-        .reduce(_.merge, {}),
+        .reduce(merge, {}),
       model.state
     )
   };

@@ -1,16 +1,16 @@
 import { ModelMap, Model } from "@dura/types";
-import _ from "lodash";
+import {keys,merge,cloneDeep} from "lodash";
 import { delay } from "./util";
 
 export default function getAsyncMiddleware(rootModel: ModelMap) {
-  const rootEffects = _.keys(rootModel)
+  const rootEffects = keys(rootModel)
     .map((name: string) => extractEffects(name, rootModel[name]))
-    .reduce(_.merge, {});
+    .reduce(merge, {});
   return store => next => async action => {
     let result = next(action);
     if (typeof rootEffects[action.type] === "function") {
       const dispatch = store.dispatch;
-      const getState = () => _.cloneDeep(store.getState());
+      const getState = () => cloneDeep(store.getState());
       const select = (_select: (state) => any) => _select(getState());
       //执行effect
       const effect = rootEffects[action.type];
@@ -34,7 +34,7 @@ export default function getAsyncMiddleware(rootModel: ModelMap) {
  */
 function extractEffects(name: string, model: Model<any>) {
   const { effects } = model;
-  return _.keys(effects)
+  return keys(effects)
     .map((effectName: string) => ({ [`${name}/${effectName}`]: effects[effectName] }))
-    .reduce(_.merge, {});
+    .reduce(merge, {});
 }

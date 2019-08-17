@@ -1,5 +1,5 @@
 import { create as _create } from "@dura/core";
-import _ from "lodash";
+import {merge,cloneDeep,values,entries} from "lodash";
 import {
   Config,
   ExcludeTypeAction,
@@ -38,34 +38,34 @@ const create = function<C extends Config, P extends PluginMap>(
   pluginMap?: P
 ): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
   //clone
-  const { initialModel, initialState, middlewares, extraReducers } = _.cloneDeep(config);
+  const { initialModel, initialState, middlewares, extraReducers } = cloneDeep(config);
 
-  const onReducerList = _.values(pluginMap)
+  const onReducerList = values(pluginMap)
     .filter(plugin => plugin.onReducer)
     .map(plugin => plugin.onReducer);
 
-  const onEffectList = _.values(pluginMap)
+  const onEffectList = values(pluginMap)
     .filter(plugin => plugin.onEffect)
     .map(plugin => plugin.onEffect);
 
-  const extraModelMap: ModelMap = _.values(pluginMap)
+  const extraModelMap: ModelMap = values(pluginMap)
     .filter(plugin => plugin.extraModel)
     .map(plugin => plugin.extraModel)
-    .reduce(_.merge, {});
+    .reduce(merge, {});
 
-  const initialModelMap = _.entries(_.merge(initialModel, extraModelMap))
+  const initialModelMap = entries(merge(initialModel, extraModelMap))
     .map(([modelName, model]) => {
-      const reducers = _.entries(model.reducers)
+      const reducers = entries(model.reducers)
         .map(([reducerName, reducer]) => ({
-          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, _.cloneDeep(onReducerList))
+          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, cloneDeep(onReducerList))
         }))
-        .reduce(_.merge, {});
+        .reduce(merge, {});
 
-      const effects = _.entries(model.effects)
+      const effects = entries(model.effects)
         .map(([effectName, effects]) => ({
-          [effectName]: recursiveOnEffect(modelName, effectName, effects, _.cloneDeep(onEffectList))
+          [effectName]: recursiveOnEffect(modelName, effectName, effects, cloneDeep(onEffectList))
         }))
-        .reduce(_.merge, {});
+        .reduce(merge, {});
       return {
         [modelName]: {
           ...model,
@@ -74,7 +74,7 @@ const create = function<C extends Config, P extends PluginMap>(
         }
       };
     })
-    .reduce(_.merge, {});
+    .reduce(merge, {});
 
   return _create({
     initialModel: initialModelMap,

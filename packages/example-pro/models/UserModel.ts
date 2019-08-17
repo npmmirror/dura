@@ -1,6 +1,6 @@
 import { actionCreator } from "../src/store";
 import { OnChangeNameAction, OnAsyncChangeName } from "./UserMode";
-import { EffectApi } from "@dura/core";
+import { EffectApi } from "@dura/plus";
 
 const initialState = {
   /**

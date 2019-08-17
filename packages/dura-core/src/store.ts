@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { Config, Store } from "@dura/types";
-import _ from "lodash";
+import {cloneDeep} from "lodash";
 import getAsyncMiddleware from "./async";
 import extractActions from "./actions";
 import extractReducers from "./reducers";
@@ -10,7 +10,7 @@ import extractReducers from "./reducers";
  * @param config
  */
 function create<C extends Config>(config: C): Store<C["initialModel"]> {
-  const { initialModel, initialState, middlewares = [], extraReducers = {} } = _.cloneDeep(config);
+  const { initialModel, initialState, middlewares = [], extraReducers = {} } = cloneDeep(config);
 
   //聚合reducers
   const modelReducers = Object.keys(initialModel)

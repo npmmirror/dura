@@ -34,17 +34,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __importDefault(require("lodash"));
+var lodash_1 = require("lodash");
 var util_1 = require("./util");
 function getAsyncMiddleware(rootModel) {
     var _this = this;
-    var rootEffects = lodash_1.default.keys(rootModel)
+    var rootEffects = lodash_1.keys(rootModel)
         .map(function (name) { return extractEffects(name, rootModel[name]); })
-        .reduce(lodash_1.default.merge, {});
+        .reduce(lodash_1.merge, {});
     return function (store) { return function (next) { return function (action) { return __awaiter(_this, void 0, void 0, function () {
         var result, dispatch, getState_1, select, effect;
         return __generator(this, function (_a) {
@@ -53,7 +50,7 @@ function getAsyncMiddleware(rootModel) {
                     result = next(action);
                     if (!(typeof rootEffects[action.type] === "function")) return [3 /*break*/, 2];
                     dispatch = store.dispatch;
-                    getState_1 = function () { return lodash_1.default.cloneDeep(store.getState()); };
+                    getState_1 = function () { return lodash_1.cloneDeep(store.getState()); };
                     select = function (_select) { return _select(getState_1()); };
                     effect = rootEffects[action.type];
                     return [4 /*yield*/, effect({
@@ -77,11 +74,11 @@ exports.default = getAsyncMiddleware;
  */
 function extractEffects(name, model) {
     var effects = model.effects;
-    return lodash_1.default.keys(effects)
+    return lodash_1.keys(effects)
         .map(function (effectName) {
         var _a;
         return (_a = {}, _a[name + "/" + effectName] = effects[effectName], _a);
     })
-        .reduce(lodash_1.default.merge, {});
+        .reduce(lodash_1.merge, {});
 }
 //# sourceMappingURL=async.js.map
