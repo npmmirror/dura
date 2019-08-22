@@ -33,7 +33,7 @@
     "reactotron-react-js": "^2.1.4",
     "style-loader": "^0.23.1",
     "ts-import-plugin": "^1.5.5",
-    "typescript": "^3.2.4"
+    "typescript": "^3.5.3"
   },
   "jest": {
     "preset": "react-native"
