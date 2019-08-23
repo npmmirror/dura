@@ -16,6 +16,9 @@ function mapDispatch(dispatch) {
         },
         onChangeName() {
             dispatch(actionCreator.user.onChangeName({ newName: "同步张三" }));
+        },
+        pushUserPage(navigation) {
+            dispatch(actionCreator.router.pushUserPage({ navigation }));
         }
     };
 }
@@ -40,9 +43,8 @@ class LoginContainer extends Component {
           </Flex.Item>
           <Flex.Item style={{ paddingLeft: 10, paddingRight: 10 }}>
             <Button size="large" onPress={() => {
-            console.log(this.props.navigation.dismiss);
             this.props.onChangeName();
-            this.props.navigation.push("User");
+            this.props.pushUserPage(this.props.navigation);
             // this.props.navigation.replace("User");
         }}>
               同步修改

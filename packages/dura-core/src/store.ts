@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
 import { Config, Store } from "@dura/types";
-import {cloneDeep} from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import getAsyncMiddleware from "./async";
 import extractActions from "./actions";
 import extractReducers from "./reducers";
