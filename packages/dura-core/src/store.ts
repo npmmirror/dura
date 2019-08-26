@@ -1,39 +1,64 @@
-import { createStore, combineReducers, compose, applyMiddleware, ReducersMapObject } from "redux";
-import { Config, Store } from "@dura/types";
-import cloneDeep from "lodash/cloneDeep";
-import getAsyncMiddleware from "./async";
-import extractActions from "./actions";
-import extractReducers from "./reducers";
+import { createStore, combineReducers } from 'redux';
+
+import cloneDeep from 'lodash/cloneDeep';
+
+import merge from 'lodash/merge';
 
 /**
  * 创建store
  * @param config
  */
-function create<C extends Config>(config: C): Store<C["initialModel"]> {
-  const { initialModel, initialState, middlewares = [], extraReducers = {} } = cloneDeep(config);
+function create(options) {
+  const { models } = cloneDeep(options);
 
-  //聚合reducers
-  const modelReducers = Object.keys(initialModel)
-    .map((name: string) => extractReducers(name, initialModel[name]))
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
+  const reducers = models
+    .map(model => {
+      const nameForModel = model.name();
+      return {
+        [nameForModel]: function(state = model.state(), action) {
+          const { type, payload = {}, meta = {} } = action;
+          const [namespace, reducerName] = type.split('/');
+          if (nameForModel !== namespace) {
+            return state;
+          }
+          const reducer = model.reducers()[reducerName];
+          if (reducer) {
+            return reducer(state, payload, meta);
+          }
+          return state;
+        }
+      };
+    })
+    .reduce(merge, {});
 
-  const rootReducers: ReducersMapObject<any> = { ...modelReducers, ...extraReducers };
+  console.log(reducers);
 
-  //获取外部传入的 compose
-  const composeEnhancers = config.compose || compose;
+  const reduxStore = createStore(combineReducers(reducers));
 
-  //store增强器
-  const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares, getAsyncMiddleware(initialModel)));
+  return reduxStore;
 
-  //获取外部传入的 createStore
-  const _createStore = config.createStore || createStore;
+  // //聚合reducers
+  // const modelReducers = Object.keys(initialModel)
+  //   .map((name: string) => extractReducers(name, initialModel[name]))
+  //   .reduce((prev, next) => ({ ...prev, ...next }), {});
 
-  //创建redux-store
-  const reduxStore = initialState
-    ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
-    : _createStore(combineReducers(rootReducers), storeEnhancer);
+  // const rootReducers: ReducersMapObject<any> = { ...modelReducers, ...extraReducers };
 
-  return { ...reduxStore, actionCreator: extractActions(initialModel) };
+  // //获取外部传入的 compose
+  // const composeEnhancers = config.compose || compose;
+
+  // //store增强器
+  // const storeEnhancer = composeEnhancers(applyMiddleware(...middlewares, getAsyncMiddleware(initialModel)));
+
+  // //获取外部传入的 createStore
+  // const _createStore = config.createStore || createStore;
+
+  // //创建redux-store
+  // const reduxStore = initialState
+  //   ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
+  //   : _createStore(combineReducers(rootReducers), storeEnhancer);
+
+  // return { ...reduxStore, actionCreator: extractActions(initialModel) };
 }
 
 export { create };

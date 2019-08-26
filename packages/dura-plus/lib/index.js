@@ -48,12 +48,12 @@ var create = function (config, pluginMap) {
         .reduce(merge_1.default, {});
     var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
         .map(function (_a) {
-        var modelName = _a[0], model = _a[1];
         var _b;
+        var modelName = _a[0], model = _a[1];
         var reducers = entries_1.default(model.reducers)
             .map(function (_a) {
-            var reducerName = _a[0], reducer = _a[1];
             var _b;
+            var reducerName = _a[0], reducer = _a[1];
             return (_b = {},
                 _b[reducerName] = recursiveOnReducer(modelName, reducerName, reducer, cloneDeep_1.default(onReducerList)),
                 _b);
@@ -61,8 +61,8 @@ var create = function (config, pluginMap) {
             .reduce(merge_1.default, {});
         var effects = entries_1.default(model.effects)
             .map(function (_a) {
-            var effectName = _a[0], effects = _a[1];
             var _b;
+            var effectName = _a[0], effects = _a[1];
             return (_b = {},
                 _b[effectName] = recursiveOnEffect(modelName, effectName, effects, cloneDeep_1.default(onEffectList)),
                 _b);
