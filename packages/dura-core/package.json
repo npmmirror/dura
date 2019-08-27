@@ -14,7 +14,7 @@
       "^.+\\.js?$": "babel-jest"
     }
   },
-  "author": "",
+  "author": "ityuany",
   "license": "ISC",
   "dependencies": {
     "redux": "^4.0.0",
