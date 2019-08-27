@@ -6,7 +6,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "typings": "./index.d.ts",
   "scripts": {
     "build": "rm -rf ./lib && tsc"
   },
