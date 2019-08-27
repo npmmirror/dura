@@ -1,10 +1,10 @@
 import * as tslib_1 from "tslib";
-import { actionCreator } from "../store";
+import { actionCreator } from '../store';
 const initialState = {
     /**
      * 姓名
      */
-    name: "默认姓名",
+    name: '默认姓名',
     /**
      * 性别
      */
@@ -12,7 +12,11 @@ const initialState = {
     /**
      * 年龄
      */
-    age: undefined
+    age: undefined,
+    /**
+     * 文本内容
+     */
+    context: ''
 };
 export default {
     state: initialState,
@@ -23,6 +27,10 @@ export default {
          */
         onChangeName(state, action) {
             state.name = action.payload.newName;
+            return state;
+        },
+        onChangeContext(state, action) {
+            state.context = action.payload.newContext;
             return state;
         }
     },
