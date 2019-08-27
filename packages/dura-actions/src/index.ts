@@ -1,9 +1,9 @@
-import { ModelMap, Model } from '@dura/types';
+import { ModelMap, Model, ExtractActions } from '@dura/types';
 import keys from 'lodash/keys';
 import merge from 'lodash/merge';
 import cloneDeep from 'lodash/cloneDeep';
 
-export default function extractActions<RM extends ModelMap>(models: RM) {
+export default function<RM extends ModelMap>(models: RM): ExtractActions<RM> {
   return keys(models)
     .map((name: string) => extractAction(name, models[name]))
     .reduce(merge, {});

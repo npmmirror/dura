@@ -2,12 +2,13 @@
 # yarn lockfile v1
 
 
-"@dura/types@^2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-2.1.4.tgz#d206c8fc7ab92104aa804f37dafc78609277bed7"
-  integrity sha512-LgC2EPHSVOtL95ewLI0Sq0zCOc73IHcaA/k13OuCG/4UbsK9bRdbev6Zr1a9nAUPtU2DYdF5D4S7w4PPIa9nIQ==
+"@dura/types@^3.0.0-alpha.1":
+  version "3.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.1.tgz#0b7baca8e7bba9b7409c9df0215ab0bed75d13de"
+  integrity sha512-xHRFqkalT0fgvUIkLE+Oja4Ts0mM3u+Nl/sgLVmejmKhFgqBek/uqbWG7ggnZYMZbT3tverXzwAbN5/9ktv3Xw==
   dependencies:
     "@types/redux" "^3.6.0"
+    utility-types "^3.7.0"
 
 "@types/redux@^3.6.0":
   version "3.6.0"
@@ -15,6 +16,11 @@
   integrity sha1-8evh5UEVGAcuT9/KXHbhbnTBOZo=
   dependencies:
     redux "*"
+
+immer@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-3.2.0.tgz#53686471e9dd2b070e0fb5500c6fdecd3a99375f"
+  integrity sha512-+a2R8z9eELHst6aht++nzVzJ8LJ+Hsg49qttfg9Kc/vmoxEdPXw5/rV6+4DYWGgnq+B36KbLr4OTaGtS9mDjtg==
 
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"
@@ -40,3 +46,8 @@ symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
+
+utility-types@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.7.0.tgz#51f1c29fa35d4267488345706efcf3f68f2b1933"
+  integrity sha512-mqRJXN7dEArK/NZNJUubjr9kbFFVZcmF/JHDc9jt5O/aYXUVmopHYujDMhLmLil1Bxo2+khe6KAIVvDH9Yc4VA==

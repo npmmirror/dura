@@ -8,7 +8,6 @@ import {
 import { Config, Store } from '@dura/types';
 import cloneDeep from 'lodash/cloneDeep';
 import getAsyncMiddleware from './async';
-import extractActions from './actions';
 
 /**
  * 创建store
@@ -46,7 +45,7 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
   };
 
   // //获取外部传入的 compose
-  // const composeEnhancers = config.compose || compose;
+  const composeEnhancers = config.compose || compose;
 
   //store增强器
   const storeEnhancer = composeEnhancers(
@@ -54,12 +53,12 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
   );
 
   // //获取外部传入的 createStore
-  // const _createStore = config.createStore || createStore;
+  const _createStore = config.createStore || createStore;
 
   // //创建redux-store
-  // const reduxStore = initialState
-  //   ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
-  //   : _createStore(combineReducers(rootReducers), storeEnhancer);
+  const reduxStore = initialState
+    ? _createStore(combineReducers(rootReducers), initialState, storeEnhancer)
+    : _createStore(combineReducers(rootReducers), storeEnhancer);
 
   return reduxStore;
 }

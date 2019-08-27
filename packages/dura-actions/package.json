@@ -10,5 +10,9 @@
     "build": "rm -rf ./lib && tsc"
   },
   "author": "ityuany",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@dura/core": "^3.0.0-alpha.1",
+    "@dura/types": "^3.0.0-alpha.1"
+  }
 }

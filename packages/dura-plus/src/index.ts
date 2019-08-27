@@ -1,8 +1,8 @@
-import { create as _create } from "@dura/core";
-import cloneDeep from "lodash/cloneDeep";
-import values from "lodash/values";
-import merge from "lodash/merge";
-import entries from "lodash/entries";
+import { create as _create } from '@dura/core';
+import cloneDeep from 'lodash/cloneDeep';
+import values from 'lodash/values';
+import merge from 'lodash/merge';
+import entries from 'lodash/entries';
 import {
   Config,
   ExcludeTypeAction,
@@ -13,7 +13,7 @@ import {
   PluginMap,
   ModelMap,
   UnionToIntersection
-} from "@dura/types";
+} from '@dura/types';
 
 function recursiveOnReducer(
   modelName: string,
@@ -28,7 +28,12 @@ function recursiveOnReducer(
   return recursiveOnReducer(modelName, reducerName, nextReducer, onReducerList);
 }
 
-function recursiveOnEffect(modelName: string, effectName: string, effect: Effect, onEffectList: onReducer[]): Effect {
+function recursiveOnEffect(
+  modelName: string,
+  effectName: string,
+  effect: Effect,
+  onEffectList: onReducer[]
+): Effect {
   if (onEffectList && onEffectList.length === 0) {
     return effect;
   }
@@ -39,9 +44,11 @@ function recursiveOnEffect(modelName: string, effectName: string, effect: Effect
 const create = function<C extends Config, P extends PluginMap>(
   config: C,
   pluginMap?: P
-): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
+): Store<C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>> {
   //clone
-  const { initialModel, initialState, middlewares, extraReducers } = cloneDeep(config);
+  const { initialModel, initialState, middlewares, extraReducers } = cloneDeep(
+    config
+  );
 
   const onReducerList = values(pluginMap)
     .filter(plugin => plugin.onReducer)
@@ -60,13 +67,23 @@ const create = function<C extends Config, P extends PluginMap>(
     .map(([modelName, model]) => {
       const reducers = entries(model.reducers)
         .map(([reducerName, reducer]) => ({
-          [reducerName]: recursiveOnReducer(modelName, reducerName, reducer, cloneDeep(onReducerList))
+          [reducerName]: recursiveOnReducer(
+            modelName,
+            reducerName,
+            reducer,
+            cloneDeep(onReducerList)
+          )
         }))
         .reduce(merge, {});
 
       const effects = entries(model.effects)
         .map(([effectName, effects]) => ({
-          [effectName]: recursiveOnEffect(modelName, effectName, effects, cloneDeep(onEffectList))
+          [effectName]: recursiveOnEffect(
+            modelName,
+            effectName,
+            effects,
+            cloneDeep(onEffectList)
+          )
         }))
         .reduce(merge, {});
       return {
@@ -86,9 +103,11 @@ const create = function<C extends Config, P extends PluginMap>(
     compose: config.compose,
     createStore: config.createStore,
     extraReducers: config.extraReducers
-  }) as Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>>;
+  }) as Store<
+    C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>
+  >;
 };
 
 export { create };
 
-export * from "@dura/types";
+export * from '@dura/types';
