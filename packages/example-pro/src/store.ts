@@ -1,8 +1,9 @@
-import UserModel from "@models/UserModel";
+import UserModel from '@models/UserModel';
 
-import { create, ExtractState } from "@dura/plus";
-import { createImmerPlugin } from "@dura/immer";
-import { createLoadingPlugin, ExtractLoadingState } from "@dura/loading";
+import { create, ExtractState } from '@dura/plus';
+import { createImmerPlugin } from '@dura/immer';
+import { createLoadingPlugin, ExtractLoadingState } from '@dura/loading';
+import createActions from '@dura/actions';
 
 const initialModel = {
   /**
@@ -13,12 +14,13 @@ const initialModel = {
 
 export type RootModel = typeof initialModel;
 
-export type RootState = ExtractState<RootModel> & ExtractLoadingState<RootModel>;
+export type RootState = ExtractState<RootModel> &
+  ExtractLoadingState<RootModel>;
 
 export const store = create(
-  { 
-    initialModel:initialModel ,
-    compose: window['__REDUX_DEVTOOLS_EXTENSION__']
+  {
+    initialModel: initialModel,
+    compose: window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
   },
   {
     immer: createImmerPlugin(),
@@ -26,4 +28,6 @@ export const store = create(
   }
 );
 
-export const { actionCreator } = store;
+const actionCreator = createActions(initialModel);
+
+export { actionCreator };

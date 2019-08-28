@@ -19,31 +19,31 @@ const initialState = {
     context: ''
 };
 export default {
-    state: initialState,
-    reducers: {
+    state: () => initialState,
+    reducers: () => ({
         /**
          *
          * @param payload 同步修改姓名
          */
-        onChangeName(state, action) {
-            state.name = action.payload.newName;
+        onChangeName(state, payload) {
+            state.name = payload.newName;
             return state;
         },
-        onChangeContext(state, action) {
-            state.context = action.payload.newContext;
+        onChangeContext(state, payload) {
+            state.context = payload.newContext;
             return state;
         }
-    },
-    effects: {
+    }),
+    effects: (dispatch, getState, delay) => ({
         /**
          * 异步修改姓名
          * @param payload
          */
-        onAsyncChangeName(effectApi, action) {
+        onAsyncChangeName(payload, meta) {
             return tslib_1.__awaiter(this, void 0, void 0, function* () {
-                yield effectApi.delay(2000);
-                effectApi.dispatch(actionCreator.user.onChangeName(action.payload));
+                yield delay(2000);
+                dispatch(actionCreator.user.onChangeName(payload));
             });
         }
-    }
+    })
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { RootState, actionCreator } from '../store';
 import { Flex, Button } from '@ant-design/react-native';
 import { NavigationInjectedProps } from 'react-navigation';
