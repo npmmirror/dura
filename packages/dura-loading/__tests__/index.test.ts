@@ -14,7 +14,7 @@ describe('测试loading 插件', function() {
       }),
       reducers: () => ({
         onChangeName(state, payload: { name: string }) {
-          return { ...state, payload };
+          return { ...state, ...payload };
         }
       }),
       effects: (dispatch, getState, delay) => ({

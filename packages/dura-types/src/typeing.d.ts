@@ -64,7 +64,7 @@ export type EffectMap = {
 export type EffectFunction = (
   dispatch?: any,
   getState?: any,
-  delay?: (ms: number) => Promise<void>
+  delay?: (ms: number) => Promise<{}>
 ) => EffectMap;
 
 export type UnionToIntersection<U> = (U extends any

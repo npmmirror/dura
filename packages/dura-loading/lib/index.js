@@ -56,84 +56,95 @@ exports.createLoadingPlugin = function (modelMap) {
     var _this = this;
     var initialState = entries_1.default(modelMap)
         .map(function (_a) {
-        var modelName = _a[0], model = _a[1];
         var _b;
-        return (_b = {},
-            _b[modelName] = keys_1.default(model.effects)
-                .map(function (effectName) {
+        var name = _a[0], model = _a[1];
+        var e = (model.effects && model.effects()) || {};
+        return _b = {},
+            _b[name] = keys_1.default(e)
+                .map(function (ename) {
                 var _a;
-                return (_a = {}, _a[effectName] = false, _a);
+                return (_a = {}, _a[ename] = false, _a);
             })
                 .reduce(merge_1.default, {}),
-            _b);
+            _b;
     })
         .reduce(merge_1.default, {});
     return {
-        onEffect: function (modelName, effectName, effect) {
-            return function (effectApi, action) { return __awaiter(_this, void 0, void 0, function () {
-                var start, end, error_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            start = function () {
-                                return effectApi.dispatch({
-                                    type: "loading/startLoading",
-                                    payload: {
-                                        modelName: modelName,
-                                        effectName: effectName
+        wrapModel: function (name, model) {
+            return __assign({}, model, { effects: function (dispatch, getState, delay) {
+                    return entries_1.default(model.effects(dispatch, getState, delay))
+                        .map(function (_a) {
+                        var _b;
+                        var k = _a[0], v = _a[1];
+                        return (_b = {},
+                            _b[k] = function (payload, meta) { return __awaiter(_this, void 0, void 0, function () {
+                                var start, end, error_1;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            start = function () {
+                                                return dispatch({
+                                                    type: 'loading/startLoading',
+                                                    payload: {
+                                                        modelName: name,
+                                                        effectName: k
+                                                    }
+                                                });
+                                            }, end = function () {
+                                                return dispatch({
+                                                    type: 'loading/endLoading',
+                                                    payload: {
+                                                        modelName: name,
+                                                        effectName: k
+                                                    }
+                                                });
+                                            };
+                                            if (!(meta && meta.loading)) return [3 /*break*/, 5];
+                                            _a.label = 1;
+                                        case 1:
+                                            _a.trys.push([1, 3, , 4]);
+                                            start();
+                                            return [4 /*yield*/, v(payload, meta)];
+                                        case 2:
+                                            _a.sent();
+                                            end();
+                                            return [3 /*break*/, 4];
+                                        case 3:
+                                            error_1 = _a.sent();
+                                            end();
+                                            throw error_1;
+                                        case 4: return [3 /*break*/, 7];
+                                        case 5: return [4 /*yield*/, v(payload, meta)];
+                                        case 6:
+                                            _a.sent();
+                                            _a.label = 7;
+                                        case 7: return [2 /*return*/];
                                     }
                                 });
-                            }, end = function () {
-                                return effectApi.dispatch({
-                                    type: "loading/endLoading",
-                                    payload: {
-                                        modelName: modelName,
-                                        effectName: effectName
-                                    }
-                                });
-                            };
-                            if (!(action.meta && action.meta.loading)) return [3 /*break*/, 5];
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, , 4]);
-                            start();
-                            return [4 /*yield*/, effect(effectApi, action)];
-                        case 2:
-                            _a.sent();
-                            end();
-                            return [3 /*break*/, 4];
-                        case 3:
-                            error_1 = _a.sent();
-                            end();
-                            throw error_1;
-                        case 4: return [3 /*break*/, 7];
-                        case 5: return [4 /*yield*/, effect(effectApi, action)];
-                        case 6:
-                            _a.sent();
-                            _a.label = 7;
-                        case 7: return [2 /*return*/];
-                    }
-                });
-            }); };
+                            }); },
+                            _b);
+                    })
+                        .reduce(merge_1.default, {});
+                } });
         },
         extraModel: {
             loading: {
-                state: initialState,
-                reducers: {
-                    startLoading: function (state, action) {
+                state: function () { return initialState; },
+                reducers: function () { return ({
+                    startLoading: function (state, payload) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                            _b[action.payload.effectName] = true,
+                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
+                            _b[payload.effectName] = true,
                             _b), _a));
                     },
-                    endLoading: function (state, action) {
+                    endLoading: function (state, payload) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                            _b[action.payload.effectName] = false,
+                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
+                            _b[payload.effectName] = false,
                             _b), _a));
                     }
-                },
-                effects: {}
+                }); },
+                effects: function () { return ({}); }
             }
         }
     };

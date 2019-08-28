@@ -24,7 +24,6 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
 
   return {
     wrapModel: (name, model) => {
-      console.log('-----');
       return {
         ...model,
         effects: (dispatch, getState, delay) =>
@@ -35,16 +34,16 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
                     dispatch({
                       type: 'loading/startLoading',
                       payload: {
-                        name,
-                        k
+                        modelName: name,
+                        effectName: k
                       }
                     }),
                   end = () =>
                     dispatch({
                       type: 'loading/endLoading',
                       payload: {
-                        name,
-                        k
+                        modelName: name,
+                        effectName: k
                       }
                     });
 

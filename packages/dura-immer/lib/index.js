@@ -7,7 +7,11 @@ var immer_1 = __importDefault(require("immer"));
 exports.createImmerPlugin = function () {
     return {
         onReducer: function (modelName, reducerName, reducer) {
-            return function (baseState, action) { return immer_1.default(baseState, function (draftState) { return reducer(draftState, action); }); };
+            return function (baseState, payload, meta) {
+                return immer_1.default(baseState, function (draftState) {
+                    return reducer(draftState, payload, meta);
+                });
+            };
         }
     };
 };
