@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@dura/actions": "^3.0.0-alpha.15",
     "@dura/immer": "^3.0.0-alpha.15",
     "@dura/loading": "^3.0.0-alpha.15",
     "@dura/plus": "^3.0.0-alpha.15",
