@@ -1,6 +1,6 @@
 {
   "name": "@dura/plus",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,11 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/core": "^3.0.0-alpha.5",
-    "@dura/types": "^3.0.0-alpha.5"
+    "@dura/core": "^3.0.0-alpha.6",
+    "@dura/types": "^3.0.0-alpha.6"
   },
   "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf",
   "devDependencies": {
-    "@dura/actions": "^3.0.0-alpha.5"
+    "@dura/actions": "^3.0.0-alpha.6"
   }
 }
