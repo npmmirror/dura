@@ -119,7 +119,7 @@ export type ExtractEffectActions<M extends ModelMap> = {
 
 export type ReviewEffects<E extends EffectMap> = {
   [key in keyof E]: Parameters<E[key]>[0] extends undefined
-    ? () => Promise<void>
+    ? () => AnyAction
     : Parameters<E[key]>[1] extends undefined
     ? (payload: Parameters<E[key]>[0]) => AnyAction
     : (

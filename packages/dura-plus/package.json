@@ -15,5 +15,8 @@
     "@dura/core": "^3.0.0-alpha.4",
     "@dura/types": "^3.0.0-alpha.4"
   },
-  "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf"
+  "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf",
+  "devDependencies": {
+    "@dura/actions": "^3.0.0-alpha.4"
+  }
 }

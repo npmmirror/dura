@@ -33,24 +33,35 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
     var nextEffect = onEffectList.shift()(modelName, effectName, effect);
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
-var create = function (config, pluginMap) {
-    //clone
-    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, extraReducers = _a.extraReducers;
-    var onReducerList = values_1.default(pluginMap)
+function getOnReducers(pluginMap) {
+    return values_1.default(pluginMap)
         .filter(function (plugin) { return plugin.onReducer; })
         .map(function (plugin) { return plugin.onReducer; });
-    var onEffectList = values_1.default(pluginMap)
+}
+function getOnEffect(pluginMap) {
+    return values_1.default(pluginMap)
         .filter(function (plugin) { return plugin.onEffect; })
         .map(function (plugin) { return plugin.onEffect; });
-    var extraModelMap = values_1.default(pluginMap)
+}
+function getExtraModelMap(pluginMap) {
+    return values_1.default(pluginMap)
         .filter(function (plugin) { return plugin.extraModel; })
         .map(function (plugin) { return plugin.extraModel; })
         .reduce(merge_1.default, {});
+}
+var create = function (config, pluginMap) {
+    //clone
+    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b;
+    var onReducerList = getOnReducers(pluginMap);
+    var onEffectList = getOnEffect(pluginMap);
+    var extraModelMap = getExtraModelMap(pluginMap);
     var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
         .map(function (_a) {
         var _b;
         var modelName = _a[0], model = _a[1];
-        var reducers = entries_1.default(model.reducers)
+        var reducers = model.reducers ? model.reducers : function () { return ({}); };
+        var effects = model.effects ? model.effects : function () { return ({}); };
+        var nextReducers = entries_1.default(reducers())
             .map(function (_a) {
             var _b;
             var reducerName = _a[0], reducer = _a[1];
@@ -59,7 +70,7 @@ var create = function (config, pluginMap) {
                 _b);
         })
             .reduce(merge_1.default, {});
-        var effects = entries_1.default(model.effects)
+        var nextEffects = entries_1.default(effects())
             .map(function (_a) {
             var _b;
             var effectName = _a[0], effects = _a[1];
@@ -69,8 +80,7 @@ var create = function (config, pluginMap) {
         })
             .reduce(merge_1.default, {});
         return _b = {},
-            _b[modelName] = __assign({}, model, { reducers: reducers,
-                effects: effects }),
+            _b[modelName] = __assign({}, model, { reducers: function () { return nextReducers; }, effects: function (dispatch, getState, delpoy) { return nextEffects; } }),
             _b;
     })
         .reduce(merge_1.default, {});
@@ -80,7 +90,7 @@ var create = function (config, pluginMap) {
         middlewares: middlewares,
         compose: config.compose,
         createStore: config.createStore,
-        extraReducers: config.extraReducers
+        extraReducers: extraReducers
     });
 };
 exports.create = create;
