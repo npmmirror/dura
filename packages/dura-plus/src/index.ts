@@ -117,7 +117,7 @@ function create<C extends Config, P extends PluginMap>(
   //           modelName,
   //           effectName,
   //           effects,
-  //           cloneDeep(onEffectList)
+  //           cloneDeep(onEffectList)1
   //         )
   //       }))
   //       .reduce(merge, {});
