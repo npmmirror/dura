@@ -1,10 +1,13 @@
-import { Plugin } from "@dura/types";
-import produce from "immer";
+import { Plugin } from '@dura/types';
+import produce from 'immer';
 
 export const createImmerPlugin = function(): Plugin {
   return {
     onReducer(modelName, reducerName, reducer) {
-      return (baseState, action) => produce(baseState, draftState => reducer(draftState, action.payload,action.meta));
+      return (baseState, payload, meta) =>
+        produce(baseState, draftState => {
+          return reducer(draftState, payload, meta);
+        });
     }
   };
 };

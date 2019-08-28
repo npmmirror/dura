@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@dura/actions": "^3.0.0-alpha.5",
     "@dura/types": "^3.0.0-alpha.5",
     "immer": "^1.12.1"
   },

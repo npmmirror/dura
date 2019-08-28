@@ -85,7 +85,7 @@ export type ModelMap = {
 export type Store<RM extends ModelMap> = _Store<ExtractState<RM>>;
 
 export type ExtractState<M extends ModelMap> = {
-  [key in keyof M]: M[key]['state'];
+  [key in keyof M]: ReturnType<M[key]['state']>;
 };
 
 export type ExtractPluginState<P extends PluginMap> = UnionToIntersection<
@@ -98,7 +98,7 @@ export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> &
 export type ExtractReducerActions<M extends ModelMap> = {
   [key in keyof M]: ReviewReducders<
     ReturnType<M[key]['reducers']>,
-    M[key]['state']
+    ReturnType<M[key]['state']>
   >;
 };
 
