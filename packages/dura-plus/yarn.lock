@@ -2,25 +2,25 @@
 # yarn lockfile v1
 
 
-"@dura/actions@^3.0.0-alpha.4":
-  version "3.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.4.tgz#161ef0d0dbcd61ba309d7853d331e3902b1ea29e"
-  integrity sha512-MoSsmLZkSiZPW0nViyvl3/aUA8QZTVMQwL5u13SEuxtngKZm2tSpk4UscqfAOVunbHwWhZfz96zBRU9fKAWBlw==
+"@dura/actions@^3.0.0-alpha.6":
+  version "3.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.6.tgz#187016a07e99741b571faeb1b025f6538511d4c9"
+  integrity sha512-TCEMz9crauRF2QHF/CA1dQLZu8A79C1fl2C7NC3PNSLN+YrkE/04TvkpzWQrV9NrPv82flQuDZOC2ax29zViMA==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.4"
-    "@dura/types" "^3.0.0-alpha.4"
+    "@dura/core" "^3.0.0-alpha.6"
+    "@dura/types" "^3.0.0-alpha.6"
 
-"@dura/core@^3.0.0-alpha.4":
-  version "3.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.4.tgz#774a2d5c3522836201a0df970fdf59a3630cfcc1"
-  integrity sha512-2YCBC6U2x/MUksjxg82sBUUiEKwPdJaS118PdSnG823GSO/CinFY+DqF5aI+BGJcxfbWrtCnSft5YUDKy0twoA==
+"@dura/core@^3.0.0-alpha.6":
+  version "3.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.6.tgz#4917a5f9d117b645e2d8be519bbf8950de51ed38"
+  integrity sha512-bQ27eRiRRCqzXGJBW54EHoLIGEJMR0NfztAArQ4v05j35SNEWBPsi+I1dMID882IoGkGab2B3y3mRUxVdmRxtQ==
   dependencies:
     redux "^4.0.4"
 
-"@dura/types@^3.0.0-alpha.4":
-  version "3.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.4.tgz#31bca57d1a1beee8b2b10895347f45100d79cdbd"
-  integrity sha512-qxftdC/r1kB1kGY3CRCRFDLnf5Vtb047ibA3z5V5iE9Hyg6DbEN+fmG/PhhwE4XMTTkqI2ohh5XHkpuA8+AEwA==
+"@dura/types@^3.0.0-alpha.6":
+  version "3.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.6.tgz#b4c3c024af86b997d9c4347c2070a1152f926816"
+  integrity sha512-aE1XkvPXv8TlDm6Nd4tCTcElR4Tp5g1TKjcciWa1THCpsXhiCUsT19ogTJ3lWYApI18UWTdW2YOe4NBKvRoq9w==
   dependencies:
     "@types/redux" "^3.6.0"
     utility-types "^3.7.0"

@@ -16,6 +16,14 @@ import {
   onEffect
 } from '@dura/types';
 
+function recursiveWrapModel(name, model, wrapModelList) {
+  if (wrapModelList && wrapModelList.length === 0) {
+    return model;
+  }
+  const nextModel = wrapModelList.shift()(name, model);
+  return recursiveWrapModel(name, nextModel, wrapModelList);
+}
+
 function recursiveOnReducer(
   modelName: string,
   reducerName: string,
@@ -43,15 +51,11 @@ function recursiveOnEffect(
 }
 
 function getOnReducers(pluginMap: PluginMap) {
-  return values(pluginMap)
-    .filter(plugin => plugin.onReducer)
-    .map(plugin => plugin.onReducer);
+  return values(pluginMap).filter(plugin => plugin.onReducer);
 }
 
 function getOnEffect(pluginMap: PluginMap) {
-  return values(pluginMap)
-    .filter(plugin => plugin.onEffect)
-    .map(plugin => plugin.onEffect);
+  return values(pluginMap).filter(plugin => plugin.onEffect);
 }
 
 function getExtraModelMap(pluginMap: PluginMap) {
@@ -73,48 +77,55 @@ const create = function<C extends Config, P extends PluginMap>(
     extraReducers = {}
   } = cloneDeep(config);
 
-  const onReducerList = getOnReducers(pluginMap);
-
-  const onEffectList = getOnEffect(pluginMap);
+  const wrapModelList = values(pluginMap).filter(p => p.warpModel);
 
   const extraModelMap: ModelMap = getExtraModelMap(pluginMap);
 
   const initialModelMap = entries(merge(initialModel, extraModelMap))
-    .map(([modelName, model]) => {
-      const reducers = model.reducers ? model.reducers : () => ({});
-
-      const effects = model.effects ? model.effects : () => ({});
-
-      const nextReducers = entries(reducers())
-        .map(([reducerName, reducer]) => ({
-          [reducerName]: recursiveOnReducer(
-            modelName,
-            reducerName,
-            reducer,
-            cloneDeep(onReducerList)
-          )
-        }))
-        .reduce(merge, {});
-
-      const nextEffects = entries(effects())
-        .map(([effectName, effects]) => ({
-          [effectName]: recursiveOnEffect(
-            modelName,
-            effectName,
-            effects,
-            cloneDeep(onEffectList)
-          )
-        }))
-        .reduce(merge, {});
+    .map(([name, model]) => {
+      const newModel = recursiveWrapModel(name, model, wrapModelList);
       return {
-        [modelName]: {
-          ...model,
-          reducers: () => nextReducers,
-          effects: (dispatch, getState, delpoy) => nextEffects
-        }
+        [name]: newModel
       };
     })
     .reduce(merge, {});
+
+  // const initialModelMap = entries(merge(initialModel, extraModelMap))
+  //   .map(([modelName, model]) => {
+  //     const reducers = model.reducers ? model.reducers : () => ({});
+
+  //     const effects = model.effects ? model.effects : () => ({});
+
+  //     const nextReducers = entries(reducers())
+  //       .map(([reducerName, reducer]) => ({
+  //         [reducerName]: recursiveOnReducer(
+  //           modelName,
+  //           reducerName,
+  //           reducer,
+  //           cloneDeep(onReducerList)
+  //         )
+  //       }))
+  //       .reduce(merge, {});
+
+  //     const nextEffects = entries(effects())
+  //       .map(([effectName, effects]) => ({
+  //         [effectName]: recursiveOnEffect(
+  //           modelName,
+  //           effectName,
+  //           effects,
+  //           cloneDeep(onEffectList)
+  //         )
+  //       }))
+  //       .reduce(merge, {});
+  //     return {
+  //       [modelName]: {
+  //         ...model,
+  //         reducers: () => nextReducers,
+  //         effects: (dispatch, getState, delpoy) => nextEffects
+  //       }
+  //     };
+  //   })
+  //   .reduce(merge, {});
 
   return _create({
     initialModel: initialModelMap,

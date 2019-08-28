@@ -1,12 +1,20 @@
 /**
  * 自动loading
  */
-import { ModelMap, EffectApi, ExcludeTypeAction, Plugin, EffectMap } from "@dura/types";
-import entries from "lodash/entries";
-import keys from "lodash/keys";
-import merge from "lodash/merge";
+import {
+  ModelMap,
+  EffectApi,
+  ExcludeTypeAction,
+  Plugin,
+  EffectMap
+} from '@dura/types';
+import entries from 'lodash/entries';
+import keys from 'lodash/keys';
+import merge from 'lodash/merge';
 
-export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): Plugin {
+export const createLoadingPlugin = function<MM extends ModelMap>(
+  modelMap: MM
+): Plugin {
   const initialState = entries(modelMap)
     .map(([modelName, model]) => ({
       [modelName]: keys(model.effects)
@@ -32,7 +40,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
       return async (effectApi: EffectApi, action: ExcludeTypeAction) => {
         const start = () =>
             effectApi.dispatch({
-              type: "loading/startLoading",
+              type: 'loading/startLoading',
               payload: {
                 modelName,
                 effectName
@@ -40,7 +48,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
             }),
           end = () =>
             effectApi.dispatch({
-              type: "loading/endLoading",
+              type: 'loading/endLoading',
               payload: {
                 modelName,
                 effectName
@@ -63,8 +71,8 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
     },
     extraModel: {
       loading: {
-        state: initialState,
-        reducers: {
+        state: () => initialState,
+        reducers: () => ({
           startLoading(state: State, action: StartLoadingAction) {
             return {
               ...state,
@@ -81,8 +89,8 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
               }
             };
           }
-        },
-        effects: {}
+        }),
+        effects: () => ({})
       }
     }
   };
@@ -91,7 +99,9 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
 type ConvertFnToBoolean<E extends EffectMap> = { [key in keyof E]: boolean };
 
 export type ExtractLoadingState<RMT extends ModelMap> = {
-  loading: { [key in keyof RMT]: ConvertFnToBoolean<RMT[key]["effects"]> };
+  loading: {
+    [key in keyof RMT]: ConvertFnToBoolean<ReturnType<RMT[key]['effects']>>;
+  };
 };
 
 export type LoadingMeta = {

@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,6 +8,13 @@ var cloneDeep_1 = __importDefault(require("lodash/cloneDeep"));
 var values_1 = __importDefault(require("lodash/values"));
 var merge_1 = __importDefault(require("lodash/merge"));
 var entries_1 = __importDefault(require("lodash/entries"));
+function recursiveWrapModel(name, model, wrapModelList) {
+    if (wrapModelList && wrapModelList.length === 0) {
+        return model;
+    }
+    var nextModel = wrapModelList.shift()(name, model);
+    return recursiveWrapModel(name, nextModel, wrapModelList);
+}
 function recursiveOnReducer(modelName, reducerName, reducer, onReducerList) {
     if (onReducerList && onReducerList.length === 0) {
         return reducer;
@@ -34,14 +30,10 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 function getOnReducers(pluginMap) {
-    return values_1.default(pluginMap)
-        .filter(function (plugin) { return plugin.onReducer; })
-        .map(function (plugin) { return plugin.onReducer; });
+    return values_1.default(pluginMap).filter(function (plugin) { return plugin.onReducer; });
 }
 function getOnEffect(pluginMap) {
-    return values_1.default(pluginMap)
-        .filter(function (plugin) { return plugin.onEffect; })
-        .map(function (plugin) { return plugin.onEffect; });
+    return values_1.default(pluginMap).filter(function (plugin) { return plugin.onEffect; });
 }
 function getExtraModelMap(pluginMap) {
     return values_1.default(pluginMap)
@@ -52,38 +44,51 @@ function getExtraModelMap(pluginMap) {
 var create = function (config, pluginMap) {
     //clone
     var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b;
-    var onReducerList = getOnReducers(pluginMap);
-    var onEffectList = getOnEffect(pluginMap);
+    var wrapModelList = values_1.default(pluginMap).filter(function (p) { return p.warpModel; });
     var extraModelMap = getExtraModelMap(pluginMap);
     var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
         .map(function (_a) {
         var _b;
-        var modelName = _a[0], model = _a[1];
-        var reducers = model.reducers ? model.reducers : function () { return ({}); };
-        var effects = model.effects ? model.effects : function () { return ({}); };
-        var nextReducers = entries_1.default(reducers())
-            .map(function (_a) {
-            var _b;
-            var reducerName = _a[0], reducer = _a[1];
-            return (_b = {},
-                _b[reducerName] = recursiveOnReducer(modelName, reducerName, reducer, cloneDeep_1.default(onReducerList)),
-                _b);
-        })
-            .reduce(merge_1.default, {});
-        var nextEffects = entries_1.default(effects())
-            .map(function (_a) {
-            var _b;
-            var effectName = _a[0], effects = _a[1];
-            return (_b = {},
-                _b[effectName] = recursiveOnEffect(modelName, effectName, effects, cloneDeep_1.default(onEffectList)),
-                _b);
-        })
-            .reduce(merge_1.default, {});
+        var name = _a[0], model = _a[1];
+        var newModel = recursiveWrapModel(name, model, wrapModelList);
         return _b = {},
-            _b[modelName] = __assign({}, model, { reducers: function () { return nextReducers; }, effects: function (dispatch, getState, delpoy) { return nextEffects; } }),
+            _b[name] = newModel,
             _b;
     })
         .reduce(merge_1.default, {});
+    // const initialModelMap = entries(merge(initialModel, extraModelMap))
+    //   .map(([modelName, model]) => {
+    //     const reducers = model.reducers ? model.reducers : () => ({});
+    //     const effects = model.effects ? model.effects : () => ({});
+    //     const nextReducers = entries(reducers())
+    //       .map(([reducerName, reducer]) => ({
+    //         [reducerName]: recursiveOnReducer(
+    //           modelName,
+    //           reducerName,
+    //           reducer,
+    //           cloneDeep(onReducerList)
+    //         )
+    //       }))
+    //       .reduce(merge, {});
+    //     const nextEffects = entries(effects())
+    //       .map(([effectName, effects]) => ({
+    //         [effectName]: recursiveOnEffect(
+    //           modelName,
+    //           effectName,
+    //           effects,
+    //           cloneDeep(onEffectList)
+    //         )
+    //       }))
+    //       .reduce(merge, {});
+    //     return {
+    //       [modelName]: {
+    //         ...model,
+    //         reducers: () => nextReducers,
+    //         effects: (dispatch, getState, delpoy) => nextEffects
+    //       }
+    //     };
+    //   })
+    //   .reduce(merge, {});
     return core_1.create({
         initialModel: initialModelMap,
         initialState: initialState,

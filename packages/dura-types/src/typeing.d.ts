@@ -30,6 +30,7 @@ export type Plugin = {
   onReducer?: onReducer;
   onEffect?: onEffect;
   extraModel?: ModelMap;
+  warpModel?: (model: Model) => Model;
 };
 
 export type PluginMap = {
@@ -63,7 +64,7 @@ export type EffectMap = {
 export type EffectFunction = (
   dispatch?: any,
   getState?: any,
-  delay?: any
+  delay?: (ms: number) => Promise<void>
 ) => EffectMap;
 
 export type UnionToIntersection<U> = (U extends any
@@ -72,10 +73,10 @@ export type UnionToIntersection<U> = (U extends any
   ? I
   : never;
 
-export type Model<S> = {
-  state: S;
-  reducers: ReducerFcuntion<S>;
-  effects: EffectFunction;
+export type Model<S = any> = {
+  state?: S;
+  reducers?: ReducerFcuntion<S>;
+  effects?: EffectFunction;
 };
 
 export type ModelMap = {
