@@ -30,7 +30,9 @@ function recursiveOnEffect(modelName, effectName, effect, onEffectList) {
     return recursiveOnEffect(modelName, effectName, nextEffect, onEffectList);
 }
 function getOnReducers(pluginMap) {
-    return values_1.default(pluginMap).filter(function (plugin) { return plugin.onReducer; });
+    return values_1.default(pluginMap)
+        .filter(function (plugin) { return plugin.onReducer; })
+        .map(function (plugin) { return plugin.onReducer; });
 }
 function getOnEffect(pluginMap) {
     return values_1.default(pluginMap).filter(function (plugin) { return plugin.onEffect; });
@@ -44,7 +46,9 @@ function getExtraModelMap(pluginMap) {
 function create(config, pluginMap) {
     //clone
     var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b;
-    var wrapModelList = values_1.default(pluginMap).filter(function (p) { return p.wrapModel; });
+    var wrapModelList = values_1.default(pluginMap)
+        .filter(function (p) { return p.wrapModel; })
+        .map(function (p) { return p.wrapModel; });
     var extraModelMap = getExtraModelMap(pluginMap);
     var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
         .map(function (_a) {
@@ -85,7 +89,7 @@ function create(config, pluginMap) {
     //         ...model,
     //         reducers: () => nextReducers,
     //         effects: (dispatch, getState, delpoy) => nextEffects
-    //       }
+    //       }12
     //     };
     //   })
     //   .reduce(merge, {});

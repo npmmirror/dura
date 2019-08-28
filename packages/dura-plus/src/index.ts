@@ -51,7 +51,9 @@ function recursiveOnEffect(
 }
 
 function getOnReducers(pluginMap: PluginMap) {
-  return values(pluginMap).filter(plugin => plugin.onReducer);
+  return values(pluginMap)
+    .filter(plugin => plugin.onReducer)
+    .map(plugin => plugin.onReducer);
 }
 
 function getOnEffect(pluginMap: PluginMap) {
@@ -77,7 +79,9 @@ function create<C extends Config, P extends PluginMap>(
     extraReducers = {}
   } = cloneDeep(config);
 
-  const wrapModelList = values(pluginMap).filter(p => p.wrapModel);
+  const wrapModelList = values(pluginMap)
+    .filter(p => p.wrapModel)
+    .map(p => p.wrapModel);
 
   const extraModelMap: ModelMap = getExtraModelMap(pluginMap);
 
