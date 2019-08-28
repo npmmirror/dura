@@ -1,6 +1,6 @@
 {
   "name": "@dura/actions",
-  "version": "3.0.0-alpha.14",
+  "version": "3.0.0-alpha.15",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,7 +12,7 @@
   "author": "ityuany",
   "license": "ISC",
   "dependencies": {
-    "@dura/core": "^3.0.0-alpha.14",
-    "@dura/types": "^3.0.0-alpha.14"
+    "@dura/core": "^3.0.0-alpha.15",
+    "@dura/types": "^3.0.0-alpha.15"
   }
 }
