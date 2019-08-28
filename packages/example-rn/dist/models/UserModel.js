@@ -41,7 +41,11 @@ export default {
          */
         onAsyncChangeName(payload, meta) {
             return tslib_1.__awaiter(this, void 0, void 0, function* () {
+                console.log('hello');
                 yield delay(2000);
+                if (payload.newName.indexOf('3') !== -1) {
+                    throw new Error();
+                }
                 dispatch(actionCreator.user.onChangeName(payload));
             });
         }

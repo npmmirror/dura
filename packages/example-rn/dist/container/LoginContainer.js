@@ -14,7 +14,7 @@ function mapState(state) {
 function mapDispatch(dispatch) {
     return {
         onAsyncChangeName() {
-            dispatch(actionCreator.user.onAsyncChangeName({ newName: 'async异步张三' }, { loading: true }));
+            dispatch(actionCreator.user.onAsyncChangeName({ newName: 'async异步张三3' }, { loading: true }));
         },
         onChangeName() {
             dispatch(actionCreator.user.onChangeName({ newName: '同步张三' }));

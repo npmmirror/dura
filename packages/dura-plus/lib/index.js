@@ -23,7 +23,7 @@ function getExtraModelMap(pluginMap) {
 }
 function create(config, pluginMap) {
     //clone
-    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b;
+    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b, _c = _a.error, error = _c === void 0 ? function () { return false; } : _c;
     var wrapModelList = values_1.default(pluginMap)
         .filter(function (p) { return p.wrapModel; })
         .map(function (p) { return p.wrapModel; });
@@ -44,7 +44,8 @@ function create(config, pluginMap) {
         middlewares: middlewares,
         compose: config.compose,
         createStore: config.createStore,
-        extraReducers: extraReducers
+        extraReducers: extraReducers,
+        error: error
     });
 }
 exports.create = create;

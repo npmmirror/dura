@@ -18,7 +18,8 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
     initialModel,
     initialState,
     middlewares = [],
-    extraReducers = {}
+    extraReducers = {},
+    error = () => false
   } = cloneDeep(config);
 
   //聚合reducers
@@ -32,7 +33,11 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
           if (name !== namespace || !reducer) {
             return state;
           } else {
-            return reducer(state, action.payload, action.meta);
+            try {
+              return reducer(state, action.payload, action.meta);
+            } catch (e) {
+              error(e);
+            }
           }
         }
       };
@@ -49,7 +54,7 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
 
   //store增强器
   const storeEnhancer = composeEnhancers(
-    applyMiddleware(...middlewares, getAsyncMiddleware(initialModel))
+    applyMiddleware(...middlewares, getAsyncMiddleware(initialModel, error))
   );
 
   // //获取外部传入的 createStore

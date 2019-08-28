@@ -136,4 +136,5 @@ export type Config = {
   compose?: typeof compose;
   createStore?: typeof createStore;
   extraReducers?: any;
+  error?: (error: Error) => void;
 };

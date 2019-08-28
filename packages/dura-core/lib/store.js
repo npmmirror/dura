@@ -22,7 +22,7 @@ var async_1 = __importDefault(require("./async"));
  * @param config
  */
 function create(config) {
-    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c;
+    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c, _d = _a.error, error = _d === void 0 ? function () { return false; } : _d;
     //聚合reducers
     var modelReducers = Object.keys(initialModel)
         .map(function (name) {
@@ -37,7 +37,12 @@ function create(config) {
                     return state;
                 }
                 else {
-                    return reducer(state, action.payload, action.meta);
+                    try {
+                        return reducer(state, action.payload, action.meta);
+                    }
+                    catch (e) {
+                        error(e);
+                    }
                 }
             },
             _a;
@@ -47,7 +52,7 @@ function create(config) {
     // //获取外部传入的 compose
     var composeEnhancers = config.compose || redux_1.compose;
     //store增强器
-    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, middlewares.concat([async_1.default(initialModel)])));
+    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, middlewares.concat([async_1.default(initialModel, error)])));
     // //获取外部传入的 createStore
     var _createStore = config.createStore || redux_1.createStore;
     // //创建redux-store

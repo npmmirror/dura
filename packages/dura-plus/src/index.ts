@@ -35,7 +35,8 @@ function create<C extends Config, P extends PluginMap>(
     initialModel,
     initialState,
     middlewares,
-    extraReducers = {}
+    extraReducers = {},
+    error = () => false
   } = cloneDeep(config);
 
   const wrapModelList = values(pluginMap)
@@ -59,7 +60,8 @@ function create<C extends Config, P extends PluginMap>(
     middlewares: middlewares,
     compose: config.compose,
     createStore: config.createStore,
-    extraReducers: extraReducers
+    extraReducers: extraReducers,
+    error: error
   }) as Store<
     C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>
   >;

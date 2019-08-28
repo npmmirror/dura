@@ -2,7 +2,7 @@ import { ModelMap, Model } from '@dura/types';
 import cloneDeep from 'lodash/cloneDeep';
 import { delay } from './util';
 
-export default function getAsyncMiddleware(rootModel: ModelMap) {
+export default function getAsyncMiddleware(rootModel: ModelMap, error) {
   return store => next => action => {
     let result = next(action);
 
@@ -18,7 +18,11 @@ export default function getAsyncMiddleware(rootModel: ModelMap) {
       const effect = moduleEffects[nameeffect];
 
       if (effect) {
-        effect(action.payload, action.meta);
+        try {
+          effect(action.payload, action.meta);
+        } catch (e) {
+          error(e);
+        }
       }
     }
 

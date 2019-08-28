@@ -47,7 +47,13 @@ export default {
       payload: { newName: string },
       meta: { loading: boolean }
     ) {
+      console.log('hello');
+
       await delay(2000);
+      if (payload.newName.indexOf('3') !== -1) {
+        throw new Error();
+      }
+
       dispatch(actionCreator.user.onChangeName(payload));
     }
   })

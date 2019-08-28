@@ -19,7 +19,7 @@ function mapDispatch(dispatch) {
     onAsyncChangeName() {
       dispatch(
         actionCreator.user.onAsyncChangeName(
-          { newName: 'async异步张三' },
+          { newName: 'async异步张三3' },
           { loading: true }
         )
       );
