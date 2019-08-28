@@ -65,7 +65,7 @@ function getExtraModelMap(pluginMap: PluginMap) {
     .reduce(merge, {});
 }
 
-const create = function<C extends Config, P extends PluginMap>(
+function create<C extends Config, P extends PluginMap>(
   config: C,
   pluginMap?: P
 ): Store<C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>> {
@@ -137,7 +137,7 @@ const create = function<C extends Config, P extends PluginMap>(
   }) as Store<
     C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>
   >;
-};
+}
 
 export { create };
 
