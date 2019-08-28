@@ -122,7 +122,7 @@ function create<C extends Config, P extends PluginMap>(
   //         ...model,
   //         reducers: () => nextReducers,
   //         effects: (dispatch, getState, delpoy) => nextEffects
-  //       }1
+  //       }12
   //     };
   //   })
   //   .reduce(merge, {});
