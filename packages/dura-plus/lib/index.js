@@ -44,7 +44,7 @@ function getExtraModelMap(pluginMap) {
 var create = function (config, pluginMap) {
     //clone
     var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b;
-    var wrapModelList = values_1.default(pluginMap).filter(function (p) { return p.warpModel; });
+    var wrapModelList = values_1.default(pluginMap).filter(function (p) { return p.wrapModel; });
     var extraModelMap = getExtraModelMap(pluginMap);
     var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
         .map(function (_a) {

@@ -2,33 +2,33 @@
 # yarn lockfile v1
 
 
-"@dura/actions@^3.0.0-alpha.6":
-  version "3.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.6.tgz#187016a07e99741b571faeb1b025f6538511d4c9"
-  integrity sha512-TCEMz9crauRF2QHF/CA1dQLZu8A79C1fl2C7NC3PNSLN+YrkE/04TvkpzWQrV9NrPv82flQuDZOC2ax29zViMA==
+"@dura/actions@^3.0.0-alpha.7":
+  version "3.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.7.tgz#b4e5a9df46ad957b1e36e9b04ab6a023f1830d02"
+  integrity sha512-4E9m2Ot70ywXAKf8gTUlrWrypoUhaNHbb3HA4d+fWxarl/mGOqVQdZW9QPMtvJdG4Z98Il/jO7i36YT0ZwTmFA==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.6"
-    "@dura/types" "^3.0.0-alpha.6"
+    "@dura/core" "^3.0.0-alpha.7"
+    "@dura/types" "^3.0.0-alpha.7"
 
-"@dura/core@^3.0.0-alpha.6":
-  version "3.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.6.tgz#4917a5f9d117b645e2d8be519bbf8950de51ed38"
-  integrity sha512-bQ27eRiRRCqzXGJBW54EHoLIGEJMR0NfztAArQ4v05j35SNEWBPsi+I1dMID882IoGkGab2B3y3mRUxVdmRxtQ==
+"@dura/core@^3.0.0-alpha.7":
+  version "3.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.7.tgz#14cedbf225a1da6a4e2bf96e96dc7fc011200864"
+  integrity sha512-A0eR25Go9zw0S2GGLB040CKt+CICISma42kvF5fYRAhZUqo0M+mySbuxDbF2bSm0WFaaroNoptx28YMkd3Cghw==
   dependencies:
     redux "^4.0.4"
 
-"@dura/plus@^3.0.0-alpha.6":
-  version "3.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.6.tgz#1d5390ae074f25ea107e47d57e2bef84b763a8db"
-  integrity sha512-LEyKmEbIx5GMfOGNn21yGF5rFvxF5/r8EaUlXKulS86W4IgNMgV+f6xFhHy2FHStH9KP9Y+GtwpKcBr9b8jBBQ==
+"@dura/plus@^3.0.0-alpha.7":
+  version "3.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.7.tgz#72422a25a5fcb841a2e8a32f3dc661e6df99f206"
+  integrity sha512-Tv6pLv9NqgE/dWmedbKFuwMmATQJefQSoKHzlzw69jll1zeSIOpjAzzaGZFKVwZlN4VBOpIJY8EIIBgYg/CZcQ==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.6"
-    "@dura/types" "^3.0.0-alpha.6"
+    "@dura/core" "^3.0.0-alpha.7"
+    "@dura/types" "^3.0.0-alpha.7"
 
-"@dura/types@^3.0.0-alpha.6":
-  version "3.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.6.tgz#b4c3c024af86b997d9c4347c2070a1152f926816"
-  integrity sha512-aE1XkvPXv8TlDm6Nd4tCTcElR4Tp5g1TKjcciWa1THCpsXhiCUsT19ogTJ3lWYApI18UWTdW2YOe4NBKvRoq9w==
+"@dura/types@^3.0.0-alpha.7":
+  version "3.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.7.tgz#c6860ab6928aa35ee5f9bd823391eda99b2efe33"
+  integrity sha512-wbyleV+bPZ9CdC1C6ON5t9U3orLJuUNGPlGkzwkjt+C8p3g3rKaqIATXLc7/zId6Y9yoEiQs8/r9j7TfyJSPpQ==
   dependencies:
     "@types/redux" "^3.6.0"
     utility-types "^3.7.0"

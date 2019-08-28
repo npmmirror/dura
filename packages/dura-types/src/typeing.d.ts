@@ -30,7 +30,7 @@ export type Plugin = {
   onReducer?: onReducer;
   onEffect?: onEffect;
   extraModel?: ModelMap;
-  warpModel?: (model: Model) => Model;
+  wrapModel?: (name: string, model: Model) => Model;
 };
 
 export type PluginMap = {

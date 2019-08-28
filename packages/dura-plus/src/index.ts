@@ -77,7 +77,7 @@ const create = function<C extends Config, P extends PluginMap>(
     extraReducers = {}
   } = cloneDeep(config);
 
-  const wrapModelList = values(pluginMap).filter(p => p.warpModel);
+  const wrapModelList = values(pluginMap).filter(p => p.wrapModel);
 
   const extraModelMap: ModelMap = getExtraModelMap(pluginMap);
 
