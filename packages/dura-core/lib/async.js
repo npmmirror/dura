@@ -13,12 +13,10 @@ function getAsyncMiddleware(rootModel, error) {
             var moduleEffects = rootModel[namespace].effects(store.dispatch, function () { return cloneDeep_1.default(store.getState()); }, util_1.delay);
             var effect = moduleEffects[nameeffect];
             if (effect) {
-                try {
-                    effect(action.payload, action.meta);
-                }
-                catch (e) {
+                effect(action.payload, action.meta).catch(function (e) {
                     error(e);
-                }
+                    console.log(e);
+                });
             }
         }
         return result;

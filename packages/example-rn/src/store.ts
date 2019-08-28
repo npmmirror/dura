@@ -37,15 +37,12 @@ export const store = create(
     middlewares: [
       store => next => action => {
         error.push(action);
-        try {
-          next(action);
-        } catch (e) {
-          console.log(JSON.stringify(error));
-          next(action);
-        }
-        console.log(JSON.stringify(error));
+        next(action);
       }
-    ]
+    ],
+    error: e => {
+      console.log(JSON.stringify(error));
+    }
   },
   {
     immer: createImmerPlugin(),
@@ -57,23 +54,8 @@ const actionCreator = createAction(initialModel);
 
 [
   { type: 'user/onChangeContext', payload: { newContext: '1' } },
-  { type: 'user/onChangeContext', payload: { newContext: '11' } },
-  { type: 'user/onChangeContext', payload: { newContext: '112' } },
-  { type: 'user/onChangeContext', payload: { newContext: '1123' } },
-  { type: 'user/onChangeContext', payload: { newContext: '11234' } },
-  {
-    type: 'user/onAsyncChangeName',
-    payload: { newName: 'async异步张三3' },
-    meta: { loading: true }
-  },
-  {
-    type: 'loading/startLoading',
-    payload: { modelName: 'user', effectName: 'onAsyncChangeName' }
-  },
-  {
-    type: 'loading/endLoading',
-    payload: { modelName: 'user', effectName: 'onAsyncChangeName' }
-  }
+  { type: 'user/onChangeContext', payload: { newContext: '12' } },
+  { type: 'user/onChangeContext', payload: { newContext: '123' } }
 ].forEach(action => {
   store.dispatch(action);
 });

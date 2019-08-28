@@ -37,6 +37,8 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
               return reducer(state, action.payload, action.meta);
             } catch (e) {
               error(e);
+              console.log(e);
+              return state;
             }
           }
         }

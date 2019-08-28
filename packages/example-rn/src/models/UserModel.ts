@@ -17,7 +17,8 @@ const initialState = {
   /**
    * 文本内容
    */
-  context: ''
+  context: '',
+  isShow: false
 };
 
 type State = typeof initialState;
@@ -25,6 +26,9 @@ type State = typeof initialState;
 export default {
   state: () => initialState,
   reducers: () => ({
+    onChangeIsShow(state: State, payload: { nextIsShow: boolean }) {
+      state.isShow = payload.nextIsShow;
+    },
     /**
      *
      * @param payload 同步修改姓名
@@ -35,6 +39,9 @@ export default {
     },
     onChangeContext(state: State, payload: { newContext: string }) {
       state.context = payload.newContext;
+      if (payload.newContext.indexOf('3') !== -1) {
+        throw new Error();
+      }
       return state;
     }
   }),
@@ -50,11 +57,13 @@ export default {
       console.log('hello');
 
       await delay(2000);
-      if (payload.newName.indexOf('3') !== -1) {
-        throw new Error();
-      }
+      // if (payload.newName.indexOf('3') !== -1) {
+      //   throw new Error();
+      // }
 
       dispatch(actionCreator.user.onChangeName(payload));
+
+      dispatch(actionCreator.user.onChangeIsShow({ nextIsShow: true }));
     }
   })
 };

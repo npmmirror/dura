@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@ant-design/icons-react-native/-/icons-react-native-1.0.2.tgz#28648eacb808a1fae0ad59d691bbb472a6ffc26e"
   integrity sha512-cpTHdeGdxS+kp59rrtHZw6guXJQyDKzvLxGUf2qXeTlua5nKLG1kVoSMtW5tIPep21RcL6gVdwQl5+/mUMk9/w==
 
-"@ant-design/react-native@^3.1.1":
-  version "3.1.14"
-  resolved "https://registry.yarnpkg.com/@ant-design/react-native/-/react-native-3.1.14.tgz#94df6f0723c6bedf617580d6a93136a3601e4d92"
-  integrity sha512-yhShLsUbe7FzJId4E3lnPnSn1QYdAoDAsxSarp5U/3T/0BlMLfAVXjbcvS9999C/0beYYAWPDOHtMsAW7sZLFQ==
+"@ant-design/react-native@^3.1.5":
+  version "3.1.15"
+  resolved "https://registry.yarnpkg.com/@ant-design/react-native/-/react-native-3.1.15.tgz#3720ac06670d22af934130efd85fb81b0ad4d0df"
+  integrity sha512-Sj02TfQ+Mu3VAtqkPdXcZU2zULkewf7m4h+ERsMrQjzRMJrifEugjKyrmZ1uLr4gRMltZnogeYjPwt5leyICLg==
   dependencies:
     "@ant-design/icons-react-native" "^1.0.2"
     "@bang88/react-native-drawer-layout" "^2.0.3"
@@ -690,49 +690,49 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dura/actions@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.15.tgz#551c6e775bd4607fb866a587c29af42edb40246c"
-  integrity sha512-L1GYPd2xRDOabGAQHQUQnVDdIEUez6cAL4YjtXg5vrwyZm0FLSNHyULzY+ceV7EOVkhhphsTXXuX3S6WbuMatg==
+"@dura/actions@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.16.tgz#268e6ab7287bf75e507bc6744cb56507ef5f812c"
+  integrity sha512-RtaZ4xEkRzYmPfuq/oGXcH7bYNC4d6cRg7klWP5/e9dS4IOWICCt7HaZ2n2dz3Pa7AjSWYCrW5vPqA1Xr8/tAg==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.15"
-    "@dura/types" "^3.0.0-alpha.15"
+    "@dura/core" "^3.0.0-alpha.16"
+    "@dura/types" "^3.0.0-alpha.16"
 
-"@dura/core@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.15.tgz#157c706a5c05e265c2021a4315717b6a7f0ee2f4"
-  integrity sha512-/0Z2/mAB1ZjYwfPj3GOy+BQ2Gct3WhgayzfekQ68RtS6M0LZfemX6/+zCVvglFw4Ak31cM/FilY8zbQONuOvng==
+"@dura/core@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.16.tgz#10e6c8d316bd096f76cf27dcd4a7ea0af5bbd61c"
+  integrity sha512-2xYh/ZD+R7dMS721Cf5YdY/YmZAdiuklw1f+EAxmj7JIuIW3CyjO7NS9ogzYMeLBVMVJQh5Rak/V/jyti4fJsw==
   dependencies:
     redux "^4.0.4"
 
-"@dura/immer@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-3.0.0-alpha.15.tgz#fdc980410b7772f7c4d8b7b84328b3857e38fc5d"
-  integrity sha512-VveZ0U5npTcjQl/L/wDlFUf/JNGYo6Ux9+0J49dWhgOaVP51wrVr+xt9BfswMX6N01iVOcF6dAr5O3MaTu8wkw==
+"@dura/immer@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-3.0.0-alpha.16.tgz#590ec67b6ba52ef3796b364b0641cb738a48371c"
+  integrity sha512-qAv50KDc15Af6UROIIG6lb2FpM927HXgrdCU8z5+mw+yQWTi4wixs/vtG8mbPZ40EFYeg9nlc1u2xU1fxC+1qA==
   dependencies:
-    "@dura/actions" "^3.0.0-alpha.15"
-    "@dura/types" "^3.0.0-alpha.15"
+    "@dura/actions" "^3.0.0-alpha.16"
+    "@dura/types" "^3.0.0-alpha.16"
     immer "^1.12.1"
 
-"@dura/loading@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-3.0.0-alpha.15.tgz#e05d6b06aeab395ccca57ec944b565d19ff5fea0"
-  integrity sha512-K84rUokllK3Hy/eX6rWi1KxKmcppwd5hEKnHSJ+knYYC65pUB2zEW3tYXigRYq08hE9kqFw0m2bxJ97NcU3oEQ==
+"@dura/loading@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-3.0.0-alpha.16.tgz#0de8f39e6873b5589e7076710a276933cf2b48d2"
+  integrity sha512-JocZOo9LpnQIDK/52K1YSvAqNlwQvAO/ZPbsLOxQLmMhEI07dnO4LSiuilMUZUmIMNQTLuAjRatX//Hpp8v5oQ==
   dependencies:
-    "@dura/types" "^3.0.0-alpha.15"
+    "@dura/types" "^3.0.0-alpha.16"
 
-"@dura/plus@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.15.tgz#ad15016c789530a570cf54980f6c0b41e367f838"
-  integrity sha512-aMhRprvaGNtKtkrbhdpKUUg2UCyzhtNk0Qc4Eu3hUfJS2U1UTk4f1I+sPyk4MfyLJ/QEAnIc/JAEGXgKtDLl+Q==
+"@dura/plus@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.16.tgz#af91762341f098c809de4aedefcff4190e5f6688"
+  integrity sha512-xPEhpE+8w6HRqchseFnYm0YB+m8klT5Qm96Jc/+FHJgpXNgkuvz+QqadSxV1kvwTNn4T7P2mruQOzJESzlJM4g==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.15"
-    "@dura/types" "^3.0.0-alpha.15"
+    "@dura/core" "^3.0.0-alpha.16"
+    "@dura/types" "^3.0.0-alpha.16"
 
-"@dura/types@^3.0.0-alpha.15":
-  version "3.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.15.tgz#5f24e0afaf22acbc435630875316ba43874330cf"
-  integrity sha512-pihe3Tqe3Y3IaIEd1QwQDRPUJ5v8CCz0ZIDfmnYO6wWlOpHBqPOZPFmu7f50cI6Bk4zpPQt0n0iFrmXIxrJ/jw==
+"@dura/types@^3.0.0-alpha.16":
+  version "3.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.16.tgz#97547554d1769a705130fa6d010394451ead0cda"
+  integrity sha512-RN3qBpLvnJNErAfxkT0ZCUVt/FYXjLScxnYB8Q1YOWkgq8HssFowIlAnUx7xL6H0Ai6AUsET40DdfTiHUG7PnQ==
   dependencies:
     "@types/redux" "^3.6.0"
     utility-types "^3.7.0"

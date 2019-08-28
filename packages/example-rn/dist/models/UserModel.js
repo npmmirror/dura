@@ -16,11 +16,15 @@ const initialState = {
     /**
      * 文本内容
      */
-    context: ''
+    context: '',
+    isShow: false
 };
 export default {
     state: () => initialState,
     reducers: () => ({
+        onChangeIsShow(state, payload) {
+            state.isShow = payload.nextIsShow;
+        },
         /**
          *
          * @param payload 同步修改姓名
@@ -31,6 +35,9 @@ export default {
         },
         onChangeContext(state, payload) {
             state.context = payload.newContext;
+            if (payload.newContext.indexOf('3') !== -1) {
+                throw new Error();
+            }
             return state;
         }
     }),
@@ -43,10 +50,11 @@ export default {
             return tslib_1.__awaiter(this, void 0, void 0, function* () {
                 console.log('hello');
                 yield delay(2000);
-                if (payload.newName.indexOf('3') !== -1) {
-                    throw new Error();
-                }
+                // if (payload.newName.indexOf('3') !== -1) {
+                //   throw new Error();
+                // }
                 dispatch(actionCreator.user.onChangeName(payload));
+                dispatch(actionCreator.user.onChangeIsShow({ nextIsShow: true }));
             });
         }
     })

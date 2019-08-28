@@ -18,11 +18,10 @@ export default function getAsyncMiddleware(rootModel: ModelMap, error) {
       const effect = moduleEffects[nameeffect];
 
       if (effect) {
-        try {
-          effect(action.payload, action.meta);
-        } catch (e) {
+        effect(action.payload, action.meta).catch(e => {
           error(e);
-        }
+          console.log(e);
+        });
       }
     }
 
