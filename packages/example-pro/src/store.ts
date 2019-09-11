@@ -25,8 +25,8 @@ export const store = create(
     compose: window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
   },
   {
-    immer: createImmerPlugin(),
-    loading: createLoadingPlugin(initialModel)
+    immer: createImmerPlugin()
+    // loading: createLoadingPlugin(initialModel)
   }
 );
 

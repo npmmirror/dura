@@ -5,8 +5,6 @@ import Item from './components/Item';
 import { Button } from 'antd';
 
 const mapState = function(state: RootState) {
-  console.log(state.hello);
-
   return {
     helloName: state.hello.name
   };

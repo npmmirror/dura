@@ -47,7 +47,11 @@ function create<C extends Config, P extends PluginMap>(
 
   const initialModelMap = entries(merge(initialModel, extraModelMap))
     .map(([name, model]) => {
-      const newModel = recursiveWrapModel(name, model, wrapModelList);
+      const newModel = recursiveWrapModel(
+        name,
+        model,
+        cloneDeep(wrapModelList)
+      );
       return {
         [name]: newModel
       };

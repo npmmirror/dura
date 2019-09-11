@@ -37,49 +37,49 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@dura/actions@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.17.tgz#6dfd469ae9e3c6c15abfbca5b80da119674354c1"
-  integrity sha512-m8zqSQiCN0kGFKMR4Gvu5YP/M4JHhJlYEsfoz0u+3sUE7unnvhIST37kHctIwsszzLez4lYAGYO8LT0rxHl8GQ==
+"@dura/actions@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.18.tgz#48b68e4aaeae6467de46e8c5ea7781adb2661fb8"
+  integrity sha512-mCDWEzBFqgrltRgkzmnfCtXADlzEUZOfTulKKtQSsP48dPPXb/cVyffp0F6hc/Gs9PbV3qWj04HTkmSIDBTcaQ==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/core" "^3.0.0-alpha.18"
+    "@dura/types" "^3.0.0-alpha.18"
 
-"@dura/core@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.17.tgz#be4b3d53ee5d4d1347a862b456379fe0d6bf1156"
-  integrity sha512-uiE7VkQ2+3qVg7tBR3VjWwPY9jfV8AStq03fYqeZcpnTBkueMP1AqFyyJgK0zIe84PaA1rDRuqJrAbRaRBrArg==
+"@dura/core@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.18.tgz#befad12367fe34944fc576d0fcba8f7124548b32"
+  integrity sha512-TEyjT08UYh97LQN3djIhk9mNXyExUCAc0kmloS+p6wqa64/vdGjjEg3F4K/22yVeWnRB/d38tUUOhk675pSPxg==
   dependencies:
     redux "^4.0.4"
 
-"@dura/immer@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-3.0.0-alpha.17.tgz#20ff49d9de49f6c968901f4626b6d4b82d5325a7"
-  integrity sha512-saygoBoJMC8QVGts/9h7mC5Nn2CxKbnisISbOZvf74J1gcJ81HERp5rwVKMe8M3sID4HCocZ1OrnEi1b3Da57w==
+"@dura/immer@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-3.0.0-alpha.18.tgz#881a14ced3e36fc055f2cd466b6f65e72900d8f8"
+  integrity sha512-Va6PhgxTMu7+Sl3znWmMIBQmrFHbz6w8d6M2NJNMkphvbpqOjWem+6mLJjjdChAwNI0tgM0QA+3FkcIsXkay/w==
   dependencies:
-    "@dura/actions" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/actions" "^3.0.0-alpha.18"
+    "@dura/types" "^3.0.0-alpha.18"
     immer "^1.12.1"
 
-"@dura/loading@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-3.0.0-alpha.17.tgz#2463fe6cfd34adc27c66fcdb11bb403d5376b9b0"
-  integrity sha512-DkSOz6OtrgqfOhxHpMi1opfCQjKklYEYuU2N1JmMChv/AaFrsox4o13TqZEpChN1unXPcByFvFfTbg+wDR7kcg==
+"@dura/loading@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-3.0.0-alpha.18.tgz#4b03a3191c00387217c19cdc20556bfcaff9948a"
+  integrity sha512-9FAq0MoFCrJ4HPq0zDx7vlBmkvXih2vEEVIhoZ1C+t3iE6KBUPnfg/ehGO2l3vX2YXHLZ3alCUzU7/NV4v5dVA==
   dependencies:
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/types" "^3.0.0-alpha.18"
 
-"@dura/plus@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.17.tgz#f241a42c8b0eb7b1990647a7404693181b2a6bf0"
-  integrity sha512-EWELft8/VK9cafIj3zASql8yNhmfZdPE+fDQiKkIFeKBCcjb9hAdG/j5bnlVEWrKjn3CHoKEahqSjyQj0jWk9w==
+"@dura/plus@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.18.tgz#7773bc21486a3c3ef1902b5cde1740c2c77893e5"
+  integrity sha512-2XCYF2Qu7sXUsXoPza6NFKL0+ksk4P2pRa6ylqjLR2nZHtPqoxJMJzQimBkoVuLD3i6tBGWFmkC7KdI/EIM5aQ==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/core" "^3.0.0-alpha.18"
+    "@dura/types" "^3.0.0-alpha.18"
 
-"@dura/types@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.17.tgz#6dc07cef7195e8da4f45d8b4b857399b4950abd0"
-  integrity sha512-XbHCMgmI4BvRMGtu1weIzIgpoIpP5VQTI2ghWDSJ0RNBVKHyXQkdCE2/hNWMt2Xgn+wph98F6OxCy9PAFLcZmw==
+"@dura/types@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.18.tgz#a7e140909ccf74c6731d599a2d51d9ec34366d20"
+  integrity sha512-wZoQ51zdWnzV/XTPkGJZEBxZ0xA7F6JwIalGAkaW/lu83HA4uVZXVTok+3XtKCKdJ4hiTf1izGpSwBqt2IJBzg==
   dependencies:
     "@types/redux" "^3.6.0"
     utility-types "^3.7.0"

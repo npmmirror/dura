@@ -9,6 +9,8 @@ type State = ReturnType<typeof initialState>;
 const reducers = () => {
   return {
     onChangeName(state: State, payload: { nextName: string }) {
+      console.log('onChangeName');
+
       state.name = payload.nextName;
     }
   };

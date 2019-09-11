@@ -32,7 +32,7 @@ function create(config, pluginMap) {
         .map(function (_a) {
         var _b;
         var name = _a[0], model = _a[1];
-        var newModel = recursiveWrapModel(name, model, wrapModelList);
+        var newModel = recursiveWrapModel(name, model, cloneDeep_1.default(wrapModelList));
         return _b = {},
             _b[name] = newModel,
             _b;
