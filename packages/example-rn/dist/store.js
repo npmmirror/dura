@@ -11,35 +11,41 @@ const initialModel = {
     user: UserModel,
     router: RouterModel
 };
-console.log(window['devToolsExtension']({
-    'user/onChangeContext': () => ({
-        type: 'user/onChangeContext',
-        payload: { newContext: '1' }
-    })
-}));
 let error = [];
-export const store = create({
-    initialModel: initialModel,
-    compose: window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'],
-    middlewares: [
-        store => next => action => {
-            error.push(action);
-            next(action);
+export const store = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
+    ? create({
+        initialModel: initialModel,
+        compose: window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'],
+        middlewares: [
+            store => next => action => {
+                error.push(action);
+                next(action);
+            }
+        ],
+        error: e => {
+            console.log(JSON.stringify(error));
         }
-    ],
-    error: e => {
-        console.log(JSON.stringify(error));
-    }
-}, {
-    immer: createImmerPlugin(),
-    loading: createLoadingPlugin(initialModel)
-});
+    }, {
+        immer: createImmerPlugin(),
+        loading: createLoadingPlugin(initialModel)
+    })
+    : create({
+        initialModel: initialModel,
+        middlewares: [
+            store => next => action => {
+                error.push(action);
+                next(action);
+            }
+        ],
+        error: e => {
+            console.log(JSON.stringify(error));
+        }
+    }, {
+        immer: createImmerPlugin(),
+        loading: createLoadingPlugin(initialModel)
+    });
 const actionCreator = createAction(initialModel);
-[
-    { type: 'user/onChangeContext', payload: { newContext: '1' } },
-    { type: 'user/onChangeContext', payload: { newContext: '12' } },
-    { type: 'user/onChangeContext', payload: { newContext: '123' } }
-].forEach(action => {
+[].forEach(action => {
     store.dispatch(action);
 });
 export { actionCreator };

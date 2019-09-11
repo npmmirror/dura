@@ -5,15 +5,16 @@ import { ModelMap, Plugin, EffectMap } from '@dura/types';
 import entries from 'lodash/entries';
 import keys from 'lodash/keys';
 import merge from 'lodash/merge';
+import get from 'lodash/get';
+import chain from 'lodash/chain';
 
 export const createLoadingPlugin = function<MM extends ModelMap>(
   modelMap: MM
 ): Plugin {
   const initialState = entries(modelMap)
     .map(([name, model]) => {
-      const e = (model.effects && model.effects()) || {};
       return {
-        [name]: keys(e)
+        [name]: keys(get(model, 'effects', () => ({}))())
           .map(ename => ({ [ename]: false }))
           .reduce(merge, {})
       };

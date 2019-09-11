@@ -6,12 +6,16 @@
   "main": "index.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
+  },
   "dependencies": {
     "@dura/actions": "^3.0.0-alpha.17",
     "@dura/immer": "^3.0.0-alpha.17",
     "@dura/loading": "^3.0.0-alpha.17",
     "@dura/plus": "^3.0.0-alpha.17",
     "antd": "^3.13.0",
+    "lodash": "^4.17.15",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",

@@ -52,15 +52,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var entries_1 = __importDefault(require("lodash/entries"));
 var keys_1 = __importDefault(require("lodash/keys"));
 var merge_1 = __importDefault(require("lodash/merge"));
+var get_1 = __importDefault(require("lodash/get"));
 exports.createLoadingPlugin = function (modelMap) {
     var _this = this;
     var initialState = entries_1.default(modelMap)
         .map(function (_a) {
         var _b;
         var name = _a[0], model = _a[1];
-        var e = (model.effects && model.effects()) || {};
         return _b = {},
-            _b[name] = keys_1.default(e)
+            _b[name] = keys_1.default(get_1.default(model, 'effects', function () { return ({}); })())
                 .map(function (ename) {
                 var _a;
                 return (_a = {}, _a[ename] = false, _a);

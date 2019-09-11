@@ -18,7 +18,8 @@ const initialState = {
    * 文本内容
    */
   context: '',
-  isShow: false
+  isShow: false,
+  isShowDraw: false
 };
 
 type State = typeof initialState;
@@ -26,6 +27,9 @@ type State = typeof initialState;
 export default {
   state: () => initialState,
   reducers: () => ({
+    onChangeIsShowDraw(state: State, payload: { isShowDraw: boolean }) {
+      state.isShowDraw = payload.isShowDraw;
+    },
     onChangeIsShow(state: State, payload: { nextIsShow: boolean }) {
       state.isShow = payload.nextIsShow;
     },

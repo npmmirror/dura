@@ -17,11 +17,15 @@ const initialState = {
      * 文本内容
      */
     context: '',
-    isShow: false
+    isShow: false,
+    isShowDraw: false
 };
 export default {
     state: () => initialState,
     reducers: () => ({
+        onChangeIsShowDraw(state, payload) {
+            state.isShowDraw = payload.isShowDraw;
+        },
         onChangeIsShow(state, payload) {
             state.isShow = payload.nextIsShow;
         },

@@ -45,7 +45,16 @@ export default {
       payload: { newName: string },
       meta: { loading: boolean }
     ) {
-      await delay(5500);
+      console.log(1);
+
+      console.log(2);
+
+      delay(1000).then(() => console.log(3));
+
+      await delay(3000);
+
+      console.log(4);
+
       dispatch(
         actionCreator.user.onChangeName({
           newName: payload.newName
@@ -54,3 +63,7 @@ export default {
     }
   })
 };
+
+async function hello() {}
+
+const a = hello;
