@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '@store';
+import { get } from 'lodash';
 
-const mapState = function(state: RootState) {
+const mapState = (state: RootState, ownProps) => {
   return {
-    helloName: state.hello.name
+    item: state.hello.articleList.find(n => n.id === +ownProps.id)
   };
 };
 
-class Item extends Component<Partial<ReturnType<typeof mapState>>> {
+type Props = Partial<ReturnType<typeof mapState>> & {
+  id: number;
+};
+
+class Item extends Component<Props> {
   render() {
-    console.log('item render');
+    console.log('item render', this.props.item);
+
     return (
       <div>
-        <h2>hello:</h2>
+        <h1>{get(this.props, 'item.title', '')}</h1>
+        <span>{get(this.props, 'item.context', '')}</span>
       </div>
     );
   }
@@ -21,9 +28,7 @@ class Item extends Component<Partial<ReturnType<typeof mapState>>> {
 
 const ItemContainer = connect(
   mapState,
-  function() {
-    return {};
-  }
+  null
 )(Item);
 
 export default ItemContainer;
