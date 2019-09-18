@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { RootState, actionCreator } from '@store';
+import { RootState, actionCreator, connectHOC } from '@store';
 import Item from './components/Item';
 import { Button } from 'antd';
-import { createSelector } from 'reselect';
 
 const mapState = function(state: RootState) {
   return {
     helloName: state.hello.name,
-    articleIdListString: state.hello.articleList.map(n => n.id).join(',')
+    articleIdList: state.hello.articleList.map(n => n.id),
+
+    loading: state.loading.hello.onAsyncQueryUserList
   };
 };
 
@@ -28,7 +29,7 @@ type Props = Partial<ReturnType<typeof mapState>> &
 
 class Home extends Component<Props> {
   render() {
-    console.log('render home index', this.props.articleIdListString);
+    console.log('render home index');
 
     return (
       <div>
@@ -37,7 +38,7 @@ class Home extends Component<Props> {
         <Button type='primary' onClick={this.props.onChangeItem}>
           更改列表item
         </Button>
-        {(this.props.articleIdListString.split(',') || []).map(id => (
+        {this.props.articleIdList.map(id => (
           <Item key={id} id={id} />
         ))}
       </div>
@@ -45,9 +46,6 @@ class Home extends Component<Props> {
   }
 }
 
-const HomeContainer = connect(
-  mapState,
-  mapDispatch
-)(Home);
+const HomeContainer = connectHOC(mapState, mapDispatch)(Home);
 
 export default HomeContainer;

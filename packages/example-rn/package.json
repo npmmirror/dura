@@ -3,7 +3,8 @@
   "version": "3.0.0-alpha.19",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:dev": "set NODE_ENV=dev & node node_modules/react-native/local-cli/cli.js start",
+    "start:prod": "set NODE_ENV=prod & node node_modules/react-native/local-cli/cli.js start",
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "@dura/plus": "^3.0.0-alpha.19",
     "@react-native-community/async-storage": "^1.6.1",
     "buffer": "5.4.2",
+    "jquery": "^3.4.1",
     "lottie-ios": "2.5.8",
     "lottie-react-native": "^2.6.1",
     "react": "^16.7.0",

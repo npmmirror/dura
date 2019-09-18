@@ -5,6 +5,8 @@ import { create, ExtractState } from '@dura/plus';
 import { createImmerPlugin } from '@dura/immer';
 import { ExtractLoadingState, createLoadingPlugin } from '@dura/loading';
 import createAction from '@dura/actions';
+import { isEqual } from 'lodash';
+import { connect } from 'react-redux';
 
 const initialModel = {
   /**
@@ -60,11 +62,18 @@ export const store = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
       }
     );
 
-const actionCreator = createAction(initialModel);
+export const actionCreator = createAction(initialModel);
 
-[].forEach(action => {
-  store.dispatch(action);
-});
-
-export { actionCreator };
-
+export const connectHOC = function(mapState, mapDispatch) {
+  return connect(
+    mapState,
+    mapDispatch,
+    null,
+    {
+      areStatesEqual: isEqual,
+      areOwnPropsEqual: isEqual,
+      areStatePropsEqual: isEqual,
+      areMergedPropsEqual: isEqual
+    }
+  );
+};

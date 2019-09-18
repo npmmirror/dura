@@ -5,6 +5,8 @@ import { createImmerPlugin } from '@dura/immer';
 import { createLoadingPlugin, ExtractLoadingState } from '@dura/loading';
 import createActions from '@dura/actions';
 import HelloModel from './container/Home/models/HelloModel';
+import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
 
 const initialModel = {
   /**
@@ -25,11 +27,23 @@ export const store = create(
     compose: window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
   },
   {
-    immer: createImmerPlugin()
-    // loading: createLoadingPlugin(initialModel)
+    immer: createImmerPlugin(),
+    loading: createLoadingPlugin(initialModel)
   }
 );
 
-const actionCreator = createActions(initialModel);
+export const actionCreator = createActions(initialModel);
 
-export { actionCreator };
+export const connectHOC = function(mapState, mapDispatch) {
+  return connect(
+    mapState,
+    mapDispatch,
+    null,
+    {
+      areStatesEqual: isEqual,
+      areOwnPropsEqual: isEqual,
+      areStatePropsEqual: isEqual,
+      areMergedPropsEqual: isEqual
+    }
+  );
+};

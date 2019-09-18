@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import { store, actionCreator } from './store';
 import LoginContainer from './container/LoginContainer';
-import UserContainer from './container/UserContainer';
-import { createStackNavigator } from 'react-navigation';
+import { createDrawerNavigator, createNavigationContainer } from 'react-navigation';
 import { Drawer } from '@ant-design/react-native';
-const AppContainer = createStackNavigator({
+const AppContainer = createNavigationContainer(createDrawerNavigator({
     Home: {
-        screen: LoginContainer,
-        navigationOptions: () => ({ title: '登陆' })
+        screen: LoginContainer
     },
-    User: {
-        screen: UserContainer,
-        navigationOptions: s => {
-            return {
-                title: '用户',
-                headerLeft: (<TouchableOpacity onPress={() => {
-                    s.navigation.goBack();
-                }}>
-            <Text>返回</Text>
-          </TouchableOpacity>)
-            };
-        }
+    Setting: () => {
+        return (<View>
+            <Text>hello</Text>
+          </View>);
     }
-});
+}, {
+    drawerBackgroundColor: 'rgba(255,255,255,.9)',
+    contentOptions: {
+        activeTintColor: '#fff',
+        activeBackgroundColor: '#6b52ae'
+    }
+}));
 const C = connect(function (state) {
     return {
         isShowDraw: state.user.isShowDraw
@@ -49,6 +45,7 @@ const C = connect(function (state) {
 });
 class App extends Component {
     render() {
+        console.log(`环境：${process.env.NODE_ENV}`);
         return (<Provider store={store}>
         <C />
       </Provider>);

@@ -690,49 +690,49 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dura/actions@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/actions/-/actions-3.0.0-alpha.17.tgz#6dfd469ae9e3c6c15abfbca5b80da119674354c1"
-  integrity sha512-m8zqSQiCN0kGFKMR4Gvu5YP/M4JHhJlYEsfoz0u+3sUE7unnvhIST37kHctIwsszzLez4lYAGYO8LT0rxHl8GQ==
+"@dura/actions@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/actions/-/actions-3.0.0-alpha.19.tgz#b325e6564cf024ce26fc30115e3812a8908523e3"
+  integrity sha512-xuAK7kiq5+SvIRKMfy5lti5kIVZkLVFwWeefsccx3Thh51EMrNAJQvgxXsc3g+ONtGsNLkrVKkJFqvPeasHLzQ==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/core" "^3.0.0-alpha.19"
+    "@dura/types" "^3.0.0-alpha.19"
 
-"@dura/core@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/core/-/core-3.0.0-alpha.17.tgz#be4b3d53ee5d4d1347a862b456379fe0d6bf1156"
-  integrity sha512-uiE7VkQ2+3qVg7tBR3VjWwPY9jfV8AStq03fYqeZcpnTBkueMP1AqFyyJgK0zIe84PaA1rDRuqJrAbRaRBrArg==
+"@dura/core@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/core/-/core-3.0.0-alpha.19.tgz#090d1ef49352397b22083428a7887439c3843e6a"
+  integrity sha512-PWwZMU9/4QJbtwHJRIpvb9cn1E6iAIoiSb1jDYv8eGVdM9eqYE/00jo8aesgF9gIFd56onVE1tqnlcwI0piuFw==
   dependencies:
     redux "^4.0.4"
 
-"@dura/immer@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/immer/-/immer-3.0.0-alpha.17.tgz#20ff49d9de49f6c968901f4626b6d4b82d5325a7"
-  integrity sha512-saygoBoJMC8QVGts/9h7mC5Nn2CxKbnisISbOZvf74J1gcJ81HERp5rwVKMe8M3sID4HCocZ1OrnEi1b3Da57w==
+"@dura/immer@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/immer/-/immer-3.0.0-alpha.19.tgz#35327c6eb4d8c3461f627a17b7a0123ea6b09309"
+  integrity sha512-vUzzbcj+LwzDYpFINo3cwuLSe01rQ91dMMNTizkh8pCNk+q1G8ut58A8VnDv9E074Vx8TktZsQSB8vanr2VC6A==
   dependencies:
-    "@dura/actions" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/actions" "^3.0.0-alpha.19"
+    "@dura/types" "^3.0.0-alpha.19"
     immer "^1.12.1"
 
-"@dura/loading@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/loading/-/loading-3.0.0-alpha.17.tgz#2463fe6cfd34adc27c66fcdb11bb403d5376b9b0"
-  integrity sha512-DkSOz6OtrgqfOhxHpMi1opfCQjKklYEYuU2N1JmMChv/AaFrsox4o13TqZEpChN1unXPcByFvFfTbg+wDR7kcg==
+"@dura/loading@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/loading/-/loading-3.0.0-alpha.19.tgz#1e25bb5a53712e96cb7d532ca96cf113b56a3eb5"
+  integrity sha512-ZzwHcYe5suHkiHHz1vaBdDY9/IaQkh6wJelfeFPlMeM3YV4TpRnE3j2Ri30WZXTd2pGoVftPqFS5cAyRDeFXKw==
   dependencies:
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/types" "^3.0.0-alpha.19"
 
-"@dura/plus@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/plus/-/plus-3.0.0-alpha.17.tgz#f241a42c8b0eb7b1990647a7404693181b2a6bf0"
-  integrity sha512-EWELft8/VK9cafIj3zASql8yNhmfZdPE+fDQiKkIFeKBCcjb9hAdG/j5bnlVEWrKjn3CHoKEahqSjyQj0jWk9w==
+"@dura/plus@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/plus/-/plus-3.0.0-alpha.19.tgz#870a63b7428a2c3e5ed0fc41f5f0402a621b6196"
+  integrity sha512-4TjNEv5/zclY50iQnIGAsvrpn4Czhts45bbEreIlFpDCF3kIiYUlMpHmFZWwLCp4YLYQX6iAS9f0plxGB1wYqA==
   dependencies:
-    "@dura/core" "^3.0.0-alpha.17"
-    "@dura/types" "^3.0.0-alpha.17"
+    "@dura/core" "^3.0.0-alpha.19"
+    "@dura/types" "^3.0.0-alpha.19"
 
-"@dura/types@^3.0.0-alpha.17":
-  version "3.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.0.0-alpha.17.tgz#6dc07cef7195e8da4f45d8b4b857399b4950abd0"
-  integrity sha512-XbHCMgmI4BvRMGtu1weIzIgpoIpP5VQTI2ghWDSJ0RNBVKHyXQkdCE2/hNWMt2Xgn+wph98F6OxCy9PAFLcZmw==
+"@dura/types@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@dura/types/-/types-3.0.0-alpha.19.tgz#e5f50e4e820d7c03a500861c6faed78828bad13e"
+  integrity sha512-cxEb9n04MOk0v7ujNXdAjBq0kEI0spQQqLsC5/uIqDjCvQ8bEmxT6A1Cj9iR+22ys4Ef+yn7sqs8am/RbPhmAQ==
   dependencies:
     "@types/redux" "^3.6.0"
     utility-types "^3.7.0"
@@ -977,9 +977,9 @@
     "@types/react" "*"
 
 "@types/react-navigation@2.5.3":
-  version "2.13.10"
-  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-2.13.10.tgz#88051dbc985c31157a4f0a85409161a0201a494a"
-  integrity sha512-XeoAriB28FAO6INKYoeAa9P5ELUB0T8TbKucoiylgB5wKu9xOY5HqIm0nfN8jFuT2NysYu9vFhhBSB9b61tqTw==
+  version "2.0.24"
+  resolved "http://10.10.60.251:8081/repository/npm-group/@types/react-navigation/-/react-navigation-2.0.24.tgz#f7cb197efed1496129283c9fd33f134e8cc27803"
+  integrity sha512-jejv7LjBdlynBN1zyfXlbiO0keyHZGz/m5iTfXNK2R5yR8Gg2nRsIscnG+CRBaR2yQtrrS3OLMJbbH+Q54GLiQ==
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
@@ -4381,7 +4381,7 @@ lottie-ios@2.5.0:
 
 lottie-ios@2.5.8:
   version "2.5.3"
-  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-2.5.3.tgz#bff86b6662f9259439535d1548894c274c9e476f"
+  resolved "http://10.10.60.251:8081/repository/npm-group/lottie-ios/-/lottie-ios-2.5.3.tgz#bff86b6662f9259439535d1548894c274c9e476f"
   integrity sha512-oBtLkPJ4JkaUqUTOsmFPbSK2/fW6iBezcH5UKBgODaGMpZXCjogArXcvmG7KRNEnPiYMhgqSCKd8tDyDrwQp7Q==
 
 lottie-react-native@^2.6.1:

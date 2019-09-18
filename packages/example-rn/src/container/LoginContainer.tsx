@@ -135,120 +135,172 @@ class LoginContainer extends Component {
         fontSize: 20,
         height: 22,
         color: 'white'
+      },
+      txt2: {
+        width: 300,
+        // borderWidth: 1,
+        borderColor: '#999',
+        lineHeight: 25
       }
     });
     return (
-      <Provider>
-        <StatusBar
-          hidden={this.props.isShowDraw}
-          showHideTransition='slide'
-          animated={true}
-        />
-        <Tabs
-          tabs={tabs}
-          animated={true}
-          prerenderingSiblingsNumber={2}
-          destroyInactiveTab={false}
-        >
-          <View style={style.txt}>
-            <Text>Content of First Tab</Text>
-            <LottieView
-              // progress={this.state.progress}
-              ref={animation => {
-                this.animation = animation;
-              }}
-              loop={true}
-              autoPlay={true}
-              source={require('../json/data.json')}
-            ></LottieView>
-            <Text>hello</Text>
-            <View style={{ marginTop: 200, padding: 8 }}>
+      <View style={{ flex: 1 }}>
+        <Provider>
+          <StatusBar
+            hidden={this.props.isShowDraw}
+            showHideTransition='slide'
+            animated={true}
+          />
+          <Tabs
+            tabs={tabs}
+            animated={true}
+            prerenderingSiblingsNumber={2}
+            destroyInactiveTab={false}
+          >
+            <View style={style.txt}>
+              <View>
+                <View style={{ backgroundColor: '#fff', zIndex: 999 }}>
+                  <Text
+                    style={[style.txt2, { backgroundColor: '#fff' }]}
+                    numberOfLines={2}
+                    ellipsizeMode='clip'
+                    onLayout={e => {
+                      if (e.nativeEvent.layout.height > 25 * 3) {
+                        console.log('大于3行');
+                      }
+                      console.log(e.nativeEvent.layout.height);
+                    }}
+                  >
+                    在嵌套的Text组件中，子Text组件将继承父Text组件的样式，并且只能添加父Text组件没有指定的样式，不能覆盖父Text组件的样式。如果试图在代码中覆盖父Text组件继承来的样式，覆盖将不会生效。Ps：嵌套Text组件的显示字符串中，需要另起一行需要在字符串前添加
+                    {'\r\n'}，否则将接着上一行继续显示 ————————————————
+                  </Text>
+                </View>
+                <View
+                  style={{ justifyContent: 'flex-start', flexDirection: 'row' }}
+                >
+                  <Text
+                    style={[
+                      style.txt2,
+                      {
+                        marginTop: -50,
+                        marginLeft: -20,
+                        width: 300
+                      }
+                    ]}
+                    numberOfLines={3}
+                    onLayout={e => {
+                      if (e.nativeEvent.layout.height > 25 * 3) {
+                        console.log('大于3行');
+                      }
+                      console.log(e.nativeEvent.layout.height);
+                    }}
+                  >
+                    在嵌套的Text组件中，子Text组件将继承父Text组件的样式，并且只能添加父Text组件没有指定的样式，不能覆盖父Text组件的样式。如果试图在代码中覆盖父Text组件继承来的样式，覆盖将不会生效。Ps：嵌套Text组件的显示字符串中，需要另起一行需要在字符串前添加
+                    {'\r\n'}，否则将接着上一行继续显示 ————————————————
+                  </Text>
+                  <Text style={{ lineHeight: 25, color: 'blue' }}>全文</Text>
+                </View>
+              </View>
+
+              <LottieView
+                // progress={this.state.progress}
+                ref={animation => {
+                  this.animation = animation;
+                }}
+                loop={true}
+                autoPlay={true}
+                source={require('../json/data.json')}
+              ></LottieView>
+              <Text>hello</Text>
+              <View style={{ marginTop: 200, padding: 8 }}>
+                <Button
+                  type='primary'
+                  onPress={() => {
+                    // this.animation.play();
+                    // this.props.onChangeIsShowDraw();
+                    this.props.navigation.openDrawer();
+                  }}
+                >
+                  打开侧滑面板
+                </Button>
+                <WhiteSpace />
+              </View>
+            </View>
+            <View style={style.txt}>
+              <Text>我的关注</Text>
+              <ActionButton buttonColor='rgba(231,76,60,1)'>
+                <ActionButton.Item
+                  buttonColor='#9b59b6'
+                  title='New Task'
+                  onPress={() => console.log('notes tapped!')}
+                >
+                  <Icon name='md-create' style={style.actionButtonIcon} />
+                </ActionButton.Item>
+                <ActionButton.Item
+                  buttonColor='#3498db'
+                  title='Notifications'
+                  onPress={() => {}}
+                >
+                  <Icon
+                    name='md-notifications-off'
+                    style={style.actionButtonIcon}
+                  />
+                </ActionButton.Item>
+                <ActionButton.Item
+                  buttonColor='#1abc9c'
+                  title='All Tasks'
+                  onPress={() => {}}
+                >
+                  <Icon name='md-done-all' style={style.actionButtonIcon} />
+                </ActionButton.Item>
+              </ActionButton>
+            </View>
+            <View style={style.txt}>
+              <Text>中小学</Text>
+            </View>
+            <View style={style.txt}>
               <Button
                 type='primary'
                 onPress={() => {
-                  // this.animation.play();
-                  this.props.onChangeIsShowDraw();
+                  const BUTTONS = [
+                    'Operation1',
+                    'Operation2',
+                    'Operation3',
+                    'Delete',
+                    'Cancel'
+                  ];
+                  ActionSheet.showActionSheetWithOptions(
+                    {
+                      title: 'Title',
+                      message: 'Description',
+                      options: BUTTONS,
+                      cancelButtonIndex: 4,
+                      destructiveButtonIndex: 3
+                    },
+                    buttonIndex => {
+                      this.setState({ clicked: BUTTONS[buttonIndex] });
+                    }
+                  );
                 }}
               >
-                打开侧滑面板
+                打开底部弹层
               </Button>
-              <WhiteSpace />
             </View>
-          </View>
-          <View style={style.txt}>
-            <Text>我的关注</Text>
-            <ActionButton buttonColor='rgba(231,76,60,1)'>
-              <ActionButton.Item
-                buttonColor='#9b59b6'
-                title='New Task'
-                onPress={() => console.log('notes tapped!')}
-              >
-                <Icon name='md-create' style={style.actionButtonIcon} />
-              </ActionButton.Item>
-              <ActionButton.Item
-                buttonColor='#3498db'
-                title='Notifications'
-                onPress={() => {}}
-              >
-                <Icon
-                  name='md-notifications-off'
-                  style={style.actionButtonIcon}
-                />
-              </ActionButton.Item>
-              <ActionButton.Item
-                buttonColor='#1abc9c'
-                title='All Tasks'
-                onPress={() => {}}
-              >
-                <Icon name='md-done-all' style={style.actionButtonIcon} />
-              </ActionButton.Item>
-            </ActionButton>
-          </View>
-          <View style={style.txt}>
-            <Text>中小学</Text>
-          </View>
-          <View style={style.txt}>
-            <Button
-              type='primary'
-              onPress={() => {
-                const BUTTONS = [
-                  'Operation1',
-                  'Operation2',
-                  'Operation3',
-                  'Delete',
-                  'Cancel'
-                ];
-                ActionSheet.showActionSheetWithOptions(
-                  {
-                    title: 'Title',
-                    message: 'Description',
-                    options: BUTTONS,
-                    cancelButtonIndex: 4,
-                    destructiveButtonIndex: 3
-                  },
-                  buttonIndex => {
-                    this.setState({ clicked: BUTTONS[buttonIndex] });
-                  }
-                );
-              }}
-            >
-              打开底部弹层
-            </Button>
-          </View>
-          <View style={style.txt}>
-            <Text>心理咨询</Text>
-          </View>
-          <View style={style.txt}>
-            <Text>医疗咨询</Text>
-          </View>
-          <View style={style.txt}>
-            <Text>英语学习</Text>
-          </View>
-          <View style={style.txt}>
-            <Text>爱问爱答</Text>
-          </View>
-        </Tabs>
-      </Provider>
+            <View style={style.txt}>
+              <Text>心理咨询</Text>
+            </View>
+            <View style={style.txt}>
+              <Text>医疗咨询</Text>
+            </View>
+            <View style={style.txt}>
+              <Text>英语学习</Text>
+            </View>
+            <View style={style.txt}>
+              <Text>爱问爱答</Text>
+            </View>
+          </Tabs>
+        </Provider>
+      </View>
     );
   }
 }

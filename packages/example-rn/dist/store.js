@@ -4,6 +4,8 @@ import { create } from '@dura/plus';
 import { createImmerPlugin } from '@dura/immer';
 import { createLoadingPlugin } from '@dura/loading';
 import createAction from '@dura/actions';
+import { isEqual } from 'lodash';
+import { connect } from 'react-redux';
 const initialModel = {
     /**
      * 用户模块1
@@ -44,8 +46,12 @@ export const store = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
         immer: createImmerPlugin(),
         loading: createLoadingPlugin(initialModel)
     });
-const actionCreator = createAction(initialModel);
-[].forEach(action => {
-    store.dispatch(action);
-});
-export { actionCreator };
+export const actionCreator = createAction(initialModel);
+export const connectHOC = function (mapState, mapDispatch) {
+    return connect(mapState, mapDispatch, null, {
+        areStatesEqual: isEqual,
+        areOwnPropsEqual: isEqual,
+        areStatePropsEqual: isEqual,
+        areMergedPropsEqual: isEqual
+    });
+};

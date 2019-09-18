@@ -4,7 +4,11 @@ import { Provider, connect } from 'react-redux';
 import { store, RootState, actionCreator } from './store';
 import LoginContainer from './container/LoginContainer';
 import UserContainer from './container/UserContainer';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import {
+  createStackNavigator,
+  createDrawerNavigator,
+  createNavigationContainer
+} from 'react-navigation';
 import {
   TextareaItem,
   Modal,
@@ -16,30 +20,36 @@ import {
   WhiteSpace
 } from '@ant-design/react-native';
 import ActionButton from 'react-native-action-button';
+declare const process: {
+  env: {
+    NODE_ENV: string;
+  };
+};
 
-const AppContainer = createStackNavigator({
-  Home: {
-    screen: LoginContainer,
-    navigationOptions: () => ({ title: '登陆' })
-  },
-  User: {
-    screen: UserContainer,
-    navigationOptions: s => {
-      return {
-        title: '用户',
-        headerLeft: (
-          <TouchableOpacity
-            onPress={() => {
-              s.navigation.goBack();
-            }}
-          >
-            <Text>返回</Text>
-          </TouchableOpacity>
-        )
-      };
+
+const AppContainer = createNavigationContainer(
+  createDrawerNavigator(
+    {
+      Home: {
+        screen: LoginContainer
+      },
+      Setting: () => {
+        return (
+          <View>
+            <Text>hello</Text>
+          </View>
+        );
+      }
+    },
+    {
+      drawerBackgroundColor: 'rgba(255,255,255,.9)',
+      contentOptions: {
+        activeTintColor: '#fff',
+        activeBackgroundColor: '#6b52ae'
+      }
     }
-  }
-});
+  )
+);
 
 const C = connect(
   function(state: RootState) {
@@ -81,6 +91,7 @@ const C = connect(
 class App extends Component {
   drawer: any;
   render() {
+    console.log(`环境：${process.env.NODE_ENV}`);
     return (
       <Provider store={store}>
         <C />
