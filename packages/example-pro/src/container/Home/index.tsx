@@ -28,8 +28,28 @@ type Props = Partial<ReturnType<typeof mapState>> &
   Partial<ReturnType<typeof mapDispatch>>;
 
 class Home extends Component<Props> {
+  async hello() {
+    console.log('1');
+    await new Promise(resolve => {
+      console.log('2');
+      resolve('3');
+    }).then(r => {
+      console.log(r);
+    });
+
+    await new Promise(resolve => {
+      console.log('4');
+      resolve('5');
+    }).then(r => {
+      console.log(r);
+    });
+  }
+
   render() {
     console.log('render home index');
+
+    this.hello();
+    this.hello();
 
     return (
       <div>

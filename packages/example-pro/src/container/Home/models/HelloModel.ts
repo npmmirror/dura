@@ -1,7 +1,6 @@
 import { actionCreator, RootState } from '@store';
 import { message } from 'antd';
 
-
 const initialState = () => {
   return {
     name: '张三',
@@ -28,6 +27,11 @@ const reducers = () => {
     onChangeName(state: State, payload: { nextName: string }) {
       state.name = payload.nextName;
     },
+    /**
+     * 更改item选项
+     * @param state
+     * @param payload
+     */
     onChangeItem(state: State, payload: { id: number; title: string }) {
       const item = state.articleList.find(n => n.id === payload.id);
       item.title = payload.title;

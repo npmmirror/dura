@@ -1,7 +1,6 @@
 import {
   Dispatch,
   Store as _Store,
-  AnyAction,
   Middleware,
   applyMiddleware,
   compose,
@@ -54,7 +53,7 @@ export type ReducerFcuntion<S> = () => ReducerMap<S>;
 export type Effect<P = any, M = any> = (payload?: P, meta?: M) => Promise<void>;
 
 export type ReducerMap<S> = {
-  [name: string]: Reducer<S, ExcludeTypeAction>;
+  [name: string]: Reducer<S>;
 };
 
 export type EffectMap = {
@@ -105,13 +104,13 @@ export type ExtractReducerActions<M extends ModelMap> = {
 
 export type ReviewReducders<R extends ReducerMap<S>, S> = {
   [key in keyof R]: Parameters<R[key]>[1] extends undefined
-    ? () => AnyAction
+    ? () => any
     : Parameters<R[key]>[2] extends undefined
-    ? (payload: Parameters<R[key]>[1]) => AnyAction
+    ? (payload: Parameters<R[key]>[1]) => any
     : (
         payload: Parameters<R[key]>[1],
         meta: Parameters<R[key]>[2]
-      ) => AnyAction;
+      ) => any;
 };
 
 export type ExtractEffectActions<M extends ModelMap> = {
@@ -120,13 +119,13 @@ export type ExtractEffectActions<M extends ModelMap> = {
 
 export type ReviewEffects<E extends EffectMap> = {
   [key in keyof E]: Parameters<E[key]>[0] extends undefined
-    ? () => AnyAction
+    ? () => any
     : Parameters<E[key]>[1] extends undefined
-    ? (payload: Parameters<E[key]>[0]) => AnyAction
+    ? (payload: Parameters<E[key]>[0]) => any
     : (
         payload: Parameters<E[key]>[0],
         meta: Parameters<E[key]>[1]
-      ) => AnyAction;
+      ) => any;
 };
 
 export type Config = {

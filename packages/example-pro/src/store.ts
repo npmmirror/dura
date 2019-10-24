@@ -13,6 +13,9 @@ const initialModel = {
    * 用户模块
    */
   user: UserModel,
+  /**
+   * hello 模块， 主要处理一些乱七八糟的问题
+   */
   hello: HelloModel
 };
 
