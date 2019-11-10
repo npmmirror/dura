@@ -31,6 +31,24 @@
 
 ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
 
+## 文档
+
+	本文假设你至少掌握redux ， 最好掌握dvajs
+	
+	我们遵循dvajs的model设计，在实际业务考量中，我们发现单纯的reducers事实上难以完成一个业务行为。
+	
+	因为我们大多数的业务都伴随着与服务端的交互，也就是说，我们一定会产生effects。
+		
+	在过去，我们尝试过 dvajs 框架，我们发现如果项目没有进行合适的领域划分，拆分成足够小的业务单元，
+	
+	那么项目成长的一定程度的时候将是灾难，因为 dispatch action 的type属性会让项目充斥着大量的魔鬼字符串，
+	
+	当然，你也可以说定义常量来解决这个问题，但是这样意味着我们需要额外产生大量的样板代码。
+	
+	至此，我们利用typescript与redux完美结合，产生了一些化学反应。
+
+
+
 ## 例子
 
 - [example-pro](https://github.com/CN-YUANYU/dura/tree/master/packages/example-pro) 演示了 dura 全家桶的使用方式
