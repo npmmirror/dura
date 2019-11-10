@@ -51,7 +51,7 @@ function create<C extends Config>(config: C): Store<C['initialModel']> {
     ...extraReducers
   };
 
-  // //获取外部传入的 compose
+  // //获取外部传入的 compose1
   const composeEnhancers = config.compose || compose;
 
   //store增强器
