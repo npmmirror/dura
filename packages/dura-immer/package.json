@@ -18,6 +18,5 @@
   },
   "devDependencies": {
     "@dura/plus": "^3.0.0-alpha.20"
-  },
-  "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf"
+  }
 }

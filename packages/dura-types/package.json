@@ -16,6 +16,5 @@
     "utility-types": "^3.7.0"
   },
   "main": "index.js",
-  "description": "",
-  "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf"
+  "description": ""
 }
