@@ -28,7 +28,7 @@
     "react-native-permissions": "^1.2.0",
     "react-native-sound": "^0.11.0",
     "react-native-vector-icons": "^6.6.0",
-    "react-navigation": "2.5.3",
+    "react-navigation": "3.8.1",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "reselect": "^4.0.0"
@@ -36,7 +36,6 @@
   "devDependencies": {
     "@types/react": "^16.7.20",
     "@types/react-dom": "^16.0.11",
-    "@types/react-navigation": "2.5.3",
     "@types/react-redux": "^7.0.0",
     "@types/react-router-dom": "^4.3.1",
     "babel-core": "^7.0.0-bridge.0",

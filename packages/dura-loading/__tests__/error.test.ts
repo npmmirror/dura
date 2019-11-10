@@ -1,9 +1,9 @@
-import { create } from '@dura/plus';
-import { createLoadingPlugin } from '../src/index';
-import createAction from '@dura/actions';
+import { create } from "@dura/plus";
+import { createLoadingPlugin } from "../src/index";
+import createAction from "@dura/actions";
 
-describe('测试loading 插件', function() {
-  it('测试异常场景下，loading关闭的问题', async function() {
+describe("测试loading 插件", function() {
+  it("测试异常场景下，loading关闭的问题", async function() {
     const user = {
       state: () => ({
         /**
@@ -22,7 +22,7 @@ describe('测试loading 插件', function() {
           payload: { name: string },
           meta: { loading: boolean }
         ) {
-          throw new Error('error');
+          throw new Error("error");
         }
       })
     };
@@ -51,7 +51,7 @@ describe('测试loading 插件', function() {
     try {
       await dispatch(
         actionCreator.user.onAsyncChangeName(
-          { name: '张三' },
+          { name: "张三" },
           { loading: true }
         )
       );
