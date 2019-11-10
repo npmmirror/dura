@@ -4,7 +4,6 @@
     <img src="image/logo.png">
 </p>
 
-[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![NPM version](https://img.shields.io/npm/v/@dura/plus.svg?style=flat)](https://www.npmjs.com/settings/dura/packages)
 [![NPM downloads](http://img.shields.io/npm/dm/@dura/core.svg?style=flat)](https://www.npmjs.com/package/@dura/plus)
