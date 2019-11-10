@@ -1,6 +1,6 @@
 {
   "name": "@dura/core",
-  "version": "3.0.0-alpha.20",
+  "version": "3.0.0",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -20,7 +20,7 @@
     "redux": "^4.0.4"
   },
   "devDependencies": {
-    "@dura/types": "^3.0.0-alpha.20"
+    "@dura/types": "^3.0.0"
   },
   "gitHead": "ffc6babfbc78e956291dc1835054b2fb384b2fcf"
 }
