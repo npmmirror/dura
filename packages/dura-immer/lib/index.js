@@ -20,7 +20,7 @@ var merge_1 = __importDefault(require("lodash/merge"));
 exports.createImmerPlugin = function () {
     return {
         wrapModel: function (name, model) {
-            return __assign({}, model, { reducers: function () {
+            return __assign(__assign({}, model), { reducers: function () {
                     return entries_1.default(model.reducers())
                         .map(function (_a) {
                         var _b;

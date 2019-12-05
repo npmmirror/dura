@@ -10,6 +10,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -49,12 +56,12 @@ function create(config) {
             },
             _a;
     })
-        .reduce(function (prev, next) { return (__assign({}, prev, next)); }, {});
-    var rootReducers = __assign({}, modelReducers, extraReducers);
-    // //获取外部传入的 compose
+        .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
+    var rootReducers = __assign(__assign({}, modelReducers), extraReducers);
+    // //获取外部传入的 compose1
     var composeEnhancers = config.compose || redux_1.compose;
     //store增强器
-    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, middlewares.concat([async_1.default(initialModel, error)])));
+    var storeEnhancer = composeEnhancers(redux_1.applyMiddleware.apply(void 0, __spreadArrays(middlewares, [async_1.default(initialModel, error)])));
     // //获取外部传入的 createStore
     var _createStore = config.createStore || redux_1.createStore;
     // //创建redux-store

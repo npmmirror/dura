@@ -1,28 +1,25 @@
-import { ModelMap, Model } from '@dura/types';
-import cloneDeep from 'lodash/cloneDeep';
-import { delay } from './util';
+import { ModelMap, Model } from "@dura/types";
+import cloneDeep from "lodash/cloneDeep";
+import { delay } from "./util";
+import produce from "immer";
 
 export default function getAsyncMiddleware(rootModel: ModelMap, error) {
   return store => next => action => {
     let result = next(action);
 
-    const [namespace, nameeffect] = action.type.split('/');
+    const [namespace, nameeffect] = action.type.split("/");
 
     if (rootModel[namespace]) {
-      const moduleEffects = rootModel[namespace].effects(
-        store.dispatch,
-        () => cloneDeep(store.getState()),
-        delay
-      );
-
-      const effect = moduleEffects[nameeffect];
-
-      if (effect) {
-        effect(action.payload, action.meta).catch(e => {
-          error(e);
-          console.log(e);
-        });
-      }
+      // produce(store.getState(), draftState => {
+      //   rootModel?.[namespace]
+      //     ?.effects(store.dispatch, () => draftState, delay)
+      //     ?.[nameeffect]?.(action?.payload, action?.meta)
+      //     ?.catch(error);
+      // });
+      rootModel?.[namespace]
+          ?.effects(store.dispatch, () => store.getState(), delay)
+          ?.[nameeffect]?.(action?.payload, action?.meta)
+          ?.catch(error);
     }
 
     return result;

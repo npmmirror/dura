@@ -11,10 +11,11 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -71,7 +72,7 @@ exports.createLoadingPlugin = function (modelMap) {
         .reduce(merge_1.default, {});
     return {
         wrapModel: function (name, model) {
-            return __assign({}, model, { effects: function (dispatch, getState, delay) {
+            return __assign(__assign({}, model), { effects: function (dispatch, getState, delay) {
                     return entries_1.default(model.effects(dispatch, getState, delay))
                         .map(function (_a) {
                         var _b;
@@ -133,13 +134,13 @@ exports.createLoadingPlugin = function (modelMap) {
                 reducers: function () { return ({
                     startLoading: function (state, payload) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
+                        return __assign(__assign({}, state), (_a = {}, _a[payload.modelName] = (_b = {},
                             _b[payload.effectName] = true,
                             _b), _a));
                     },
                     endLoading: function (state, payload) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[payload.modelName] = (_b = {},
+                        return __assign(__assign({}, state), (_a = {}, _a[payload.modelName] = (_b = {},
                             _b[payload.effectName] = false,
                             _b), _a));
                     }
