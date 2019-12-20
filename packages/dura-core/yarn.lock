@@ -2,20 +2,12 @@
 # yarn lockfile v1
 
 
-"@dura/types@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.npm.taobao.org/@dura/types/download/@dura/types-3.0.2.tgz#1dcc4a0bb0a646092ebcbce06fd1814a18a83e0e"
-  integrity sha1-HcxKC7CmRgkuvLzgb9GBShioPg4=
+"@dura/types@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@dura/types/-/types-3.1.1.tgz#3a2cf9b7e95604b8299756cfc5cebccf2dd3f837"
+  integrity sha512-scMzd01kHJTHeq8n0EhR7Nb6r3poz0qRli55kNgM+m/xRDhV6sXWwPkuEiLdsaE3laS2SKnRghGnjy+V0F7taQ==
   dependencies:
-    "@types/redux" "^3.6.0"
-    utility-types "^3.7.0"
-
-"@types/redux@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
-  integrity sha1-8evh5UEVGAcuT9/KXHbhbnTBOZo=
-  dependencies:
-    redux "*"
+    utility-types "3.7.0"
 
 immer@5.1.0:
   version "5.1.0"
@@ -34,7 +26,7 @@ loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-redux@*, redux@4.0.4:
+redux@4.0.4:
   version "4.0.4"
   resolved "https://registry.npm.taobao.org/redux/download/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
   integrity sha1-TuGusWS2PWobzFeuSqC25vp6N5Y=
@@ -47,7 +39,7 @@ symbol-observable@^1.2.0:
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
-utility-types@^3.7.0:
+utility-types@3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.7.0.tgz#51f1c29fa35d4267488345706efcf3f68f2b1933"
   integrity sha512-mqRJXN7dEArK/NZNJUubjr9kbFFVZcmF/JHDc9jt5O/aYXUVmopHYujDMhLmLil1Bxo2+khe6KAIVvDH9Yc4VA==
