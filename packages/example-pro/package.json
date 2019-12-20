@@ -1,6 +1,6 @@
 {
   "name": "example-pro",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "",
   "private": true,
   "main": "index.js",
@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@dura/actions": "^3.1.0",
-    "@dura/immer": "^3.1.0",
-    "@dura/loading": "^3.1.0",
-    "@dura/plus": "^3.1.0",
+    "@dura/immer": "^3.1.1",
+    "@dura/loading": "^3.1.1",
+    "@dura/plus": "^3.1.1",
     "antd": "^3.13.0",
     "lodash": "^4.17.15",
     "react": "^16.7.0",
