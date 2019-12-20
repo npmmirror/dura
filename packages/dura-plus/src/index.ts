@@ -1,15 +1,22 @@
-import { create as _create } from '@dura/core';
-import cloneDeep from 'lodash/cloneDeep';
-import values from 'lodash/values';
-import merge from 'lodash/merge';
-import entries from 'lodash/entries';
+import { create as _create } from "@dura/core";
+import cloneDeep from "lodash/cloneDeep";
+import values from "lodash/values";
+import merge from "lodash/merge";
+import entries from "lodash/entries";
 import {
   Config,
   Store,
   PluginMap,
   ModelMap,
   UnionToIntersection
-} from '@dura/types';
+} from "@dura/types";
+import {
+  compose,
+  bindActionCreators,
+  applyMiddleware,
+  combineReducers
+} from "redux";
+import { useSelector, useDispatch, useStore, shallowEqual } from "react-redux";
 
 function recursiveWrapModel(name, model, wrapModelList) {
   if (wrapModelList && wrapModelList.length === 0) {
@@ -29,7 +36,7 @@ function getExtraModelMap(pluginMap: PluginMap) {
 function create<C extends Config, P extends PluginMap>(
   config: C,
   pluginMap?: P
-): Store<C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>> {
+): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
   //clone
   const {
     initialModel,
@@ -67,10 +74,20 @@ function create<C extends Config, P extends PluginMap>(
     extraReducers: extraReducers,
     error: error
   }) as Store<
-    C['initialModel'] & UnionToIntersection<P[keyof P]['extraModel']>
+    C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>
   >;
 }
 
-export { create };
+export {
+  create,
+  useSelector,
+  useDispatch,
+  useStore,
+  shallowEqual,
+  compose,
+  bindActionCreators,
+  applyMiddleware,
+  combineReducers
+};
 
-export * from '@dura/types';
+export * from "@dura/types";

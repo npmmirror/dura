@@ -8,6 +8,16 @@ var cloneDeep_1 = __importDefault(require("lodash/cloneDeep"));
 var values_1 = __importDefault(require("lodash/values"));
 var merge_1 = __importDefault(require("lodash/merge"));
 var entries_1 = __importDefault(require("lodash/entries"));
+var redux_1 = require("redux");
+exports.compose = redux_1.compose;
+exports.bindActionCreators = redux_1.bindActionCreators;
+exports.applyMiddleware = redux_1.applyMiddleware;
+exports.combineReducers = redux_1.combineReducers;
+var react_redux_1 = require("react-redux");
+exports.useSelector = react_redux_1.useSelector;
+exports.useDispatch = react_redux_1.useDispatch;
+exports.useStore = react_redux_1.useStore;
+exports.shallowEqual = react_redux_1.shallowEqual;
 function recursiveWrapModel(name, model, wrapModelList) {
     if (wrapModelList && wrapModelList.length === 0) {
         return model;

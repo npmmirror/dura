@@ -1,8 +1,8 @@
-import { create } from '../src/index';
-import createActions from '@dura/actions';
+import { create } from "../src/index";
+import createActions from "@dura/actions";
 
-describe('测试plus', function() {
-  it('测试插件额外的model', function() {
+describe("测试plus", function() {
+  it("测试插件额外的model", function() {
     const UserModel = {
       state: () => ({
         name: undefined
@@ -22,7 +22,7 @@ describe('测试plus', function() {
         extraModel: {
           loading: {
             state: () => ({
-              name: '测试loading'
+              name: "测试loading"
             }),
             reducers: () => ({
               loadingChange(state, action) {
@@ -37,7 +37,7 @@ describe('测试plus', function() {
         extraModel: {
           immer: {
             state: () => ({
-              name: '测试immer'
+              name: "测试immer"
             }),
             reducers: () => ({
               immerChange(state, action) {
@@ -58,9 +58,9 @@ describe('测试plus', function() {
       plugins
     );
 
-    expect(store.getState().loading.name).toEqual('测试loading');
+    expect(store.getState().loading.name).toEqual("测试loading");
   });
-  it('测试插件', function() {
+  it("测试插件", function() {
     const UserModel = {
       state: () => ({
         name: undefined
@@ -86,7 +86,7 @@ describe('测试plus', function() {
       }),
       effects: () => ({
         async onAsyncChangeStudentName() {
-          console.log('StudentModel-effects');
+          console.log("StudentModel-effects");
         }
       })
     };
@@ -102,38 +102,38 @@ describe('测试plus', function() {
         a: {
           onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
-              console.log('开始');
+              console.log("开始");
               const result = reducer(state, action.payload, action.meta);
-              console.log('结束');
+              console.log("结束");
               return result;
             };
           },
           onEffect: (modelName, effectName, effect) => {
             return async (effectApi, action) => {
-              console.log('effect开始1');
+              console.log("effect开始1");
 
               await effect(effectApi, action);
 
-              console.log('effect结束1');
+              console.log("effect结束1");
             };
           }
         },
         b: {
           onReducer: (modelName, reducerName, reducer) => {
             return (state, action) => {
-              console.log('开始1');
+              console.log("开始1");
               const result = reducer(state, action.payload, action.meta);
-              console.log('结束1');
+              console.log("结束1");
               return result;
             };
           },
           onEffect: (modelName, effectName, effect) => {
             return async (effectApi, action) => {
-              console.log('effect开始2');
+              console.log("effect开始2");
 
               await effect(effectApi, action);
 
-              console.log('effect结束2');
+              console.log("effect结束2");
             };
           }
         }
@@ -147,7 +147,7 @@ describe('测试plus', function() {
     store.dispatch(actionCreator.student.onAsyncChangeStudentName());
   });
 
-  it('不传任何插件', function() {
+  it("不传任何插件", function() {
     const UserModel = {
       state: () => ({
         name: undefined

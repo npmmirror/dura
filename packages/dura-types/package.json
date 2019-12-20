@@ -12,8 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/redux": "^3.6.0",
-    "utility-types": "^3.7.0"
+    "utility-types": "3.7.0"
   },
   "main": "index.js",
   "description": ""

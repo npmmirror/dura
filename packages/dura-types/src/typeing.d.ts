@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  Store as _Store,
-  Middleware,
-  applyMiddleware,
-  compose,
-  createStore
-} from 'redux';
+import { Store as _Store, Middleware, compose, createStore } from "redux";
 
 export { Middleware };
 
@@ -67,8 +60,8 @@ export type EffectFunction = (
 ) => EffectMap;
 
 export type UnionToIntersection<U> = (U extends any
-  ? (k: U) => void
-  : never) extends ((k: infer I) => void)
+? (k: U) => void
+: never) extends (k: infer I) => void
   ? I
   : never;
 
@@ -85,11 +78,11 @@ export type ModelMap = {
 export type Store<RM extends ModelMap> = _Store<ExtractState<RM>>;
 
 export type ExtractState<M extends ModelMap> = {
-  [key in keyof M]: ReturnType<M[key]['state']>;
+  [key in keyof M]: ReturnType<M[key]["state"]>;
 };
 
 export type ExtractPluginState<P extends PluginMap> = UnionToIntersection<
-  P[keyof P]['extraModel']
+  P[keyof P]["extraModel"]
 >;
 
 export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> &
@@ -97,8 +90,8 @@ export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> &
 
 export type ExtractReducerActions<M extends ModelMap> = {
   [key in keyof M]: ReviewReducders<
-    ReturnType<M[key]['reducers']>,
-    ReturnType<M[key]['state']>
+    ReturnType<M[key]["reducers"]>,
+    ReturnType<M[key]["state"]>
   >;
 };
 
@@ -107,14 +100,11 @@ export type ReviewReducders<R extends ReducerMap<S>, S> = {
     ? () => any
     : Parameters<R[key]>[2] extends undefined
     ? (payload: Parameters<R[key]>[1]) => any
-    : (
-        payload: Parameters<R[key]>[1],
-        meta: Parameters<R[key]>[2]
-      ) => any;
+    : (payload: Parameters<R[key]>[1], meta: Parameters<R[key]>[2]) => any;
 };
 
 export type ExtractEffectActions<M extends ModelMap> = {
-  [key in keyof M]: ReviewEffects<ReturnType<M[key]['effects']>>;
+  [key in keyof M]: ReviewEffects<ReturnType<M[key]["effects"]>>;
 };
 
 export type ReviewEffects<E extends EffectMap> = {
@@ -122,10 +112,7 @@ export type ReviewEffects<E extends EffectMap> = {
     ? () => any
     : Parameters<E[key]>[1] extends undefined
     ? (payload: Parameters<E[key]>[0]) => any
-    : (
-        payload: Parameters<E[key]>[0],
-        meta: Parameters<E[key]>[1]
-      ) => any;
+    : (payload: Parameters<E[key]>[0], meta: Parameters<E[key]>[1]) => any;
 };
 
 export type Config = {

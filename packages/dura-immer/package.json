@@ -13,8 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@dura/actions": "^3.0.2",
-    "@dura/types": "^3.0.2",
-    "immer": "^1.12.1"
+    "@dura/types": "^3.0.2"
   },
   "devDependencies": {
     "@dura/plus": "^3.0.2"

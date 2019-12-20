@@ -17,8 +17,8 @@
   "author": "ityuany",
   "license": "ISC",
   "dependencies": {
-    "immer": "^1.12.1",
-    "redux": "^4.0.4"
+    "immer": "5.1.0",
+    "redux": "4.0.4"
   },
   "devDependencies": {
     "@dura/types": "^3.0.2"

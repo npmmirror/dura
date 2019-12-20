@@ -49,7 +49,6 @@ function create(config) {
                     }
                     catch (e) {
                         error(e);
-                        console.log(e);
                         return state;
                     }
                 }
