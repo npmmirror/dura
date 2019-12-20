@@ -18,6 +18,8 @@ exports.useSelector = react_redux_1.useSelector;
 exports.useDispatch = react_redux_1.useDispatch;
 exports.useStore = react_redux_1.useStore;
 exports.shallowEqual = react_redux_1.shallowEqual;
+exports.Provider = react_redux_1.Provider;
+exports.connect = react_redux_1.connect;
 function recursiveWrapModel(name, model, wrapModelList) {
     if (wrapModelList && wrapModelList.length === 0) {
         return model;
