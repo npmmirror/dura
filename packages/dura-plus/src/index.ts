@@ -16,7 +16,14 @@ import {
   applyMiddleware,
   combineReducers
 } from "redux";
-import { useSelector, useDispatch, useStore, shallowEqual } from "react-redux";
+import {
+  useSelector,
+  useDispatch,
+  useStore,
+  shallowEqual,
+  Provider,
+  connect
+} from "react-redux";
 
 function recursiveWrapModel(name, model, wrapModelList) {
   if (wrapModelList && wrapModelList.length === 0) {
@@ -87,7 +94,9 @@ export {
   compose,
   bindActionCreators,
   applyMiddleware,
-  combineReducers
+  combineReducers,
+  Provider,
+  connect
 };
 
 export * from "@dura/types";
