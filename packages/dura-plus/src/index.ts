@@ -22,7 +22,8 @@ import {
   useStore,
   shallowEqual,
   Provider,
-  connect
+  connect,
+  batch
 } from "react-redux";
 
 function recursiveWrapModel(name, model, wrapModelList) {
@@ -96,7 +97,8 @@ export {
   applyMiddleware,
   combineReducers,
   Provider,
-  connect
+  connect,
+  batch
 };
 
 export * from "@dura/types";
