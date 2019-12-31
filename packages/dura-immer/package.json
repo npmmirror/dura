@@ -1,6 +1,6 @@
 {
   "name": "@dura/immer",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dura/actions": "^3.2.0",
+    "@dura/actions": "^3.3.0",
     "@dura/types": "^3.2.0"
   },
   "devDependencies": {
-    "@dura/plus": "^3.2.0"
+    "@dura/plus": "^3.3.0"
   }
 }
