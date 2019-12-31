@@ -61,7 +61,7 @@ exports.createLoadingPlugin = function (modelMap) {
         var _b;
         var name = _a[0], model = _a[1];
         return _b = {},
-            _b[name] = keys_1.default(get_1.default(model, 'effects', function () { return ({}); })())
+            _b[name] = keys_1.default(get_1.default(model, "effects", function () { return ({}); })())
                 .map(function (ename) {
                 var _a;
                 return (_a = {}, _a[ename] = false, _a);
@@ -85,7 +85,7 @@ exports.createLoadingPlugin = function (modelMap) {
                                         case 0:
                                             start = function () {
                                                 return dispatch({
-                                                    type: 'loading/startLoading',
+                                                    type: "loading/startLoading",
                                                     payload: {
                                                         modelName: name,
                                                         effectName: k
@@ -93,7 +93,7 @@ exports.createLoadingPlugin = function (modelMap) {
                                                 });
                                             }, end = function () {
                                                 return dispatch({
-                                                    type: 'loading/endLoading',
+                                                    type: "loading/endLoading",
                                                     payload: {
                                                         modelName: name,
                                                         effectName: k

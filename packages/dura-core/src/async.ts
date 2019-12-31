@@ -1,5 +1,6 @@
 import { ModelMap, Model } from "@dura/types";
 import { delay } from "./util";
+import produce from "immer";
 
 export default function getAsyncMiddleware(rootModel: ModelMap, error) {
   return store => next => action => {
@@ -9,9 +10,13 @@ export default function getAsyncMiddleware(rootModel: ModelMap, error) {
 
     if (rootModel[namespace]) {
       rootModel?.[namespace]
-          ?.effects(store.dispatch, () => store.getState(), delay)
-          ?.[nameeffect]?.(action?.payload, action?.meta)
-          ?.catch(error);
+        ?.effects(
+          store.dispatch,
+          () => produce(store.getState(), state => state),
+          delay
+        )
+        ?.[nameeffect]?.(action?.payload, action?.meta)
+        ?.catch(error);
     }
 
     return result;

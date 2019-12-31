@@ -1,12 +1,12 @@
 /**
  * 自动loading
  */
-import { ModelMap, Plugin, EffectMap } from '@dura/types';
-import entries from 'lodash/entries';
-import keys from 'lodash/keys';
-import merge from 'lodash/merge';
-import get from 'lodash/get';
-import chain from 'lodash/chain';
+import { ModelMap, Plugin, EffectMap } from "@dura/types";
+import entries from "lodash/entries";
+import keys from "lodash/keys";
+import merge from "lodash/merge";
+import get from "lodash/get";
+import chain from "lodash/chain";
 
 export const createLoadingPlugin = function<MM extends ModelMap>(
   modelMap: MM
@@ -14,7 +14,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
   const initialState = entries(modelMap)
     .map(([name, model]) => {
       return {
-        [name]: keys(get(model, 'effects', () => ({}))())
+        [name]: keys(get(model, "effects", () => ({}))())
           .map(ename => ({ [ename]: false }))
           .reduce(merge, {})
       };
@@ -33,7 +33,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
               [k]: async (payload, meta) => {
                 const start = () =>
                     dispatch({
-                      type: 'loading/startLoading',
+                      type: "loading/startLoading",
                       payload: {
                         modelName: name,
                         effectName: k
@@ -41,7 +41,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
                     }),
                   end = () =>
                     dispatch({
-                      type: 'loading/endLoading',
+                      type: "loading/endLoading",
                       payload: {
                         modelName: name,
                         effectName: k
@@ -108,7 +108,7 @@ type ConvertFnToBoolean<E extends EffectMap> = { [key in keyof E]: boolean };
 
 export type ExtractLoadingState<RMT extends ModelMap> = {
   loading: {
-    [key in keyof RMT]: ConvertFnToBoolean<ReturnType<RMT[key]['effects']>>;
+    [key in keyof RMT]: ConvertFnToBoolean<ReturnType<RMT[key]["effects"]>>;
   };
 };
 
