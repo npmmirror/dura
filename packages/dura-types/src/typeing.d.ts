@@ -41,7 +41,7 @@ export type Reducer<S, P = any, M = any> = (
   meta: M
 ) => void;
 
-export type ReducerFcuntion<S> = () => ReducerMap<S>;
+export type ReducerFunction<S> = () => ReducerMap<S>;
 
 export type Effect<P = any, M = any> = (payload?: P, meta?: M) => Promise<void>;
 
@@ -67,7 +67,7 @@ export type UnionToIntersection<U> = (U extends any
 
 export type Model<S = any> = {
   state?: S;
-  reducers?: ReducerFcuntion<S>;
+  reducers?: ReducerFunction<S>;
   effects?: EffectFunction;
 };
 
@@ -89,13 +89,13 @@ export type ExtractActions<M extends ModelMap> = ExtractReducerActions<M> &
   ExtractEffectActions<M>;
 
 export type ExtractReducerActions<M extends ModelMap> = {
-  [key in keyof M]: ReviewReducders<
+  [key in keyof M]: ReviewReducers<
     ReturnType<M[key]["reducers"]>,
     ReturnType<M[key]["state"]>
   >;
 };
 
-export type ReviewReducders<R extends ReducerMap<S>, S> = {
+export type ReviewReducers<R extends ReducerMap<S>, S> = {
   [key in keyof R]: Parameters<R[key]>[1] extends undefined
     ? () => any
     : Parameters<R[key]>[2] extends undefined
