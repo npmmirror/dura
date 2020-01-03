@@ -12,7 +12,7 @@ export default function getAsyncMiddleware(rootModel: ModelMap, error) {
       rootModel?.[namespace]
         ?.effects(
           store.dispatch,
-          () => produce(store.getState(), state => state),
+          () => store.getState(),
           delay
         )
         ?.[nameeffect]?.(action?.payload, action?.meta)
