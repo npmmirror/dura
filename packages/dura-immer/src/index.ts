@@ -1,23 +1,22 @@
-import { Plugin } from '@dura/types';
-import produce from 'immer';
-import entries from 'lodash/entries';
-import merge from 'lodash/merge';
+import { Plugin } from "@dura/types";
+import produce from "immer";
 
 export const createImmerPlugin = function(): Plugin {
   return {
     wrapModel: (name, model) => {
+      const convert = ([k, v]) => ({
+        [k]: (state, payload, meta) =>
+          produce(state, draftState => v(draftState, payload, meta))
+      });
+
+      const reducers = () =>
+        Object.entries(model?.reducers?.() ?? {})
+          .map(convert)
+          .reduce((prev, next) => ({ ...prev, ...next }), {});
+
       return {
         ...model,
-        reducers: () =>
-          entries(model.reducers())
-            .map(([k, v]) => ({
-              [k]: (baseState, payload, meta) => {
-                return produce(baseState, draftState => {
-                  return v(draftState, payload, meta);
-                });
-              }
-            }))
-            .reduce(merge, {})
+        reducers
       };
     }
   };

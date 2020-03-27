@@ -4,46 +4,41 @@ import {
   compose,
   applyMiddleware,
   ReducersMapObject
-} from 'redux';
-import { Config, Store } from '@dura/types';
-import cloneDeep from 'lodash/cloneDeep';
-import getAsyncMiddleware from './async';
-
+} from "redux";
+import { Config, Store } from "@dura/types";
+import getAsyncMiddleware from "./async";
+import { merge, noop } from "./util";
 /**
  * 创建store
  * @param config
  */
-function create<C extends Config>(config: C): Store<C['initialModel']> {
+function create<C extends Config>(config: C): Store<C["initialModel"]> {
   const {
     initialModel,
     initialState,
     middlewares = [],
     extraReducers = {},
     error = () => false
-  } = cloneDeep(config);
+  } = config;
+
+  const convert = ([k, v]) => ({
+    [k]: (state = v.state(), { payload, meta, type }) => {
+      const nameForReducer = type.split("/")?.[1];
+      try {
+        return (
+          v?.reducers?.()?.[nameForReducer]?.(state, payload, meta) ?? state
+        );
+      } catch (e) {
+        error(e);
+        return state;
+      }
+    }
+  });
 
   //聚合reducers
-  const modelReducers = Object.keys(initialModel)
-    .map((name: string) => {
-      const currModel = initialModel[name];
-      return {
-        [name]: function(state = currModel.state(), action) {
-          const [namespace, namereducer] = action.type.split('/');
-          const reducer = currModel.reducers()[namereducer];
-          if (name !== namespace || !reducer) {
-            return state;
-          } else {
-            try {
-              return reducer(state, action.payload, action.meta);
-            } catch (e) {
-              error(e);
-              return state;
-            }
-          }
-        }
-      };
-    })
-    .reduce((prev, next) => ({ ...prev, ...next }), {});
+  const modelReducers = Object.entries(initialModel)
+    .map(convert)
+    .reduce(merge, noop());
 
   const rootReducers: ReducersMapObject<any> = {
     ...modelReducers,

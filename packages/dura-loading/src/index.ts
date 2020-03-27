@@ -6,7 +6,6 @@ import entries from "lodash/entries";
 import keys from "lodash/keys";
 import merge from "lodash/merge";
 import get from "lodash/get";
-import chain from "lodash/chain";
 
 export const createLoadingPlugin = function<MM extends ModelMap>(
   modelMap: MM

@@ -1,8 +1,4 @@
 import { create as _create } from "@dura/core";
-import cloneDeep from "lodash/cloneDeep";
-import values from "lodash/values";
-import merge from "lodash/merge";
-import entries from "lodash/entries";
 import {
   Config,
   Store,
@@ -34,11 +30,11 @@ function recursiveWrapModel(name, model, wrapModelList) {
   return recursiveWrapModel(name, nextModel, wrapModelList);
 }
 
-function getExtraModelMap(pluginMap: PluginMap) {
-  return values(pluginMap)
+function getExtraModelMap(pluginMap: PluginMap = {}) {
+  return Object.values(pluginMap)
     .filter(plugin => plugin.extraModel)
     .map(plugin => plugin.extraModel)
-    .reduce(merge, {});
+    .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
 function create<C extends Config, P extends PluginMap>(
@@ -52,26 +48,22 @@ function create<C extends Config, P extends PluginMap>(
     middlewares,
     extraReducers = {},
     error = () => false
-  } = cloneDeep(config);
+  } = config;
 
-  const wrapModelList = values(pluginMap)
+  const wrapModelList = Object.values(pluginMap ?? {})
     .filter(p => p.wrapModel)
     .map(p => p.wrapModel);
 
   const extraModelMap: ModelMap = getExtraModelMap(pluginMap);
 
-  const initialModelMap = entries(merge(initialModel, extraModelMap))
+  const initialModelMap = Object.entries({ ...initialModel, ...extraModelMap })
     .map(([name, model]) => {
-      const newModel = recursiveWrapModel(
-        name,
-        model,
-        cloneDeep(wrapModelList)
-      );
+      const newModel = recursiveWrapModel(name, model, [...wrapModelList]);
       return {
         [name]: newModel
       };
     })
-    .reduce(merge, {});
+    .reduce((prev, next) => ({ ...prev, ...next }), {});
 
   return _create({
     initialModel: initialModelMap,
