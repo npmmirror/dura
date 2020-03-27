@@ -18,18 +18,18 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
     initialState,
     middlewares = [],
     extraReducers = {},
-    error = () => false
+    error
   } = config;
 
   const convert = ([k, v]) => ({
     [k]: (state = v.state(), { payload, meta, type }) => {
-      const nameForReducer = type.split("/")?.[1];
+      const nameForReducer = type?.split("/")?.[1];
       try {
         return (
           v?.reducers?.()?.[nameForReducer]?.(state, payload, meta) ?? state
         );
       } catch (e) {
-        error(e);
+        error?.(e);
         return state;
       }
     }

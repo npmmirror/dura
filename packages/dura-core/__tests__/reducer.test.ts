@@ -1,4 +1,4 @@
-import { create } from '../src/index';
+import { create } from "../src/index";
 
 function getUserModel() {
   return {
@@ -11,14 +11,17 @@ function getUserModel() {
       },
       emptyAction(state) {
         return state;
+      },
+      errorChange(state) {
+        throw new Error("错误");
       }
     }),
     effects: () => ({})
   };
 }
 
-describe('测试reducers', function() {
-  it('通过reducer修改state', function() {
+describe("测试reducers", function() {
+  it("通过reducer修改state", function() {
     const UserModel = getUserModel();
 
     const rootModel = {
@@ -34,16 +37,16 @@ describe('测试reducers', function() {
     expect(getState().user.name).toBeUndefined();
 
     dispatch({
-      type: 'user/onChangeName',
+      type: "user/onChangeName",
       payload: {
-        newName: '张三'
+        newName: "张三"
       }
     });
 
-    expect(getState().user.name).toEqual('张三');
+    expect(getState().user.name).toEqual("张三");
   });
 
-  it('空的payload和meta', function() {
+  it("空的payload和meta", function() {
     const UserModel = getUserModel();
 
     const rootModel = {
@@ -59,7 +62,29 @@ describe('测试reducers', function() {
     expect(getState().user.name).toBeUndefined();
 
     dispatch({
-      type: 'user/emptyAction'
+      type: "user/emptyAction"
+    });
+
+    expect(getState().user.name).toBeUndefined();
+  });
+
+  it("测试reducer报错", function() {
+    const UserModel = getUserModel();
+
+    const rootModel = {
+      user: UserModel
+    };
+
+    const store = create({
+      initialModel: rootModel
+    });
+
+    const { dispatch, getState } = store;
+
+    expect(getState().user.name).toBeUndefined();
+
+    dispatch({
+      type: "user/errorChange"
     });
 
     expect(getState().user.name).toBeUndefined();
