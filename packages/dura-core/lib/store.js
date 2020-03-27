@@ -22,40 +22,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = require("redux");
-var cloneDeep_1 = __importDefault(require("lodash/cloneDeep"));
 var async_1 = __importDefault(require("./async"));
+var util_1 = require("./util");
 /**
  * 创建store
  * @param config
  */
 function create(config) {
-    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, _b = _a.middlewares, middlewares = _b === void 0 ? [] : _b, _c = _a.extraReducers, extraReducers = _c === void 0 ? {} : _c, _d = _a.error, error = _d === void 0 ? function () { return false; } : _d;
-    //聚合reducers
-    var modelReducers = Object.keys(initialModel)
-        .map(function (name) {
-        var _a;
-        var currModel = initialModel[name];
-        return _a = {},
-            _a[name] = function (state, action) {
-                if (state === void 0) { state = currModel.state(); }
-                var _a = action.type.split('/'), namespace = _a[0], namereducer = _a[1];
-                var reducer = currModel.reducers()[namereducer];
-                if (name !== namespace || !reducer) {
+    var initialModel = config.initialModel, initialState = config.initialState, _a = config.middlewares, middlewares = _a === void 0 ? [] : _a, _b = config.extraReducers, extraReducers = _b === void 0 ? {} : _b, _c = config.error, error = _c === void 0 ? function () { return false; } : _c;
+    var convert = function (_a) {
+        var _b;
+        var k = _a[0], v = _a[1];
+        return (_b = {},
+            _b[k] = function (state, _a) {
+                if (state === void 0) { state = v.state(); }
+                var payload = _a.payload, meta = _a.meta, type = _a.type;
+                var _b, _c, _d, _e, _f, _g, _h, _j;
+                var nameForReducer = (_b = type.split("/")) === null || _b === void 0 ? void 0 : _b[1];
+                try {
+                    return (_j = (_h = (_f = (_e = (_c = v) === null || _c === void 0 ? void 0 : (_d = _c).reducers) === null || _e === void 0 ? void 0 : _e.call(_d)) === null || _f === void 0 ? void 0 : (_g = _f)[nameForReducer]) === null || _h === void 0 ? void 0 : _h.call(_g, state, payload, meta), (_j !== null && _j !== void 0 ? _j : state));
+                }
+                catch (e) {
+                    error(e);
                     return state;
                 }
-                else {
-                    try {
-                        return reducer(state, action.payload, action.meta);
-                    }
-                    catch (e) {
-                        error(e);
-                        return state;
-                    }
-                }
             },
-            _a;
-    })
-        .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
+            _b);
+    };
+    //聚合reducers
+    var modelReducers = Object.entries(initialModel)
+        .map(convert)
+        .reduce(util_1.merge, util_1.noop());
     var rootReducers = __assign(__assign({}, modelReducers), extraReducers);
     // //获取外部传入的 compose1
     var composeEnhancers = config.compose || redux_1.compose;

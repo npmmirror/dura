@@ -1,22 +1,28 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var keys_1 = __importDefault(require("lodash/keys"));
-var merge_1 = __importDefault(require("lodash/merge"));
-var cloneDeep_1 = __importDefault(require("lodash/cloneDeep"));
+var merge = function (prev, next) { return (__assign(__assign({}, prev), next)); };
 function default_1(models) {
-    return keys_1.default(models)
+    return Object.keys(models)
         .map(function (name) { return extractAction(name, models[name]); })
-        .reduce(merge_1.default, {});
+        .reduce(merge, {});
 }
 exports.default = default_1;
 function extractAction(name, model) {
     var _a;
-    var _b = cloneDeep_1.default(model), reducers = _b.reducers, effects = _b.effects;
+    var reducers = model.reducers, effects = model.effects;
     return _a = {},
-        _a[name] = keys_1.default(merge_1.default(reducers(), effects()))
+        _a[name] = Object.keys(merge(reducers(), effects()))
             .map(function (reducerKey) {
             var _a;
             return (_a = {},
@@ -27,7 +33,7 @@ function extractAction(name, model) {
                 }); },
                 _a);
         })
-            .reduce(merge_1.default, {}),
+            .reduce(merge, {}),
         _a;
 }
 //# sourceMappingURL=index.js.map

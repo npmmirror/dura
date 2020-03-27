@@ -1,13 +1,24 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@dura/core");
-var cloneDeep_1 = __importDefault(require("lodash/cloneDeep"));
-var values_1 = __importDefault(require("lodash/values"));
-var merge_1 = __importDefault(require("lodash/merge"));
-var entries_1 = __importDefault(require("lodash/entries"));
 var redux_1 = require("redux");
 exports.compose = redux_1.compose;
 exports.bindActionCreators = redux_1.bindActionCreators;
@@ -29,28 +40,29 @@ function recursiveWrapModel(name, model, wrapModelList) {
     return recursiveWrapModel(name, nextModel, wrapModelList);
 }
 function getExtraModelMap(pluginMap) {
-    return values_1.default(pluginMap)
+    if (pluginMap === void 0) { pluginMap = {}; }
+    return Object.values(pluginMap)
         .filter(function (plugin) { return plugin.extraModel; })
         .map(function (plugin) { return plugin.extraModel; })
-        .reduce(merge_1.default, {});
+        .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
 }
 function create(config, pluginMap) {
     //clone
-    var _a = cloneDeep_1.default(config), initialModel = _a.initialModel, initialState = _a.initialState, middlewares = _a.middlewares, _b = _a.extraReducers, extraReducers = _b === void 0 ? {} : _b, _c = _a.error, error = _c === void 0 ? function () { return false; } : _c;
-    var wrapModelList = values_1.default(pluginMap)
+    var initialModel = config.initialModel, initialState = config.initialState, middlewares = config.middlewares, _a = config.extraReducers, extraReducers = _a === void 0 ? {} : _a, _b = config.error, error = _b === void 0 ? function () { return false; } : _b;
+    var wrapModelList = Object.values((pluginMap !== null && pluginMap !== void 0 ? pluginMap : {}))
         .filter(function (p) { return p.wrapModel; })
         .map(function (p) { return p.wrapModel; });
     var extraModelMap = getExtraModelMap(pluginMap);
-    var initialModelMap = entries_1.default(merge_1.default(initialModel, extraModelMap))
+    var initialModelMap = Object.entries(__assign(__assign({}, initialModel), extraModelMap))
         .map(function (_a) {
         var _b;
         var name = _a[0], model = _a[1];
-        var newModel = recursiveWrapModel(name, model, cloneDeep_1.default(wrapModelList));
+        var newModel = recursiveWrapModel(name, model, __spreadArrays(wrapModelList));
         return _b = {},
             _b[name] = newModel,
             _b;
     })
-        .reduce(merge_1.default, {});
+        .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
     return core_1.create({
         initialModel: initialModelMap,
         initialState: initialState,
