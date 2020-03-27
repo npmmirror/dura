@@ -29,7 +29,7 @@ var util_1 = require("./util");
  * @param config
  */
 function create(config) {
-    var initialModel = config.initialModel, initialState = config.initialState, _a = config.middlewares, middlewares = _a === void 0 ? [] : _a, _b = config.extraReducers, extraReducers = _b === void 0 ? {} : _b, _c = config.error, error = _c === void 0 ? function () { return false; } : _c;
+    var initialModel = config.initialModel, initialState = config.initialState, _a = config.middlewares, middlewares = _a === void 0 ? [] : _a, _b = config.extraReducers, extraReducers = _b === void 0 ? {} : _b, error = config.error;
     var convert = function (_a) {
         var _b;
         var k = _a[0], v = _a[1];
@@ -37,13 +37,13 @@ function create(config) {
             _b[k] = function (state, _a) {
                 if (state === void 0) { state = v.state(); }
                 var payload = _a.payload, meta = _a.meta, type = _a.type;
-                var _b, _c, _d, _e, _f, _g, _h, _j;
-                var nameForReducer = (_b = type.split("/")) === null || _b === void 0 ? void 0 : _b[1];
+                var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+                var nameForReducer = (_c = (_b = type) === null || _b === void 0 ? void 0 : _b.split("/")) === null || _c === void 0 ? void 0 : _c[1];
                 try {
-                    return (_j = (_h = (_f = (_e = (_c = v) === null || _c === void 0 ? void 0 : (_d = _c).reducers) === null || _e === void 0 ? void 0 : _e.call(_d)) === null || _f === void 0 ? void 0 : (_g = _f)[nameForReducer]) === null || _h === void 0 ? void 0 : _h.call(_g, state, payload, meta), (_j !== null && _j !== void 0 ? _j : state));
+                    return (_k = (_j = (_g = (_f = (_d = v) === null || _d === void 0 ? void 0 : (_e = _d).reducers) === null || _f === void 0 ? void 0 : _f.call(_e)) === null || _g === void 0 ? void 0 : (_h = _g)[nameForReducer]) === null || _j === void 0 ? void 0 : _j.call(_h, state, payload, meta), (_k !== null && _k !== void 0 ? _k : state));
                 }
                 catch (e) {
-                    error(e);
+                    (_l = error) === null || _l === void 0 ? void 0 : _l(e);
                     return state;
                 }
             },
