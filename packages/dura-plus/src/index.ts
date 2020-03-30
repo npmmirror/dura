@@ -6,12 +6,6 @@ import {
   ModelMap,
   UnionToIntersection
 } from "@dura/types";
-import {
-  compose,
-  bindActionCreators,
-  applyMiddleware,
-  combineReducers
-} from "redux";
 
 function recursiveWrapModel(name, model, wrapModelList) {
   if (wrapModelList && wrapModelList.length === 0) {
@@ -68,13 +62,3 @@ function create<C extends Config, P extends PluginMap>(
     C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>
   >;
 }
-
-export {
-  create,
-  compose,
-  bindActionCreators,
-  applyMiddleware,
-  combineReducers
-};
-
-export * from "@dura/types";

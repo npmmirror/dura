@@ -14,6 +14,7 @@
     "@dura/immer": "^3.3.3-alpha.1",
     "@dura/loading": "^3.3.3-alpha.1",
     "@dura/plus": "^3.3.3-alpha.1",
+    "@dura/react": "^3.3.3-alpha.2",
     "antd": "^3.13.0",
     "lodash": "^4.17.15",
     "react": "^16.7.0",

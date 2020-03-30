@@ -19,11 +19,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@dura/core");
-var redux_1 = require("redux");
-exports.compose = redux_1.compose;
-exports.bindActionCreators = redux_1.bindActionCreators;
-exports.applyMiddleware = redux_1.applyMiddleware;
-exports.combineReducers = redux_1.combineReducers;
 function recursiveWrapModel(name, model, wrapModelList) {
     if (wrapModelList && wrapModelList.length === 0) {
         return model;
@@ -65,5 +60,4 @@ function create(config, pluginMap) {
         error: error
     });
 }
-exports.create = create;
 //# sourceMappingURL=index.js.map
