@@ -2,18 +2,16 @@
  * 自动loading
  */
 import { ModelMap, Plugin, EffectMap } from "@dura/types";
-import entries from "lodash/entries";
-import keys from "lodash/keys";
-import merge from "lodash/merge";
-import get from "lodash/get";
+
+const merge = (prev, next) => ({ ...prev, ...next });
 
 export const createLoadingPlugin = function<MM extends ModelMap>(
   modelMap: MM
 ): Plugin {
-  const initialState = entries(modelMap)
+  const initialState = Object.entries(modelMap)
     .map(([name, model]) => {
       return {
-        [name]: keys(get(model, "effects", () => ({}))())
+        [name]: Object.keys(model?.effects?.())
           .map(ename => ({ [ename]: false }))
           .reduce(merge, {})
       };
@@ -27,7 +25,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
       return {
         ...model,
         effects: (dispatch, getState, delay) =>
-          entries(model.effects(dispatch, getState, delay))
+          Object.entries(model.effects(dispatch, getState, delay))
             .map(([k, v]) => ({
               [k]: async (payload, meta) => {
                 const start = () =>
