@@ -24,14 +24,6 @@ exports.compose = redux_1.compose;
 exports.bindActionCreators = redux_1.bindActionCreators;
 exports.applyMiddleware = redux_1.applyMiddleware;
 exports.combineReducers = redux_1.combineReducers;
-var react_redux_1 = require("react-redux");
-exports.useSelector = react_redux_1.useSelector;
-exports.useDispatch = react_redux_1.useDispatch;
-exports.useStore = react_redux_1.useStore;
-exports.shallowEqual = react_redux_1.shallowEqual;
-exports.Provider = react_redux_1.Provider;
-exports.connect = react_redux_1.connect;
-exports.batch = react_redux_1.batch;
 function recursiveWrapModel(name, model, wrapModelList) {
     if (wrapModelList && wrapModelList.length === 0) {
         return model;

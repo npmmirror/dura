@@ -46,34 +46,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var entries_1 = __importDefault(require("lodash/entries"));
-var keys_1 = __importDefault(require("lodash/keys"));
-var merge_1 = __importDefault(require("lodash/merge"));
-var get_1 = __importDefault(require("lodash/get"));
+var merge = function (prev, next) { return (__assign(__assign({}, prev), next)); };
 exports.createLoadingPlugin = function (modelMap) {
     var _this = this;
-    var initialState = entries_1.default(modelMap)
+    var initialState = Object.entries(modelMap)
         .map(function (_a) {
         var _b;
         var name = _a[0], model = _a[1];
+        var _c, _d, _e;
         return _b = {},
-            _b[name] = keys_1.default(get_1.default(model, "effects", function () { return ({}); })())
+            _b[name] = Object.keys((_e = (_c = model) === null || _c === void 0 ? void 0 : (_d = _c).effects) === null || _e === void 0 ? void 0 : _e.call(_d))
                 .map(function (ename) {
                 var _a;
                 return (_a = {}, _a[ename] = false, _a);
             })
-                .reduce(merge_1.default, {}),
+                .reduce(merge, {}),
             _b;
     })
-        .reduce(merge_1.default, {});
+        .reduce(merge, {});
     return {
         wrapModel: function (name, model) {
             return __assign(__assign({}, model), { effects: function (dispatch, getState, delay) {
-                    return entries_1.default(model.effects(dispatch, getState, delay))
+                    return Object.entries(model.effects(dispatch, getState, delay))
                         .map(function (_a) {
                         var _b;
                         var k = _a[0], v = _a[1];
@@ -125,7 +120,7 @@ exports.createLoadingPlugin = function (modelMap) {
                             }); },
                             _b);
                     })
-                        .reduce(merge_1.default, {});
+                        .reduce(merge, {});
                 } });
         },
         extraModel: {
