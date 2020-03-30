@@ -1,6 +1,6 @@
 {
   "name": "example-pro",
-  "version": "3.3.3-alpha.4",
+  "version": "3.3.3",
   "description": "",
   "private": true,
   "main": "index.js",
@@ -10,11 +10,11 @@
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "dependencies": {
-    "@dura/actions": "^3.3.3-alpha.4",
-    "@dura/immer": "^3.3.3-alpha.4",
-    "@dura/loading": "^3.3.3-alpha.4",
-    "@dura/plus": "^3.3.3-alpha.4",
-    "@dura/react": "^3.3.3-alpha.4",
+    "@dura/actions": "^3.3.3",
+    "@dura/immer": "^3.3.3",
+    "@dura/loading": "^3.3.3",
+    "@dura/plus": "^3.3.3",
+    "@dura/react": "^3.3.3",
     "antd": "^3.13.0",
     "lodash": "^4.17.15",
     "react": "^16.7.0",
