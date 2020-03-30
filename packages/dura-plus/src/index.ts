@@ -62,3 +62,5 @@ function create<C extends Config, P extends PluginMap>(
     C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>
   >;
 }
+
+export { create };

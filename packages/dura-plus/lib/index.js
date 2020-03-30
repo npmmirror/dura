@@ -60,4 +60,5 @@ function create(config, pluginMap) {
         error: error
     });
 }
+exports.create = create;
 //# sourceMappingURL=index.js.map
