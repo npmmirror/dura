@@ -10,7 +10,7 @@
     "build": "rm -rf ./lib && tsc"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@dura/actions": "^3.3.3-alpha.4",
     "@dura/plus": "^3.3.3-alpha.4"
