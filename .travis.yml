@@ -16,7 +16,7 @@ before_script:
   - npm run bootstrap
 script:
   - npm run build
-  - npm run test
+  # - npm run test
 after_success:
   - jest --coverage --coverageReporters=text-lcov | coveralls
   - cat ./coverage/lcov.info|./node_modules/coveralls/bin/coveralls.js
