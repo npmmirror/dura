@@ -1,6 +1,6 @@
 {
   "name": "@dura/plus",
-  "version": "3.3.3-alpha.1",
+  "version": "3.3.3-alpha.3",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
