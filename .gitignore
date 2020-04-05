@@ -6,3 +6,4 @@ packages/example-pro/dist
 packages/example-pro/dist
 
 docs/src/.umi
+.DS_Store
