@@ -1,5 +1,5 @@
 {
-  "name": "@dura/actions",
+  "name": "@dura/utils",
   "version": "3.4.0",
   "description": "",
   "main": "./lib/index.js",
@@ -10,10 +10,6 @@
   "scripts": {
     "build": "rm -rf ./lib && tsc"
   },
-  "author": "ityuany",
-  "license": "MIT",
-  "dependencies": {
-    "@dura/core": "^3.4.0",
-    "@dura/utils": "^3.4.0"
-  }
+  "author": "",
+  "license": "MIT"
 }

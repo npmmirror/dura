@@ -1,2 +1,10 @@
-import { ModelMap, ExtractActions } from "@dura/types";
-export default function <RM extends ModelMap>(models: RM): ExtractActions<RM>;
+declare function createActions(models: any): {
+    [x: number]: {
+        [x: string]: (payload: any, meta: any) => {
+            type: string;
+            payload: any;
+            meta: any;
+        };
+    };
+};
+export { createActions };

@@ -34,7 +34,7 @@ exports.createImmerPlugin = function () {
                     .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
             };
             return __assign(__assign({}, model), { reducers: reducers });
-        }
+        },
     };
 };
 //# sourceMappingURL=index.js.map

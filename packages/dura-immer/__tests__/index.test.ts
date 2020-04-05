@@ -1,20 +1,20 @@
-import { create } from '@dura/plus';
-import { createImmerPlugin } from '../src/index';
-import createActions from '@dura/actions';
+import { create } from "@dura/plus";
+import { createImmerPlugin } from "../src/index";
+import { createActions } from "@dura/actions";
 
-describe('测试immer插件', function() {
-  it('测试immer插件', function() {
+describe("测试immer插件", function () {
+  it("测试immer插件", function () {
     const initialState = {
       name: undefined,
       sex: undefined,
       addressList: [
         {
-          province: undefined
+          province: undefined,
         },
         {
-          province: '安徽'
-        }
-      ]
+          province: "安徽",
+        },
+      ],
     };
     const user = {
       state: () => initialState,
@@ -24,19 +24,19 @@ describe('测试immer插件', function() {
           payload: { provinceName: string }
         ) {
           state.addressList[0].province = payload.provinceName;
-        }
+        },
       }),
-      effects: () => ({})
+      effects: () => ({}),
     };
     const initialModel = {
-      user
+      user,
     };
     const store = create(
       {
-        initialModel
+        initialModel,
       },
       {
-        immer: createImmerPlugin()
+        immer: createImmerPlugin(),
       }
     );
 
@@ -46,8 +46,8 @@ describe('测试immer插件', function() {
 
     expect(getState().user.addressList[0].province).toBeUndefined();
 
-    dispatch(actionCreator.user.onChangeName({ provinceName: '江苏' }));
+    dispatch(actionCreator.user.onChangeName({ provinceName: "江苏" }));
 
-    expect(getState().user.addressList[0].province).toEqual('江苏');
+    expect(getState().user.addressList[0].province).toEqual("江苏");
   });
 });

@@ -34,7 +34,6 @@ function getExtraModelMap(pluginMap) {
         .reduce(function (prev, next) { return (__assign(__assign({}, prev), next)); }, {});
 }
 function create(config, pluginMap) {
-    //clone
     var initialModel = config.initialModel, initialState = config.initialState, middlewares = config.middlewares, _a = config.extraReducers, extraReducers = _a === void 0 ? {} : _a, _b = config.error, error = _b === void 0 ? function () { return false; } : _b;
     var wrapModelList = Object.values((pluginMap !== null && pluginMap !== void 0 ? pluginMap : {}))
         .filter(function (p) { return p.wrapModel; })
@@ -57,8 +56,7 @@ function create(config, pluginMap) {
         compose: config.compose,
         createStore: config.createStore,
         extraReducers: extraReducers,
-        error: error
+        error: error,
     });
 }
 exports.create = create;
-//# sourceMappingURL=index.js.map

@@ -1,8 +1,9 @@
 {
   "name": "@dura/loading",
-  "version": "3.3.3",
+  "version": "3.4.0",
   "description": "",
   "main": "./lib/index.js",
+  "typings": "./index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -11,11 +12,11 @@
   },
   "author": "",
   "license": "MIT",
-  "devDependencies": {
-    "@dura/actions": "^3.3.3",
-    "@dura/plus": "^3.3.3"
-  },
   "dependencies": {
-    "@dura/types": "^3.3.3"
+    "@dura/plus": "^3.4.0",
+    "@dura/utils": "^3.4.0"
+  },
+  "devDependencies": {
+    "@dura/actions": "^3.4.0"
   }
 }

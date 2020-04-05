@@ -1,2 +1,3 @@
-import { Plugin } from "@dura/types";
-export declare const createImmerPlugin: () => Plugin;
+export declare const createImmerPlugin: () => {
+    wrapModel: (name: any, model: any) => any;
+};

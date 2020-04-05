@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { get } from 'lodash';
+import React from "react";
+import { connect } from "react-redux";
+import { get } from "lodash";
 
 /**
  * {
@@ -26,7 +26,7 @@ class Hello extends React.Component<State, Props> {
   constructor(props) {
     super(props);
     this.state = {
-      answer: {}
+      answer: {},
     };
   }
 
@@ -35,7 +35,7 @@ class Hello extends React.Component<State, Props> {
   componentDidMount() {}
 
   render() {
-    const name1 = get(this.state, 'answer.orderNo.projectName', '默认');
+    const name1 = get(this.state, "answer.orderNo.projectName", "默认");
 
     return (
       <div>

@@ -47,7 +47,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var merge = function (prev, next) { return (__assign(__assign({}, prev), next)); };
+/**
+ * 自动loading
+ */
+var utils_1 = require("@dura/utils");
 exports.createLoadingPlugin = function (modelMap) {
     var _this = this;
     var initialState = Object.entries(modelMap)
@@ -61,10 +64,10 @@ exports.createLoadingPlugin = function (modelMap) {
                 var _a;
                 return (_a = {}, _a[ename] = false, _a);
             })
-                .reduce(merge, {}),
+                .reduce(utils_1.merge, utils_1.noop()),
             _b;
     })
-        .reduce(merge, {});
+        .reduce(utils_1.merge, {});
     return {
         wrapModel: function (name, model) {
             return __assign(__assign({}, model), { effects: function (dispatch, getState, delay) {
@@ -83,16 +86,16 @@ exports.createLoadingPlugin = function (modelMap) {
                                                     type: "loading/startLoading",
                                                     payload: {
                                                         modelName: name,
-                                                        effectName: k
-                                                    }
+                                                        effectName: k,
+                                                    },
                                                 });
                                             }, end = function () {
                                                 return dispatch({
                                                     type: "loading/endLoading",
                                                     payload: {
                                                         modelName: name,
-                                                        effectName: k
-                                                    }
+                                                        effectName: k,
+                                                    },
                                                 });
                                             };
                                             if (!(meta && meta.loading)) return [3 /*break*/, 5];
@@ -120,7 +123,7 @@ exports.createLoadingPlugin = function (modelMap) {
                             }); },
                             _b);
                     })
-                        .reduce(merge, {});
+                        .reduce(utils_1.merge, {});
                 } });
         },
         extraModel: {
@@ -138,11 +141,11 @@ exports.createLoadingPlugin = function (modelMap) {
                         return __assign(__assign({}, state), (_a = {}, _a[payload.modelName] = (_b = {},
                             _b[payload.effectName] = false,
                             _b), _a));
-                    }
+                    },
                 }); },
-                effects: function () { return ({}); }
-            }
-        }
+                effects: function () { return ({}); },
+            },
+        },
     };
 };
 //# sourceMappingURL=index.js.map

@@ -1,11 +1,4 @@
 import { create as _create } from "@dura/core";
-import {
-  Config,
-  Store,
-  PluginMap,
-  ModelMap,
-  UnionToIntersection
-} from "@dura/types";
 
 function recursiveWrapModel(name, model, wrapModelList) {
   if (wrapModelList && wrapModelList.length === 0) {
@@ -15,37 +8,33 @@ function recursiveWrapModel(name, model, wrapModelList) {
   return recursiveWrapModel(name, nextModel, wrapModelList);
 }
 
-function getExtraModelMap(pluginMap: PluginMap = {}) {
+function getExtraModelMap(pluginMap = {}) {
   return Object.values(pluginMap)
-    .filter(plugin => plugin.extraModel)
-    .map(plugin => plugin.extraModel)
+    .filter((plugin: any) => plugin.extraModel)
+    .map((plugin: any) => plugin.extraModel)
     .reduce((prev, next) => ({ ...prev, ...next }), {});
 }
 
-function create<C extends Config, P extends PluginMap>(
-  config: C,
-  pluginMap?: P
-): Store<C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>> {
-  //clone
+export function create(config, pluginMap = {}) {
   const {
     initialModel,
     initialState,
     middlewares,
     extraReducers = {},
-    error = () => false
+    error = () => false,
   } = config;
 
-  const wrapModelList = Object.values(pluginMap ?? {})
-    .filter(p => p.wrapModel)
-    .map(p => p.wrapModel);
+  const wrapModelList = Object.values(pluginMap)
+    .filter((p: any) => p.wrapModel)
+    .map((p: any) => p.wrapModel);
 
-  const extraModelMap: ModelMap = getExtraModelMap(pluginMap);
+  const extraModelMap = getExtraModelMap(pluginMap);
 
   const initialModelMap = Object.entries({ ...initialModel, ...extraModelMap })
     .map(([name, model]) => {
       const newModel = recursiveWrapModel(name, model, [...wrapModelList]);
       return {
-        [name]: newModel
+        [name]: newModel,
       };
     })
     .reduce((prev, next) => ({ ...prev, ...next }), {});
@@ -57,10 +46,6 @@ function create<C extends Config, P extends PluginMap>(
     compose: config.compose,
     createStore: config.createStore,
     extraReducers: extraReducers,
-    error: error
-  }) as Store<
-    C["initialModel"] & UnionToIntersection<P[keyof P]["extraModel"]>
-  >;
+    error: error,
+  });
 }
-
-export { create };

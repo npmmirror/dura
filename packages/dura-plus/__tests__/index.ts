@@ -1,20 +1,20 @@
-import { create } from "../src/index";
-import createActions from "@dura/actions";
+import { create } from "../src";
+import { createActions } from "@dura/actions";
 
-describe("测试plus", function() {
-  it("测试插件额外的model", function() {
+describe("测试plus", function () {
+  it("测试插件额外的model", function () {
     const UserModel = {
       state: () => ({
-        name: undefined
+        name: undefined,
       }),
       reducers: () => ({
         onChangeLoad(state, action) {
           return state;
-        }
+        },
       }),
       effects: (dispatch, getState, delay) => ({
-        async onAsyncChangeName(effectApi, action) {}
-      })
+        async onAsyncChangeName(effectApi, action) {},
+      }),
     };
 
     const plugins = {
@@ -22,81 +22,81 @@ describe("测试plus", function() {
         extraModel: {
           loading: {
             state: () => ({
-              name: "测试loading"
+              name: "测试loading",
             }),
             reducers: () => ({
               loadingChange(state, action) {
                 return state;
-              }
+              },
             }),
-            effects: () => ({})
-          }
-        }
+            effects: () => ({}),
+          },
+        },
       },
       immer: {
         extraModel: {
           immer: {
             state: () => ({
-              name: "测试immer"
+              name: "测试immer",
             }),
             reducers: () => ({
               immerChange(state, action) {
                 return state;
-              }
+              },
             }),
-            effects: () => ({})
-          }
-        }
-      }
+            effects: () => ({}),
+          },
+        },
+      },
     };
     const store = create(
       {
         initialModel: {
-          user: UserModel
-        }
+          user: UserModel,
+        },
       },
       plugins
     );
 
     expect(store.getState().loading.name).toEqual("测试loading");
   });
-  it("测试插件", function() {
+  it("测试插件", function () {
     const UserModel = {
       state: () => ({
-        name: undefined
+        name: undefined,
       }),
       reducers: () => ({
         onChangeLoad(state, action) {
           return state;
-        }
+        },
       }),
       effects: () => ({
-        async onAsyncChangeName() {}
-      })
+        async onAsyncChangeName() {},
+      }),
     };
 
     const StudentModel = {
       state: () => ({
-        name: undefined
+        name: undefined,
       }),
       reducers: () => ({
         onChangeLoad(state, action) {
           return state;
-        }
+        },
       }),
       effects: () => ({
         async onAsyncChangeStudentName() {
           console.log("StudentModel-effects");
-        }
-      })
+        },
+      }),
     };
 
     const store = create(
       {
         initialModel: {
           user: UserModel,
-          student: StudentModel
-        }
+          student: StudentModel,
+        },
       },
       {
         a: {
@@ -116,7 +116,7 @@ describe("测试plus", function() {
 
               console.log("effect结束1");
             };
-          }
+          },
         },
         b: {
           onReducer: (modelName, reducerName, reducer) => {
@@ -135,37 +135,37 @@ describe("测试plus", function() {
 
               console.log("effect结束2");
             };
-          }
-        }
+          },
+        },
       }
     );
     const actionCreator = createActions({
       user: UserModel,
-      student: StudentModel
+      student: StudentModel,
     });
 
     store.dispatch(actionCreator.student.onAsyncChangeStudentName());
   });
 
-  it("不传任何插件", function() {
+  it("不传任何插件", function () {
     const UserModel = {
       state: () => ({
-        name: undefined
+        name: undefined,
       }),
       reducers: () => ({
         onChangeLoad(state, action) {
           return state;
-        }
+        },
       }),
       effects: () => ({
-        async onAsyncChangeName(effectApi, action) {}
-      })
+        async onAsyncChangeName(effectApi, action) {},
+      }),
     };
 
     const store = create({
       initialModel: {
-        user: UserModel
-      }
+        user: UserModel,
+      },
     });
 
     expect(store.getState().user.name).toBeUndefined();
