@@ -1,6 +1,6 @@
 {
   "name": "@dura/util",
-  "version": "3.3.3",
+  "version": "3.4.0-alpha.0",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -12,9 +12,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/actions": "^3.3.3",
-    "@dura/core": "^3.3.3",
-    "@dura/plus": "^3.3.3",
+    "@dura/actions": "^3.4.0-alpha.0",
+    "@dura/core": "^3.4.0-alpha.0",
+    "@dura/plus": "^3.4.0-alpha.0",
     "@dura/types": "^3.3.3"
   }
 }
