@@ -1,20 +1,19 @@
-import { actionCreator } from '../src/store';
-import { OnChangeNameAction, OnAsyncChangeName } from './UserMode';
-import { EffectApi } from '@dura/plus';
+import { actionCreator } from "../src/store";
+import { OnChangeNameAction, OnAsyncChangeName } from "./UserMode";
 
 const initialState = {
   /**
    * 姓名
    */
-  name: '默认姓名' as string,
+  name: "默认姓名" as string,
   /**
    * 性别
    */
-  sex: undefined as '男' | '女',
+  sex: undefined as "男" | "女",
   /**
    * 年龄
    */
-  age: undefined as number
+  age: undefined as number,
 };
 
 type State = typeof initialState;
@@ -32,9 +31,9 @@ export default {
         newName: string;
       }
     ): State {
-      state.name = payload.newName + '9';
+      state.name = payload.newName + "9";
       return state;
-    }
+    },
   }),
   effects: (dispatch, getState, delay) => ({
     /**
@@ -57,11 +56,11 @@ export default {
 
       dispatch(
         actionCreator.user.onChangeName({
-          newName: payload.newName
+          newName: payload.newName,
         })
       );
-    }
-  })
+    },
+  }),
 };
 
 async function hello() {}

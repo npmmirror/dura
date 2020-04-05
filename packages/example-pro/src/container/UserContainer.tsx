@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Button, Input, Tabs } from 'antd';
-import { actionCreator, RootState } from '@store';
-import Hello from './Hello';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Button, Input, Tabs } from "antd";
+import { actionCreator, RootState } from "@store";
+import Hello from "./Hello";
+import { compose } from "redux";
 
 function mapState(state: RootState) {
   return {
     name: state.user.name,
-    loading: state.loading.user.onAsyncChangeName
+    age: state.user.age,
   };
 }
 
 function mapDispatch(dispatch) {
   return {
-    onAsyncChangeName(newName: string) {
-      dispatch(
-        actionCreator.user.onAsyncChangeName({ newName }, { loading: true })
-      );
-    },
-    onChangeName(newName: string) {
-      dispatch(actionCreator.user.onChangeName({ newName }));
-    }
+    onAsyncChangeName: compose(dispatch, actionCreator.user.onAsyncChangeName),
   };
 }
 
@@ -31,16 +25,16 @@ class UserContainer extends Component {
     return (
       <div>
         <h1>{this.props.name}</h1>
-        <Input
-          value={this.props.name}
-          onChange={e => this.props.onChangeName(e.target.value)}
-        />
+        <h2>{this.props.age}</h2>
         <Button
-          loading={this.props.loading}
-          type='primary'
-          onClick={() => this.props.onAsyncChangeName(this.props.name)}
+          onClick={() =>
+            this.props.onAsyncChangeName(
+              { newName: "李四" },
+              { loading: false }
+            )
+          }
         >
-          提交
+          修改
         </Button>
         <Hello />
       </div>
@@ -48,7 +42,4 @@ class UserContainer extends Component {
   }
 }
 
-export default connect(
-  mapState,
-  mapDispatch
-)(UserContainer);
+export default connect(mapState, mapDispatch)(UserContainer);
