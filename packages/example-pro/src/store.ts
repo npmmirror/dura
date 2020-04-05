@@ -2,11 +2,10 @@ import UserModel from "@models/UserModel";
 
 import { createImmerPlugin } from "@dura/immer";
 import { createLoadingPlugin, ExtractLoadingState } from "@dura/loading";
-import createActions from "@dura/actions";
 import HelloModel from "./container/Home/models/HelloModel";
-import { connect } from "react-redux";
-import { isEqual } from "lodash";
-import { create, ExtractState } from "@dura/react";
+import { create } from "@dura/plus";
+import { ExtractState } from "@dura/core";
+import { createActions } from "@dura/actions";
 
 const initialModel = {
   /**
@@ -21,8 +20,8 @@ const initialModel = {
 
 export type RootModel = typeof initialModel;
 
-export type RootState = ExtractState<RootModel> &
-  ExtractLoadingState<RootModel>;
+export type RootState = ExtractLoadingState<RootModel> &
+  ExtractState<RootModel>;
 
 export const store = create(
   {
@@ -36,12 +35,3 @@ export const store = create(
 );
 
 export const actionCreator = createActions(initialModel);
-
-export const connectHOC = function (mapState, mapDispatch) {
-  return connect(mapState, mapDispatch, null, {
-    areStatesEqual: isEqual,
-    areOwnPropsEqual: isEqual,
-    areStatePropsEqual: isEqual,
-    areMergedPropsEqual: isEqual,
-  });
-};

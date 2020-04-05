@@ -6,12 +6,14 @@ import {
   ReducersMapObject,
 } from "redux";
 import getAsyncMiddleware from "./async";
-import { merge, noop } from "./util";
+
+import { noop, merge } from "@dura/utils";
+
 /**
  * 创建store
  * @param config
  */
-function create(config) {
+export function create(config) {
   const {
     initialModel,
     initialState,
@@ -22,11 +24,9 @@ function create(config) {
 
   const convert = ([k, v]) => ({
     [k]: (state = v.state(), { payload, meta, type }) => {
-      const nameForReducer = type?.split("/")?.[1];
+      const nameForReducer = type.split("/")[1];
       try {
-        return (
-          v?.reducers?.()?.[nameForReducer]?.(state, payload, meta) ?? state
-        );
+        return v.reducers()[nameForReducer]?.(state, payload, meta) ?? state;
       } catch (e) {
         error?.(e);
         return state;
@@ -62,5 +62,3 @@ function create(config) {
 
   return reduxStore;
 }
-
-export { create };

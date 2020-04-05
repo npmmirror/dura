@@ -1,12 +1,11 @@
-import { Plugin } from "@dura/types";
 import produce from "immer";
 
-export const createImmerPlugin = function(): Plugin {
+export const createImmerPlugin = function () {
   return {
     wrapModel: (name, model) => {
       const convert = ([k, v]) => ({
         [k]: (state, payload, meta) =>
-          produce(state, draftState => v(draftState, payload, meta))
+          produce(state, (draftState) => v(draftState, payload, meta)),
       });
 
       const reducers = () =>
@@ -16,8 +15,8 @@ export const createImmerPlugin = function(): Plugin {
 
       return {
         ...model,
-        reducers
+        reducers,
       };
-    }
+    },
   };
 };

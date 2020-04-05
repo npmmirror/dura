@@ -1,14 +1,12 @@
-import { ModelMap, Model, ExtractActions } from "@dura/types";
+import { merge, noop } from "@dura/utils";
 
-const merge = (prev, next) => ({ ...prev, ...next });
-
-export default function<RM extends ModelMap>(models: RM): ExtractActions<RM> {
-  return Object.keys(models)
-    .map((name: string) => extractAction(name, models[name]))
-    .reduce(merge, {});
+function createActions(models) {
+  return Object.entries(models)
+    .map(([k, m]) => extractAction(k, m))
+    .reduce(merge, noop());
 }
 
-function extractAction(name: string, model: Model<any>) {
+function extractAction(name, model) {
   const { reducers, effects } = model;
   return {
     [name]: Object.keys(merge(reducers(), effects()))
@@ -16,9 +14,11 @@ function extractAction(name: string, model: Model<any>) {
         [reducerKey]: (payload, meta) => ({
           type: `${name}/${reducerKey}`,
           payload,
-          meta
-        })
+          meta,
+        }),
       }))
-      .reduce(merge, {})
+      .reduce(merge, {}),
   };
 }
+
+export { createActions };

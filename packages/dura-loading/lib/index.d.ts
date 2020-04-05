@@ -1,8 +1,5 @@
-/**
- * 自动loading
- */
-import { ModelMap, Plugin, EffectMap } from "@dura/types";
-export declare const createLoadingPlugin: <MM extends ModelMap>(modelMap: MM) => Plugin;
+import { ModelMap, EffectMap, Plugin } from "@dura/plus";
+export declare const createLoadingPlugin: <MM extends any>(modelMap: MM) => Plugin;
 declare type ConvertFnToBoolean<E extends EffectMap> = {
     [key in keyof E]: boolean;
 };

@@ -1,19 +1,18 @@
 /**
  * 自动loading
  */
-import { ModelMap, Plugin, EffectMap } from "@dura/types";
+import { merge, noop } from "@dura/utils";
+import { ModelMap, EffectMap, Plugin } from "@dura/plus";
 
-const merge = (prev, next) => ({ ...prev, ...next });
-
-export const createLoadingPlugin = function<MM extends ModelMap>(
+export const createLoadingPlugin = function <MM extends ModelMap>(
   modelMap: MM
 ): Plugin {
   const initialState = Object.entries(modelMap)
     .map(([name, model]) => {
       return {
         [name]: Object.keys(model?.effects?.())
-          .map(ename => ({ [ename]: false }))
-          .reduce(merge, {})
+          .map((ename) => ({ [ename]: false }))
+          .reduce(merge, noop()),
       };
     })
     .reduce(merge, {});
@@ -33,16 +32,16 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
                       type: "loading/startLoading",
                       payload: {
                         modelName: name,
-                        effectName: k
-                      }
+                        effectName: k,
+                      },
                     }),
                   end = () =>
                     dispatch({
                       type: "loading/endLoading",
                       payload: {
                         modelName: name,
-                        effectName: k
-                      }
+                        effectName: k,
+                      },
                     });
 
                 if (meta && meta.loading) {
@@ -57,9 +56,9 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
                 } else {
                   await v(payload, meta);
                 }
-              }
+              },
             }))
-            .reduce(merge, {})
+            .reduce(merge, {}),
       };
     },
     extraModel: {
@@ -76,8 +75,8 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
             return {
               ...state,
               [payload.modelName]: {
-                [payload.effectName]: true
-              }
+                [payload.effectName]: true,
+              },
             };
           },
           endLoading(
@@ -90,14 +89,14 @@ export const createLoadingPlugin = function<MM extends ModelMap>(
             return {
               ...state,
               [payload.modelName]: {
-                [payload.effectName]: false
-              }
+                [payload.effectName]: false,
+              },
             };
-          }
+          },
         }),
-        effects: () => ({})
-      }
-    }
+        effects: () => ({}),
+      },
+    },
   };
 };
 

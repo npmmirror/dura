@@ -1,21 +1,21 @@
-import { create, EffectApi } from '@dura/plus';
-import { createLoadingPlugin } from '../src/index';
-import createAction from '@dura/actions';
+import { create } from "@dura/plus";
+import { createLoadingPlugin } from "../src/index";
+import { createActions } from "@dura/actions";
 
-describe('测试loading 插件', function() {
-  it('测试loading 插件,启用loading', function(done) {
+describe("测试loading 插件", function () {
+  it("测试loading 插件,启用loading", function (done) {
     const user = {
       state: () => ({
         /**
          * 姓名
          */
         name: undefined,
-        sex: undefined
+        sex: undefined,
       }),
       reducers: () => ({
         onChangeName(state, payload: { name: string }) {
           return { ...state, ...payload };
-        }
+        },
       }),
       effects: (dispatch, getState, delay) => ({
         /**
@@ -28,22 +28,22 @@ describe('测试loading 插件', function() {
         ) {
           await delay(1000);
           dispatch(actionCreator.user.onChangeName(payload));
-        }
-      })
+        },
+      }),
     };
     const initialModel = {
       /**
        * 用户模块
        */
-      user
+      user,
     };
 
     const store = create(
       {
-        initialModel
+        initialModel,
       },
       {
-        loading: createLoadingPlugin(initialModel)
+        loading: createLoadingPlugin(initialModel),
       }
     );
 
@@ -51,10 +51,10 @@ describe('测试loading 插件', function() {
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
-    const actionCreator = createAction(initialModel);
+    const actionCreator = createActions(initialModel);
 
     dispatch(
-      actionCreator.user.onAsyncChangeName({ name: '张三' }, { loading: true })
+      actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: true })
     );
 
     setTimeout(
@@ -63,25 +63,25 @@ describe('测试loading 插件', function() {
     );
 
     setTimeout(() => {
-      expect(getState().user.name).toEqual('张三');
+      expect(getState().user.name).toEqual("张三");
       expect(getState().loading.user.onAsyncChangeName).toEqual(false);
       done();
     }, 1500);
   });
 
-  it('测试loading 插件,不启用loading', function(done) {
+  it("测试loading 插件,不启用loading", function (done) {
     const user = {
       state: () => ({
         /**
          * 姓名
          */
         name: undefined,
-        sex: undefined
+        sex: undefined,
       }),
       reducers: () => ({
         onChangeName(state, payload: { name: string }) {
           return { ...state, ...payload };
-        }
+        },
       }),
       effects: (dispatch, getState, delay) => ({
         /**
@@ -94,8 +94,8 @@ describe('测试loading 插件', function() {
         ) {
           await delay(1000);
           dispatch(actionCreator.user.onChangeName(payload));
-        }
-      })
+        },
+      }),
     };
     const initialModel = {
       /**
@@ -105,27 +105,27 @@ describe('测试loading 插件', function() {
       t: {
         state: () => ({}),
         reducers: () => ({}),
-        effects: () => ({})
-      }
+        effects: () => ({}),
+      },
     };
 
     const store = create(
       {
-        initialModel
+        initialModel,
       },
       {
-        loading: createLoadingPlugin(initialModel)
+        loading: createLoadingPlugin(initialModel),
       }
     );
 
     const { dispatch, getState } = store;
 
-    const actionCreator = createAction(initialModel);
+    const actionCreator = createActions(initialModel);
 
     expect(getState().user).toEqual({ name: undefined, sex: undefined });
 
     dispatch(
-      actionCreator.user.onAsyncChangeName({ name: '张三' }, { loading: false })
+      actionCreator.user.onAsyncChangeName({ name: "张三" }, { loading: false })
     );
 
     setTimeout(
@@ -134,7 +134,7 @@ describe('测试loading 插件', function() {
     );
 
     setTimeout(() => {
-      expect(getState().user.name).toEqual('张三');
+      expect(getState().user.name).toEqual("张三");
       expect(getState().loading.user.onAsyncChangeName).toEqual(false);
       done();
     }, 1500);

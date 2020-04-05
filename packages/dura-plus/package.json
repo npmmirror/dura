@@ -3,6 +3,7 @@
   "version": "3.4.0-alpha.0",
   "description": "",
   "main": "./lib/index.js",
+  "typings": "./index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -12,8 +13,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/actions": "^3.4.0-alpha.0",
-    "@dura/core": "^3.4.0-alpha.0",
-    "@dura/types": "^3.3.3"
+    "@dura/core": "^3.4.0-alpha.0"
+  },
+  "devDependencies": {
+    "@dura/actions": "^3.4.0-alpha.0"
   }
 }

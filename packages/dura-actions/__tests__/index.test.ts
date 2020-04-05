@@ -1,22 +1,23 @@
-import createAction from '../src/index';
-
+import { createActions } from "../src";
+import { ActionCreator } from "../index";
+const ca = createActions as ActionCreator;
 const initialState = () => ({
   /**
    * 姓名
    */
-  name: '默认姓名' as string,
+  name: "默认姓名" as string,
   /**
    * 性别
    */
-  sex: undefined as '男' | '女',
+  sex: undefined as "男" | "女",
   /**
    * 年龄
    */
-  age: undefined as number
+  age: undefined as number,
 });
 
 const UserModel = {
-  name: () => <const>'user',
+  name: () => <const>"user",
   state: () => initialState(),
   reducers: () => ({
     /**
@@ -24,28 +25,29 @@ const UserModel = {
      * @param payload 同步修改姓名
      */
     onChangeName(state, payload: { newS: string }) {
-      console.log('hello');
+      console.log("hello");
       state.name = payload.newS;
       return state;
-    }
+    },
   }),
   effects: () => ({
     async onAsyncChangeName(
       payload: { newName: string },
       meta: { loading: boolean }
-    ) {}
-  })
+    ) {},
+  }),
 };
 
-describe('action-describe', function() {
-  it('test-action', function() {
-    const actionCreator = createAction({ UserModel });
-    const action = actionCreator.UserModel.onChangeName({ newS: 'test' });
+describe("action-describe", function () {
+  it("test-action", function () {
+    const actionCreator = ca({ UserModel });
+
+    const action = actionCreator.UserModel.onChangeName({ newS: "test" });
     expect(action).toEqual({
-      type: 'UserModel/onChangeName',
+      type: "UserModel/onChangeName",
       payload: {
-        newS: 'test'
-      }
+        newS: "test",
+      },
     });
   });
 });

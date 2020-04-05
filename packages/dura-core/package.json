@@ -3,11 +3,9 @@
   "version": "3.4.0-alpha.0",
   "description": "",
   "main": "./lib/index.js",
+  "typings": "./index.d.ts",
   "publishConfig": {
     "access": "public"
-  },
-  "scripts": {
-    "build": "rm -rf ./lib && tsc"
   },
   "jest": {
     "transform": {
@@ -17,6 +15,7 @@
   "author": "ityuany",
   "license": "MIT",
   "dependencies": {
+    "@dura/utils": "^3.4.0-alpha.0",
     "redux": "4.0.4"
   }
 }

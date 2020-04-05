@@ -1,3 +1,4 @@
-import { create } from './store';
+import { create } from "./store";
 
 export { create };
+export * from "redux";
