@@ -1,32 +1,35 @@
 ---
 hero:
-  title: duraStat
-  desc: 为typescript而生基于redux的前端数据流管理方案
+  title: dura
+  desc: Born for typescript Redux-based front-end data flow management solution
   actions:
-    - text: 起步
-      link: /getting-started
+    - text: Get Started
+      link: /guide
 features:
   - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/safe.png
-    title: 安全的
-    desc: 基于TypeScript构建，健壮的类型推导系统
+    title: Safe
+    desc: Built on TypeScript, a robust type derivation system
   - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/kaixin.png
-    title: 愉快的
-    desc: 良好的代码感知，让每一行代码的敲击都具有强烈的安全感
+    title: Happy
+    desc: Good code perception, so that each line of code has a strong sense of security
   - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/chajian.png
-    title: 可拓展
-    desc: 强大的插件机制，自由的拓展model
+    title: Scalable
+    desc: Powerful plug-in mechanism, free to expand the model
+  - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/redux.png
+    title: Based on Redux
+    desc: Standing on the shoulders of giants, you can still embrace the whole Redux ecology
   - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/close.png
-    title: 无样板
-    desc: 干掉redux固有的大量样板代码，早点下班
+    title: No Template
+    desc: Get rid of the large amount of boilerplate code inherent in redux and get off work early
   - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/zhuisu.png
-    title: 可追溯
-    desc: 让每一个state、reducer、effect可逆向追溯，不必在为无法安全移除而苦恼
+    title: Traceable
+    desc: Make every state, reducer, and effect retroactively traceable without having to worry about the inability to remove it safely
 ---
 
-## 观赏 1
+## Appreciation
 
 ![](https://dura.oss-cn-hangzhou.aliyuncs.com/test1.gif)
 
-## 反馈
+## Feedback
 
 ![dd](https://dura.oss-cn-hangzhou.aliyuncs.com/dingding.jpg?x-oss-process=image/resize,w_300)
