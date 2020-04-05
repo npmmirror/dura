@@ -1,5 +1,5 @@
 {
-  "name": "@dura/core",
+  "name": "@dura/util",
   "version": "3.3.3",
   "description": "",
   "main": "./lib/index.js",
@@ -9,15 +9,12 @@
   "scripts": {
     "build": "rm -rf ./lib && tsc"
   },
-  "jest": {
-    "transform": {
-      "^.+\\.js?$": "babel-jest"
-    }
-  },
-  "author": "ityuany",
+  "author": "",
   "license": "MIT",
   "dependencies": {
-    "redux": "4.0.4"
-  },
-  "devDependencies": {}
+    "@dura/actions": "^3.3.3",
+    "@dura/core": "^3.3.3",
+    "@dura/plus": "^3.3.3",
+    "@dura/types": "^3.3.3"
+  }
 }

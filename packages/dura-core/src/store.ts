@@ -3,22 +3,21 @@ import {
   combineReducers,
   compose,
   applyMiddleware,
-  ReducersMapObject
+  ReducersMapObject,
 } from "redux";
-import { Config, Store } from "@dura/types";
 import getAsyncMiddleware from "./async";
 import { merge, noop } from "./util";
 /**
  * 创建store
  * @param config
  */
-function create<C extends Config>(config: C): Store<C["initialModel"]> {
+function create(config) {
   const {
     initialModel,
     initialState,
     middlewares = [],
     extraReducers = {},
-    error
+    error,
   } = config;
 
   const convert = ([k, v]) => ({
@@ -32,7 +31,7 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
         error?.(e);
         return state;
       }
-    }
+    },
   });
 
   //聚合reducers
@@ -42,7 +41,7 @@ function create<C extends Config>(config: C): Store<C["initialModel"]> {
 
   const rootReducers: ReducersMapObject<any> = {
     ...modelReducers,
-    ...extraReducers
+    ...extraReducers,
   };
 
   // //获取外部传入的 compose1

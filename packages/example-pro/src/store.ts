@@ -16,7 +16,7 @@ const initialModel = {
   /**
    * hello 模块， 主要处理一些乱七八糟的问题
    */
-  hello: HelloModel
+  hello: HelloModel,
 };
 
 export type RootModel = typeof initialModel;
@@ -27,21 +27,21 @@ export type RootState = ExtractState<RootModel> &
 export const store = create(
   {
     initialModel: initialModel,
-    compose: window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"]
+    compose: window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"],
   },
   {
     immer: createImmerPlugin(),
-    loading: createLoadingPlugin(initialModel)
+    loading: createLoadingPlugin(initialModel),
   }
 );
 
 export const actionCreator = createActions(initialModel);
 
-export const connectHOC = function(mapState, mapDispatch) {
+export const connectHOC = function (mapState, mapDispatch) {
   return connect(mapState, mapDispatch, null, {
     areStatesEqual: isEqual,
     areOwnPropsEqual: isEqual,
     areStatePropsEqual: isEqual,
-    areMergedPropsEqual: isEqual
+    areMergedPropsEqual: isEqual,
   });
 };
