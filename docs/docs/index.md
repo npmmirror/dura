@@ -23,7 +23,7 @@ features:
     desc: 让每一个state、reducer、effect可逆向追溯，不必在为无法安全移除而苦恼
 ---
 
-## 观赏 1
+## 观赏
 
 ![](https://dura.oss-cn-hangzhou.aliyuncs.com/test1.gif)
 
