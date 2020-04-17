@@ -26,7 +26,7 @@ features:
     desc: Make every state, reducer, and effect retroactively traceable without having to worry about the inability to remove it safely
 ---
 
-## Appreciation1
+## Appreciation
 
 ![](https://dura.oss-cn-hangzhou.aliyuncs.com/test1.gif)
 
