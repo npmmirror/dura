@@ -13,7 +13,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/core": "^3.4.0"
+    "@dura/core": "^3.4.0",
+    "demo": "^0.1.10"
   },
   "devDependencies": {
     "@dura/actions": "^3.4.0"

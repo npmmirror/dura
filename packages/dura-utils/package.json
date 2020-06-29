@@ -11,5 +11,8 @@
     "build": "rm -rf ./lib && tsc"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "demo": "^0.1.10"
+  }
 }

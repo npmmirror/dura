@@ -14,7 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "@dura/plus": "^3.4.0",
-    "@dura/utils": "^3.4.0"
+    "@dura/utils": "^3.4.0",
+    "demo": "^0.1.10"
   },
   "devDependencies": {
     "@dura/actions": "^3.4.0"
