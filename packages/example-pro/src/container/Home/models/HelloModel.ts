@@ -61,6 +61,6 @@ const effects = (dispatch, getState, delay) => {
 
 export default {
   state: initialState,
-  reducers: reducers,
+  reducers1: reducers,
   effects: effects,
 };

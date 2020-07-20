@@ -28,9 +28,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
+    "@babel/runtime": "^7.10.4",
+    "@types/lodash": "^4.14.157",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
@@ -47,6 +51,10 @@
     "webpackbar": "^4.0.0"
   },
   "dependencies": {
+    "immer": "^7.0.5",
+    "is-promise": "^4.0.0",
+    "lodash": "^4.17.19",
+    "proxy-frozen-object": "^1.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
