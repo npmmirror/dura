@@ -19,7 +19,8 @@ import { produce, produceWithPatches } from "immer";
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
     const [namespace, methodName] = action.type.split("/");
-
+    console.log(getEffects?.());
+    
     getEffects?.()?.[namespace]?.[methodName]?.(
       Object.freeze(store.getState())
     );
@@ -38,13 +39,13 @@ type Store<S> = {
     [name: string]: any;
   };
   reducers: Reducers<S>;
-  methods: {};
+  effects: {};
 };
 
 function getDefineComponentFn(reduxStore: ReduxStore) {
   const context = createContext(reduxStore.getState());
-
-  const { Provider } = context;
+  
+  const { Provider , Consumer } = context;
 
   const defineContainer = (
     Component: React.ClassicComponentClass | React.FC
@@ -68,11 +69,15 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
       | React.ClassicComponentClass<{ store: any }>
       | React.FC<{ store: any }>
   ) => {
+
+ 
+
     return () => {
       const props = React.useContext(context);
       const ref = useRef([]);
       const proxyProps = createProxy(props, ref.current);
-
+      console.log(ref.current);
+      
       const MemoComponent = React.useMemo(() => {
         return React.memo(Component, (prevProps, nextProps) => {
           let memo = true;
@@ -101,7 +106,8 @@ export function createAppCreator(
 ) {
   return function createApp() {
     let reducers: any = {};
-    let methods: any = {};
+    let effects: any = {};
+    let reduxStore:ReduxStore;
     const app = {
       use: (...store: Store<any>[]) => {
         store.forEach((n) => {
@@ -114,16 +120,22 @@ export function createAppCreator(
               );
               return res;
             };
-            methods[n.namespace] = n.methods;
+            effects[n.namespace] = n.effects;
           }
         });
+        reduxStore && reduxStore.replaceReducer( combineReducers(reducers) )
+      },
+      unUse:(namespace:string) => {
+        delete effects[namespace]
+        delete reducers[namespace]
+        reduxStore.replaceReducer( combineReducers(reducers) )
       },
       run: () => {
-        const s: ReduxStore = createStore(
+        reduxStore = createStore(
           combineReducers(reducers),
-          applyMiddleware(createThunk(() => methods))
+          applyMiddleware(createThunk(() => effects))
         );
-        return { store: s, ...getDefineComponentFn(s) };
+        return { store: reduxStore, ...getDefineComponentFn(reduxStore) };
       },
     };
     return app;
@@ -150,12 +162,9 @@ export function createProxy<T extends object>(state: T, deps: any): T {
       if (property in target) {
         const _nextDeps = nextDeps(property, deps);
         const value = Reflect.get(target, property, receiver);
-        if (value instanceof Object) {
-          return createProxy({ ...value }, _nextDeps);
-        }
-        if (value instanceof Array) {
-          return createProxy([...value], _nextDeps);
-        }
+        if (value instanceof Object || value instanceof Array) {
+          return createProxy(value, _nextDeps);
+        } 
       }
       return Reflect.get(target, property, receiver);
     },

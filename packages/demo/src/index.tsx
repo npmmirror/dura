@@ -10,10 +10,11 @@ import produce, {
   produceWithPatches,
   current,
   original,
+  setAutoFreeze
 } from "immer";
-import { defineStore, StoreCreatorFactory } from "./util";
+import {  StoreCreatorFactory } from "./util";
 import { createAppCreator, createProxy } from "./util/createApp";
-
+setAutoFreeze(false)
 enablePatches();
 
 const createApp = createAppCreator();
@@ -31,13 +32,17 @@ app.use(
     reducers: {
       changeName(state, action) {
         state.users[0].name = "李四";
+
       },
       changeAge(state, action) {
         state.users[0].age = state.users[0].age + 1;
+
       },
     },
-    methods: {
-      async change(storeState) {},
+    effects: {
+      async change(storeState,commit) {
+
+      },
     },
   },
   {
@@ -46,19 +51,34 @@ app.use(
       name: "张三",
     },
     reducers: {
-      changeName(state, action) {},
+      changeName(state, action) {
+
+      },
     },
-    methods: {},
+    effects: {},
   }
 );
 const { defineContainer, defineComponent, store } = app.run();
+
+const s = {
+  namespace:'sss',
+  state:{
+    hello:'hello'
+  },
+  reducers:{
+    changeHello(state){
+      state.hello = 'world'
+    }
+  },
+  effects:{}
+}
 
 const Item = defineComponent((props) => {
   console.log("我是上面的组件，我用到了name", props.store);
 
   return (
     <div>
-      {/* <h1>{props.store.demo.users[0].name}</h1> */}
+      <h1>{props.store.sss?.hello}</h1>
       <h1>{props.store.demo.users[0].name}</h1>
       <button
         onClick={() => {
@@ -66,10 +86,20 @@ const Item = defineComponent((props) => {
             type: "demo/changeName",
             name: "李四",
           });
+          app.use(s)
+          store.dispatch({
+            type: "sss/changeHello",
+          });
         }}
       >
         改姓名
       </button>
+      <button onClick={() => {
+        app.unUse(s.namespace)
+      }}>减去</button>
+      <button onClick={() => {
+        app.use(s)
+      }}>减去2</button>
       <button
         onClick={() => {
           store.dispatch({
@@ -134,3 +164,4 @@ const App = defineContainer(() => {
 if (document.querySelector("#app")) {
   render(<App />, document?.querySelector?.("#app"));
 }
+ 

@@ -52,7 +52,7 @@ const compiler = webpack(smp.wrap(cfg.toConfig()));
 // compiler.watch
 const server = new WebpackDevServer(compiler);
 
-server.listen(3001, "0.0.0.0", () => {
+server.listen(3030, "0.0.0.0", () => {
   console.log("app started");
 });
 // compiler.run((err, stats) => {
