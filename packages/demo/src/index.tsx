@@ -1,27 +1,36 @@
 import React from "react";
 import { render } from "react-dom";
-import { combineReducers } from "redux";
-import { connect, Provider } from "react-redux";
 import produce, {
-  createDraft,
-  finishDraft,
-  applyPatches,
   enablePatches,
-  produceWithPatches,
-  current,
-  original,
   setAutoFreeze
 } from "immer";
-import {  StoreCreatorFactory } from "./util";
+import u from './models/user.model'
+import { useVirtualList } from "@umijs/hooks"
 import { createAppCreator, createProxy } from "./util/createApp";
 setAutoFreeze(false)
 enablePatches();
+const createElement = React.createElement.bind(React);
+
+const ownAuthorityBtnList = ["addModel","delModel"]
+
+React.createElement = <T,P extends {[name:string]:any},C>(type:T,props:P,...children:C[]) => {
+
+  if (!props?.["data-authority"]) {
+    return createElement(type,props,...children)
+  }
+
+  if (ownAuthorityBtnList.includes(props?.["data-authority"])) {
+    return createElement(type,props,...children)
+  }
+  return null;
+};
 
 const createApp = createAppCreator();
 
 const app = createApp();
 
 app.use(
+  u,
   {
     namespace: "demo" as const,
     state: {
@@ -45,18 +54,6 @@ app.use(
       },
     },
   },
-  {
-    namespace: "user" as const,
-    state: {
-      name: "张三",
-    },
-    reducers: {
-      changeName(state, action) {
-
-      },
-    },
-    effects: {},
-  }
 );
 const { defineContainer, defineComponent, store } = app.run();
 
@@ -73,33 +70,65 @@ const s = {
   effects:{}
 }
 
+
+
+const S = props => {
+  console.log("defineComponent -> s",props);
+  
+  return <div key={props.item?.id}>
+  <span>{props.item?.name}</span>
+  <S />
+  <span style={{color:"#999",marginLeft:20}}>{props.item?.city}</span>
+</div>
+}
+
 const Item = defineComponent((props) => {
   console.log("我是上面的组件，我用到了name", props.store);
+  const { users} = props.store.user
+
+  
+  // users.map(n => {
+  //   console.log(n);
+    
+  // })
+  
 
   return (
     <div>
-      <h1>{props.store.sss?.hello}</h1>
-      <h1>{props.store.demo.users[0].name}</h1>
+      <h1>{props.store.demo.name}</h1>
+      <h1>{props.store.demo.name}</h1>
+      {
+        users.map((n) =>  {
+          return (<div key={n.id}>
+            <span>{n.name}</span>
+            {/* <S /> */}
+            <span style={{color:"#999",marginLeft:20}}>{n.city}</span>
+          </div>)
+        })
+      }
+      
+      <span style={{display:"inline-block"}}>hello</span>
+      <span style={{display:"inline-block"}}>world</span>
       <button
         onClick={() => {
+          // store.dispatch({
+          //   type: "demo/changeName",
+          //   name: "李四",
+          // });
+          // app.use(s)
           store.dispatch({
-            type: "demo/changeName",
-            name: "李四",
-          });
-          app.use(s)
-          store.dispatch({
-            type: "sss/changeHello",
+            type: "user/push",
           });
         }}
       >
         改姓名
       </button>
-      <button onClick={() => {
+      <button data-authority="delModel" onClick={() => {
         app.unUse(s.namespace)
-      }}>减去</button>
-      <button onClick={() => {
+      }}>删除model</button>
+      <button data-authority="addModel" onClick={() => {
         app.use(s)
-      }}>减去2</button>
+      }}>增加model</button>
       <button
         onClick={() => {
           store.dispatch({
