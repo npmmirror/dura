@@ -85,6 +85,24 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
             Component, 
             (prevProps, nextProps) => {
 
+              const keysA = Object.keys(prevProps)
+              const keysB = Object.keys(nextProps)
+
+              if (keysA.length !== keysB.length) {
+                return false
+              }
+
+              const hasOwn = Object.prototype.hasOwnProperty
+              for (let i = 0; i < keysA.length; i++) {
+                if (keysA[i] === "store") {
+                  continue;
+                }
+                if (!hasOwn.call(nextProps, keysA[i]) ||
+                prevProps[keysA[i]] !== nextProps[keysA[i]]) {
+                  return false
+                }
+              }
+
               const values = Object.values(nextProps.store)
 
               for (let index = 0; index < values.length; index++) {
@@ -112,10 +130,9 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
               //   return false
               // }
               // console.log("http://localhost:3030/");
+              console.log(prevProps,nextProps);
               
-              // if (prevProps === nextProps) {
-              //   return true
-              // }
+              
 
               return false;
               
@@ -145,7 +162,9 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
           ), 
           []
       );
-      return <MemoComponent store={proxy} {...ownProps} />;
+      // console.log(ownProps);
+      
+      return <MemoComponent store={proxy} {...ownProps}  />;
     };
   };
 
@@ -214,7 +233,9 @@ export function createProxy<T extends object>(state: T, deps: any,parent?:any): 
   return new Proxy(state , {
     get(target:T , property:string , receiver:T){
       const value = Reflect.get(target , property,receiver);
-      if (!Object.keys(target).includes(property)) {
+
+      
+      if (!target.hasOwnProperty(property)) {
         return value;
       }
       if (isPlainObject(value) || Array.isArray(value)) {

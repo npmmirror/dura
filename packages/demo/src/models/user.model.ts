@@ -4,7 +4,7 @@ import { times } from 'lodash'
 // faker.setLocale('zh_CN')
 faker.locale = 'zh_CN'
 
-const users = times(4800).map(n => ({
+const users = times(1000).map(n => ({
     id:n,
     name: `${faker.name.firstName()}${faker.name.lastName()}`,
     city: faker.address.city(),
@@ -20,7 +20,7 @@ export default {
     },
     reducers:{
         push(state){
-            state.users[4799].name = "xx"+Math.random()
+            state.users[999].name = "xx"+Math.random()
         }
     },
     effects:{}
