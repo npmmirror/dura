@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useRef,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, createContext, useRef } from 'react';
 import {
   Middleware,
   StoreEnhancer,
@@ -14,8 +8,7 @@ import {
   applyMiddleware,
   compose,
 } from 'redux';
-import { get, uniqWith, isEqual, uniq, chain, isFunction, times } from 'lodash';
-import { produce, produceWithPatches } from 'immer';
+import { produceWithPatches } from 'immer';
 import { createProxy } from './createProxy';
 
 function createThunk(getEffects: any): Middleware {
@@ -112,10 +105,6 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
               flag = true;
 
               const s = value.patches.some((n: string) => {
-                // return deps.current.some((k: any) => {
-                //   return n === k
-                // })
-
                 return deps.current.has(n);
               });
 
@@ -124,34 +113,10 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
               }
             }
 
-            // if (Object.keys(prevProps) !== Object.keys(nextProps)) {
-            //   return false
-            // }
-            // console.log("http://localhost:3030/");
-
             return false;
-
-            // const r = Object.values(nextProps.store)
-            // .filter(n => n.patches.length > 0).map(n => {
-
-            //   return n.patches
-            // }).reduce( (prev,next) => ([...prev,...next]),[] )
-
-            // console.time("res")
-            // const res = !r.some((n: any) => {
-
-            //   return deps.current.some((k: any) => {
-
-            //     return n === k
-            //   }
-            // )})
-            // console.timeEnd("res")
-
-            // return res
           }),
         [],
       );
-      // console.log(ownProps);
 
       return <MemoComponent store={proxy} {...ownProps} />;
     };
@@ -205,7 +170,8 @@ export function createAppCreator(
           typeof window === 'object' &&
           window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
             ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-                // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+                name: 'dura4.x-draft',
+                trace: true,
               })
             : compose;
 
