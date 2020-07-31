@@ -1,7 +1,9 @@
+import isPlainObject from 'lodash.isplainobject';
+export const DURA = Symbol('@DURA');
 export const createProxy = <T extends object>(
   state: T,
   deps: Map<string, null>,
-  parentPath?: string
+  parentPath?: string,
 ): T =>
   new Proxy(state, {
     get(target: T, property: PropertyKey, receiver: T) {
@@ -11,7 +13,7 @@ export const createProxy = <T extends object>(
         return value;
       }
       // 如果是 symbol 类型 则直接返回
-      if (typeof property === "symbol") {
+      if (typeof property === 'symbol') {
         return value;
       }
 
@@ -20,6 +22,10 @@ export const createProxy = <T extends object>(
 
       if (isPlainObject(value) || Array.isArray(value)) {
         const path = parentPath ? joinPath : rootPath;
+        Object.defineProperty(value, DURA, {
+          configurable: true,
+          value: value,
+        });
         return createProxy(value, deps, path);
       }
 
@@ -31,8 +37,8 @@ export const createProxy = <T extends object>(
     },
   });
 
-function isPlainObject<T>(value: T): boolean {
-  if (value === null || typeof value !== "object") return false;
-  const proto = Object.getPrototypeOf(value);
-  return proto === Object.prototype || proto === null;
-}
+// function isPlainObject<T>(value: T): boolean {
+//   if (value === null || typeof value !== 'object') return false;
+//   const proto = Object.getPrototypeOf(value);
+//   return proto === Object.prototype || proto === null;
+// }

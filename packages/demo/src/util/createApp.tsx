@@ -9,7 +9,7 @@ import {
   compose,
 } from 'redux';
 import { produceWithPatches } from 'immer';
-import { createProxy } from './createProxy';
+import { createProxy, DURA } from './createProxy';
 
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
@@ -83,9 +83,10 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
               if (keysA[i] === 'store') {
                 continue;
               }
+
               if (
                 !hasOwn.call(nextProps, keysA[i]) ||
-                prevProps[keysA[i]] !== nextProps[keysA[i]]
+                prevProps[keysA[i]][DURA] !== nextProps[keysA[i]][DURA]
               ) {
                 return false;
               }

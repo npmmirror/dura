@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, message } from 'antd';
+import { Button, notification } from 'antd';
 import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock3() {
-  React.useEffect(() => message.info('区块三被渲染'));
+  React.useEffect(() =>
+    notification.info({ message: '区块三被渲染', duration: 1.8 }),
+  );
   const onClick = React.useCallback(
     () =>
       store.dispatch({
