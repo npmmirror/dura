@@ -4,7 +4,7 @@ import React, {
   createContext,
   useRef,
   useMemo,
-} from "react";
+} from 'react';
 import {
   Middleware,
   StoreEnhancer,
@@ -12,17 +12,18 @@ import {
   combineReducers,
   Store as ReduxStore,
   applyMiddleware,
-} from "redux";
-import { get, uniqWith, isEqual, uniq, chain, isFunction, times } from "lodash";
-import { produce, produceWithPatches } from "immer";
-import { createProxy } from "./createProxy";
+  compose,
+} from 'redux';
+import { get, uniqWith, isEqual, uniq, chain, isFunction, times } from 'lodash';
+import { produce, produceWithPatches } from 'immer';
+import { createProxy } from './createProxy';
 
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
-    const [namespace, methodName] = action.type.split("/");
+    const [namespace, methodName] = action.type.split('/');
 
     getEffects?.()?.[namespace]?.[methodName]?.(
-      Object.freeze(store.getState())
+      Object.freeze(store.getState()),
     );
 
     return next(action);
@@ -48,13 +49,13 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
   const { Provider, Consumer } = context;
 
   const defineContainer = (
-    Component: React.ClassicComponentClass | React.FC
+    Component: React.ClassicComponentClass | React.FC,
   ) => {
     return () => {
       const [store, setStore] = useState(reduxStore.getState());
       useEffect(
         () => reduxStore.subscribe(() => setStore(reduxStore.getState())),
-        []
+        [],
       );
       return (
         <Provider value={store}>
@@ -67,7 +68,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
   const defineComponent = (
     Component:
       | React.ClassicComponentClass<{ store: any }>
-      | React.FC<{ store: any }>
+      | React.FC<{ store: any }>,
   ) => {
     return (ownProps: any) => {
       const props = React.useContext(context);
@@ -86,7 +87,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
 
             const hasOwn = Object.prototype.hasOwnProperty;
             for (let i = 0; i < keysA.length; i++) {
-              if (keysA[i] === "store") {
+              if (keysA[i] === 'store') {
                 continue;
               }
               if (
@@ -127,7 +128,6 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
             //   return false
             // }
             // console.log("http://localhost:3030/");
-            console.log(prevProps, nextProps);
 
             return false;
 
@@ -149,7 +149,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
 
             // return res
           }),
-        []
+        [],
       );
       // console.log(ownProps);
 
@@ -162,7 +162,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
 
 export function createAppCreator(
   middlewares: Middleware[] = [],
-  enhancers: StoreEnhancer[] = []
+  enhancers: StoreEnhancer[] = [],
 ) {
   return function createApp() {
     let reducers: any = {};
@@ -172,22 +172,24 @@ export function createAppCreator(
       use: (...store: Store<any>[]) => {
         store.forEach((n) => {
           if (n.namespace in reducers) {
-            console.error("xxx");
+            console.error('xxx');
           } else {
             reducers[n.namespace] = (state = n.state, action: any) => {
               const [res, patches] = produceWithPatches((draft) =>
-                n.reducers[action.type.split("/")[1]]?.(draft, action)
+                n.reducers[action.type.split('/')[1]]?.(draft, action),
               )(state);
-
               let p: any = {};
-
               patches.forEach((k) => {
-                p[[n.namespace, ...k.path].join(".")] = "";
+                p[[n.namespace, ...k.path].join('.')] = '';
               });
-              const s = patches.map((k) => [n.namespace, ...k.path].join("."));
-
-              return { ...res, patches: s };
+              const s = patches.map((k) => [n.namespace, ...k.path].join('.'));
+              Object.defineProperty(res, 'patches', {
+                value: s,
+                writable: true,
+              });
+              return res;
             };
+
             effects[n.namespace] = n.effects;
           }
         });
@@ -199,10 +201,19 @@ export function createAppCreator(
         reduxStore.replaceReducer(combineReducers(reducers));
       },
       run: () => {
-        reduxStore = createStore(
-          combineReducers(reducers),
-          applyMiddleware(createThunk(() => effects))
+        const composeEnhancers =
+          typeof window === 'object' &&
+          window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+            ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+                // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+              })
+            : compose;
+
+        const enhancer = composeEnhancers(
+          applyMiddleware(createThunk(() => effects)),
+          // other store enhancers if any
         );
+        reduxStore = createStore(combineReducers(reducers), enhancer);
         return { store: reduxStore, ...getDefineComponentFn(reduxStore) };
       },
     };

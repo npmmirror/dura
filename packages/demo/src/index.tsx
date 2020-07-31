@@ -1,69 +1,24 @@
-import React from "react";
-import { render } from "react-dom";
-import produce, { enablePatches, setAutoFreeze } from "immer";
-import u from "./models/user.model";
-import { useVirtualList } from "@umijs/hooks";
-import { createAppCreator, createProxy } from "./util/createApp";
-import faker from "faker";
-import { times } from "lodash";
-// faker.setLocale('zh_CN')
-faker.locale = "zh_CN";
+import React from 'react';
+import { render } from 'react-dom';
+import produce, { enablePatches, setAutoFreeze } from 'immer';
+import u from './models/user.model';
+import { useVirtualList } from '@umijs/hooks';
+import { createAppCreator } from './util/createApp';
+import faker from 'faker';
+import { Button, message } from 'antd';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+faker.locale = 'zh_CN';
 
 setAutoFreeze(false);
 enablePatches();
-// const createElement = React.createElement.bind(React);
-
-// const ownAuthorityBtnList = ["addModel","delModel"]
-
-// React.createElement = <T,P extends {[name:string]:any},C>(type:T,props:P,...children:C[]) => {
-
-//   if (!props?.["data-authority"]) {
-//     return createElement(type,props,...children)
-//   }
-
-//   if (ownAuthorityBtnList.includes(props?.["data-authority"])) {
-//     return createElement(type,props,...children)
-//   }
-//   return null;
-// };
 
 const createApp = createAppCreator();
 
 const app = createApp();
 
-app.use(u, {
-  namespace: "demo" as const,
-  state: {
-    users: [{ name: "张三", age: 12 }],
-    name: "demo",
-    age: 1,
-  },
-  reducers: {
-    changeName(state, action) {
-      state.users[0].name = "李四";
-    },
-    changeAge(state, action) {
-      state.users[0].age = state.users[0].age + 1;
-    },
-  },
-  effects: {
-    async change(storeState, commit) {},
-  },
-});
+app.use(u);
 const { defineContainer, defineComponent, store } = app.run();
-
-const s = {
-  namespace: "sss",
-  state: {
-    hello: "hello",
-  },
-  reducers: {
-    changeHello(state) {
-      state.hello = "world";
-    },
-  },
-  effects: {},
-};
 
 // const S = defineComponent(props => {
 
@@ -81,168 +36,126 @@ const S = defineComponent((props) => {
   return (
     <div key={props?.item?.id}>
       <span>{props?.item?.name}</span>
-      <span style={{ color: "#999", marginLeft: 20 }}>{props?.item?.city}</span>
+      <span style={{ color: '#999', marginLeft: 20 }}>{props?.item?.city}</span>
     </div>
   );
 });
 
-const Item = defineComponent((props) => {
-  console.log("我是上面的组件，我用到了name");
+const Block1 = defineComponent((props) => {
+  React.useEffect(() => message.info('区块一被渲染'));
+
   const { users } = props.store.user;
 
-  // users.map(n => {
-  //   console.log(n);
+  const index = 19;
 
-  // })
+  const onClick = React.useCallback(() => {
+    store.dispatch({
+      type: 'user/onChangeName',
+      payload: {
+        id: index,
+        name: 'xx' + Math.random(),
+      },
+    });
+  }, []);
 
   return (
-    <div>
-      <h1>{props.store.demo.name}</h1>
-      <h1>{props.store.demo.name}</h1>
-      {users.map((n) => {
+    <div
+      style={{
+        border: '1px solid gray',
+        padding: '10px',
+        float: 'left',
+        width: 300,
+      }}
+    >
+      <h1>我是区块一</h1>
+      {users.map((n: any) => {
         // return (<S item={n} key={n.id} />)
         return (
           <div key={n?.id}>
+            <span>{n.id}：</span>
             <span>{n?.name}</span>
-            <span style={{ color: "#999", marginLeft: 20 }}>{n?.city}</span>
+            <span style={{ color: '#999', marginLeft: 20 }}>{n?.city}</span>
           </div>
         );
       })}
-
-      <span style={{ display: "inline-block" }}>hello</span>
-      <span style={{ display: "inline-block" }}>world</span>
-      <button
-        onClick={() => {
-          // store.dispatch({
-          //   type: "demo/changeName",
-          //   name: "李四",
-          // });
-          // app.use(s)
-          store.dispatch({
-            type: "user/push",
-          });
-        }}
-      >
-        改姓名
-      </button>
-      <button
-        data-authority="delModel"
-        onClick={() => {
-          app.unUse(s.namespace);
-        }}
-      >
-        删除model
-      </button>
-      <button
-        data-authority="addModel"
-        onClick={() => {
-          app.use(s);
-        }}
-      >
-        增加model
-      </button>
-      <button
-        onClick={() => {
-          store.dispatch({
-            type: "demo/changeAge",
-          });
-        }}
-      >
-        改年龄
-      </button>
+      <Button type="primary" onClick={onClick}>
+        {`修改第${index + 1}位用户的姓名`}
+      </Button>
     </div>
   );
 });
 
-const Item1 = defineComponent((props) => {
-  console.log("我是下面的组件，我用到了age");
+const Block2 = defineComponent((props) => {
+  console.log('我是区块二');
+
+  React.useEffect(() => message.info('区块二被渲染'));
+  const index = 18;
+  const onClick = React.useCallback(() => {
+    store.dispatch({
+      type: 'user/onChangeStreetAddress',
+      payload: {
+        id: index,
+        streetAddress: faker.address.streetAddress(),
+      },
+    });
+  }, []);
+  const { users } = props.store?.user;
   return (
-    <div>
-      {/* <h1>{props.store.demo.users[0].age}</h1> */}
-      <h1>{props.store.demo.users[0].age}</h1>
-      <button
-        onClick={() => {
-          store.dispatch({
-            type: "demo/changeName",
-            name: "李四",
-          });
-        }}
-      >
-        改姓名
-      </button>
-      <button
-        onClick={() => {
-          store.dispatch({
-            type: "demo/changeAge",
-          });
-        }}
-      >
-        改年龄
-      </button>
-      <button
-        onClick={() => {
-          store.dispatch({
-            type: "demo/change",
-            name: "李四",
-          });
-        }}
-      >
-        effect
-      </button>
+    <div
+      style={{
+        border: '1px solid gray',
+        padding: '10px',
+        float: 'left',
+        width: 300,
+      }}
+    >
+      <h1>我是区块二</h1>
+
+      <h2>{`${users?.[18]?.id}： ${users?.[18]?.streetAddress}`}</h2>
+      <Button type="primary" onClick={onClick}>
+        修改streetAddress
+      </Button>
     </div>
   );
 });
 
-const users = times(4800).map((n) => ({
-  id: n,
-  name: `${faker.name.firstName()}${faker.name.lastName()}`,
-  city: faker.address.city(),
-  streetAddress: faker.address.streetAddress(),
-}));
+const Block3 = defineComponent((props) => {
+  React.useEffect(() => message.info('区块三被渲染'));
+  const { users } = props.store?.user;
+  const onClick = React.useCallback(() =>
+    store.dispatch({
+      type: 'user/onChangeOriName',
+    }),
+  );
+  return (
+    <div
+      style={{
+        border: '1px solid gray',
+        padding: '10px',
+        float: 'left',
+        width: 300,
+      }}
+    >
+      <h1>我是区块三</h1>
+      <h2>我没有使用任何状态</h2>
+      <Button type="primary" onClick={onClick}>
+        去修改一个没有任何组件依赖的状态
+      </Button>
+    </div>
+  );
+});
 
 const App = defineContainer(() => {
+  console.log('app');
   return (
     <div>
-      <Item />
-      <Item1 />
+      <Block1 />
+      <Block2 />
+      <Block3 />
     </div>
   );
-  // const [state,setState] = React.useState(users)
-  // return (
-  //   <div>
-  //      {
-  //       state.map((n) =>  {
-  //         // return (<S item={n} key={n.id} />)
-  //         return (
-  //           <div key={n?.id}>
-  //     <span>{n?.name}</span>
-  //     <span style={{color:"#999",marginLeft:20}}>{n?.city}</span>
-  //   </div>
-  //         )
-  //       })
-  //     }
-  //     <button
-  //       onClick={() => {
-
-  //         setState(s => {
-  //           let _s = []
-  //           s.forEach((k,i) =>{
-  //             if (i !== 3999) {
-  //               _s.push(k)
-  //             }else{
-  //               _s.push({...k,name:"xx"+Math.random()} )
-  //             }
-  //           })
-  //           return _s;
-  //         })
-  //       }}
-  //     >
-  //       改姓名
-  //     </button>
-  //   </div>
-  // )
 });
 
-if (document.querySelector("#app")) {
-  render(<App />, document?.querySelector?.("#app"));
+if (document.querySelector('#app')) {
+  render(<App />, document?.querySelector?.('#app'));
 }

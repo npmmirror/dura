@@ -1,9 +1,9 @@
-import faker from "faker";
-import { times } from "lodash";
+import faker from 'faker';
+import { times } from 'lodash';
 // faker.setLocale('zh_CN')
-faker.locale = "zh_CN";
+faker.locale = 'zh_CN';
 
-const users = times(200).map((n) => ({
+const users = times(20).map((n) => ({
   id: n,
   name: `${faker.name.firstName()}${faker.name.lastName()}`,
   city: faker.address.city(),
@@ -11,13 +11,21 @@ const users = times(200).map((n) => ({
 }));
 
 export default {
-  namespace: "user" as const,
+  namespace: 'user' as const,
   state: {
     users,
+    oriName: 'default',
   },
   reducers: {
-    push(state) {
-      state.users[199].name = "xx" + Math.random();
+    onChangeName(state, action) {
+      state.users[action.payload.id].name = action.payload.name;
+    },
+    onChangeStreetAddress(state, action) {
+      state.users[action.payload.id].streetAddress =
+        action.payload.streetAddress;
+    },
+    onChangeOriName(state) {
+      state.oriName = Math.random();
     },
   },
   effects: {},
