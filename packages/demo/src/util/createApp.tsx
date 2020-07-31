@@ -15,12 +15,12 @@ import {
 } from "redux";
 import { get, uniqWith, isEqual, uniq, chain, isFunction, times } from "lodash";
 import { produce, produceWithPatches } from "immer";
+import { createProxy } from "./createProxy";
 
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
     const [namespace, methodName] = action.type.split("/");
 
-    
     getEffects?.()?.[namespace]?.[methodName]?.(
       Object.freeze(store.getState())
     );
@@ -44,8 +44,8 @@ type Store<S> = {
 
 function getDefineComponentFn(reduxStore: ReduxStore) {
   const context = createContext(reduxStore.getState());
-  
-  const { Provider , Consumer } = context;
+
+  const { Provider, Consumer } = context;
 
   const defineContainer = (
     Component: React.ClassicComponentClass | React.FC
@@ -69,102 +69,91 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
       | React.ClassicComponentClass<{ store: any }>
       | React.FC<{ store: any }>
   ) => {
-
- 
-
-    return (ownProps:any) => {
+    return (ownProps: any) => {
       const props = React.useContext(context);
-      const deps = useRef<Map<string,null>>(new Map());
+      const deps = useRef<Map<string, null>>(new Map());
 
-      
+      const proxy = createProxy(props, deps.current);
+      const MemoComponent = React.useMemo(
+        () =>
+          React.memo(Component, (prevProps, nextProps) => {
+            const keysA = Object.keys(prevProps);
+            const keysB = Object.keys(nextProps);
 
-      
-      const proxy = createProxy(props,deps.current);
-      const MemoComponent = React.useMemo(() => 
-          React.memo(
-            Component, 
-            (prevProps, nextProps) => {
-
-              const keysA = Object.keys(prevProps)
-              const keysB = Object.keys(nextProps)
-
-              if (keysA.length !== keysB.length) {
-                return false
-              }
-
-              const hasOwn = Object.prototype.hasOwnProperty
-              for (let i = 0; i < keysA.length; i++) {
-                if (keysA[i] === "store") {
-                  continue;
-                }
-                if (!hasOwn.call(nextProps, keysA[i]) ||
-                prevProps[keysA[i]] !== nextProps[keysA[i]]) {
-                  return false
-                }
-              }
-
-              const values = Object.values(nextProps.store)
-
-              for (let index = 0; index < values.length; index++) {
-                const value:any = values[index];
-                if (value.patches.length <= 0) {
-                  continue;
-                }
-
-                const s = value.patches.some((n: string) => {
-                  // return deps.current.some((k: any) => {
-                  //   return n === k
-                  // })
-
-                  
-                  return deps.current.has(n)
-                })
-
-                if (!s) {
-
-                  return true
-                }
-              }
-
-              // if (Object.keys(prevProps) !== Object.keys(nextProps)) {
-              //   return false
-              // }
-              // console.log("http://localhost:3030/");
-              console.log(prevProps,nextProps);
-              
-              
-
+            if (keysA.length !== keysB.length) {
               return false;
-              
-              // const r = Object.values(nextProps.store)
-              // .filter(n => n.patches.length > 0).map(n => {
-
-                
-              //   return n.patches
-              // }).reduce( (prev,next) => ([...prev,...next]),[] )
-              
-
-              // console.time("res")
-              // const res = !r.some((n: any) => {
-
-                
-              //   return deps.current.some((k: any) => {
-
-                  
-              //     return n === k
-              //   }
-              // )})
-              // console.timeEnd("res")
-
-              
-              // return res
             }
-          ), 
-          []
+
+            const hasOwn = Object.prototype.hasOwnProperty;
+            for (let i = 0; i < keysA.length; i++) {
+              if (keysA[i] === "store") {
+                continue;
+              }
+              if (
+                !hasOwn.call(nextProps, keysA[i]) ||
+                prevProps[keysA[i]] !== nextProps[keysA[i]]
+              ) {
+                return false;
+              }
+            }
+
+            const values = Object.values(nextProps.store);
+
+            let flag = false;
+            for (let index = 0; index < values.length; index++) {
+              const value: any = values[index];
+              if (value.patches.length <= 0) {
+                if (index === values.length - 1 && !flag) {
+                  return true;
+                }
+                continue;
+              }
+              flag = true;
+
+              const s = value.patches.some((n: string) => {
+                // return deps.current.some((k: any) => {
+                //   return n === k
+                // })
+
+                return deps.current.has(n);
+              });
+
+              if (!s) {
+                return true;
+              }
+            }
+
+            // if (Object.keys(prevProps) !== Object.keys(nextProps)) {
+            //   return false
+            // }
+            // console.log("http://localhost:3030/");
+            console.log(prevProps, nextProps);
+
+            return false;
+
+            // const r = Object.values(nextProps.store)
+            // .filter(n => n.patches.length > 0).map(n => {
+
+            //   return n.patches
+            // }).reduce( (prev,next) => ([...prev,...next]),[] )
+
+            // console.time("res")
+            // const res = !r.some((n: any) => {
+
+            //   return deps.current.some((k: any) => {
+
+            //     return n === k
+            //   }
+            // )})
+            // console.timeEnd("res")
+
+            // return res
+          }),
+        []
       );
       // console.log(ownProps);
-      
-      return <MemoComponent store={proxy} {...ownProps}  />;
+
+      return <MemoComponent store={proxy} {...ownProps} />;
     };
   };
 
@@ -178,7 +167,7 @@ export function createAppCreator(
   return function createApp() {
     let reducers: any = {};
     let effects: any = {};
-    let reduxStore:ReduxStore;
+    let reduxStore: ReduxStore;
     const app = {
       use: (...store: Store<any>[]) => {
         store.forEach((n) => {
@@ -186,32 +175,28 @@ export function createAppCreator(
             console.error("xxx");
           } else {
             reducers[n.namespace] = (state = n.state, action: any) => {
-
-              const [res,patches] = produceWithPatches((draft) =>
+              const [res, patches] = produceWithPatches((draft) =>
                 n.reducers[action.type.split("/")[1]]?.(draft, action)
               )(state);
 
+              let p: any = {};
 
-              let p:any = {}
+              patches.forEach((k) => {
+                p[[n.namespace, ...k.path].join(".")] = "";
+              });
+              const s = patches.map((k) => [n.namespace, ...k.path].join("."));
 
-              patches.forEach(k => {
-                p[[n.namespace,...k.path].join(".")] = ""
-              })
-              const s = patches.map(k => [n.namespace,...k.path].join("."));
-
-              
-              
-              return {...res,patches:s};
+              return { ...res, patches: s };
             };
             effects[n.namespace] = n.effects;
           }
         });
-        reduxStore && reduxStore.replaceReducer( combineReducers(reducers) )
+        reduxStore && reduxStore.replaceReducer(combineReducers(reducers));
       },
-      unUse:(namespace:string) => {
-        delete effects[namespace]
-        delete reducers[namespace]
-        reduxStore.replaceReducer( combineReducers(reducers) )
+      unUse: (namespace: string) => {
+        delete effects[namespace];
+        delete reducers[namespace];
+        reduxStore.replaceReducer(combineReducers(reducers));
       },
       run: () => {
         reduxStore = createStore(
@@ -224,52 +209,3 @@ export function createAppCreator(
     return app;
   };
 }
-
-function prevElement(deps: string[][]) {
-  return deps[deps.length - 1];
-}
- 
-export function createProxy<T extends object>(state: T, deps: any,parent?:any): T {
-  return new Proxy(state , {
-    get(target:T , property:string , receiver:T){
-      const value = Reflect.get(target , property,receiver);
-
-      
-      if (!target.hasOwnProperty(property)) {
-        return value;
-      }
-      if (isPlainObject(value) || Array.isArray(value)) {
-        const nextProxy = createProxy(value,deps,parent ? parent+"."+property:property);
-        return nextProxy
-      }
-      
-      if (!deps.has(parent+"."+property)) {
-        // deps.push(parent+"."+property)  
-        deps.set(parent+"."+property,null)
-      }
-      
-      
-      return value;
-    }
-  })
-
-  // return new Proxy(state, {
-  //   get(target: T, property: string, receiver: T) {
-  //     if (property in target) {
-  //       const _nextDeps = nextDeps(property, deps);
-  //       const value = Reflect.get(target, property, receiver);
-  //       if (value instanceof Object || value instanceof Array) {
-  //         return createProxy(value, _nextDeps);
-  //       } 
-  //     }
-  //     return Reflect.get(target, property, receiver);
-  //   },
-  // });
-}
-
-function isPlainObject(value) {
-  if (value === null || typeof value !== "object") return false
-  const proto = Object.getPrototypeOf(value)
-  return proto === Object.prototype || proto === null
-}
-

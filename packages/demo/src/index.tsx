@@ -1,18 +1,15 @@
 import React from "react";
 import { render } from "react-dom";
-import produce, {
-  enablePatches,
-  setAutoFreeze
-} from "immer";
-import u from './models/user.model'
-import { useVirtualList } from "@umijs/hooks"
+import produce, { enablePatches, setAutoFreeze } from "immer";
+import u from "./models/user.model";
+import { useVirtualList } from "@umijs/hooks";
 import { createAppCreator, createProxy } from "./util/createApp";
-import faker from 'faker'
-import { times } from 'lodash'
+import faker from "faker";
+import { times } from "lodash";
 // faker.setLocale('zh_CN')
-faker.locale = 'zh_CN'
+faker.locale = "zh_CN";
 
-setAutoFreeze(false)
+setAutoFreeze(false);
 enablePatches();
 // const createElement = React.createElement.bind(React);
 
@@ -34,48 +31,39 @@ const createApp = createAppCreator();
 
 const app = createApp();
 
-app.use(
-  u,
-  {
-    namespace: "demo" as const,
-    state: {
-      users: [{ name: "张三", age: 12 }],
-      name: "demo",
-      age: 1,
+app.use(u, {
+  namespace: "demo" as const,
+  state: {
+    users: [{ name: "张三", age: 12 }],
+    name: "demo",
+    age: 1,
+  },
+  reducers: {
+    changeName(state, action) {
+      state.users[0].name = "李四";
     },
-    reducers: {
-      changeName(state, action) {
-        state.users[0].name = "李四";
-
-      },
-      changeAge(state, action) {
-        state.users[0].age = state.users[0].age + 1;
-
-      },
-    },
-    effects: {
-      async change(storeState,commit) {
-
-      },
+    changeAge(state, action) {
+      state.users[0].age = state.users[0].age + 1;
     },
   },
-);
+  effects: {
+    async change(storeState, commit) {},
+  },
+});
 const { defineContainer, defineComponent, store } = app.run();
 
 const s = {
-  namespace:'sss',
-  state:{
-    hello:'hello'
+  namespace: "sss",
+  state: {
+    hello: "hello",
   },
-  reducers:{
-    changeHello(state){
-      state.hello = 'world'
-    }
+  reducers: {
+    changeHello(state) {
+      state.hello = "world";
+    },
   },
-  effects:{}
-}
-
-
+  effects: {},
+};
 
 // const S = defineComponent(props => {
 
@@ -89,48 +77,40 @@ const s = {
 //   )
 // })
 
-const S = defineComponent(props => {
-
-
-  
-
+const S = defineComponent((props) => {
   return (
     <div key={props?.item?.id}>
       <span>{props?.item?.name}</span>
-      <span style={{color:"#999",marginLeft:20}}>{props?.item?.city}</span>
+      <span style={{ color: "#999", marginLeft: 20 }}>{props?.item?.city}</span>
     </div>
-  )
-})
+  );
+});
 
 const Item = defineComponent((props) => {
   console.log("我是上面的组件，我用到了name");
-  const { users} = props.store.user
+  const { users } = props.store.user;
 
-  
   // users.map(n => {
   //   console.log(n);
-    
+
   // })
-  
 
   return (
     <div>
       <h1>{props.store.demo.name}</h1>
       <h1>{props.store.demo.name}</h1>
-      {
-        users.map((n) =>  {
-          return (<S item={n} key={n.id} />)
-    //       return (
-    //         <div key={n?.id}>
-    //   <span>{n?.name}</span>
-    //   <span style={{color:"#999",marginLeft:20}}>{n?.city}</span>
-    // </div>
-    //       )
-        })
-      }
-      
-      <span style={{display:"inline-block"}}>hello</span>
-      <span style={{display:"inline-block"}}>world</span>
+      {users.map((n) => {
+        // return (<S item={n} key={n.id} />)
+        return (
+          <div key={n?.id}>
+            <span>{n?.name}</span>
+            <span style={{ color: "#999", marginLeft: 20 }}>{n?.city}</span>
+          </div>
+        );
+      })}
+
+      <span style={{ display: "inline-block" }}>hello</span>
+      <span style={{ display: "inline-block" }}>world</span>
       <button
         onClick={() => {
           // store.dispatch({
@@ -145,12 +125,22 @@ const Item = defineComponent((props) => {
       >
         改姓名
       </button>
-      <button data-authority="delModel" onClick={() => {
-        app.unUse(s.namespace)
-      }}>删除model</button>
-      <button data-authority="addModel" onClick={() => {
-        app.use(s)
-      }}>增加model</button>
+      <button
+        data-authority="delModel"
+        onClick={() => {
+          app.unUse(s.namespace);
+        }}
+      >
+        删除model
+      </button>
+      <button
+        data-authority="addModel"
+        onClick={() => {
+          app.use(s);
+        }}
+      >
+        增加model
+      </button>
       <button
         onClick={() => {
           store.dispatch({
@@ -203,13 +193,12 @@ const Item1 = defineComponent((props) => {
   );
 });
 
-
-const users = times(4800).map(n => ({
-  id:n,
+const users = times(4800).map((n) => ({
+  id: n,
   name: `${faker.name.firstName()}${faker.name.lastName()}`,
   city: faker.address.city(),
-  streetAddress: faker.address.streetAddress()
-}))
+  streetAddress: faker.address.streetAddress(),
+}));
 
 const App = defineContainer(() => {
   return (
@@ -234,7 +223,7 @@ const App = defineContainer(() => {
   //     }
   //     <button
   //       onClick={() => {
-          
+
   //         setState(s => {
   //           let _s = []
   //           s.forEach((k,i) =>{
@@ -257,4 +246,3 @@ const App = defineContainer(() => {
 if (document.querySelector("#app")) {
   render(<App />, document?.querySelector?.("#app"));
 }
- 

@@ -1,27 +1,24 @@
-
-import faker from 'faker'
-import { times } from 'lodash'
+import faker from "faker";
+import { times } from "lodash";
 // faker.setLocale('zh_CN')
-faker.locale = 'zh_CN'
+faker.locale = "zh_CN";
 
-const users = times(1000).map(n => ({
-    id:n,
-    name: `${faker.name.firstName()}${faker.name.lastName()}`,
-    city: faker.address.city(),
-    streetAddress: faker.address.streetAddress()
-}))
-
-
+const users = times(200).map((n) => ({
+  id: n,
+  name: `${faker.name.firstName()}${faker.name.lastName()}`,
+  city: faker.address.city(),
+  streetAddress: faker.address.streetAddress(),
+}));
 
 export default {
-    namespace:"user" as const,
-    state:{
-        users
+  namespace: "user" as const,
+  state: {
+    users,
+  },
+  reducers: {
+    push(state) {
+      state.users[199].name = "xx" + Math.random();
     },
-    reducers:{
-        push(state){
-            state.users[999].name = "xx"+Math.random()
-        }
-    },
-    effects:{}
-}
+  },
+  effects: {},
+};
