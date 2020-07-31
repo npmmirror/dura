@@ -21,7 +21,7 @@
     "url": "git+https://github.com/ityuany/dura.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "node a.js"
   },
   "bugs": {
     "url": "https://github.com/ityuany/dura/issues"
