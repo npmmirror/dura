@@ -21,3 +21,44 @@ const App = defineContainer(() => {
 if (document.querySelector('#app')) {
   render(<App />, document?.querySelector?.('#app'));
 }
+
+// interface StoreObject<T> {
+//   [name: string]: any;
+// }
+// interface Store {
+//   state: StoreObject<any>;
+//   reducers: StoreObject<(state: any, action: any) => void>;
+//   effects: StoreObject<() => Promise<void>>;
+// }
+
+// function defineStore<S>(store: {
+//   state: S;
+//   reducers: {
+//     [name: string]: (
+//       state: S,
+//       action: { type: string; payload: any; meta: any; error: any },
+//     ) => void;
+//   };
+//   effects: {
+//     [name: string]: () => Promise<void> | void;
+//   };
+// }): null;
+
+// function defineStore(store) {
+//   console.log(store);
+//   return null;
+// }
+
+// defineStore({
+//   state: { name: '' },
+//   reducers: {
+//     changeName(state, action) {
+//       state.name = '';
+//     },
+//   },
+//   effects: {
+//     onAsync(state, getState) {},
+//   },
+//   watches: {},
+//   computed: {},
+// });

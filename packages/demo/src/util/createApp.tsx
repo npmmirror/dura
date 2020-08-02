@@ -9,7 +9,8 @@ import {
   compose,
 } from 'redux';
 import { produceWithPatches } from 'immer';
-import { createProxy, DURA } from './createProxy';
+import { createProxy } from './createProxy';
+import { DURA_SYMBOL, PATCHES_SYMBOL } from './Symbol';
 
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
@@ -65,7 +66,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
   ) => {
     return (ownProps: any) => {
       const props = React.useContext(context);
-      const deps = useRef<Map<string, null>>(new Map());
+      const deps = useRef<Map<string, number>>(new Map());
 
       const proxy = createProxy(props, deps.current);
       const MemoComponent = React.useMemo(
@@ -86,7 +87,8 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
 
               if (
                 !hasOwn.call(nextProps, keysA[i]) ||
-                prevProps[keysA[i]][DURA] !== nextProps[keysA[i]][DURA]
+                prevProps[keysA[i]][DURA_SYMBOL] !==
+                  nextProps[keysA[i]][DURA_SYMBOL]
               ) {
                 return false;
               }
@@ -97,7 +99,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
             let flag = false;
             for (let index = 0; index < values.length; index++) {
               const value: any = values[index];
-              if (value.patches.length <= 0) {
+              if (value[PATCHES_SYMBOL].length <= 0) {
                 if (index === values.length - 1 && !flag) {
                   return true;
                 }
@@ -105,7 +107,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
               }
               flag = true;
 
-              const s = value.patches.some((n: string) => {
+              const s = value[PATCHES_SYMBOL].some((n: string) => {
                 return deps.current.has(n);
               });
 
@@ -113,7 +115,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
                 return true;
               }
             }
-
+            deps.current.clear();
             return false;
           }),
         [],
@@ -149,7 +151,7 @@ export function createAppCreator(
                 p[[n.namespace, ...k.path].join('.')] = '';
               });
               const s = patches.map((k) => [n.namespace, ...k.path].join('.'));
-              Object.defineProperty(res, 'patches', {
+              Object.defineProperty(res, PATCHES_SYMBOL, {
                 value: s,
                 writable: true,
               });

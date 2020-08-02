@@ -3,7 +3,7 @@ import { times } from 'lodash';
 // faker.setLocale('zh_CN')
 faker.locale = 'zh_CN';
 
-const users = times(4000).map((n) => ({
+const users = times(200).map((n) => ({
   id: n,
   name: `${faker.name.firstName()}${faker.name.lastName()}`,
   city: faker.address.city(),
@@ -15,6 +15,7 @@ export default {
   state: {
     users,
     oriName: 'default',
+    isShow: false,
   },
   reducers: {
     onChangeName(state, action) {
@@ -26,6 +27,9 @@ export default {
     },
     onChangeOriName(state) {
       state.oriName = Math.random();
+    },
+    onChangeIsShow(state) {
+      state.isShow = !state.isShow;
     },
   },
   effects: {},

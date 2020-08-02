@@ -1,8 +1,10 @@
+import { join } from 'lodash';
 import isPlainObject from 'lodash.isplainobject';
-export const DURA = Symbol('@DURA');
+import { DURA_SYMBOL } from './Symbol';
+
 export const createProxy = <T extends object>(
   state: T,
-  deps: Map<string, null>,
+  deps: Map<string, number>,
   parentPath?: string,
 ): T =>
   new Proxy(state, {
@@ -13,7 +15,7 @@ export const createProxy = <T extends object>(
         return value;
       }
       // 如果是 symbol 类型 则直接返回
-      if (typeof property === 'symbol') {
+      if (typeof property === 'symbol' || property === 'patches') {
         return value;
       }
 
@@ -22,7 +24,7 @@ export const createProxy = <T extends object>(
 
       if (isPlainObject(value) || Array.isArray(value)) {
         const path = parentPath ? joinPath : rootPath;
-        Object.defineProperty(value, DURA, {
+        Object.defineProperty(value, DURA_SYMBOL, {
           configurable: true,
           value: value,
         });
@@ -30,7 +32,9 @@ export const createProxy = <T extends object>(
       }
 
       if (!deps.has(joinPath)) {
-        deps.set(joinPath, null);
+        deps.set(joinPath, 0);
+      } else {
+        deps.set(joinPath, (deps.get(joinPath) || 0) + 1);
       }
 
       return value;
