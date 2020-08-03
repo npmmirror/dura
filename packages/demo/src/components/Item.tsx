@@ -21,6 +21,7 @@ export default defineComponent((props) => {
       <span>{item.id}：</span>
       <span>{item?.name}</span>
       <span style={{ color: '#999', marginLeft: 20 }}>{item?.city}</span>
+      <span style={{ color: '#333' }}>{`${item?.streetAddress}`}</span>
     </div>
   );
 });
