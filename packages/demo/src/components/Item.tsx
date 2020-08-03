@@ -13,11 +13,11 @@ import { defineComponent, store } from '../store';
 //   );
 // });
 
-export default defineComponent((props) => {
+export default defineComponent(function Item(props) {
   const { item } = props;
   console.log('item');
   return (
-    <div key={item?.id}>
+    <div>
       <span>{item.id}：</span>
       <span>{item?.name}</span>
       <span style={{ color: '#999', marginLeft: 20 }}>{item?.city}</span>

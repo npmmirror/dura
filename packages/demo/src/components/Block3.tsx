@@ -1,12 +1,9 @@
 import React from 'react';
-import { Button, notification, Grid } from 'antd';
+import { Button } from 'antd';
 import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock3() {
-  React.useEffect(() =>
-    notification.info({ message: '区块三被渲染', duration: 1.8 }),
-  );
   const onClick = React.useCallback(
     () =>
       store.dispatch({
@@ -22,10 +19,9 @@ function useBlock3() {
   return { onClick, changeShow };
 }
 
-export default defineComponent((props) => {
+export default defineComponent(function Block3(props) {
   const { users, isShow } = props.store?.user;
   const { onClick, changeShow } = useBlock3();
-  console.log('block3', props);
 
   return (
     <div
@@ -46,7 +42,7 @@ export default defineComponent((props) => {
           <p>
             <span
               style={{ color: '#333' }}
-            >{`${users?.[18]?.id}： ${users?.[18]?.streetAddress}`}</span>
+            >{`${users?.[8]?.id}： ${users?.[8]?.streetAddress}`}</span>
           </p>
         </div>
       ) : null}

@@ -33,7 +33,7 @@ function getDefineComponentFn<R extends ReduxStore>(reduxStore: R) {
   const context = createContext(reduxStore.getState());
   return {
     defineContainer: createDefineContainer(context, reduxStore),
-    defineComponent: createDefineComponent(context),
+    defineComponent: createDefineComponent(reduxStore),
   };
 }
 

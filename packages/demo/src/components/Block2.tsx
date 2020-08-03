@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button, notification } from 'antd';
+import { Button } from 'antd';
 import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock2() {
-  React.useEffect(() =>
-    notification.info({ message: '区块二被渲染', duration: 1.8 }),
-  );
-  const index = 18;
+  const index = 8;
   const onClick = React.useCallback(() => {
     store.dispatch({
       type: 'user/onChangeStreetAddress',
@@ -29,7 +26,7 @@ function useBlock2() {
   return { onClick, index, onClickAsync };
 }
 
-export default defineComponent((props) => {
+export default defineComponent(function Block2(props) {
   const { onClick, onClickAsync } = useBlock2();
 
   const { users } = props.store?.user;
@@ -44,7 +41,7 @@ export default defineComponent((props) => {
     >
       <h1>我是区块二</h1>
 
-      <h2>{`${users?.[18]?.id}： ${users?.[18]?.streetAddress}`}</h2>
+      <h2>{`${users?.[8]?.id}： ${users?.[8]?.streetAddress}`}</h2>
       <Button type="primary" onClick={onClick} shape="round">
         修改streetAddress
       </Button>

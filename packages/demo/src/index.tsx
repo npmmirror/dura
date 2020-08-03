@@ -8,7 +8,7 @@ import Block3 from './components/Block3';
 
 function useContainer() {
   const [v, setV] = useState(false);
-  useEffect(() => notification.info({ message: 'App被渲染', duration: 1.8 }));
+
   useEffect(() => {
     if (v) {
       document.documentElement.scrollTop =

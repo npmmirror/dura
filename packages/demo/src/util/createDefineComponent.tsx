@@ -18,58 +18,60 @@ type PlainObject = {
 
 type ReactComponent<T> = React.ClassicComponentClass | React.FC<Props<T>>;
 
-function useComponent<S extends PlainObject, T extends PlainObject>(
-  context: Context<S>,
-  Component: ReactComponent<T>,
-) {
-  const storeState = useContext(context);
-  const deps = useRef<Map<string, number>>(new Map<string, number>());
-  const storeStateProxy = createProxy(storeState, deps.current);
-  const pureCompared = useMemo(() => getPureCompared(deps.current), [deps]);
-  const MemoComponent = useMemo(() => memo(Component, pureCompared), [deps]);
-  return { MemoComponent, storeStateProxy };
-}
-
 export function createDefineComponent<CS>(
-  context: Context<CS>,
+  reduxStore: any,
 ): <P>(Component: ReactComponent<P>) => FC<P>;
 
-export function createDefineComponent(context) {
+export function createDefineComponent(reduxStore) {
   return function defineComponent(Component) {
-    return function duraComponent(ownProps) {
-      const { MemoComponent, storeStateProxy } = useComponent(
-        context,
-        Component,
-      );
-      return <MemoComponent {...ownProps} store={storeStateProxy} />;
-    };
+    return memo(function DuraComponent(ownProps) {
+      const deps = useRef<Map<string, number>>(new Map<string, number>());
+      const storeRef = useRef(createProxy(reduxStore.getState(), deps.current));
+      const [, setCount] = React.useState(0);
+      React.useEffect(() => {
+        return reduxStore.subscribe(() => {
+          const nextStore = createProxy(reduxStore.getState(), deps.current);
+          const memo = deepEqualProxyStore(nextStore, deps.current);
+          if (!memo) {
+            storeRef.current = nextStore;
+            deps.current.clear();
+            setCount(Math.random());
+          }
+        });
+      }, []);
+      return <Component {...ownProps} store={storeRef.current} />;
+    }, shallowEqual);
   };
-}
-
-function useContainer(reduxStore) {
-  const [storeState, setStoreState] = useState(reduxStore.getState());
-  useEffect(
-    () => reduxStore.subscribe(() => setStoreState(reduxStore.getState())),
-    [],
-  );
-  return { storeState };
 }
 
 export function createDefineContainer(context, reduxStore) {
   return function defineContainer(Component) {
-    return function duraContainer(ownProps) {
+    return memo(function DuraContainer(ownProps) {
       const { Provider } = context;
-      const { storeState } = useContainer(reduxStore);
-      const { MemoComponent, storeStateProxy } = useComponent(
-        context,
-        Component,
-      );
+      const deps = useRef<Map<string, number>>(new Map<string, number>());
+      const storeRef = useRef(createProxy(reduxStore.getState(), deps.current));
+      const storeRef1 = useRef(reduxStore.getState());
+      const [, setCount] = React.useState(0);
+      React.useEffect(() => {
+        return reduxStore.subscribe(() => {
+          let s = reduxStore.getState();
+          const nextStore = createProxy(s, deps.current);
+          const memo = deepEqualProxyStore(nextStore, deps.current);
+          if (!memo) {
+            storeRef.current = nextStore;
+            storeRef1.current = s;
+            deps.current.clear();
+            setCount(Math.random());
+          }
+        });
+      }, []);
+
       return (
-        <Provider value={storeState}>
-          <MemoComponent {...ownProps} store={storeStateProxy} />
+        <Provider value={storeRef1.current}>
+          <Component {...ownProps} store={storeRef.current} />;
         </Provider>
       );
-    };
+    }, shallowEqual);
   };
 }
 
@@ -94,7 +96,7 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
   let index = -1;
   while (++index < values.length) {
     const patches = values[index][PATCHES_SYMBOL];
-    if (patches.length > 0) {
+    if (patches?.length > 0) {
       const hasDependencies = patches.some((n: string) => deps.has(n));
       if (hasDependencies) {
         return false;
@@ -123,7 +125,6 @@ function shallowEqual<A extends PlainObject, B extends PlainObject>(
     const referenceEqual = prevProps[prevKey][DURA_SYMBOL]
       ? prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL]
       : prevProps[prevKey] === nextProps[prevKey];
-
     if (!nextPropsHasOwnProperty || !referenceEqual) {
       return false;
     }
