@@ -25,6 +25,7 @@ function useBlock3() {
 export default defineComponent((props) => {
   const { users, isShow } = props.store?.user;
   const { onClick, changeShow } = useBlock3();
+
   return (
     <div
       style={{

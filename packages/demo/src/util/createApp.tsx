@@ -11,6 +11,7 @@ import {
 import { produceWithPatches } from 'immer';
 import { createProxy } from './createProxy';
 import { DURA_SYMBOL, PATCHES_SYMBOL } from './Symbol';
+import { defineHiddenProperty } from './defineHiddenProperty';
 
 function createThunk(getEffects: any): Middleware {
   return (store) => (next) => (action) => {
@@ -37,7 +38,7 @@ type Store<S> = {
   effects: {};
 };
 
-function getDefineComponentFn(reduxStore: ReduxStore) {
+function getDefineComponentFn<R extends ReduxStore>(reduxStore: R) {
   const context = createContext(reduxStore.getState());
 
   const { Provider, Consumer } = context;
@@ -71,7 +72,7 @@ function getDefineComponentFn(reduxStore: ReduxStore) {
       const proxy = createProxy(props, deps.current);
       const MemoComponent = React.useMemo(
         () =>
-          React.memo(Component, (prevProps, nextProps) => {
+          React.memo(Component, (prevProps: any, nextProps: any) => {
             const keysA = Object.keys(prevProps);
             const keysB = Object.keys(nextProps);
 
@@ -151,10 +152,8 @@ export function createAppCreator(
                 p[[n.namespace, ...k.path].join('.')] = '';
               });
               const s = patches.map((k) => [n.namespace, ...k.path].join('.'));
-              Object.defineProperty(res, PATCHES_SYMBOL, {
-                value: s,
-                writable: true,
-              });
+              defineHiddenProperty(res, PATCHES_SYMBOL, s);
+
               return res;
             };
 
