@@ -36,7 +36,7 @@ export default defineComponent((props) => {
       <h1>我是区块二</h1>
 
       <h2>{`${users?.[18]?.id}： ${users?.[18]?.streetAddress}`}</h2>
-      <Button type="primary" onClick={onClick}>
+      <Button type="primary" onClick={onClick} shape="round">
         修改streetAddress
       </Button>
     </div>

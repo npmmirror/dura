@@ -1,6 +1,7 @@
 import { createApp } from './configuration';
 import user from './models/user.model';
 import produce, { enablePatches, setAutoFreeze } from 'immer';
+import { compose } from 'redux';
 setAutoFreeze(false);
 enablePatches();
 

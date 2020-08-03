@@ -1,16 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import faker from 'faker';
-import { Button, Card } from 'antd';
-import { store, defineContainer, defineComponent } from './store';
+import { notification, Button } from 'antd';
+import { defineContainer } from './store';
 import Block1 from './components/Block1';
 import Block2 from './components/Block2';
 import Block3 from './components/Block3';
 
+function useContainer() {
+  const [v, setV] = useState(false);
+  useEffect(() => notification.info({ message: 'App被渲染', duration: 1.8 }));
+  useEffect(() => {
+    if (v) {
+      document.documentElement.scrollTop =
+        document.documentElement.scrollHeight;
+    } else {
+      document.documentElement.scrollTop = 0;
+    }
+  }, [v]);
+  return { v, setV };
+}
+
 const App = defineContainer(() => {
-  console.log('app');
+  const { v, setV } = useContainer();
+
   return (
     <div style={{ margin: '0px auto' }}>
+      <div style={{ position: 'fixed', right: 20, bottom: 20, width: 160 }}>
+        <Button type="primary" onClick={() => setV(!v)} shape="round">
+          {`${v ? '上去' : '下去'}`}
+        </Button>
+      </div>
+
       <Block1 />
       <Block2 />
       <Block3 />
@@ -21,44 +41,3 @@ const App = defineContainer(() => {
 if (document.querySelector('#app')) {
   render(<App />, document?.querySelector?.('#app'));
 }
-
-// interface StoreObject<T> {
-//   [name: string]: any;
-// }
-// interface Store {
-//   state: StoreObject<any>;
-//   reducers: StoreObject<(state: any, action: any) => void>;
-//   effects: StoreObject<() => Promise<void>>;
-// }
-
-// function defineStore<S>(store: {
-//   state: S;
-//   reducers: {
-//     [name: string]: (
-//       state: S,
-//       action: { type: string; payload: any; meta: any; error: any },
-//     ) => void;
-//   };
-//   effects: {
-//     [name: string]: () => Promise<void> | void;
-//   };
-// }): null;
-
-// function defineStore(store) {
-//   console.log(store);
-//   return null;
-// }
-
-// defineStore({
-//   state: { name: '' },
-//   reducers: {
-//     changeName(state, action) {
-//       state.name = '';
-//     },
-//   },
-//   effects: {
-//     onAsync(state, getState) {},
-//   },
-//   watches: {},
-//   computed: {},
-// });
