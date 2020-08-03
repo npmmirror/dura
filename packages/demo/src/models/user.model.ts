@@ -1,6 +1,6 @@
 import faker from 'faker';
 import { times } from 'lodash';
-// faker.setLocale('zh_CN')
+
 faker.locale = 'zh_CN';
 
 const users = times(100).map((n) => ({
@@ -32,5 +32,9 @@ export default {
       state.isShow = !state.isShow;
     },
   },
-  effects: {},
+  effects: {
+    onAsyncQuery(getState) {
+      console.log(getState());
+    },
+  },
 };

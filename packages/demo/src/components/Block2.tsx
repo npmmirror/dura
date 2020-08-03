@@ -17,11 +17,20 @@ function useBlock2() {
       },
     });
   }, []);
-  return { onClick, index };
+  const onClickAsync = React.useCallback(() => {
+    store.dispatch({
+      type: 'user/onAsyncQuery',
+      payload: {
+        id: index,
+        streetAddress: faker.address.streetAddress(),
+      },
+    });
+  }, []);
+  return { onClick, index, onClickAsync };
 }
 
 export default defineComponent((props) => {
-  const { onClick } = useBlock2();
+  const { onClick, onClickAsync } = useBlock2();
 
   const { users } = props.store?.user;
   return (
@@ -38,6 +47,9 @@ export default defineComponent((props) => {
       <h2>{`${users?.[18]?.id}： ${users?.[18]?.streetAddress}`}</h2>
       <Button type="primary" onClick={onClick} shape="round">
         修改streetAddress
+      </Button>
+      <Button type="primary" onClick={onClickAsync} shape="round">
+        测试异步
       </Button>
     </div>
   );
