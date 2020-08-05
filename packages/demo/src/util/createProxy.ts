@@ -30,7 +30,7 @@ export const createProxy = <T extends object>(
         const path = parentPath ? joinPath : rootPath;
         const r = m.get(value) ? m.get(value) : Math.random();
         m.set(value, r);
-        defineHiddenProperty(value, DURA_SYMBOL, r);
+        defineHiddenProperty(value, DURA_SYMBOL, 1);
         return createProxy(value, deps, path, name);
       }
 

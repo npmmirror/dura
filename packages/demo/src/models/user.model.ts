@@ -3,7 +3,7 @@ import { times } from 'lodash';
 
 faker.locale = 'zh_CN';
 
-const users = times(10).map((n) => ({
+const users = times(4000).map((n) => ({
   id: n,
   name: `${faker.name.firstName()}${faker.name.lastName()}`,
   city: faker.address.city(),

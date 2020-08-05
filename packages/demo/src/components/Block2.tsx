@@ -4,9 +4,6 @@ import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock2() {
-  React.useEffect(() => {
-    message.success('useBlock2', 0.6);
-  });
   const index = 8;
   const onClick = React.useCallback(() => {
     store.dispatch({

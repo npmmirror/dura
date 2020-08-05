@@ -42,6 +42,7 @@ export function createDefineComponent(reduxStore) {
           if (!memo) {
             storeRef.current = nextStore;
             // TODO 这里不能盲目的清除 deps.current.clear();
+            deps.current.clear();
             setCount(Math.random());
           }
         });
@@ -73,7 +74,7 @@ export function createDefineContainer(context, reduxStore) {
           if (!memo) {
             storeRef.current = nextStore;
             storeRef1.current = s;
-            // deps.current.clear();
+            deps.current.clear();
             setCount(Math.random());
           }
         });
@@ -123,6 +124,8 @@ function shallowEqual<A extends PlainObject, B extends PlainObject>(
   prevProps: A,
   nextProps: B,
 ) {
+  console.log('shallowEqual');
+
   const filterStore = (key: string) => key !== 'store';
   const prevPropsKey = Object.keys(prevProps).filter(filterStore);
   const nextPropsKey = Object.keys(nextProps).filter(filterStore);
@@ -135,8 +138,15 @@ function shallowEqual<A extends PlainObject, B extends PlainObject>(
   while (++index < len) {
     const prevKey = prevPropsKey[index];
     const nextPropsHasOwnProperty = hasOwnProperty.call(nextProps, prevKey);
+    console.log(
+      'DURA_SYMBOL',
+      prevProps[prevKey][DURA_SYMBOL],
+      nextProps[prevKey][DURA_SYMBOL],
+      prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL],
+    );
+
     const referenceEqual = prevProps[prevKey][DURA_SYMBOL]
-      ? prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL]
+      ? shallowEqual(prevProps[prevKey], nextProps[prevKey]) //prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL]
       : prevProps[prevKey] === nextProps[prevKey];
     if (!nextPropsHasOwnProperty || !referenceEqual) {
       return false;

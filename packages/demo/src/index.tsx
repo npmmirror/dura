@@ -31,11 +31,9 @@ const App = defineContainer(() => {
         </Button>
       </div>
       <div style={{ height: 100, width: '100%' }}></div>
-      <Space>
-        <Block2 />
-        <Block1 />
-        <Block3 />
-      </Space>
+      <Block1 />
+      <Block2 />
+      <Block3 />
     </div>
   );
 });
