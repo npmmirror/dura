@@ -1,4 +1,4 @@
-export function defineHiddenProperty<T, S extends symbol, V>(
+export function defineHiddenProperty<T, S extends symbol | string, V>(
   target: T,
   nameOfSymbol: S,
   value: V,

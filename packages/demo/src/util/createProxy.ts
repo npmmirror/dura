@@ -7,11 +7,14 @@ export const createProxy = <T extends object>(
   state: T,
   deps: Map<string, number>,
   parentPath?: string,
-): T =>
-  new Proxy(state, {
+  name?: string,
+): T => {
+  const m = new Map();
+  const proxy = new Proxy(state, {
     get(target: T, property: PropertyKey, receiver: T) {
       const value = Reflect.get(target, property, receiver);
-      //如果不是我自身定义的属性，例如 map() 、 length 、 constructor 等等，则直接返回
+
+      //如果不是我自身定义的属性
       if (!target.hasOwnProperty(property)) {
         return value;
       }
@@ -25,8 +28,10 @@ export const createProxy = <T extends object>(
 
       if (isPlainObject(value) || Array.isArray(value)) {
         const path = parentPath ? joinPath : rootPath;
-        defineHiddenProperty(value, DURA_SYMBOL, value);
-        return createProxy(value, deps, path);
+        const r = m.get(value) ? m.get(value) : Math.random();
+        m.set(value, r);
+        defineHiddenProperty(value, DURA_SYMBOL, r);
+        return createProxy(value, deps, path, name);
       }
 
       let count = (deps?.get?.(joinPath) ?? 0) + 1;
@@ -35,3 +40,5 @@ export const createProxy = <T extends object>(
       return value;
     },
   });
+  return proxy;
+};

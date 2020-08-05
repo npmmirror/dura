@@ -1,16 +1,17 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock3() {
-  const onClick = React.useCallback(
-    () =>
-      store.dispatch({
-        type: 'user/onChangeOriName',
-      }),
-    [],
-  );
+  React.useEffect(() => {
+    message.success('useBlock3', 0.6);
+  });
+  const onClick = React.useCallback(() => {
+    store.dispatch({
+      type: 'user/onChangeOriName',
+    });
+  }, []);
 
   const changeShow = React.useCallback(() => {
     store.dispatch({ type: 'user/onChangeIsShow' });

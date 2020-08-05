@@ -1,9 +1,12 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { store, defineComponent } from '../store';
 import faker from 'faker';
 
 function useBlock2() {
+  React.useEffect(() => {
+    message.success('useBlock2', 0.6);
+  });
   const index = 8;
   const onClick = React.useCallback(() => {
     store.dispatch({
@@ -30,6 +33,7 @@ export default defineComponent(function Block2(props) {
   const { onClick, onClickAsync } = useBlock2();
 
   const { users } = props.store?.user;
+
   return (
     <div
       style={{

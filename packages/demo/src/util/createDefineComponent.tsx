@@ -30,11 +30,18 @@ export function createDefineComponent(reduxStore) {
       const [, setCount] = React.useState(0);
       React.useEffect(() => {
         return reduxStore.subscribe(() => {
-          const nextStore = createProxy(reduxStore.getState(), deps.current);
-          const memo = deepEqualProxyStore(nextStore, deps.current);
+          let s = reduxStore.getState();
+          const nextStore = createProxy(
+            s,
+            deps.current,
+            void 0,
+            Component.name,
+          );
+          const memo = deepEqualProxyStore(s, deps.current);
+
           if (!memo) {
             storeRef.current = nextStore;
-            deps.current.clear();
+            // TODO 这里不能盲目的清除 deps.current.clear();
             setCount(Math.random());
           }
         });
@@ -55,12 +62,18 @@ export function createDefineContainer(context, reduxStore) {
       React.useEffect(() => {
         return reduxStore.subscribe(() => {
           let s = reduxStore.getState();
-          const nextStore = createProxy(s, deps.current);
+          const nextStore = createProxy(
+            s,
+            deps.current,
+            void 0,
+            Component.name,
+          );
           const memo = deepEqualProxyStore(nextStore, deps.current);
+
           if (!memo) {
             storeRef.current = nextStore;
             storeRef1.current = s;
-            deps.current.clear();
+            // deps.current.clear();
             setCount(Math.random());
           }
         });

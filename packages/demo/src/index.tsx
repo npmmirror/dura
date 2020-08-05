@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import { notification, Button } from 'antd';
+import { Space, Button } from 'antd';
 import { defineContainer } from './store';
 import Block1 from './components/Block1';
 import Block2 from './components/Block2';
@@ -30,10 +30,12 @@ const App = defineContainer(() => {
           {`${v ? '上去' : '下去'}`}
         </Button>
       </div>
-
-      <Block1 />
-      <Block2 />
-      <Block3 />
+      <div style={{ height: 100, width: '100%' }}></div>
+      <Space>
+        <Block2 />
+        <Block1 />
+        <Block3 />
+      </Space>
     </div>
   );
 });

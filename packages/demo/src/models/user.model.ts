@@ -3,7 +3,7 @@ import { times } from 'lodash';
 
 faker.locale = 'zh_CN';
 
-const users = times(11).map((n) => ({
+const users = times(10).map((n) => ({
   id: n,
   name: `${faker.name.firstName()}${faker.name.lastName()}`,
   city: faker.address.city(),
@@ -18,12 +18,11 @@ export default {
     isShow: false,
   },
   reducers: {
-    onChangeName(state, action) {
-      state.users[action.payload.id].name = action.payload.name;
+    onChangeName(state, { payload: { id, name } }) {
+      state.users[id].name = name;
     },
-    onChangeStreetAddress(state, action) {
-      state.users[action.payload.id].streetAddress =
-        action.payload.streetAddress;
+    onChangeStreetAddress(state, { payload: { id, streetAddress } }) {
+      state.users[id].streetAddress = streetAddress;
     },
     onChangeOriName(state) {
       state.oriName = Math.random();

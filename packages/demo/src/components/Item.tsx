@@ -1,3 +1,4 @@
+import { chain } from 'lodash';
 import React from 'react';
 import { defineComponent, store } from '../store';
 
@@ -15,7 +16,7 @@ import { defineComponent, store } from '../store';
 
 export default defineComponent(function Item(props) {
   const { item } = props;
-  console.log('item');
+  // console.log('item', props);
   return (
     <div>
       <span>{item.id}：</span>

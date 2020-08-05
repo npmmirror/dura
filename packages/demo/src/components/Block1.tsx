@@ -1,9 +1,12 @@
 import React from 'react';
 import { defineComponent, store } from '../store';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import Item from './Item';
-const index = 9;
+const index = 2;
 function useBlock1() {
+  React.useEffect(() => {
+    message.success('useBlock1', 0.6);
+  });
   const onClick = React.useCallback(() => {
     store.dispatch({
       type: 'user/onChangeName',
@@ -19,6 +22,7 @@ function useBlock1() {
 export default defineComponent(function Block1(props) {
   const { users } = props.store.user;
   const { onClick, index } = useBlock1();
+  console.log('render Block1');
 
   return (
     <div
@@ -32,15 +36,15 @@ export default defineComponent(function Block1(props) {
       <h1>我是区块一</h1>
       {users.map((item: any) => {
         // return <Item id={item.id} key={item.id} />;
-        // return <Item item={item} key={item.id} />;
-        return (
-          <div key={item?.id}>
-            <span>{item.id}：</span>
-            <span>{item?.name}</span>
-            <span style={{ color: '#999', marginLeft: 20 }}>{item?.city}</span>
-            <span style={{ color: '#333' }}>{`${item?.streetAddress}`}</span>
-          </div>
-        );
+        return <Item item={item} key={item.id} />;
+        // return (
+        //   <div key={item?.id}>
+        //     <span>{item.id}：</span>
+        //     <span>{item?.name}</span>
+        //     <span style={{ color: '#999', marginLeft: 20 }}>{item?.city}</span>
+        //     <span style={{ color: '#333' }}>{`${item?.streetAddress}`}</span>
+        //   </div>
+        // );
       })}
       <Button type="primary" onClick={onClick} shape="round">
         {`修改第${index + 1}位用户的姓名`}
