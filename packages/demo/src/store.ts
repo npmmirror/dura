@@ -6,6 +6,7 @@ setAutoFreeze(false);
 enablePatches();
 
 const app = createApp();
+
 app.use(user);
 
 const { store, defineContainer, defineComponent } = app.run();

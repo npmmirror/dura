@@ -15,6 +15,7 @@ import {
   createDefineComponent,
   createDefineContainer,
 } from './createDefineComponent';
+import { createProxy } from './createProxy';
 
 type Reducers<S> = {
   [name: string]: (state: S, action: any) => void;
@@ -44,6 +45,7 @@ export function createAppCreator(
   return function createApp() {
     let reducers: any = {};
     let effects: any = {};
+
     let reduxStore: ReduxStore;
     const app = {
       use: (...store: Store<any>[]) => {
@@ -55,10 +57,7 @@ export function createAppCreator(
               const [nextState, patches] = produceWithPatches((draft) =>
                 n.reducers[action.type.split('/')[1]]?.(draft, action),
               )(state);
-              let p: any = {};
-              patches.forEach((k) => {
-                p[[n.namespace, ...k.path].join('.')] = '';
-              });
+
               const s = patches.map((k) => [n.namespace, ...k.path].join('.'));
               defineHiddenProperty(nextState, PATCHES_SYMBOL, s);
 

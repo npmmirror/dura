@@ -40,6 +40,7 @@ export default defineComponent(function Block1(props) {
       <Button type="primary" onClick={onClick} shape="round">
         {`修改第${index + 1}位用户的姓名`}
       </Button>
+      <input />
       <div {...containerProps} style={{ height: '300px', overflow: 'auto' }}>
         <div {...wrapperProps}>
           {list.map((item: any) => {

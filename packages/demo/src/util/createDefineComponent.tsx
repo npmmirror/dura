@@ -80,11 +80,12 @@ export function createDefineContainer(context, reduxStore) {
         });
       }, []);
 
-      return (
-        <Provider value={storeRef1.current}>
-          <Component {...ownProps} store={storeRef.current} />;
-        </Provider>
-      );
+      // return (
+      //   <Provider value={storeRef1.current}>
+      //     <Component {...ownProps} store={storeRef.current} />;
+      //   </Provider>
+      // );
+      return <Component {...ownProps} store={storeRef.current} />;
     }, shallowEqual);
   };
 }
@@ -124,8 +125,6 @@ function shallowEqual<A extends PlainObject, B extends PlainObject>(
   prevProps: A,
   nextProps: B,
 ) {
-  console.log('shallowEqual');
-
   const filterStore = (key: string) => key !== 'store';
   const prevPropsKey = Object.keys(prevProps).filter(filterStore);
   const nextPropsKey = Object.keys(nextProps).filter(filterStore);
@@ -138,12 +137,6 @@ function shallowEqual<A extends PlainObject, B extends PlainObject>(
   while (++index < len) {
     const prevKey = prevPropsKey[index];
     const nextPropsHasOwnProperty = hasOwnProperty.call(nextProps, prevKey);
-    console.log(
-      'DURA_SYMBOL',
-      prevProps[prevKey][DURA_SYMBOL],
-      nextProps[prevKey][DURA_SYMBOL],
-      prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL],
-    );
 
     const referenceEqual = prevProps[prevKey][DURA_SYMBOL]
       ? shallowEqual(prevProps[prevKey], nextProps[prevKey]) //prevProps[prevKey][DURA_SYMBOL] === nextProps[prevKey][DURA_SYMBOL]

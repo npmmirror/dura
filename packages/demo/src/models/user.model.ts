@@ -1,5 +1,6 @@
 import faker from 'faker';
 import { times } from 'lodash';
+import { defineStore } from '../util/defineStore';
 
 faker.locale = 'zh_CN';
 
@@ -10,7 +11,7 @@ const users = times(4000).map((n) => ({
   streetAddress: faker.address.streetAddress(),
 }));
 
-export default {
+export default defineStore({
   namespace: 'user' as const,
   state: {
     users,
@@ -25,15 +26,15 @@ export default {
       state.users[id].streetAddress = streetAddress;
     },
     onChangeOriName(state) {
-      state.oriName = Math.random();
+      state.oriName = String(Math.random());
     },
     onChangeIsShow(state) {
       state.isShow = !state.isShow;
     },
   },
   effects: {
-    onAsyncQuery(getState) {
+    async onAsyncQuery(getState) {
       console.log(getState());
     },
   },
-};
+});
