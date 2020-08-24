@@ -67,7 +67,8 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
             return {
               ...state,
               [action.payload.modelName]: {
-                [action.payload.effectName]: true
+                ...state[action.payload.modelName],
+                [action.payload.effectName]: true,
               }
             };
           },
@@ -75,6 +76,7 @@ export const createLoadingPlugin = function<MM extends ModelMap>(modelMap: MM): 
             return {
               ...state,
               [action.payload.modelName]: {
+                ...state[action.payload.modelName],
                 [action.payload.effectName]: false
               }
             };

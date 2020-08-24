@@ -120,15 +120,11 @@ exports.createLoadingPlugin = function (modelMap) {
                 reducers: {
                     startLoading: function (state, action) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                            _b[action.payload.effectName] = true,
-                            _b), _a));
+                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = __assign({}, state[action.payload.modelName], (_b = {}, _b[action.payload.effectName] = true, _b)), _a));
                     },
                     endLoading: function (state, action) {
                         var _a, _b;
-                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = (_b = {},
-                            _b[action.payload.effectName] = false,
-                            _b), _a));
+                        return __assign({}, state, (_a = {}, _a[action.payload.modelName] = __assign({}, state[action.payload.modelName], (_b = {}, _b[action.payload.effectName] = false, _b)), _a));
                     }
                 },
                 effects: {}
