@@ -1,6 +1,6 @@
 {
   "name": "@dura/types",
-  "version": "2.1.0",
+  "version": "2.1.3",
   "types": "./src/typeing.d.ts",
   "typings": "./src/typeing.d.ts",
   "publishConfig": {
