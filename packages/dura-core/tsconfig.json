@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
-    "sourceMap": true,
+    "jsx": "react",
+    "lib": ["es6", "dom"],
+    "rootDir": "src",
+    "module": "esnext",
     "target": "es5",
-    "lib": ["es2017", "dom"],
+    "sourceMap": true,
     "moduleResolution": "node",
-    "declaration": true,
-    "declarationDir": "./lib",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
     "allowSyntheticDefaultImports": true
   },
-  "files": ["./src/index.ts"]
+  "exclude": ["node_modules", "build"]
 }

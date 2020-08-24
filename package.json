@@ -9,7 +9,9 @@
   "devDependencies": {
     "lerna": "^3.22.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "invariant": "^2.2.4"
+  },
   "resolutions": {},
   "config": {
     "commitizen": {

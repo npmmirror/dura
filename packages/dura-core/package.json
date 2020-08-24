@@ -15,8 +15,13 @@
   "author": "ityuany",
   "license": "MIT",
   "dependencies": {
-    "@dura/utils": "^3.4.0",
-    "demo": "^0.1.10",
-    "redux": "4.0.4"
+    "invariant": "^2.2.4",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/invariant": "^2.2.33",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.2"
   }
 }

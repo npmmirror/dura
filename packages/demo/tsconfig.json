@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "lib": ["es6", "dom"],
     "rootDir": "src",
-    "module": "esnext",
+    "module": "ESNext",
     "target": "es5",
     "sourceMap": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": false,
