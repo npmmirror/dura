@@ -1,21 +1,7 @@
 {
-  "name": "dura",
-  "scripts": {
-    "build": "lerna run build",
-    "test": "jest --coverage",
-    "bootstrap": "lerna bootstrap",
-    "cov": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-  },
+  "name": "root",
+  "private": true,
   "devDependencies": {
     "lerna": "^3.22.1"
-  },
-  "dependencies": {
-    "invariant": "^2.2.4"
-  },
-  "resolutions": {},
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }

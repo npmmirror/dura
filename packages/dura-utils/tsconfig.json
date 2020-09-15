@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
-    "target": "es5",
-    "lib": ["es2017", "dom"],
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
+    "target": "ES5",
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true
+    "jsx": "react",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "lib"
   },
-  "files": ["./src/index.ts"]
+  "include": ["src"],
+  "exclude": ["node_modules", "__tests__"]
 }

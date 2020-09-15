@@ -1,0 +1,39 @@
+{
+  "name": "@dura/stat",
+  "version": "3.4.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "typings": "./index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "build:w": "tsc -w",
+    "test": "npx jest",
+    "test:w": "npx jest --watch"
+  },
+  "author": "ityuany",
+  "license": "MIT",
+  "dependencies": {
+    "@dura/async": "^3.4.0",
+    "@dura/core": "^3.4.0",
+    "@dura/utils": "^3.4.0",
+    "invariant": "^2.2.4",
+    "lodash.isplainobject": "^4.0.6",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/invariant": "^2.2.33",
+    "@types/lodash.isplainobject": "^4.0.6",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "typescript": "3.9.6",
+    "utility-types": "^3.10.0"
+  }
+}
