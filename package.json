@@ -3,5 +3,11 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.22.1"
+  },
+  "scripts": {
+    "build": "npx lerna run build",
+    "build:w": "npx lerna run build:w",
+    "test": "npx jest",
+    "test:w": "npx jest --watchAll"
   }
 }
