@@ -45,10 +45,10 @@ const order = defineStoreSlice({
     ],
   },
   reducers: {
-    onChangeId(state, action: { payload: { id: number } }) {
+    onChangeId(state, action) {
       state.id = action.payload.id;
     },
-    onChangeSku(state, action: { payload: { newName: string; id: number } }) {
+    onChangeSku(state, action) {
       state.skuSource.forEach((n) => {
         if (n.id === action.payload.id) {
           n.name = action.payload.newName;
