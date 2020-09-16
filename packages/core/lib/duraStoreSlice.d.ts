@@ -1,9 +1,9 @@
-declare const _default: import("./defineStoreSlice").WrapStoreSlice<"@@DURA", {
+declare const _default: import("@dura/types").StoreSlice<"@@DURA", {
     REFRESH: number;
 }, {
-    UPDATE: (state: {
+    UPDATE(state: {
         REFRESH: number;
-    }, { payload: { REFRESH } }: any) => {
+    }, { payload: { REFRESH } }: any): {
         REFRESH: number;
     };
 }, {}>;

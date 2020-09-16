@@ -2,7 +2,8 @@ import type {
   JsonObject,
   ReducersMapOfStoreSlice,
   EffectsMapOfStoreSlice,
-} from "@dura/types";
+  StoreSlice,
+} from '@dura/types';
 
 export type WrapStoreSlice<N, S, R, E> = {
   namespace: N;
@@ -20,6 +21,6 @@ export function defineStoreSlice<
   S extends JsonObject,
   R extends ReducersMapOfStoreSlice<S>,
   E extends EffectsMapOfStoreSlice
->(store: WrapStoreSlice<N, S, R, E>): WrapStoreSlice<N, S, R, E> {
+>(store: StoreSlice<N, S, R, E>): StoreSlice<N, S, R, E> {
   return store;
 }

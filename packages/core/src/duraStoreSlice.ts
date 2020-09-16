@@ -1,7 +1,7 @@
-import { defineStoreSlice } from "./defineStoreSlice";
+import { defineStoreSlice } from './defineStoreSlice';
 
 export default defineStoreSlice({
-  namespace: "@@DURA",
+  namespace: '@@DURA',
   state: {
     REFRESH: 0,
   },

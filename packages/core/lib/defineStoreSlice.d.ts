@@ -1,4 +1,4 @@
-import type { JsonObject, ReducersMapOfStoreSlice, EffectsMapOfStoreSlice } from "@dura/types";
+import type { JsonObject, ReducersMapOfStoreSlice, EffectsMapOfStoreSlice, StoreSlice } from '@dura/types';
 export declare type WrapStoreSlice<N, S, R, E> = {
     namespace: N;
     state: S;
@@ -7,4 +7,4 @@ export declare type WrapStoreSlice<N, S, R, E> = {
     };
     effects: E;
 };
-export declare function defineStoreSlice<N extends string, S extends JsonObject, R extends ReducersMapOfStoreSlice<S>, E extends EffectsMapOfStoreSlice>(store: WrapStoreSlice<N, S, R, E>): WrapStoreSlice<N, S, R, E>;
+export declare function defineStoreSlice<N extends string, S extends JsonObject, R extends ReducersMapOfStoreSlice<S>, E extends EffectsMapOfStoreSlice>(store: StoreSlice<N, S, R, E>): StoreSlice<N, S, R, E>;
