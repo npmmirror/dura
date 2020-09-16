@@ -44,7 +44,7 @@ export * from './defineStoreSlice';
 export function configura(options?: ConfiguraOptions) {
   return function create<
     N extends string,
-    S extends JsonObject,
+    S,
     R extends ReducersMapOfStoreSlice<S>,
     E extends EffectsMapOfStoreSlice,
     STORES extends StoreSlice<N, S, R, E>[] = StoreSlice<N, S, R, E>[],
@@ -63,7 +63,7 @@ export function configura(options?: ConfiguraOptions) {
 
     function UNSAFE_use<
       N extends string,
-      S extends JsonObject,
+      S,
       R extends ReducersMapOfStoreSlice<S>,
       E extends EffectsMapOfStoreSlice,
       STORES extends StoreSlice<N, S, R, E>[]
