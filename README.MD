@@ -7,7 +7,6 @@
 ![build](https://github.com/ityuany/dura/workflows/build/badge.svg?branch=master&event=push)
 [![NPM version](https://img.shields.io/npm/v/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
 [![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
-[![typescript](https://img.shields.io/npm/dependency-version/typescript/dev/typescript)](http://typescriptlang.org/)
 
 **让人痛哭流涕、老泪纵横的开发体验**
 
