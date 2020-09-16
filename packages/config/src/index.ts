@@ -1,4 +1,4 @@
-import rollup from "rollup";
+import rollup, { Plugin, WarningHandlerWithDefault } from "rollup";
 import { program } from "commander";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
@@ -7,6 +7,10 @@ const configOfUser = require(`${process.cwd()}/lub.config.js`);
 
 const format = "cjs";
 const outDir = "test";
+
+const defaultPlugins = [typescript(), terser()];
+
+const defaultInput = `${process.cwd()}/src/index.ts`;
 
 const getInputOptions = () => ({
   input: `${process.cwd()}/src/index.ts`,
@@ -57,5 +61,12 @@ program
     }
   })
   .parse(process.argv);
+
+export interface Configura {
+  input?: string;
+  external?: string[];
+  plugins?: Plugin[];
+  onwarn?: WarningHandlerWithDefault;
+}
 
 function defineRollup(config) {}

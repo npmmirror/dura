@@ -1,5 +1,5 @@
 {
-  "name": "@dura/luban",
+  "name": "@dura/config",
   "version": "4.0.0-alpha.0",
   "description": "",
   "main": "index.js",
@@ -7,13 +7,7 @@
     "build": "npx rollup --config rollup.config.js",
     "build:w": "npx rollup --config rollup.config.js -w"
   },
-  "bin": {
-    "lub": "lib/index.js"
-  },
   "author": "",
-  "publishConfig": {
-    "access": "public"
-  },
   "license": "MIT",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",

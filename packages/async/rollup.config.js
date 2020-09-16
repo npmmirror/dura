@@ -12,5 +12,11 @@ const getOutput = (dir, format) => ({
 export default {
   input: `${__dirname}/src/index.ts`,
   output: [getOutput("lib", "cjs")],
-  plugins: [progress(), typescript(), terser()],
+  plugins: [
+    progress(),
+    typescript({
+      tsconfig: "tsconfig.json",
+    }),
+    terser(),
+  ],
 };
