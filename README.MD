@@ -4,13 +4,10 @@
     <img src="image/logo.png">
 </p>
 
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-[![NPM version](https://img.shields.io/npm/v/@dura/plus.svg?style=flat)](https://www.npmjs.com/settings/dura/packages)
-[![NPM downloads](http://img.shields.io/npm/dm/@dura/core.svg?style=flat)](https://www.npmjs.com/package/@dura/plus)
-[![Build Status](https://travis-ci.org/ityuany/dura.svg?branch=master)](https://travis-ci.org/ityuany/dura)
-[![Coverage Status](https://coveralls.io/repos/github/ityuany/dura/badge.svg?branch=v2.x)](https://coveralls.io/github/ityuany/dura)
-[![TypeScript](https://badges.frapsoft.com/typescript/version/typescript-next.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
+![build](https://github.com/ityuany/dura/workflows/build/badge.svg?branch=master&event=push)
+[![NPM version](https://img.shields.io/npm/v/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
+[![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
+[![https://img.shields.io/npm/dependency-version/typescript/dev/typescript]](http://typescriptlang.org/)
 
 **让人痛哭流涕、老泪纵横的开发体验**
 
