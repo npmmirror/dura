@@ -11,7 +11,7 @@
 
 [![REACT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/react/master?logo=react&style=flat-square)](https://reactjs.org/)
 [![REDUX](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/redux/master?logo=redux&style=flat-square&color=6B49B8)](https://redux.js.org/)
-[![IMMER](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=perl&style=flat-square&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
+[![IMMER](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=twoo&logoColor=44B89D&style=flat-square&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
 [![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.typescriptlang.org/)
 
 **让人痛哭流涕、老泪纵横的开发体验**
