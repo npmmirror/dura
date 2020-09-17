@@ -4,8 +4,11 @@
     <img src="image/logo.png">
 </p>
 
-[![NPM downloads](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![NPM downloads](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![typescript](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![react](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/react/master?logo=react&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![redux](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/redux/master?logo=redux&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![immer](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=perl&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 [![NPM version](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 [![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 
