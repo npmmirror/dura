@@ -4,9 +4,9 @@
     <img src="image/logo.png">
 </p>
 
-![build](https://github.com/ityuany/dura/workflows/build/badge.svg?branch=master&event=push)
-[![NPM version](https://img.shields.io/npm/v/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
-[![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?style=flat)](https://www.npmjs.com/package/@dura/react)
+[![NPM downloads](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![NPM version](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 
 **让人痛哭流涕、老泪纵横的开发体验**
 
