@@ -4,14 +4,15 @@
     <img src="image/logo.png">
 </p>
 
-[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![typescript](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![react](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/react/master?logo=react&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![redux](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/redux/master?logo=redux&style=flat-square&color=6B49B8)](https://www.npmjs.com/package/@dura/react)
-[![immer](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=perl&style=flat-square&color=44B89D)](https://www.npmjs.com/package/@dura/react)
+[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://github.com/ityuany/dura)
+[![NPM VERSION](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![NPM DOWNLOADS](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![LICENSE](https://img.shields.io/npm/l/@dura/react?logo=npm&style=flat-square)](https://github.com/ityuany/dura)
 
-[![NPM version](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.typescriptlang.org/)
+[![REACT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/react/master?logo=react&style=flat-square)](https://reactjs.org/)
+[![REDUX](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/redux/master?logo=redux&style=flat-square&color=6B49B8)](https://redux.js.org/)
+[![IMMER](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=perl&style=flat-square&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
 
 **让人痛哭流涕、老泪纵横的开发体验**
 
