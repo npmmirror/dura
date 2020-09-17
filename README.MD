@@ -5,6 +5,7 @@
 </p>
 
 [![NPM downloads](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://www.npmjs.com/package/@dura/react)
+[![NPM downloads](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 [![NPM version](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 [![NPM downloads](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
 
