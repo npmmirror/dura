@@ -16,6 +16,16 @@
 
 [_点我去看 4.0.0 开发者预览版演示 demo_](https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx)
 
+**4.0.0 特性计划**
+
+- 更加友好的 ts 类型推导
+- 完善的依赖收集
+- 状态机 watch 机制
+- 状态机 computed 机制
+- 对微前端更加友好的支持
+- 多 store 的友好支持
+- auto-loaing 全新的设计机制（支持针对同一个 effect 按照不同的 key 来区分 loading 状态 ）
+
 **让人痛哭流涕、老泪纵横的开发体验**
 
 - 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架。
