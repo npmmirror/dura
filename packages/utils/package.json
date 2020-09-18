@@ -7,8 +7,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npx rollup --config rollup.config.js",
-    "build:w": "npx rollup --config rollup.config.js -w",
+    "build": "npx lub",
+    "build:w": "npx lub -w",
     "test": "npx jest",
     "test:w": "npx jest --watchAll"
   },
