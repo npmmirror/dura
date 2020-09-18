@@ -5,6 +5,7 @@ import { program } from "commander";
 const Module = require("module");
 const notify = require("rollup-plugin-notify");
 const progress = require("rollup-plugin-progress");
+const chalk = require("chalk");
 
 const base = process.cwd();
 
@@ -60,6 +61,7 @@ async function getConfig() {
 }
 
 async function build() {
+  console.log(chalk.green("start all file bundle construction"));
   const config = await getConfig();
   const inputOptions = {
     input: config?.input ?? input,
@@ -80,11 +82,12 @@ async function build() {
   await bundle.generate(outputOptions);
 
   await bundle.write(outputOptions);
+
+  console.log(chalk.green("complete all file bundle construction"));
 }
 
 async function watch() {
   const config = await getConfig();
-
   const outputOptions = {
     file: config?.file ?? output,
     format: config?.format ?? format,
@@ -99,11 +102,20 @@ async function watch() {
     plugins: [...plugins, ...(config?.plugins ?? [])],
     output: [outputOptions],
   };
-
   const watcher = rollup.watch(watchOptions);
   watcher.on("event", function (event) {
-    if (event.code === "ERROR") {
-      console.error(event.error);
+    if (event.code === "START") {
+      console.log(chalk.green("the listener is starting (restarting)  "));
+    } else if (event.code === "BUNDLE_START") {
+      console.log(chalk.green("build a single file bundle"));
+    } else if (event.code === "BUNDLE_END") {
+      console.log(chalk.green("complete file bundle construction"));
+    } else if (event.code === "END") {
+      console.log(chalk.green("complete all file bundle construction"));
+    } else if (event.code === "ERROR") {
+      console.log(
+        chalk.red(`encountered an error while building:${event.error}`)
+      );
     }
   });
 }
