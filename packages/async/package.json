@@ -1,6 +1,6 @@
 {
   "name": "@dura/async",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.0-alpha.4",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -20,6 +20,6 @@
   "author": "ityuany",
   "license": "MIT",
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.3"
+    "@dura/lub": "^4.0.0-alpha.4"
   }
 }

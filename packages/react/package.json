@@ -1,6 +1,6 @@
 {
   "name": "@dura/react",
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-alpha.4",
   "description": "> TODO: description",
   "author": "ityuany <yuanyu@shein.com>",
   "homepage": "https://github.com/ityuany/dura#readme",
@@ -36,11 +36,11 @@
     "redux": "^4.0.5"
   },
   "dependencies": {
-    "@dura/core": "^4.0.0-alpha.3",
-    "@dura/types": "^4.0.0-alpha.0",
-    "@dura/utils": "^4.0.0-alpha.0"
+    "@dura/core": "^4.0.0-alpha.4",
+    "@dura/types": "^4.0.0-alpha.4",
+    "@dura/utils": "^4.0.0-alpha.4"
   },
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.3"
+    "@dura/lub": "^4.0.0-alpha.4"
   }
 }
