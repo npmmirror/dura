@@ -109,7 +109,11 @@ async function watch() {
 }
 
 program
-  .version(require("../package.json").version)
+  .version(
+    require("../package.json").version,
+    "-v --version",
+    "output the current version"
+  )
   .command("build", { isDefault: true })
   .option("-w , --watch", "watch build")
   .action(function (arg) {
