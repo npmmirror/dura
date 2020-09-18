@@ -1,6 +1,6 @@
 {
   "name": "@dura/types",
-  "version": "4.0.0-alpha.7",
+  "version": "4.0.0-alpha.8",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -12,6 +12,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.7"
+    "@dura/lub": "^4.0.0-alpha.8"
   }
 }
