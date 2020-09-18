@@ -14,6 +14,8 @@
 [![IMMER](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/immer/master?logo=twoo&logoColor=44B89D&style=flat-square&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
 [![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.typescriptlang.org/)
 
+[_点我去看 4.0.0 开发者预览版演示 demo_](https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx)
+
 **让人痛哭流涕、老泪纵横的开发体验**
 
 - 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架。
