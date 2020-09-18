@@ -1,4 +1,4 @@
-import { configura as coreConfigura, defineStoreSlice } from "@dura/core";
+import { configura as coreConfigura, defineStoreSlice } from '@dura/core';
 import type {
   ConfiguraOptions,
   JsonObject,
@@ -9,11 +9,11 @@ import type {
   ExtractAction,
   ExtractStateByStoreUnion,
   CreateStoreReturn,
-} from "@dura/types";
-import { getUseMount } from "./useMount";
-import { getUseMonitor } from "./useMonitor";
-import { createActionsFactory } from "@dura/utils";
-import { useMemo } from "react";
+} from '@dura/types';
+import { getUseMount } from './useMount';
+import { getUseMonitor } from './useMonitor';
+import { createActionsFactory } from '@dura/utils';
+import { useMemo } from 'react';
 
 export interface Return<S, A> extends CreateStoreReturn<S, A> {
   useMount: () => void;
@@ -52,7 +52,7 @@ export function configura(options?: ConfiguraOptions) {
     const duraStore = createStore(...stores);
 
     return function next(...nextStores) {
-      const key = nextStores.map((n) => n.namespace).join(".");
+      const key = nextStores.map((n) => n.namespace).join('.');
 
       const moment = () => duraStore.use(...nextStores).refresh(key);
       const unMoment = () => duraStore.unUse(...nextStores).refresh(key);

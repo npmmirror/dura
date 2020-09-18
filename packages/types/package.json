@@ -10,5 +10,8 @@
     "test:w": "npx jest --watch"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@dura/lub": "^4.0.0-alpha.3"
+  }
 }

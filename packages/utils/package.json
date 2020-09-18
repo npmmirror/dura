@@ -20,5 +20,8 @@
   "peerDependencies": {
     "lodash.isplainobject": "^4.0.6",
     "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@dura/lub": "^4.0.0-alpha.3"
   }
 }

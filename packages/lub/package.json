@@ -1,14 +1,17 @@
 {
-  "name": "@dura/react",
+  "name": "@dura/lub",
   "version": "4.0.0-alpha.3",
   "description": "> TODO: description",
   "author": "ityuany <yuanyu@shein.com>",
   "homepage": "https://github.com/ityuany/dura#readme",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/lub.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
+  },
+  "bin": {
+    "lub": "lib/index.js"
   },
   "files": [
     "lib"
@@ -29,18 +32,15 @@
   "bugs": {
     "url": "https://github.com/ityuany/dura/issues"
   },
-  "peerDependencies": {
-    "immer": "^7.0.9",
-    "invariant": "^2.2.4",
-    "react": "^16.13.1",
-    "redux": "^4.0.5"
-  },
   "dependencies": {
-    "@dura/core": "^4.0.0-alpha.3",
-    "@dura/types": "^4.0.0-alpha.0",
-    "@dura/utils": "^4.0.0-alpha.0"
-  },
-  "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.3"
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "commander": "^6.1.0",
+    "rollup": "^2.26.9",
+    "rollup-plugin-notify": "^1.1.0",
+    "rollup-plugin-progress": "^1.1.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "tslib": "^2.0.1",
+    "typescript": "^4.0.2"
   }
 }
