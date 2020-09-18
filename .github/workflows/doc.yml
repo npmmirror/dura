@@ -1,4 +1,4 @@
-name: MainWorkflow
+name: doc
 
 on:
   push:
