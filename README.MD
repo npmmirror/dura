@@ -16,7 +16,7 @@
 
 [_点我去看 4.0.0 开发者预览版演示 demo_](https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx)
 
-**4.0.0 特性计划**
+**4.0.0 特性开发计划**
 
 - 更加友好的 ts 类型推导
 - 完善的依赖收集
@@ -38,13 +38,6 @@
 
 - 不想写详细的文档，一切看 demo，本身也没太多复杂的功能
 
----
-
-        如果项目不追求状态的可追溯性，同时React版本又可以即使的 升级，那么建议直接使用react-hooks会简单很多。
-        react-hooks 的出现并不意味着 dura 将会被取代 。
-
----
-
 ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
 
 ## 文档
@@ -62,12 +55,6 @@
     当然，你也可以说定义常量来解决这个问题，但是这样意味着我们需要额外产生大量的样板代码。
 
     至此，我们利用typescript与redux完美结合，产生了一些化学反应。
-
-## 例子
-
-- [example-pro](https://github.com/CN-YUANYU/dura/tree/master/packages/example-pro) 演示了 dura 全家桶的使用方式
-
-**征集更过的基于 dura 的项目案例， 可直接提供在 issue 当中**
 
 ## 技术支持
 
