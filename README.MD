@@ -4,16 +4,16 @@
     <img src="image/logo.png">
 </p>
 
-[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=flat-square)](https://github.com/ityuany/dura)
+[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=?style=flat&logo=appveyor)](https://github.com/ityuany/dura)
 [![Coverage Status](https://coveralls.io/repos/github/ityuany/dura/badge.svg?branch=master)](https://coveralls.io/github/ityuany/dura?branch=master)
-[![NPM VERSION](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![NPM DOWNLOADS](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat-square)](https://www.npmjs.com/package/@dura/react)
-[![LICENSE](https://img.shields.io/npm/l/@dura/react?logo=npm&style=flat-square)](https://github.com/ityuany/dura)
+[![NPM VERSION](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
+[![NPM DOWNLOADS](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
+[![LICENSE](https://img.shields.io/npm/l/@dura/react?logo=npm&style=flat)](https://github.com/ityuany/dura)
 
-[![REACT](https://img.shields.io/npm/dependency-version/@dura/react/peer/react?logo=react&style=flat-square)](https://reactjs.org/)
-[![REDUX](https://img.shields.io/npm/dependency-version/@dura/react/peer/redux?logo=redux&style=flat-square&color=6B49B8)](https://redux.js.org/)
-[![IMMER](https://img.shields.io/npm/dependency-version/@dura/react/peer/immer?logo=twoo&logoColor=44B89D&style=flat-square&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
-[![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat-square)](https://www.typescriptlang.org/)
+[![REACT](https://img.shields.io/npm/dependency-version/@dura/react/peer/react?logo=react&style=flat)](https://reactjs.org/)
+[![REDUX](https://img.shields.io/npm/dependency-version/@dura/react/peer/redux?logo=redux&style=flat&color=6B49B8)](https://redux.js.org/)
+[![IMMER](https://img.shields.io/npm/dependency-version/@dura/react/peer/immer?logo=twoo&logoColor=44B89D&style=flat&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
+[![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat)](https://www.typescriptlang.org/)
 
 [_点我去看 4.0.0 开发者预览版演示 demo_](https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx)
 
