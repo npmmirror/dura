@@ -11,8 +11,6 @@ const user = defineStoreSlice({
   },
   reducers: {
     onChangeName(state, action) {
-      console.log('reducer-->onChangeName', action);
-
       state.name = action.payload.name;
     },
   },
@@ -80,13 +78,6 @@ describe('test @dura/react', function () {
     act(() => {
       hooks1.result.current.actions.user.onChangeName({ name: '李四' });
     });
-    // Object.keys(hooks1.result.current.store.user).forEach((n: any) => {
-    //   console.log(n, n === DURA_PATCHES_SYMBOL);
-    // });
-    console.log(DURA_PATCHES_SYMBOL);
-    console.log(hooks1.result.current.store.user);
-    console.log(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]);
-    console.log(hooks1.result.current.store.user[DURA_SYMBOL]);
 
     expect(hooks1.result.current.store.user.name).toEqual('李四');
     expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([

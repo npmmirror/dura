@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const lub = require('..');
+const lub = require("..");
 
-describe('@dura/lub', () => {
-    it('needs tests');
+describe("@dura/lub", () => {
+  it("needs tests", function () {});
 });

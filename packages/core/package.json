@@ -12,11 +12,6 @@
     "test": "npx jest",
     "test:w": "npx jest --watch"
   },
-  "jest": {
-    "transform": {
-      "^.+\\.js?$": "babel-jest"
-    }
-  },
   "author": "ityuany",
   "license": "MIT",
   "dependencies": {

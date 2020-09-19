@@ -1,10 +1,9 @@
 module.exports = {
+  verbose: true,
   collectCoverage: true,
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-  testPathIgnorePatterns: ["/node_modules/", "/packages/example-rn/", "/lib/"],
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  collectCoverageFrom: ["packages/dura-*/src/**/*.{ts,tsx,js,jsx}"],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  collectCoverageFrom: [
+    "**/packages/src/*.{js,jsx,ts,tsx}",
+    "!**/node_modules/**",
+  ],
+  transformIgnorePatterns: [],
 };
