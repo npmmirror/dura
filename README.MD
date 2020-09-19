@@ -5,7 +5,7 @@
 </p>
 
 [![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=?style=flat)](https://github.com/ityuany/dura)
-[![Coverage Status](https://img.shields.io/coveralls/github/ityuany/dura?logo=coveralls&style=flat)](https://github.com/ityuany/dura)
+[![Coverage Status](https://img.shields.io/coveralls/github/ityuany/dura?logo=coveralls&style=flat)](https://coveralls.io/github/ityuany/dura)
 [![NPM VERSION](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
 [![NPM DOWNLOADS](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
 [![LICENSE](https://img.shields.io/npm/l/@dura/react?logo=npm&style=flat)](https://github.com/ityuany/dura)
