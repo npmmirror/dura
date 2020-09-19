@@ -4,8 +4,8 @@
     <img src="image/logo.png">
 </p>
 
-[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=?style=flat&logo=appveyor)](https://github.com/ityuany/dura)
-[![Coverage Status](https://coveralls.io/repos/github/ityuany/dura/badge.svg?branch=master)](https://coveralls.io/github/ityuany/dura?branch=master)
+[![build](https://img.shields.io/github/workflow/status/ityuany/dura/build?logo=github&style=?style=flat)](https://github.com/ityuany/dura)
+[![Coverage Status](https://img.shields.io/coveralls/github/ityuany/dura?logo=coveralls&style=flat)](https://github.com/ityuany/dura)
 [![NPM VERSION](https://img.shields.io/npm/v/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
 [![NPM DOWNLOADS](http://img.shields.io/npm/dm/@dura/react.svg?logo=npm&style=flat)](https://www.npmjs.com/package/@dura/react)
 [![LICENSE](https://img.shields.io/npm/l/@dura/react?logo=npm&style=flat)](https://github.com/ityuany/dura)
