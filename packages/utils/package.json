@@ -1,6 +1,6 @@
 {
   "name": "@dura/utils",
-  "version": "4.0.0-alpha.8",
+  "version": "4.0.0-alpha.9",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -15,13 +15,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/types": "^4.0.0-alpha.8"
+    "@dura/types": "^4.0.0-alpha.9"
   },
   "peerDependencies": {
     "lodash.isplainobject": "^4.0.6",
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.8"
+    "@dura/lub": "^4.0.0-alpha.9"
   }
 }
