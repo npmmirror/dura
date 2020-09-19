@@ -1,4 +1,14 @@
-export default {
+import { defineRollupConfigura } from '@dura/lub';
+
+export default defineRollupConfigura({
   name: 'duraCore',
-  external: ['redux', '@dura/utils', '@dura/async', 'invariant', 'immer'],
-};
+  external: [
+    'redux',
+    'immer',
+    'invariant',
+    '@dura/utils',
+    '@dura/async',
+    '@dura/types',
+    '@dura/lub',
+  ],
+});

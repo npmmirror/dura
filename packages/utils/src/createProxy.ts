@@ -1,11 +1,11 @@
-import isPlainObject from "lodash.isplainobject";
-import { DURA_SYMBOL, DURA_PATCHES_SYMBOL } from "./Symbol";
-import { defineHiddenConstantProperty } from "./defineHiddenConstantProperty";
+import isPlainObject from 'lodash.isplainobject';
+import { DURA_SYMBOL, DURA_PATCHES_SYMBOL } from './Symbol';
+import { defineHiddenConstantProperty } from './defineHiddenConstantProperty';
 
 export function createProxy<T extends object>(
   state: T,
   deps: Map<string, number>,
-  parentPath?: string
+  parentPath?: string,
 ) {
   const proxy = new Proxy(state, {
     get(target, property, receiver) {

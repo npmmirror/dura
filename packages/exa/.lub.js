@@ -1,11 +1,7 @@
-function defineRollup(arg) {
-  return arg;
-}
+import { defineRollupConfigura } from "@dura/lub";
 
-export default defineRollup({
+export default defineRollupConfigura({
   input: "src/index.ts",
   name: "test",
   format: "es",
 });
-
-export const a = 12;

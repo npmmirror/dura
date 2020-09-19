@@ -1,4 +1,4 @@
-import type { ReducersMapObject } from "redux";
+import type { ReducersMapObject } from 'redux';
 import type {
   JsonObject,
   StoreSlice,
@@ -6,14 +6,10 @@ import type {
   EffectsMapOfStoreSlice,
   ReducersMapOfStoreSlice,
   StoreSliceMap,
-} from "@dura/types";
-import invariant from "invariant";
-import { produceWithPatches } from "immer";
-import {
-  defineHiddenConstantProperty,
-  DURA_PATCHES_SYMBOL,
-  createActionsFactory,
-} from "@dura/utils";
+} from '@dura/types';
+import invariant from 'invariant';
+import { produceWithPatches } from 'immer';
+import { defineHiddenConstantProperty, DURA_PATCHES_SYMBOL } from '@dura/utils';
 
 export function operatorFactory() {
   const globalReducers: ReducersMapObject = {};
@@ -51,22 +47,22 @@ export function operatorFactory() {
 
       invariant(
         !has(store),
-        "store already exists, please note that the namespace needs to be unique!"
+        'store already exists, please note that the namespace needs to be unique!',
       );
       globalReducers[store.namespace] = function (state = store.state, action) {
-        const [, reducerName] = action.type.split("/");
+        const [, reducerName] = action.type.split('/');
 
         const [nextState, patches] = produceWithPatches(function (draftState) {
           store.reducers[reducerName]?.(draftState, action);
         })(state);
 
         const patchesOfStringify = patches.map(
-          (n) => `${store.namespace}.${n.path.join(".")}`
+          (n) => `${store.namespace}.${n.path.join('.')}`,
         );
         defineHiddenConstantProperty(
           nextState,
           DURA_PATCHES_SYMBOL,
-          patchesOfStringify
+          patchesOfStringify,
         );
         return nextState;
       };

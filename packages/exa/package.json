@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "@dura/lub": "^4.0.0-alpha.8"
+  },
+  "dependencies": {
+    "lodash": "^4.17.20"
   }
 }
