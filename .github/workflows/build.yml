@@ -23,9 +23,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: lerna bootstrap
-      - run: lerna link
+      - run: npm i
+      - run: npx lerna bootstrap
+      - run: npx lerna link
       - run: npm run build --if-present
       - run: npm run test
       - name: Coveralls GitHub Action
