@@ -28,4 +28,4 @@ jobs:
       - name: Deply To OSS
         run: |
           cd docs
-          ossutil cp dist oss://dura/ -rf
+          ossutil cp docs-dist oss://dura/ -rf
