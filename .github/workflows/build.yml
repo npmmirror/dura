@@ -27,7 +27,7 @@ jobs:
       - run: npx lerna bootstrap
       - run: npx lerna link
       - run: npm run build --if-present
-      - run: npm test
+      - run: npm run test
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1.1.2
         with:
