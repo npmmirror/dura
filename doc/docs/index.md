@@ -1,20 +1,23 @@
 ---
 hero:
-  title: doc
-  desc: doc site example
+  title: dura
+  desc: The next generation of dura, dura.4.x is coming
   actions:
-    - text: Getting Started
-      link: /components
+    - text: Guide
+      link: /guide
 features:
-  - icon: https://gw.alipayobjects.com/zos/bmw-prod/881dc458-f20b-407b-947a-95104b5ec82b/k79dm8ih_w144_h144.png
-    title: Feature 1
-    desc: Balabala
-  - icon: https://gw.alipayobjects.com/zos/bmw-prod/d60657df-0822-4631-9d7c-e7a869c2f21c/k79dmz3q_w126_h126.png
-    title: Feature 2
-    desc: Balabala
-  - icon: https://gw.alipayobjects.com/zos/bmw-prod/d1ee0c6f-5aed-4a45-a507-339a4bfe076c/k7bjsocq_w144_h144.png
-    title: Feature 3
-    desc: Balabala
+  - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/safe.png
+    title: Safe
+    desc: Built on TypeScript, a robust type derivation system
+  - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/kaixin.png
+    title: Happy
+    desc: Good code perception, so that each line of code has a strong sense of security
+  - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/redux.png
+    title: Redux
+    desc: Standing on the shoulders of giants, you can still embrace the whole Redux ecology
+  - icon: https://dura.oss-cn-hangzhou.aliyuncs.com/zhuisu.png
+    title: Traceable
+    desc: Make every state, reducer, and effect retroactively traceable without having to worry about the inability to remove it safely
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
