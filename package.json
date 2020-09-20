@@ -34,7 +34,7 @@
     "redux": "^4.0.5"
   },
   "scripts": {
-    "build": "npx lerna run build --parallel",
+    "build": "npx lerna run build",
     "build:w": "npx lerna run build:w --parallel",
     "test": "npx jest",
     "test:w": "npx jest --watchAll",
