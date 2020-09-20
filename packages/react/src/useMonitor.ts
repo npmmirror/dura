@@ -1,13 +1,13 @@
-import { useRef, useLayoutEffect, useCallback } from "react";
-import { DURA_PATCHES_SYMBOL, createProxy } from "@dura/utils";
-import { useUpdate } from "./useUpdate";
+import { useRef, useLayoutEffect, useCallback } from 'react';
+import { DURA_PATCHES_SYMBOL, createProxy } from '@dura/utils';
+import { useUpdate } from './useUpdate';
 
 export function getUseMonitor(key, reduxStore) {
   return function useMonitor(subscribeDeps) {
     const update = useUpdate();
     const deps = useRef<Map<string, number>>(new Map<string, number>());
     const storeProxyRef = useRef(
-      createProxy(reduxStore.getState(), deps.current)
+      createProxy(reduxStore.getState(), deps.current),
     );
     const storeOriginalRef = useRef(reduxStore.getState());
 
@@ -41,14 +41,14 @@ export function getUseMonitor(key, reduxStore) {
 function deepEqualProxyStore<P, D extends Map<string, number>>(
   nextPropsStore: P,
   deps: D,
-  key
+  key,
 ) {
   const values = Object.values(nextPropsStore);
 
   if (
     key &&
-    nextPropsStore["@@DURA"][DURA_PATCHES_SYMBOL].includes("@@DURA.REFRESH") &&
-    nextPropsStore["@@DURA"]["REFRESH"].startsWith(key)
+    nextPropsStore['@@DURA'][DURA_PATCHES_SYMBOL].includes('@@DURA.REFRESH') &&
+    nextPropsStore['@@DURA']['REFRESH'].startsWith(key)
   ) {
     return false;
   }
