@@ -1,14 +1,14 @@
-import { createActionsFactory } from "../src";
-import type { Store as ReduxStore } from "redux";
+import { createActionsFactory } from '../src';
+import type { Store as ReduxStore } from 'redux';
 import {
   StoreSlice,
   JsonObject,
   ReducersMapOfStoreSlice,
   EffectsMapOfStoreSlice,
-} from "@dura/types";
+} from '@dura/types';
 
-describe("test createActions", function () {
-  it("test createActions", function () {
+describe('test createActions', function () {
+  it('test createActions', function () {
     function defineStore<
       N extends string,
       S,
@@ -20,7 +20,7 @@ describe("test createActions", function () {
     }
 
     const user = defineStore({
-      namespace: "user",
+      namespace: 'user',
       state: {
         age: 12,
       },
@@ -33,24 +33,24 @@ describe("test createActions", function () {
     });
 
     const order = defineStore({
-      namespace: "order",
+      namespace: 'order',
       state: {},
     });
 
-    let name = "default";
+    let name = 'default';
 
     const dispatch = (action) => {
       name = action.payload;
     };
 
-    expect(name).toEqual("default");
+    expect(name).toEqual('default');
 
     const createActions = createActionsFactory({ dispatch } as ReduxStore);
 
     const actions = createActions(user, order);
 
-    actions.user.onChangeUser("zhangsan");
+    actions.user.onChangeUser('zhangsan');
 
-    expect(name).toEqual("zhangsan");
+    expect(name).toEqual('zhangsan');
   });
 });

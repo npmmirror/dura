@@ -48,7 +48,7 @@ const input = `${process.cwd()}/src/index.ts`;
 
 const output = `${process.cwd()}/lib/index.js`;
 
-const format = "cjs";
+const format = "esm";
 
 async function getConfig() {
   const bundle = await rollup.rollup({

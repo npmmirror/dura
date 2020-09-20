@@ -1,7 +1,7 @@
-import { merge } from "../src";
+import { merge } from '../src';
 
-describe("test merge", function () {
-  it("test merge", function () {
+describe('test merge', function () {
+  it('test merge', function () {
     const a = {
       a: 12,
     };

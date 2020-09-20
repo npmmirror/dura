@@ -1,6 +1,5 @@
-import { configura, defineStoreSlice } from '../src';
+import { configura, defineStoreSlice, DURA_PATCHES_SYMBOL } from '../src';
 import { renderHook, act } from '@testing-library/react-hooks';
-import { DURA_PATCHES_SYMBOL } from '@dura/utils';
 
 let name = 'default';
 const user = defineStoreSlice({

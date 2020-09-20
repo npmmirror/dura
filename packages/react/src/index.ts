@@ -34,8 +34,9 @@ export interface Next<SS, A> {
     ...stores: STORES
   ): Return<GS & SS, GA & A>;
 }
-
 export { defineStoreSlice };
+export * from '@dura/types';
+export * from '@dura/utils';
 
 export function configura(options?: ConfiguraOptions) {
   return function create<
