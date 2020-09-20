@@ -83,6 +83,7 @@ async function build() {
     file: config?.file ?? output,
     format: config?.format ?? format,
     name: config?.name,
+    sourcemap: true,
     globals: config?.globals,
     exports: config?.exports,
   };
