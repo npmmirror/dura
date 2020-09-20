@@ -1,6 +1,6 @@
 {
   "name": "@dura/core",
-  "version": "4.0.0-alpha.10",
+  "version": "4.0.0-alpha.11",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -15,9 +15,9 @@
   "author": "ityuany",
   "license": "MIT",
   "dependencies": {
-    "@dura/async": "^4.0.0-alpha.10",
-    "@dura/types": "^4.0.0-alpha.10",
-    "@dura/utils": "^4.0.0-alpha.10"
+    "@dura/async": "^4.0.0-alpha.11",
+    "@dura/types": "^4.0.0-alpha.11",
+    "@dura/utils": "^4.0.0-alpha.11"
   },
   "peerDependencies": {
     "immer": ">=7.0.0",
@@ -25,7 +25,7 @@
     "redux": ">=4.0.0"
   },
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.10",
+    "@dura/lub": "^4.0.0-alpha.11",
     "immer": "^7.0.9"
   }
 }
