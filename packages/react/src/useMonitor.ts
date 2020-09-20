@@ -57,10 +57,8 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
   while (++index < values.length) {
     const patches = values[index][DURA_PATCHES_SYMBOL];
     if (patches?.length > 0) {
-      const hasDependencies = patches.some((n: string) => deps.has(n));
-      if (hasDependencies) {
-        return false;
-      }
+      //hasDependencies
+      return !patches.some((n: string) => deps.has(n));
     }
   }
   return true;
