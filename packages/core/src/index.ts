@@ -10,6 +10,7 @@ import type {
   EffectsMapOfStoreSlice,
   CreateStoreReturn,
   EffectsMapOfStore,
+  Action,
 } from '@dura/types';
 import {
   compose as reduxCompose,
@@ -83,7 +84,7 @@ export function configura(options?: ConfiguraOptions) {
           const [nextState, patches] = produceWithPatches(function (
             draftState,
           ) {
-            store.reducers[reducerName]?.(draftState, action);
+            store.reducers[reducerName]?.(draftState, action as any);
           })(state);
 
           const patchesOfStringify = patches.map(
