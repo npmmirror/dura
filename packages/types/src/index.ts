@@ -1,4 +1,9 @@
-import type { StoreEnhancer, Middleware, Store as ReduxStore } from "redux";
+import type {
+  StoreEnhancer,
+  Middleware,
+  Store as ReduxStore,
+  Action as ReduxAction,
+} from 'redux';
 
 export interface ConfiguraOptions {
   enhancers?: StoreEnhancer[];
@@ -12,12 +17,23 @@ export interface JsonObject<V = any> {
 }
 
 export interface Effect {
-  (action: any): Promise<void>;
+  (action: Action): Promise<void>;
 }
 
 export interface Reducer<S = JsonObject> {
-  (state: S, action: any): void | S;
+  (state: S, action: Action): void | S;
 }
+
+export interface Meta {
+  loading?: boolean | string | number;
+  debounce?: number;
+  throttle?: number;
+}
+
+export type Action<P = any> = {
+  payload: P;
+  meta?: Meta;
+};
 
 export type EffectsMapOfStoreSlice = JsonObject<Effect>;
 
@@ -72,9 +88,9 @@ export type ExtractActionByReducer<T> = T extends StoreSlice<
       [K in N]: {
         [RK in keyof R]: R[RK] extends (
           state: infer FS,
-          action?: infer A
+          action: Action<infer A>,
         ) => any
-          ? (action?: A) => void | FS
+          ? (payload?: A) => void
           : never;
       };
     }
@@ -88,8 +104,8 @@ export type ExtractActionByEffect<T> = T extends StoreSlice<
 >
   ? {
       [K in N]: {
-        [EK in keyof E]: E[EK] extends (action?: infer A) => any
-          ? (action?: A) => void
+        [EK in keyof E]: E[EK] extends (action?: Action<infer A>) => any
+          ? (payload?: A, meta?: Meta) => void
           : never;
       };
     }
@@ -125,8 +141,8 @@ export interface UnUseStoreSliceFn<GS, GA> {
   >(
     ...stores: STORES
   ): CreateStoreReturn<
-    Omit<GS, STORES[number]["namespace"]>,
-    Omit<GA, STORES[number]["namespace"]>
+    Omit<GS, STORES[number]['namespace']>,
+    Omit<GA, STORES[number]['namespace']>
   >;
 }
 

@@ -1,4 +1,9 @@
-import { configura, defineStoreSlice, DURA_PATCHES_SYMBOL } from '../src';
+import {
+  configura,
+  defineStoreSlice,
+  DURA_PATCHES_SYMBOL,
+  Action,
+} from '../src';
 import { renderHook, act } from '@testing-library/react-hooks';
 
 let name = 'default';
@@ -9,12 +14,12 @@ const user = defineStoreSlice({
     name: '张三',
   },
   reducers: {
-    onChangeName(state, action) {
+    onChangeName(state, action: Action<{ name: string }>) {
       state.name = action.payload.name;
     },
   },
   effects: {
-    async onAsyncQuery(action) {
+    async onAsyncQuery(action: Action<{ name: string }>) {
       name = action.payload.name;
     },
   },
@@ -43,10 +48,10 @@ const order = defineStoreSlice({
     ],
   },
   reducers: {
-    onChangeId(state, action) {
+    onChangeId(state, action: Action<{ id: number }>) {
       state.id = action.payload.id;
     },
-    onChangeSku(state, action) {
+    onChangeSku(state, action: Action<{ id: number; newName: string }>) {
       state.skuSource.forEach((n) => {
         if (n.id === action.payload.id) {
           n.name = action.payload.newName;
@@ -75,7 +80,9 @@ describe('test @dura/react', function () {
 
     expect(hooks1.result.current.store.user.name).toEqual('张三');
     act(() => {
-      hooks1.result.current.actions.user.onChangeName({ name: '李四' });
+      hooks1.result.current.actions.user.onChangeName({
+        name: '李四',
+      });
     });
 
     expect(hooks1.result.current.store.user.name).toEqual('李四');
@@ -83,7 +90,9 @@ describe('test @dura/react', function () {
       'user.name',
     ]);
     act(() => {
-      hooks1.result.current.actions.user.onChangeName({ name: '王五' });
+      hooks1.result.current.actions.user.onChangeName({
+        name: '王五',
+      });
     });
     expect(hooks1.result.current.store.user.name).toEqual('王五');
     expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
@@ -111,7 +120,9 @@ describe('test @dura/react', function () {
     });
     expect(hooks2.result.current.store.order.id).toEqual(12);
     act(() => {
-      hooks2.result.current.actions.order.onChangeId({ id: 99 });
+      hooks2.result.current.actions.order.onChangeId({
+        id: 99,
+      });
     });
     expect(hooks2.result.current.store.order.id).toEqual(99);
     expect(hooks2.result.current.store.order[DURA_PATCHES_SYMBOL]).toEqual([
@@ -123,6 +134,7 @@ describe('test @dura/react', function () {
         newName: '新的手机',
       });
     });
+
     expect(hooks2.result.current.store.order.skuSource[1].name).toEqual(
       '新的手机',
     );
