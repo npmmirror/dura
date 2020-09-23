@@ -43,6 +43,7 @@
     "build": "npx lerna run build",
     "build:w": "npx lerna run build:w --parallel",
     "commit": "npx git-cz",
+    "changelog": "npx lerna-changelog",
     "test": "npx jest",
     "test:w": "npx jest --watchAll",
     "coverage": "open ./coverage/lcov-report/index.html"

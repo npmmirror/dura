@@ -21,12 +21,20 @@ export default defineConfig({
     'en-US': [
       null, // null 值代表保留约定式生成的导航，只做增量配置
       {
+        title: 'Demo',
+        path: 'https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx',
+      },
+      {
         title: 'GitHub',
         path: 'https://github.com/ityuany/dura',
       },
     ],
     'zh-CN': [
       null, // null 值代表保留约定式生成的导航，只做增量配置
+      {
+        title: '示例',
+        path: 'https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx',
+      },
       {
         title: 'GitHub',
         path: 'https://github.com/ityuany/dura',
