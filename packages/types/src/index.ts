@@ -5,6 +5,13 @@ import type {
   Action as ReduxAction,
 } from 'redux';
 
+export interface DebounceSettings {
+  /** 需要延迟的毫秒数 */
+  wait?: number;
+  /** 是否立即执行 */
+  iife?: boolean;
+}
+
 export interface ConfiguraOptions {
   enhancers?: StoreEnhancer[];
   middlewares?: Middleware[];
@@ -24,9 +31,11 @@ export interface Reducer<S = JsonObject> {
   (state: S, action: Action): void | S;
 }
 
+export interface s extends DebounceSettings {}
+
 export interface Meta {
   loading?: boolean | string | number;
-  debounce?: number;
+  debounce?: DebounceSettings;
   throttle?: number;
 }
 
