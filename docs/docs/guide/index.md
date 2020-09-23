@@ -1,5 +1,7 @@
 ---
 title: Introduction
+nav:
+  order: 1
 ---
 
 # What is dura?

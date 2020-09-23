@@ -1,5 +1,8 @@
 ---
 title: 介绍
+nav:
+  order: 1
+  title: 指南
 ---
 
 # 什么是 dura ?

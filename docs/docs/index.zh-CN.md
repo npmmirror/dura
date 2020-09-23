@@ -21,4 +21,16 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-## Hello doc!
+# 下一代 dura 开发计划（dura4）
+
+- 😺 更加友好的 ts 类型推导
+- 😁 完善的依赖收集
+- 🚀 完善的 hooks api 支持
+- 📱 状态机 watch 机制
+- 💻 状态机 computed 机制
+- 🧱 对微前端更加友好的支持
+- 👬 多 store 的友好支持
+- 😮 auto-loaing 全新的设计机制（支持针对同一个 effect 按照不同的 key 来区分 loading 状态 ）
+- 🚗 状态机内置可动态配置化的 节流 和 防抖
+- 🍳 友善的 bind 机制（类 vue 双向数据绑定）
+- 🔧 鲁班 统一打包、测试逻辑
