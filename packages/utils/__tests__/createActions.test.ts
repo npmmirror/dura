@@ -2,7 +2,6 @@ import { createActionsFactory } from '../src';
 import type { Store as ReduxStore } from 'redux';
 import {
   StoreSlice,
-  JsonObject,
   ReducersMapOfStoreSlice,
   EffectsMapOfStoreSlice,
   Action,
@@ -19,9 +18,8 @@ function defineStore<
 }
 
 describe('test createActions', function () {
-  it('test debounce', function (done) {
+  it('test iife debounce', function (done) {
     let name = 'default';
-
     const user = defineStore({
       namespace: 'user',
       state: {
@@ -37,22 +35,54 @@ describe('test createActions', function () {
     const dispatch = (action) => {
       name = action.payload.name;
     };
-
     expect(name).toEqual('default');
-
     const createActions = createActionsFactory({ dispatch } as ReduxStore);
-
     const actions = createActions(user);
-
-    actions.user.onAsyncQuery({ name: '1' }, { debounce: 500 });
-    actions.user.onAsyncQuery({ name: '2' }, { debounce: 500 });
-    actions.user.onAsyncQuery({ name: '3' }, { debounce: 500 });
-    expect(name).toEqual('default');
+    const debounceMeta = {
+      wait: 500,
+      iife: true,
+    };
+    actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
+    actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
+    actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
+    expect(name).toEqual('1');
     setTimeout(() => {
-      expect(name).toEqual('1');
+      expect(name).toEqual('3');
       done();
     }, 1000);
   }),
+    it('test plain debounce', function (done) {
+      let name = 'default';
+      const user = defineStore({
+        namespace: 'user',
+        state: {
+          age: 12,
+        },
+        reducers: {
+          onChangeUser(state, action: Action) {},
+        },
+        effects: {
+          async onAsyncQuery(action: Action<{ name: string }>) {},
+        },
+      });
+      const dispatch = (action) => {
+        name = action.payload.name;
+      };
+      expect(name).toEqual('default');
+      const createActions = createActionsFactory({ dispatch } as ReduxStore);
+      const actions = createActions(user);
+      const debounceMeta = {
+        wait: 500,
+      };
+      actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
+      actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
+      actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
+      expect(name).toEqual('default');
+      setTimeout(() => {
+        expect(name).toEqual('3');
+        done();
+      }, 1000);
+    }),
     it('test createActions', function () {
       const order = defineStore({
         namespace: 'order',

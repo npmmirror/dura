@@ -7,21 +7,19 @@ import type {
   ExtractAction,
   UnionToIntersection,
   Meta,
-  Action,
 } from '@dura/types';
 import { noop } from './noop';
 import { merge } from './merge';
 import { keys } from './keys';
-import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
+import { debounceDispatch } from './debounceDispatch';
 
 export function createDispatch<S>(
   reduxStore: ReduxStore<S>,
   namespace: string,
   methodName: string,
 ) {
-  const debounceCache = new Map<string, Function>();
-  const throttleCache = new Map<string, Function>();
+  const cache = new Map<string, any>();
 
   return function (payload, meta?: Meta) {
     const type = `${namespace}/${methodName}`;
@@ -31,19 +29,14 @@ export function createDispatch<S>(
         payload,
       });
     if (meta?.debounce) {
-      if (debounceCache.has(type)) {
-        debounceCache.get(type)();
-      } else {
-        const debounceDispatchFn = debounce(dispatchFn, meta.debounce);
-        debounceCache.set(type, debounceDispatchFn);
-        debounceDispatchFn();
-      }
+      debounceDispatch(cache, type, meta.debounce, dispatchFn);
     } else if (meta?.throttle) {
-      if (throttleCache.has(type)) {
-        throttleCache.get(type)();
+      const throttleKey = `${type}/throttle`;
+      if (cache.has(throttleKey)) {
+        cache.get(throttleKey)();
       } else {
         const throttleDispatchFn = throttle(dispatchFn, meta.throttle);
-        throttleCache.set(type, throttleDispatchFn);
+        cache.set(throttleKey, throttleDispatchFn);
         throttleDispatchFn();
       }
     } else {
