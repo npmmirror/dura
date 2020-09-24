@@ -42,7 +42,7 @@ export async function dispatchLoading<S>(
     });
 
   const finallyTyoe =
-    typeof loading === 'boolean' ? type : `${type}/${loading}`;
+    typeof loading === 'boolean' ? `${type}/default` : `${type}/${loading}`;
 
   try {
     dispatchTrue(finallyTyoe);
