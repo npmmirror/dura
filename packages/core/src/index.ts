@@ -163,7 +163,7 @@ export function configura(options?: ConfiguraOptions) {
 
     function refresh(prefix: string) {
       reduxStore.dispatch({
-        type: '@@DURA/UPDATE',
+        type: 'DURA/UPDATE',
         payload: { REFRESH: prefix },
       });
       return duraStore;

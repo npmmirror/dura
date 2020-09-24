@@ -1,6 +1,6 @@
 import type { DebounceSettings } from '@dura/types';
 
-export function debounceDispatch(
+export function dispatchDebounce(
   cache: Map<string, any>,
   type: string,
   debounceSettings: DebounceSettings,

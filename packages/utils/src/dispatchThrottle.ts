@@ -1,6 +1,6 @@
 import type { DebounceSettings } from '@dura/types';
 
-export function throttleDispatch(
+export function dispatchThrottle(
   cache: Map<string, any>,
   type: string,
   debounceSettings: DebounceSettings,

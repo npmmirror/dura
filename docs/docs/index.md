@@ -23,14 +23,14 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](http
 
 # Next-generation dura development plan (dura 4)
 
-- 😺 More friendly ts type deduction
-- 😁 Complete dependency collection
-- 🚀 Perfect hooks api support
+- 😺 ✅ More friendly ts type deduction
+- 😁 ✅ Complete dependency collection
+- 🚀 ✅ Perfect hooks api support
 - 📱 State machine watch mechanism
 - 💻 State machine computed mechanism
-- 🧱 More friendly support for micro front end
-- 👬 Friendly support from multiple stores
-- 😮 A new design mechanism for auto-loaing (supports different keys for the same effect to distinguish the loading status)
-- 🚗 State machine built-in dynamically configurable throttling and anti-shake
+- 🧱 ✅ More friendly support for micro front end
+- 👬 ✅ Friendly support from multiple stores
+- 😮 ✅ A new design mechanism for auto-loaing (supports different keys for the same effect to distinguish the loading status)
+- 🚗 ✅ State machine built-in dynamically configurable throttling and anti-shake
 - 🍳 Friendly bind mechanism (like vue two-way data binding)
-- 🔧 Luban unified packaging and testing logic
+- 🔧 ✅ Luban unified packaging and testing logic

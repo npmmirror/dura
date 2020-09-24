@@ -3,7 +3,8 @@ import { DURA_PATCHES_SYMBOL } from '@dura/utils';
 import { compose } from 'redux';
 
 let name = 'default';
-
+const deloy = (ms: number) =>
+  new Promise((resolve, reject) => setTimeout(resolve, ms));
 const user = defineStoreSlice({
   namespace: 'user',
   state: {
@@ -18,6 +19,7 @@ const user = defineStoreSlice({
   effects: {
     async onAsyncQuery(action) {
       name = action.payload.name;
+      await deloy(500);
     },
   },
 
@@ -35,13 +37,6 @@ const user = defineStoreSlice({
   },
 });
 
-function immediate(w) {
-  Object.defineProperty(w, 'immediate', {
-    value: true,
-  });
-  return w;
-}
-
 const order = defineStoreSlice({
   namespace: 'order',
   state: {
@@ -56,6 +51,43 @@ const order = defineStoreSlice({
 });
 
 describe('test dura-core', function () {
+  it('test customize loading', function (done) {
+    const createStore = configura();
+    const store = createStore(user);
+
+    const id = 11;
+
+    store.actions.user.onAsyncQuery(null, { loading: id });
+    expect(
+      store.getState()['DURA']['LOADING']['user']['onAsyncQuery'][id][
+        ['status']
+      ],
+    ).toBeTruthy();
+    setTimeout(() => {
+      expect(
+        store.getState()['DURA']['LOADING']['user']['onAsyncQuery'][id][
+          ['status']
+        ],
+      ).toBeFalsy();
+      done();
+    }, 501);
+  });
+
+  it('test loading', function (done) {
+    const createStore = configura();
+    const store = createStore(user);
+    store.actions.user.onAsyncQuery(null, { loading: true });
+    expect(
+      store.getState()['DURA']['LOADING']['user']['onAsyncQuery']['status'],
+    ).toBeTruthy();
+    setTimeout(() => {
+      expect(
+        store.getState()['DURA']['LOADING']['user']['onAsyncQuery']['status'],
+      ).toBeFalsy();
+      done();
+    }, 501);
+  });
+
   it('test create store', function () {
     const createStore = configura();
     const store = createStore(user);
