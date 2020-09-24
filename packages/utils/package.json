@@ -15,17 +15,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dura/types": "^4.0.0-alpha.11",
-    "lodash.debounce": "^4.0.8",
-    "lodash.throttle": "^4.1.1"
+    "@dura/types": "^4.0.0-alpha.11"
   },
   "peerDependencies": {
     "lodash.isplainobject": "^4.0.6",
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@dura/lub": "^4.0.0-alpha.11",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/lodash.throttle": "^4.1.6"
+    "@dura/lub": "^4.0.0-alpha.11"
   }
 }

@@ -1,5 +1,4 @@
-import { throttleDispatch } from '../src/throttleDispatch';
-import type { ThrottleSettings } from '@dura/types';
+import { dispatchThrottle } from '../src';
 
 describe('test throttleDispatch', function () {
   it('test plain throttle', function (done) {
@@ -11,13 +10,13 @@ describe('test throttleDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '1';
     });
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '2';
     });
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '3';
     });
     expect(name).toEqual('default');
@@ -32,7 +31,7 @@ describe('test throttleDispatch', function () {
     }, 500);
 
     setTimeout(() => {
-      throttleDispatch(cache, type, meta, () => {
+      dispatchThrottle(cache, type, meta, () => {
         name = '4';
       });
       expect(name).toEqual('1');
@@ -60,13 +59,13 @@ describe('test throttleDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '1';
     });
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '2';
     });
-    throttleDispatch(cache, type, meta, () => {
+    dispatchThrottle(cache, type, meta, () => {
       name = '3';
     });
     expect(name).toEqual('1');
@@ -81,7 +80,7 @@ describe('test throttleDispatch', function () {
     }, 500);
 
     setTimeout(() => {
-      throttleDispatch(cache, type, meta, () => {
+      dispatchThrottle(cache, type, meta, () => {
         name = '4';
       });
       expect(name).toEqual('4');

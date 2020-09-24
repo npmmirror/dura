@@ -11,9 +11,6 @@ import type {
 import { noop } from './noop';
 import { merge } from './merge';
 import { keys } from './keys';
-import throttle from 'lodash.throttle';
-import { debounceDispatch } from './debounceDispatch';
-import { throttleDispatch } from './throttleDispatch';
 
 export function createDispatch<S>(
   reduxStore: ReduxStore<S>,
@@ -24,18 +21,36 @@ export function createDispatch<S>(
 
   return function (payload, meta?: Meta) {
     const type = `${namespace}/${methodName}`;
-    const dispatchFn = () =>
-      reduxStore.dispatch({
-        type: `${namespace}/${methodName}`,
-        payload,
-      });
-    if (meta?.debounce) {
-      debounceDispatch(cache, type, meta.debounce, dispatchFn);
-    } else if (meta?.throttle) {
-      throttleDispatch(cache, type, meta.throttle, dispatchFn);
-    } else {
-      dispatchFn();
-    }
+    reduxStore.dispatch({ type, payload, meta });
+    // const dispatchFn = () =>
+    //   reduxStore.dispatch({
+    //     type: `${namespace}/${methodName}`,
+    //     payload,
+    //   });
+    // if (meta?.debounce) {
+    //   dispatchDebounce(cache, type, meta.debounce, dispatchFn);
+    // } else if (meta?.throttle) {
+    //   dispatchThrottle(cache, type, meta.throttle, dispatchFn);
+    // } else if (meta?.loading) {
+    //   if (typeof meta?.loading === 'boolean') {
+    //     reduxStore.dispatch({
+    //       type: 'DURA/CHANGE_LOADING',
+    //       payload: {
+    //         k: type,
+    //         value: true,
+    //       },
+    //     });
+    //     reduxStore.dispatch({
+    //       type: 'DURA/CHANGE_LOADING',
+    //       payload: {
+    //         k: type,
+    //         value: false,
+    //       },
+    //     });
+    //   }
+    // } else {
+    //   dispatchFn();
+    // }
   };
 }
 

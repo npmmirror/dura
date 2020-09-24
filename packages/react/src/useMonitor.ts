@@ -47,8 +47,8 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
 
   if (
     key &&
-    nextPropsStore['@@DURA'][DURA_PATCHES_SYMBOL].includes('@@DURA.REFRESH') &&
-    nextPropsStore['@@DURA']['REFRESH'].startsWith(key)
+    nextPropsStore['DURA'][DURA_PATCHES_SYMBOL].includes('DURA.REFRESH') &&
+    nextPropsStore['DURA']['REFRESH'].startsWith(key)
   ) {
     return false;
   }

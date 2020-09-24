@@ -18,8 +18,109 @@ function defineStore<
 }
 
 describe('test createActions', function () {
-  it('test plain throttle', function (done) {
-    let name = 'default';
+  // it('test plain throttle', function (done) {
+  //   let name = 'default';
+  //   const user = defineStore({
+  //     namespace: 'user',
+  //     state: {
+  //       age: 12,
+  //     },
+  //     reducers: {
+  //       onChangeUser(state, action: Action) {},
+  //     },
+  //     effects: {
+  //       async onAsyncQuery(action: Action<{ name: string }>) {},
+  //     },
+  //   });
+  //   const dispatch = (action) => {
+  //     name = action.payload.name;
+  //   };
+  //   expect(name).toEqual('default');
+  //   const createActions = createActionsFactory({ dispatch } as ReduxStore);
+  //   const actions = createActions(user);
+  //   const throttleMeta = {
+  //     wait: 500,
+  //   };
+  //   actions.user.onAsyncQuery({ name: '1' }, { throttle: throttleMeta });
+  //   actions.user.onAsyncQuery({ name: '2' }, { throttle: throttleMeta });
+  //   actions.user.onAsyncQuery({ name: '3' }, { throttle: throttleMeta });
+  //   expect(name).toEqual('default');
+  //   setTimeout(() => {
+  //     expect(name).toEqual('1');
+  //     done();
+  //   }, 1000);
+  // }),
+  //   it('test iife debounce', function (done) {
+  //     let name = 'default';
+  //     const user = defineStore({
+  //       namespace: 'user',
+  //       state: {
+  //         age: 12,
+  //       },
+  //       reducers: {
+  //         onChangeUser(state, action: Action) {},
+  //       },
+  //       effects: {
+  //         async onAsyncQuery(action: Action<{ name: string }>) {},
+  //       },
+  //     });
+  //     const dispatch = (action) => {
+  //       name = action.payload.name;
+  //     };
+  //     expect(name).toEqual('default');
+  //     const createActions = createActionsFactory({ dispatch } as ReduxStore);
+  //     const actions = createActions(user);
+  //     const debounceMeta = {
+  //       wait: 500,
+  //       iife: true,
+  //     };
+  //     actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
+  //     actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
+  //     actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
+  //     expect(name).toEqual('1');
+  //     setTimeout(() => {
+  //       expect(name).toEqual('3');
+  //       done();
+  //     }, 1000);
+  //   }),
+  //   it('test plain debounce', function (done) {
+  //     let name = 'default';
+  //     const user = defineStore({
+  //       namespace: 'user',
+  //       state: {
+  //         age: 12,
+  //       },
+  //       reducers: {
+  //         onChangeUser(state, action: Action) {},
+  //       },
+  //       effects: {
+  //         async onAsyncQuery(action: Action<{ name: string }>) {},
+  //       },
+  //     });
+  //     const dispatch = (action) => {
+  //       name = action.payload.name;
+  //     };
+  //     expect(name).toEqual('default');
+  //     const createActions = createActionsFactory({ dispatch } as ReduxStore);
+  //     const actions = createActions(user);
+  //     const debounceMeta = {
+  //       wait: 500,
+  //     };
+  //     actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
+  //     actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
+  //     actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
+  //     expect(name).toEqual('default');
+  //     setTimeout(() => {
+  //       expect(name).toEqual('3');
+  //       done();
+  //     }, 1000);
+  //   }),
+  it('test createActions', function () {
+    const order = defineStore({
+      namespace: 'order',
+      state: {},
+    });
+
     const user = defineStore({
       namespace: 'user',
       state: {
@@ -29,124 +130,23 @@ describe('test createActions', function () {
         onChangeUser(state, action: Action) {},
       },
       effects: {
-        async onAsyncQuery(action: Action<{ name: string }>) {},
+        async onAsyncQuery(action: Action) {},
       },
     });
+    let name = 'default';
+
     const dispatch = (action) => {
-      name = action.payload.name;
+      name = action.payload;
     };
+
     expect(name).toEqual('default');
+
     const createActions = createActionsFactory({ dispatch } as ReduxStore);
-    const actions = createActions(user);
-    const throttleMeta = {
-      wait: 500,
-    };
-    actions.user.onAsyncQuery({ name: '1' }, { throttle: throttleMeta });
-    actions.user.onAsyncQuery({ name: '2' }, { throttle: throttleMeta });
-    actions.user.onAsyncQuery({ name: '3' }, { throttle: throttleMeta });
-    expect(name).toEqual('default');
-    setTimeout(() => {
-      expect(name).toEqual('1');
-      done();
-    }, 1000);
-  }),
-    it('test iife debounce', function (done) {
-      let name = 'default';
-      const user = defineStore({
-        namespace: 'user',
-        state: {
-          age: 12,
-        },
-        reducers: {
-          onChangeUser(state, action: Action) {},
-        },
-        effects: {
-          async onAsyncQuery(action: Action<{ name: string }>) {},
-        },
-      });
-      const dispatch = (action) => {
-        name = action.payload.name;
-      };
-      expect(name).toEqual('default');
-      const createActions = createActionsFactory({ dispatch } as ReduxStore);
-      const actions = createActions(user);
-      const debounceMeta = {
-        wait: 500,
-        iife: true,
-      };
-      actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
-      actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
-      actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
-      expect(name).toEqual('1');
-      setTimeout(() => {
-        expect(name).toEqual('3');
-        done();
-      }, 1000);
-    }),
-    it('test plain debounce', function (done) {
-      let name = 'default';
-      const user = defineStore({
-        namespace: 'user',
-        state: {
-          age: 12,
-        },
-        reducers: {
-          onChangeUser(state, action: Action) {},
-        },
-        effects: {
-          async onAsyncQuery(action: Action<{ name: string }>) {},
-        },
-      });
-      const dispatch = (action) => {
-        name = action.payload.name;
-      };
-      expect(name).toEqual('default');
-      const createActions = createActionsFactory({ dispatch } as ReduxStore);
-      const actions = createActions(user);
-      const debounceMeta = {
-        wait: 500,
-      };
-      actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
-      actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
-      actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
-      expect(name).toEqual('default');
-      setTimeout(() => {
-        expect(name).toEqual('3');
-        done();
-      }, 1000);
-    }),
-    it('test createActions', function () {
-      const order = defineStore({
-        namespace: 'order',
-        state: {},
-      });
 
-      const user = defineStore({
-        namespace: 'user',
-        state: {
-          age: 12,
-        },
-        reducers: {
-          onChangeUser(state, action: Action) {},
-        },
-        effects: {
-          async onAsyncQuery(action: Action) {},
-        },
-      });
-      let name = 'default';
+    const actions = createActions(user, order);
 
-      const dispatch = (action) => {
-        name = action.payload;
-      };
+    actions.user.onChangeUser('zhangsan');
 
-      expect(name).toEqual('default');
-
-      const createActions = createActionsFactory({ dispatch } as ReduxStore);
-
-      const actions = createActions(user, order);
-
-      actions.user.onChangeUser('zhangsan');
-
-      expect(name).toEqual('zhangsan');
-    });
+    expect(name).toEqual('zhangsan');
+  });
 });

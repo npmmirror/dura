@@ -1,5 +1,4 @@
-import { debounceDispatch } from '../src/debounceDispatch';
-import type { DebounceSettings } from '@dura/types';
+import { dispatchDebounce } from '../src';
 
 describe('test debounceDispatch', function () {
   it('test plain', function (done) {
@@ -11,13 +10,13 @@ describe('test debounceDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '1';
     });
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '2';
     });
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '3';
     });
     expect(name).toEqual('default');
@@ -43,18 +42,18 @@ describe('test debounceDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '1';
     });
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '2';
     });
-    debounceDispatch(cache, type, meta, () => {
+    dispatchDebounce(cache, type, meta, () => {
       name = '3';
     });
 
     setTimeout(() => {
-      debounceDispatch(cache, type, meta, () => {
+      dispatchDebounce(cache, type, meta, () => {
         name = '4';
       });
       expect(name).toEqual('4');
