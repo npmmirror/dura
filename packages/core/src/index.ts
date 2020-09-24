@@ -97,6 +97,7 @@ export function configura(options?: ConfiguraOptions) {
           );
           return nextState;
         };
+
         globalEffects[store.namespace] = store.effects;
       }
     }
