@@ -6,6 +6,7 @@ import type {
   UnionToIntersection,
   ExtractStateByStoreUnion,
   ExtractAction,
+  ExtractActionByEffect,
   ReducersMapOfStoreSlice,
   EffectsMapOfStoreSlice,
   CreateStoreReturn,
@@ -42,6 +43,21 @@ export const defaultConfiguraOptions: ConfiguraOptions = {
 
 export * from './defineStoreSlice';
 
+type Loading = {
+  status: boolean;
+  error: Error;
+};
+
+type Demo<T> = T extends StoreSlice<infer N, infer S, infer R, infer E>
+  ? {
+      [K in N]: {
+        [EK in keyof E]: E[EK] extends (action?: Action<infer A>) => any
+          ? JsonObject<Loading> & { default: Loading }
+          : never;
+      };
+    }
+  : never;
+
 export function configura(options?: ConfiguraOptions) {
   return function create<
     N extends string,
@@ -50,7 +66,11 @@ export function configura(options?: ConfiguraOptions) {
     E extends EffectsMapOfStoreSlice,
     STORES extends StoreSlice<N, S, R, E>[] = StoreSlice<N, S, R, E>[],
     GA = UnionToIntersection<ExtractAction<STORES[number]>>,
-    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>>
+    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>> & {
+      DURA: {
+        LOADING: UnionToIntersection<Demo<STORES[number]>>;
+      };
+    }
   >(...stores: STORES): CreateStoreReturn<GS, GA> {
     const {
       middlewares = [],
