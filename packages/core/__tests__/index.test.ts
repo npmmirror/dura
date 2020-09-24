@@ -20,7 +20,27 @@ const user = defineStoreSlice({
       name = action.payload.name;
     },
   },
+
+  watchs: {
+    async hello0(state, prevState) {
+      console.log(state.name);
+    },
+
+    hello: {
+      handler: async function (state, prevState) {
+        console.log(state.name);
+      },
+      immediate: true,
+    },
+  },
 });
+
+function immediate(w) {
+  Object.defineProperty(w, 'immediate', {
+    value: true,
+  });
+  return w;
+}
 
 const order = defineStoreSlice({
   namespace: 'order',

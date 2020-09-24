@@ -18,7 +18,7 @@ function defineStore<
 }
 
 describe('test createActions', function () {
-  it('test iife debounce', function (done) {
+  it('test plain throttle', function (done) {
     let name = 'default';
     const user = defineStore({
       namespace: 'user',
@@ -38,19 +38,51 @@ describe('test createActions', function () {
     expect(name).toEqual('default');
     const createActions = createActionsFactory({ dispatch } as ReduxStore);
     const actions = createActions(user);
-    const debounceMeta = {
+    const throttleMeta = {
       wait: 500,
-      iife: true,
     };
-    actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
-    actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
-    actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
-    expect(name).toEqual('1');
+    actions.user.onAsyncQuery({ name: '1' }, { throttle: throttleMeta });
+    actions.user.onAsyncQuery({ name: '2' }, { throttle: throttleMeta });
+    actions.user.onAsyncQuery({ name: '3' }, { throttle: throttleMeta });
+    expect(name).toEqual('default');
     setTimeout(() => {
-      expect(name).toEqual('3');
+      expect(name).toEqual('1');
       done();
     }, 1000);
   }),
+    it('test iife debounce', function (done) {
+      let name = 'default';
+      const user = defineStore({
+        namespace: 'user',
+        state: {
+          age: 12,
+        },
+        reducers: {
+          onChangeUser(state, action: Action) {},
+        },
+        effects: {
+          async onAsyncQuery(action: Action<{ name: string }>) {},
+        },
+      });
+      const dispatch = (action) => {
+        name = action.payload.name;
+      };
+      expect(name).toEqual('default');
+      const createActions = createActionsFactory({ dispatch } as ReduxStore);
+      const actions = createActions(user);
+      const debounceMeta = {
+        wait: 500,
+        iife: true,
+      };
+      actions.user.onAsyncQuery({ name: '1' }, { debounce: debounceMeta });
+      actions.user.onAsyncQuery({ name: '2' }, { debounce: debounceMeta });
+      actions.user.onAsyncQuery({ name: '3' }, { debounce: debounceMeta });
+      expect(name).toEqual('1');
+      setTimeout(() => {
+        expect(name).toEqual('3');
+        done();
+      }, 1000);
+    }),
     it('test plain debounce', function (done) {
       let name = 'default';
       const user = defineStore({

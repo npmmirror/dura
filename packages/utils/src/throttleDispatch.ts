@@ -1,24 +1,28 @@
 import type { DebounceSettings } from '@dura/types';
 
-export function debounceDispatch(
+export function throttleDispatch(
   cache: Map<string, any>,
   type: string,
   debounceSettings: DebounceSettings,
   fn: () => any,
 ) {
-  const debounceKey = `${type}/debounce`;
-  const clearKey = `${debounceKey}/clear`;
-  const has = cache.has(debounceKey);
+  const throttleKey = `${type}/throttle`;
+  const clearKey = `${throttleKey}/clear`;
+  const has = cache.has(throttleKey);
+
+  if (has) {
+    return;
+  }
 
   const timerId = setTimeout(() => {
-    cache.delete(debounceKey);
+    cache.delete(throttleKey);
     cache.delete(clearKey);
   }, debounceSettings.wait);
 
   if (debounceSettings.iife && !has) {
     fn();
     cache.set(
-      debounceKey,
+      throttleKey,
       setTimeout(() => false, debounceSettings.wait),
     );
     cache.set(clearKey, timerId);
@@ -27,11 +31,11 @@ export function debounceDispatch(
 
   const executor = setTimeout(fn, debounceSettings.wait);
 
-  clearTimeout(cache.get(debounceKey));
+  clearTimeout(cache.get(throttleKey));
   clearTimeout(cache.get(clearKey));
-  cache.delete(debounceKey);
+  cache.delete(throttleKey);
   cache.delete(clearKey);
 
-  cache.set(debounceKey, executor);
+  cache.set(throttleKey, executor);
   cache.set(clearKey, timerId);
 }

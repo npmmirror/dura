@@ -13,6 +13,7 @@ import { merge } from './merge';
 import { keys } from './keys';
 import throttle from 'lodash.throttle';
 import { debounceDispatch } from './debounceDispatch';
+import { throttleDispatch } from './throttleDispatch';
 
 export function createDispatch<S>(
   reduxStore: ReduxStore<S>,
@@ -31,14 +32,7 @@ export function createDispatch<S>(
     if (meta?.debounce) {
       debounceDispatch(cache, type, meta.debounce, dispatchFn);
     } else if (meta?.throttle) {
-      const throttleKey = `${type}/throttle`;
-      if (cache.has(throttleKey)) {
-        cache.get(throttleKey)();
-      } else {
-        const throttleDispatchFn = throttle(dispatchFn, meta.throttle);
-        cache.set(throttleKey, throttleDispatchFn);
-        throttleDispatchFn();
-      }
+      throttleDispatch(cache, type, meta.throttle, dispatchFn);
     } else {
       dispatchFn();
     }

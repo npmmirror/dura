@@ -12,6 +12,13 @@ export interface DebounceSettings {
   iife?: boolean;
 }
 
+export interface ThrottleSettings {
+  /** 需要延迟的毫秒数 */
+  wait?: number;
+  /** 是否立即执行 */
+  iife?: boolean;
+}
+
 export interface ConfiguraOptions {
   enhancers?: StoreEnhancer[];
   middlewares?: Middleware[];
@@ -31,12 +38,10 @@ export interface Reducer<S = JsonObject> {
   (state: S, action: Action): void | S;
 }
 
-export interface s extends DebounceSettings {}
-
 export interface Meta {
   loading?: boolean | string | number;
   debounce?: DebounceSettings;
-  throttle?: number;
+  throttle?: ThrottleSettings;
 }
 
 export type Action<P = any> = {
@@ -69,6 +74,8 @@ export interface StoreSlice<
   state: S;
   reducers?: R;
   effects?: E;
+  watchs?: any;
+  computed?: any;
 }
 
 export type ExtractStateByStoreUnion<T> = T extends StoreSlice<
