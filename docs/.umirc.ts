@@ -1,17 +1,17 @@
-import { defineConfig } from 'dumi';
+import { defineConfig, utils } from 'dumi';
 
 export default defineConfig({
   title: 'dura',
   // base: '/dura/',
   // publicPath: '/dura/',
 
-  favicon: 'https://dura.oss-cn-hangzhou.aliyuncs.com/kaixin.png',
-  logo: 'https://dura.oss-cn-hangzhou.aliyuncs.com/kaixin.png',
+  favicon: 'https://dura.oss-cn-hangzhou.aliyuncs.com/logo.png',
+  logo: 'https://dura.oss-cn-hangzhou.aliyuncs.com/logo.png',
   outputPath: 'docs-dist',
   mode: 'site',
   locales: [
-    ['en-US', 'English'],
     ['zh-CN', '中文'],
+    ['en-US', 'English'],
   ],
   // 多语言配置方式如下
   navs: {
@@ -40,4 +40,5 @@ export default defineConfig({
     ],
   },
   // more config: https://d.umijs.org/config
+  // plugins: ['@umijs/plugin-antd'],
 });
