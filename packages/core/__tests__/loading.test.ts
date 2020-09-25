@@ -62,6 +62,7 @@ describe('test core loading', function () {
   it('test loading', function (done) {
     const createStore = configura();
     const store = createStore(user);
+
     store.actions.user.onAsyncQuery(null, { loading: true });
     expect(store.getState().DURA.LOADING.user.onAsyncQuery.status).toBeTruthy();
     setTimeout(() => {
