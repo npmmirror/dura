@@ -10,13 +10,13 @@ describe('test throttleDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    dispatchThrottle(cache, type, meta, () => {
+    dispatchThrottle(cache, type, 500, () => {
       name = '1';
     });
-    dispatchThrottle(cache, type, meta, () => {
+    dispatchThrottle(cache, type, 500, () => {
       name = '2';
     });
-    dispatchThrottle(cache, type, meta, () => {
+    dispatchThrottle(cache, type, 500, () => {
       name = '3';
     });
     expect(name).toEqual('default');

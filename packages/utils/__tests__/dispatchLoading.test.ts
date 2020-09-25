@@ -21,11 +21,11 @@ describe('test throttleDispatch', function () {
     });
 
     expect(Object.keys(loading).length).toEqual(1);
-    expect(loading[`${type}/default`].status).toEqual(true);
+    expect(loading[`${type}`].status).toEqual(true);
     expect(name).toEqual('default');
 
     setTimeout(() => {
-      expect(loading[`${type}/default`].status).toEqual(false);
+      expect(loading[`${type}`].status).toEqual(false);
       expect(name).toEqual('xx');
       done();
     }, 1001);
@@ -46,16 +46,16 @@ describe('test throttleDispatch', function () {
     const deloy = (ms: number) =>
       new Promise((resolve, reject) => setTimeout(resolve, ms));
 
-    dispatchLoading(reduxStore as any, type, id, async () => {
+    dispatchLoading(reduxStore as any, type, { customizeId: id }, async () => {
       await deloy(1000);
       name = 'xx';
     });
     expect(Object.keys(loading).length).toEqual(1);
-    expect(loading[`${type}/${id}`].status).toEqual(true);
+    expect(loading[`${type}/customize/${id}`].status).toEqual(true);
     expect(name).toEqual('default');
 
     setTimeout(() => {
-      expect(loading[`${type}/${id}`].status).toEqual(false);
+      expect(loading[`${type}/customize/${id}`].status).toEqual(false);
       expect(name).toEqual('xx');
       done();
     }, 1001);
@@ -81,12 +81,12 @@ describe('test throttleDispatch', function () {
       name = 'xx';
     });
     expect(Object.keys(loading).length).toEqual(1);
-    expect(loading[`${type}/default`].status).toEqual(true);
+    expect(loading[`${type}`].status).toEqual(true);
     expect(name).toEqual('default');
 
     setTimeout(() => {
-      expect(loading[`${type}/default`].status).toEqual(false);
-      expect(loading[`${type}/default`].error.message).toEqual('error1111');
+      expect(loading[`${type}`].status).toEqual(false);
+      expect(loading[`${type}`].error.message).toEqual('error1111');
 
       expect(name).toEqual('default');
       done();

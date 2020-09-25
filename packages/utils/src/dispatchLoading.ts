@@ -1,9 +1,10 @@
 import type { Store as ReduxStore } from 'redux';
+import type { LoadingSettings } from '@dura/types';
 
 export async function dispatchLoading<S>(
   reduxStore: ReduxStore<S>,
   type: string,
-  loading: boolean | string | number,
+  loading: boolean | LoadingSettings,
   fn: () => any,
 ) {
   const dispatchTrue = (type: string) =>
@@ -42,7 +43,9 @@ export async function dispatchLoading<S>(
     });
 
   const finallyTyoe =
-    typeof loading === 'boolean' ? `${type}/default` : `${type}/${loading}`;
+    typeof loading === 'boolean'
+      ? `${type}`
+      : `${type}/customize/${loading.customizeId}`;
 
   try {
     dispatchTrue(finallyTyoe);

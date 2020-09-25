@@ -6,12 +6,13 @@ import type {
   UnionToIntersection,
   ExtractStateByStoreUnion,
   ExtractAction,
-  ExtractActionByEffect,
   ReducersMapOfStoreSlice,
   EffectsMapOfStoreSlice,
   CreateStoreReturn,
   EffectsMapOfStore,
   Action,
+  Loading,
+  ExtractLoadingTypes,
 } from '@dura/types';
 import {
   compose as reduxCompose,
@@ -43,21 +44,6 @@ export const defaultConfiguraOptions: ConfiguraOptions = {
 
 export * from './defineStoreSlice';
 
-type Loading = {
-  status: boolean;
-  error: Error;
-};
-
-type Demo<T> = T extends StoreSlice<infer N, infer S, infer R, infer E>
-  ? {
-      [K in N]: {
-        [EK in keyof E]: E[EK] extends (action?: Action<infer A>) => any
-          ? JsonObject<Loading> & { default: Loading }
-          : never;
-      };
-    }
-  : never;
-
 export function configura(options?: ConfiguraOptions) {
   return function create<
     N extends string,
@@ -68,7 +54,7 @@ export function configura(options?: ConfiguraOptions) {
     GA = UnionToIntersection<ExtractAction<STORES[number]>>,
     GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>> & {
       DURA: {
-        LOADING: UnionToIntersection<Demo<STORES[number]>>;
+        LOADING: UnionToIntersection<ExtractLoadingTypes<STORES[number]>>;
       };
     }
   >(...stores: STORES): CreateStoreReturn<GS, GA> {

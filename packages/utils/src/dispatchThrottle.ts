@@ -1,9 +1,9 @@
-import type { DebounceSettings } from '@dura/types';
+import type { ThrottleSettings } from '@dura/types';
 
 export function dispatchThrottle(
   cache: Map<string, any>,
   type: string,
-  debounceSettings: DebounceSettings,
+  throttleSettings: number | ThrottleSettings,
   fn: () => any,
 ) {
   const throttleKey = `${type}/throttle`;
@@ -14,22 +14,32 @@ export function dispatchThrottle(
     return;
   }
 
+  const wait =
+    typeof throttleSettings === 'number'
+      ? throttleSettings
+      : throttleSettings.wait;
+
+  const iife =
+    typeof throttleSettings === 'number'
+      ? false
+      : throttleSettings.iife ?? false;
+
   const timerId = setTimeout(() => {
     cache.delete(throttleKey);
     cache.delete(clearKey);
-  }, debounceSettings.wait);
+  }, wait);
 
-  if (debounceSettings.iife && !has) {
+  if (iife && !has) {
     fn();
     cache.set(
       throttleKey,
-      setTimeout(() => false, debounceSettings.wait),
+      setTimeout(() => false, wait),
     );
     cache.set(clearKey, timerId);
     return;
   }
 
-  const executor = setTimeout(fn, debounceSettings.wait);
+  const executor = setTimeout(fn, wait);
 
   clearTimeout(cache.get(throttleKey));
   clearTimeout(cache.get(clearKey));

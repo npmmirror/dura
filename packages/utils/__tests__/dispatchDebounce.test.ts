@@ -10,10 +10,10 @@ describe('test debounceDispatch', function () {
     let name = 'default';
 
     expect(name).toEqual('default');
-    dispatchDebounce(cache, type, meta, () => {
+    dispatchDebounce(cache, type, 500, () => {
       name = '1';
     });
-    dispatchDebounce(cache, type, meta, () => {
+    dispatchDebounce(cache, type, 500, () => {
       name = '2';
     });
     dispatchDebounce(cache, type, meta, () => {

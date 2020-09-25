@@ -14,7 +14,8 @@ export default defineStoreSlice({
       return state;
     },
     CHANGE_LOADING(state, action: Action<{ k: string; v: boolean }>) {
-      set(state.LOADING, action.payload.k.split('/'), action.payload.v);
+      const path = action.payload.k.split('/');
+      set(state.LOADING, path, action.payload.v);
     },
   },
   effects: {},
