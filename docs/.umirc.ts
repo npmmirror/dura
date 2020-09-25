@@ -10,8 +10,8 @@ export default defineConfig({
   outputPath: 'docs-dist',
   mode: 'site',
   locales: [
-    ['zh-CN', '中文'],
     ['en-US', 'English'],
+    ['zh-CN', '中文'],
   ],
   // 多语言配置方式如下
   navs: {
