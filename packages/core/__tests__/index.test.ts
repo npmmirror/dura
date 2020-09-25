@@ -47,47 +47,9 @@ const order = defineStoreSlice({
       return { ...state, name: action?.payload?.name };
     },
   },
-  effects: {},
 });
 
 describe('test dura-core', function () {
-  it('test customize loading', function (done) {
-    const createStore = configura();
-    const store = createStore(user);
-
-    const id = 11;
-
-    store.actions.user.onAsyncQuery(null, {
-      loading: {
-        customizeId: id,
-      },
-    });
-
-    expect(
-      store.getState().DURA.LOADING.user.onAsyncQuery.customize[id].status,
-    ).toBeTruthy();
-
-    setTimeout(() => {
-      expect(
-        store.getState().DURA.LOADING.user.onAsyncQuery.customize[id].status,
-      ).toBeFalsy();
-      done();
-    }, 501);
-  });
-
-  it('test loading', function (done) {
-    const createStore = configura();
-    const store = createStore(user);
-    store.actions.user.onAsyncQuery(null, { loading: true });
-    expect(store.getState().DURA.LOADING.user.onAsyncQuery.status).toBeTruthy();
-    setTimeout(() => {
-      expect(
-        store.getState().DURA.LOADING.user.onAsyncQuery.status,
-      ).toBeFalsy();
-      done();
-    }, 501);
-  });
-
   it('test create store', function () {
     const createStore = configura();
     const store = createStore(user);
