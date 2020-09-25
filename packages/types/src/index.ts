@@ -1,22 +1,26 @@
-import type {
-  StoreEnhancer,
-  Middleware,
-  Store as ReduxStore,
-  Action as ReduxAction,
-} from 'redux';
+import type { StoreEnhancer, Middleware, Store as ReduxStore } from 'redux';
+
+export interface Loading {
+  status: boolean;
+  error: Error;
+}
 
 export interface DebounceSettings {
   /** 需要延迟的毫秒数 */
-  wait?: number;
+  wait: number;
   /** 是否立即执行 */
   iife?: boolean;
 }
 
 export interface ThrottleSettings {
   /** 需要延迟的毫秒数 */
-  wait?: number;
+  wait: number;
   /** 是否立即执行 */
   iife?: boolean;
+}
+
+export interface LoadingSettings {
+  customizeId: string | number;
 }
 
 export interface ConfiguraOptions {
@@ -38,11 +42,19 @@ export interface Reducer<S = JsonObject> {
   (state: S, action: Action): void | S;
 }
 
-export interface Meta {
-  loading?: boolean | string | number;
-  debounce?: DebounceSettings;
-  throttle?: ThrottleSettings;
+export interface LoadingMeta {
+  loading: boolean | LoadingSettings;
 }
+
+export interface DebounceMeta {
+  debounce: number | DebounceSettings;
+}
+
+export interface ThrottleMeta {
+  throttle: number | ThrottleSettings;
+}
+
+export type Meta = LoadingMeta | DebounceMeta | ThrottleMeta;
 
 export type Action<P = any> = {
   payload: P;
@@ -112,6 +124,12 @@ export type ExtractActionByReducer<T> = T extends StoreSlice<
     }
   : never;
 
+export interface WrapTypesEffect<T> {
+  (payload?: T, meta?: LoadingMeta): void;
+  (payload?: T, meta?: DebounceMeta): void;
+  (payload?: T, meta?: ThrottleMeta): void;
+}
+
 export type ExtractActionByEffect<T> = T extends StoreSlice<
   infer N,
   infer S,
@@ -121,7 +139,22 @@ export type ExtractActionByEffect<T> = T extends StoreSlice<
   ? {
       [K in N]: {
         [EK in keyof E]: E[EK] extends (action?: Action<infer A>) => any
-          ? (payload?: A, meta?: Meta) => void
+          ? WrapTypesEffect<A>
+          : never;
+      };
+    }
+  : never;
+
+export type ExtractLoadingTypes<T> = T extends StoreSlice<
+  infer N,
+  infer S,
+  infer R,
+  infer E
+>
+  ? {
+      [K in N]: {
+        [EK in keyof E]: E[EK] extends (action?: Action<infer A>) => any
+          ? { status: boolean; error: Error; customize: JsonObject<Loading> }
           : never;
       };
     }

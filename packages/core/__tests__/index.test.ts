@@ -57,14 +57,19 @@ describe('test dura-core', function () {
 
     const id = 11;
 
-    store.actions.user.onAsyncQuery(null, { loading: id });
+    store.actions.user.onAsyncQuery(null, {
+      loading: {
+        customizeId: id,
+      },
+    });
 
     expect(
-      store.getState().DURA.LOADING.user.onAsyncQuery[id].status,
+      store.getState().DURA.LOADING.user.onAsyncQuery.customize[id].status,
     ).toBeTruthy();
+
     setTimeout(() => {
       expect(
-        store.getState().DURA.LOADING.user.onAsyncQuery[id].status,
+        store.getState().DURA.LOADING.user.onAsyncQuery.customize[id].status,
       ).toBeFalsy();
       done();
     }, 501);
@@ -74,12 +79,10 @@ describe('test dura-core', function () {
     const createStore = configura();
     const store = createStore(user);
     store.actions.user.onAsyncQuery(null, { loading: true });
-    expect(
-      store.getState().DURA.LOADING.user.onAsyncQuery.default.status,
-    ).toBeTruthy();
+    expect(store.getState().DURA.LOADING.user.onAsyncQuery.status).toBeTruthy();
     setTimeout(() => {
       expect(
-        store.getState().DURA.LOADING.user.onAsyncQuery.default.status,
+        store.getState().DURA.LOADING.user.onAsyncQuery.status,
       ).toBeFalsy();
       done();
     }, 501);
