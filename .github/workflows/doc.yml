@@ -2,9 +2,7 @@ name: doc
 
 on:
   push:
-    paths:
-      - "docs/**"
-      - ".github/workflows/**"
+    branches: [master]
 
 jobs:
   build:
