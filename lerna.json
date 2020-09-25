@@ -9,6 +9,8 @@
     },
     "cacheDir": ".changelog"
   },
-  "packages": ["packages/*"],
-  "version": "4.0.0-alpha.11"
+  "packages": [
+    "packages/*"
+  ],
+  "version": "4.0.0-alpha.12"
 }
