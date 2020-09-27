@@ -23,6 +23,11 @@ const user = defineStoreSlice({
     },
   },
   watchs: {
+    a: {
+      dep: (state) => [],
+      handler: function () {},
+      immudate: true,
+    },
     testW(state) {
       console.log('watch-->', state.name);
     },
@@ -34,6 +39,7 @@ const store = createStore(user);
 describe('test watch', function () {
   it('test plain watch', function () {
     store.actions.user.asyncChangeName({ name: 'xx1' });
+    store.actions.user.asyncChangeName({ name: 'xx2' });
     store.actions.user.asyncChangeName({ name: 'xx2' });
     store.actions.user.onChangeAge();
     expect(store.getState().user.name).toEqual('xx2');

@@ -23,6 +23,7 @@ import {
 import {
   keys,
   createProxy,
+  DURA_PATCHES_SYMBOL,
   DURA_STORE_EFFECTS,
   DURA_STORE_REDUCERS,
   createActionsFactory,
@@ -30,9 +31,9 @@ import {
 } from '@dura/utils';
 import invariant from 'invariant';
 import duraStoreSlice from './duraStoreSlice';
-import { DURA_PATCHES_SYMBOL } from '@dura/utils';
 import { createAsyncMiddleware } from '@dura/async';
 import { enablePatches, setAutoFreeze, produceWithPatches } from 'immer';
+import { createReducers } from './createReducers';
 
 enablePatches();
 setAutoFreeze(false);
@@ -85,50 +86,7 @@ export function configura(options?: ConfiguraOptions) {
           !UNSAFE_has(store),
           'store already exists, please note that the namespace needs to be unique!',
         );
-        globalReducers[store.namespace] = function (
-          state = store.state,
-          action,
-        ) {
-          const [, reducerName] = action.type.split('/');
-          const [nextState, patches] = produceWithPatches(function (
-            draftState,
-          ) {
-            store.reducers[reducerName]?.(draftState, action as any);
-          })(state);
-
-          const patchesOfStringify = patches.map(
-            (n) => `${store.namespace}.${n.path.join('.')}`,
-          );
-
-          defineHiddenConstantProperty(
-            nextState,
-            DURA_PATCHES_SYMBOL,
-            patchesOfStringify,
-          );
-
-          keys(store.watchs ?? {}).forEach((x) => {
-            let watch = store.watchs[x];
-            if (!watch || typeof watch !== 'function') {
-              return;
-            }
-            const PATHCHE: Map<string, number> = watch[DURA_PATCHES_SYMBOL];
-            const deps = new Map<string, number>();
-            const proxy = createProxy(nextState, deps, store.namespace);
-            if (PATHCHE?.size === 0 && patchesOfStringify?.length !== 0) {
-              watch(proxy);
-              defineHiddenConstantProperty(watch, DURA_PATCHES_SYMBOL, deps);
-              return;
-            }
-
-            if (patchesOfStringify.some((n: string) => PATHCHE.has(n))) {
-              watch(proxy);
-              defineHiddenConstantProperty(watch, DURA_PATCHES_SYMBOL, deps);
-              return;
-            }
-          });
-
-          return nextState;
-        };
+        globalReducers[store.namespace] = createReducers(store);
         globalWatchs[store.namespace] = store.watchs;
         globalEffects[store.namespace] = store.effects;
       }
