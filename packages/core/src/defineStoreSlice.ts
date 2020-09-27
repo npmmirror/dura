@@ -12,6 +12,8 @@ import {
   keys,
   merge,
   noop,
+  defineHiddenConstantProperty,
+  DURA_PATCHES_SYMBOL,
 } from '@dura/utils';
 import type { Store as ReduxStore } from 'redux';
 
@@ -59,6 +61,15 @@ export function defineStoreSlice<
           }
         },
       }))
+      .reduce(merge, noop()),
+    watchs: keys(store.watchs ?? {})
+      .map((x) => {
+        let fn = store.watchs[x];
+        defineHiddenConstantProperty(fn, DURA_PATCHES_SYMBOL, new Map());
+        return {
+          [x]: fn,
+        };
+      })
       .reduce(merge, noop()),
   };
 
