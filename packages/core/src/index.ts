@@ -21,10 +21,12 @@ import {
   createStore,
 } from 'redux';
 import {
-  defineHiddenConstantProperty,
+  keys,
+  createProxy,
   DURA_STORE_EFFECTS,
   DURA_STORE_REDUCERS,
   createActionsFactory,
+  defineHiddenConstantProperty,
 } from '@dura/utils';
 import invariant from 'invariant';
 import duraStoreSlice from './duraStoreSlice';
@@ -67,6 +69,7 @@ export function configura(options?: ConfiguraOptions) {
 
     const globalReducers: ReducersMapObject = {};
     const globalEffects: EffectsMapOfStore = {};
+    const globalWatchs: any = {};
 
     function UNSAFE_use<
       N extends string,
@@ -96,14 +99,37 @@ export function configura(options?: ConfiguraOptions) {
           const patchesOfStringify = patches.map(
             (n) => `${store.namespace}.${n.path.join('.')}`,
           );
+
           defineHiddenConstantProperty(
             nextState,
             DURA_PATCHES_SYMBOL,
             patchesOfStringify,
           );
+
+          keys(store.watchs ?? {}).forEach((x) => {
+            let watch = store.watchs[x];
+            if (!watch || typeof watch !== 'function') {
+              return;
+            }
+            const PATHCHE: Map<string, number> = watch[DURA_PATCHES_SYMBOL];
+            const deps = new Map<string, number>();
+            const proxy = createProxy(nextState, deps, store.namespace);
+            if (PATHCHE?.size === 0 && patchesOfStringify?.length !== 0) {
+              watch(proxy);
+              defineHiddenConstantProperty(watch, DURA_PATCHES_SYMBOL, deps);
+              return;
+            }
+
+            if (patchesOfStringify.some((n: string) => PATHCHE.has(n))) {
+              watch(proxy);
+              defineHiddenConstantProperty(watch, DURA_PATCHES_SYMBOL, deps);
+              return;
+            }
+          });
+
           return nextState;
         };
-
+        globalWatchs[store.namespace] = store.watchs;
         globalEffects[store.namespace] = store.effects;
       }
     }
