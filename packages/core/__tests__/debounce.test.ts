@@ -1,8 +1,6 @@
 import { defineStoreSlice, configura } from '../src';
 import { Action } from '@dura/types';
 
-const deloy = (ms: number) =>
-  new Promise((resolve, reject) => setTimeout(resolve, ms));
 const user = defineStoreSlice({
   namespace: 'user',
   state: {

@@ -86,7 +86,13 @@ export interface StoreSlice<
   state: S;
   reducers?: R;
   effects?: E;
-  watchs?: any;
+  watchs?: {
+    [name: string]: {
+      dep: (state: S) => any[];
+      handler: (state: S) => Promise<void>;
+      immediate?: boolean;
+    };
+  };
   computed?: any;
 }
 
