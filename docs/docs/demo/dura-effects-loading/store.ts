@@ -3,7 +3,7 @@ import user from './user.model';
 
 const createStore = configura();
 
-const next = createStore(user as any);
+const next = createStore(user);
 
 const globalStore = next();
 
