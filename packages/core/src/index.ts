@@ -21,9 +21,6 @@ import {
   createStore,
 } from 'redux';
 import {
-  keys,
-  createProxy,
-  DURA_PATCHES_SYMBOL,
   DURA_STORE_EFFECTS,
   DURA_STORE_REDUCERS,
   createActionsFactory,
@@ -32,8 +29,9 @@ import {
 import invariant from 'invariant';
 import duraStoreSlice from './duraStoreSlice';
 import { createAsyncMiddleware } from '@dura/async';
-import { enablePatches, setAutoFreeze, produceWithPatches } from 'immer';
+import { enablePatches, setAutoFreeze } from 'immer';
 import { createReducers } from './createReducers';
+import { createWatch } from './createWatch';
 
 enablePatches();
 setAutoFreeze(false);
@@ -86,7 +84,7 @@ export function configura(options?: ConfiguraOptions) {
           !UNSAFE_has(store),
           'store already exists, please note that the namespace needs to be unique!',
         );
-        globalReducers[store.namespace] = createReducers(store);
+        globalReducers[store.namespace] = createReducers(store, [createWatch]);
         globalWatchs[store.namespace] = store.watchs;
         globalEffects[store.namespace] = store.effects;
       }

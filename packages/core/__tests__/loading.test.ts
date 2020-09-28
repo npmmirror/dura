@@ -17,19 +17,6 @@ const user = defineStoreSlice({
       await deloy(500);
     },
   },
-
-  watchs: {
-    async hello0(state, prevState) {
-      console.log(state.name);
-    },
-
-    hello: {
-      handler: async function (state, prevState) {
-        console.log(state.name);
-      },
-      immediate: true,
-    },
-  },
 });
 
 const deloy = (ms: number) =>
