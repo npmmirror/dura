@@ -9,6 +9,7 @@ import type {
   ExtractAction,
   ExtractStateByStoreUnion,
   CreateStoreReturn,
+  ExtractLoadingTypes,
 } from '@dura/types';
 import { getUseMount } from './useMount';
 import { getUseMonitor } from './useMonitor';
@@ -16,7 +17,7 @@ import { createActionsFactory } from '@dura/utils';
 import { useMemo } from 'react';
 
 export interface Return<S, A> extends CreateStoreReturn<S, A> {
-  useMount: () => void;
+  // useMount: () => void;
   useStore: <T>(deps?: T[]) => S;
   useActions: () => A;
 }
@@ -46,35 +47,58 @@ export function configura(options?: ConfiguraOptions) {
     E extends EffectsMapOfStoreSlice,
     STORES extends StoreSlice<N, S, R, E>[] = StoreSlice<N, S, R, E>[],
     GA = UnionToIntersection<ExtractAction<STORES[number]>>,
-    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>>
-  >(...stores: STORES): Next<GS, GA> {
+    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>> & {
+      DURA: {
+        LOADING: UnionToIntersection<ExtractLoadingTypes<STORES[number]>>;
+      };
+    }
+  >(...stores: STORES): Return<GS, GA> {
     const createStore = coreConfigura(options);
 
     const duraStore = createStore(...stores);
+    const key = stores.map((n) => n.namespace).join('.');
 
-    return function next(...nextStores) {
-      const key = nextStores.map((n) => n.namespace).join('.');
+    // const moment = () => duraStore.use(...stores).refresh(key);
+    // const unMoment = () => duraStore.unUse(...stores).refresh(key);
 
-      const moment = () => duraStore.use(...nextStores).refresh(key);
-      const unMoment = () => duraStore.unUse(...nextStores).refresh(key);
+    // const useMount = getUseMount(moment, unMoment);
 
-      const useMount = getUseMount(moment, unMoment);
+    const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
 
-      const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
+    const useActions = function () {
+      const createActions = createActionsFactory(duraStore);
+      return useMemo(() => createActions(...stores, ...stores), []);
+    };
 
-      const useActions = function () {
-        const createActions = createActionsFactory(duraStore);
-        return useMemo(() => createActions(...stores, ...nextStores), []);
-      };
-
-      const duraReact = {
-        ...duraStore,
-        useMount,
-        useStore,
-        useActions,
-      };
-
-      return duraReact;
+    return {
+      ...duraStore,
+      useStore,
+      useActions,
     } as any;
+
+    // return function next(...nextStores) {
+    //   const key = nextStores.map((n) => n.namespace).join('.');
+
+    //   const moment = () => duraStore.use(...nextStores).refresh(key);
+    //   const unMoment = () => duraStore.unUse(...nextStores).refresh(key);
+
+    //   const useMount = getUseMount(moment, unMoment);
+
+    //   const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
+
+    //   const useActions = function () {
+    //     const createActions = createActionsFactory(duraStore);
+    //     return useMemo(() => createActions(...stores, ...nextStores), []);
+    //   };
+
+    //   const duraReact = {
+    //     ...duraStore,
+    //     useMount,
+    //     useStore,
+    //     useActions,
+    //   };
+
+    //   return duraReact;
+    // } as any;
   };
 }
