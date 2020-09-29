@@ -22,6 +22,10 @@ npm i @dura/react -S
 
 <code src="../example/dura-effects/index.tsx" >
 
+# 自动 loading
+
+<code src="../example/dura-effects-loading/index.tsx" >
+
 # 防抖
 
 <code src="../example/dura-effects-debounce/index.tsx" >
