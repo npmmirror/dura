@@ -9,6 +9,7 @@ export function getUseMonitor(key, reduxStore) {
     const storeProxyRef = useRef(
       createProxy(reduxStore.getState(), deps.current),
     );
+
     const storeOriginalRef = useRef(reduxStore.getState());
 
     const subscribe = useCallback(() => {
@@ -56,9 +57,14 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
   let index = -1;
   while (++index < values.length) {
     const patches = values[index][DURA_PATCHES_SYMBOL];
+    // console.log('patches:', patches);
+    // console.log('deps:', deps);
+    // console.log('\r\n');
     if (patches?.length > 0) {
-      //hasDependencies
-      return !patches.some((n: string) => deps.has(n));
+      return !patches.some((n: string) => {
+        const iterator = Array.from(deps.keys());
+        return iterator.some((k: string) => k.startsWith(n));
+      });
     }
   }
   return true;

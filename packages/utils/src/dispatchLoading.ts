@@ -14,7 +14,7 @@ export async function dispatchLoading<S>(
         k: type,
         v: {
           status: true,
-          error: undefined,
+          error: null,
         },
       },
     });
@@ -25,7 +25,7 @@ export async function dispatchLoading<S>(
         k: type,
         v: {
           status: false,
-          error: undefined,
+          error: null,
         },
       },
     });

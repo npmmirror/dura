@@ -1,8 +1,3 @@
-/**
- * title: effect 功能演示
- * desc: 这里展示的是effect相关功能演示
- */
-
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { render } from 'react-dom';
 import { Button } from 'antd';

@@ -49,7 +49,7 @@ export function defineStoreSlice<
       .map((x) => ({
         [x]: (action, reduxStore) => {
           const type = `${store.namespace}/${x}`;
-          const fn = () => store.effects[x](action);
+          const fn = async () => await store.effects[x](action);
           if (action.meta?.debounce) {
             dispatchDebounce(cache, type, action.meta.debounce, fn);
           } else if (action.meta?.throttle) {
