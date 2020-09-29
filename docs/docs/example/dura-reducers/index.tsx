@@ -1,18 +1,20 @@
 /**
- * title: effect 功能演示
- * desc: 这里展示的是effect相关功能演示
+ * title: 最基础的演示demo
+ * desc: 这里展示的是一个最基本、简单的演示demo
  */
 
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { render } from 'react-dom';
 import { Button } from 'antd';
-import { next, globalStore } from './store';
+import { store } from './store';
+
+type a = {};
 
 const App = () => {
-  const state = globalStore.useStore();
-  const actions = globalStore.actions;
+  const state = store.useStore();
+  const actions = store.actions;
   const onClick = React.useCallback(() => {
-    actions.user.onAsyncQuery({ name: `张三${Math.random()}` });
+    actions.user.onChangeName({ name: `张三${Math.random()}` });
   }, []);
   return (
     <>

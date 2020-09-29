@@ -9,7 +9,7 @@ group:
 
 在过去我们的工作中，虽然 dura 提供了大量的类型推导，但是依然逃脱不掉大量的 **样板代码**，让我们看一下下面的例子：
 
-<code src="../../../demo/mapStateToProps.tsx" inline />
+<code src="../../../example/mapStateToProps.tsx" inline />
 
 当然，我们能够理解规避无意义渲染的重要性，我们也了解 [react-redux](https://react-redux.js.org/) 内部使用的 [shallowEqual](https://github.com/reduxjs/react-redux/blob/58ae5edee510a2f2f3bc577f55057fe9142f2976/src/utils/shallowEqual.js)。但是针对如此的样板代码依然让我们长期的工作中备受折磨。我们试图去解决这个问题。
 

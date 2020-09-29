@@ -3,8 +3,6 @@ import user from './user.model';
 
 const createStore = configura();
 
-const next = createStore(user);
+const store = createStore(user);
 
-const globalStore = next();
-
-export { next, globalStore };
+export { store };
