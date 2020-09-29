@@ -45,13 +45,13 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
 ) {
   const values = Object.values(nextPropsStore);
 
-  if (
-    key &&
-    nextPropsStore['DURA'][DURA_PATCHES_SYMBOL].includes('DURA.REFRESH') &&
-    nextPropsStore['DURA']['REFRESH'].startsWith(key)
-  ) {
-    return false;
-  }
+  // if (
+  //   key &&
+  //   nextPropsStore['DURA'][DURA_PATCHES_SYMBOL].includes('DURA.REFRESH') &&
+  //   nextPropsStore['DURA']['REFRESH'].startsWith(key)
+  // ) {
+  //   return false;
+  // }
 
   let index = -1;
   while (++index < values.length) {

@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@dura/react": "^4.0.0-alpha.13",
+    "@dura/react": "^4.0.0-alpha.14",
     "antd": "^4.6.5",
     "lodash.isplainobject": "^4.0.6",
     "react": "^16.12.0",

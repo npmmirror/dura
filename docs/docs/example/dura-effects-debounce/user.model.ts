@@ -1,5 +1,5 @@
 import { defineStoreSlice, Action } from '@dura/react';
-import { globalStore } from './store';
+import { store } from './store';
 
 const deloy = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -16,8 +16,8 @@ const user = defineStoreSlice({
   },
   effects: {
     async onAsyncQuery(action: Action<{ name: string }>) {
-      await deloy(500);
-      globalStore.actions.user.onChangeName({ ...action.payload });
+      await deloy(2000);
+      store.actions.user.onChangeName({ ...action.payload });
     },
   },
 });

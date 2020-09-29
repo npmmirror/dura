@@ -1,21 +1,24 @@
 /**
- * title: 最基础的演示demo
- * desc: 这里展示的是一个最基本、简单的演示demo
+ * title: 防抖
+ * desc: 这里展示的是防抖
  */
 
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { render } from 'react-dom';
 import { Button } from 'antd';
-import { next, globalStore } from './store';
-
-type a = {};
+import { store } from './store';
 
 const App = () => {
-  const state = globalStore.useStore();
-  const actions = globalStore.actions;
+  const state = store.useStore([]);
+
+  const actions = store.actions;
   const onClick = React.useCallback(() => {
-    actions.user.onChangeName({ name: `张三${Math.random()}` });
+    actions.user.onAsyncQuery(
+      { name: `张三${Math.random()}` },
+      { debounce: 600 },
+    );
   }, []);
+  console.log(state);
+
   return (
     <>
       <h1>姓名：{state.user.name}</h1>
