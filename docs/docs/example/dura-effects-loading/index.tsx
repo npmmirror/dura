@@ -1,8 +1,3 @@
-/**
- * title: Loading 功能演示
- * desc: 这里展示的是Loading
- */
-
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Button } from 'antd';
 import { store } from './store';

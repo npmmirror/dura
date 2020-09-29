@@ -1,8 +1,3 @@
-/**
- * title: 最基础的演示demo
- * desc: 这里展示的是一个最基本、简单的演示demo
- */
-
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { render } from 'react-dom';
 import { Button } from 'antd';

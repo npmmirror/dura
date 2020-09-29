@@ -1,8 +1,3 @@
-/**
- * title: 防抖
- * desc: 这里展示的是防抖
- */
-
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Button } from 'antd';
 import { store } from './store';
