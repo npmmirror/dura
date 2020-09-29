@@ -14,7 +14,7 @@ export async function dispatchLoading<S>(
         k: type,
         v: {
           status: true,
-          error: undefined,
+          error: null,
         },
       },
     });
@@ -25,7 +25,7 @@ export async function dispatchLoading<S>(
         k: type,
         v: {
           status: false,
-          error: undefined,
+          error: null,
         },
       },
     });
@@ -48,6 +48,8 @@ export async function dispatchLoading<S>(
       : `${type}/customize/${loading.customizeId}`;
 
   try {
+    console.log('fn->', fn);
+
     dispatchTrue(finallyTyoe);
     await fn();
     dispatchFalse(finallyTyoe);

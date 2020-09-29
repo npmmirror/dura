@@ -12,7 +12,7 @@ export function createProxy<T extends object>(
       const value = Reflect.get(target, property, receiver);
 
       //如果不是我自身定义的属性
-      if (!target.hasOwnProperty(property)) {
+      if (!target.hasOwnProperty(property) && value !== void 0) {
         return value;
       }
       // 如果是 symbol 类型 则直接返回
@@ -23,9 +23,14 @@ export function createProxy<T extends object>(
       const path = caclPath(parentPath, property);
 
       if (isPlainObject(value) || Array.isArray(value)) {
-        defineHiddenConstantProperty(value, DURA_SYMBOL, 1);
+        // defineHiddenConstantProperty(value, DURA_SYMBOL, 1);
         return createProxy(value, deps, path);
       }
+
+      // if (value === undefined || value === null) {
+      //   defineHiddenConstantProperty({}, DURA_SYMBOL, 1);
+      //   return createProxy({}, deps, path);
+      // }
 
       const count = deps.get(path) + 1;
       if (isNaN(count)) {
