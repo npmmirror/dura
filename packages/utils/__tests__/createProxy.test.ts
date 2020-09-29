@@ -3,6 +3,7 @@ describe('test createProxy', function () {
   it('test proxy', function () {
     const target = {
       name: '张三',
+      user: {},
       orderList: [
         {
           id: 1,
@@ -24,11 +25,16 @@ describe('test createProxy', function () {
     proxy.orderList[0].id;
     expect(deps.size).toEqual(2);
     expect(deps.has('orderList.0.id')).toEqual(true);
+
     expect(proxy.toString()).toEqual('[object Object]');
     expect(proxy.orderList[DURA_SYMBOL]).toEqual(1);
     proxy.orderList[0].id;
     expect(deps.size).toEqual(2);
     expect(deps.has('orderList.0.id')).toEqual(true);
     expect(deps.get('orderList.0.id')).toEqual(2);
+    proxy.user?.name;
+    expect(deps.has('user.name')).toEqual(true);
+    proxy.user?.address?.name;
+    expect(deps.has('user.address')).toEqual(true);
   });
 });

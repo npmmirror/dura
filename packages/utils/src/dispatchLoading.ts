@@ -48,8 +48,6 @@ export async function dispatchLoading<S>(
       : `${type}/customize/${loading.customizeId}`;
 
   try {
-    console.log('fn->', fn);
-
     dispatchTrue(finallyTyoe);
     await fn();
     dispatchFalse(finallyTyoe);
