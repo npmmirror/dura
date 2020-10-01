@@ -9,7 +9,12 @@ const App = () => {
   const onClick = React.useCallback(() => {
     actions.user.onAsyncQuery(
       { name: `张三${Math.random()}` },
-      { debounce: 600 },
+      {
+        debounce: {
+          leading: true,
+          wait: 500,
+        },
+      },
     );
   }, []);
   console.log(state);

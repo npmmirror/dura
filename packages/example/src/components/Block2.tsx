@@ -20,7 +20,12 @@ function useBlock2() {
     //   id: index,
     //   streetAddress: faker.address.streetAddress(),
     // });
-    actions.user.onAsyncQuery(null, { loading: true });
+    actions.user.onAsyncQuery(null, {
+      debounce: {
+        leading: true,
+        wait: 500,
+      },
+    });
   }, []);
   return { onClick, index, onClickAsync };
 }
@@ -29,6 +34,8 @@ export default memo(function Block2(props) {
   const { onClick, onClickAsync } = useBlock2();
 
   const state = store.useStore();
+
+  const actions = store.useActions();
 
   console.log('block2', state.DURA.LOADING?.user?.onAsyncQuery?.status);
   return (

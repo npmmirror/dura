@@ -19,18 +19,14 @@ export function dispatchDebounce(
   const debounceFn =
     typeof debounceSettings === 'number'
       ? debounce(fn, debounceSettings)
-      : debounce(fn, debounceSettings.wait, {
-          leading: debounceSettings.leading ?? false,
-          maxWait: debounceSettings.maxWait ?? 0,
-          trailing: debounceSettings.trailing ?? true,
-        });
+      : debounce(fn, debounceSettings.wait, debounceSettings);
 
   function resetClearTime() {
     cache.get(clearKey) && clearTimeout(cache.get(clearKey));
     const timeId = setTimeout(() => {
       cache.delete(debounceKey);
       cache.delete(clearKey);
-    }, wait);
+    }, wait + 10);
     cache.set(clearKey, timeId);
   }
 

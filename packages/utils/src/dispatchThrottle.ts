@@ -19,10 +19,7 @@ export function dispatchThrottle(
   const throttleFn =
     typeof throttleSettings === 'number'
       ? throttle(fn, throttleSettings)
-      : throttle(fn, throttleSettings.wait, {
-          leading: throttleSettings.leading ?? true,
-          trailing: throttleSettings.trailing ?? true,
-        });
+      : throttle(fn, throttleSettings.wait, throttleSettings);
 
   function resetClearTime() {
     cache.get(clearKey) && clearTimeout(cache.get(clearKey));
