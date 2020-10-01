@@ -1,6 +1,6 @@
 {
   "name": "@dura/utils",
-  "version": "4.0.0-alpha.17",
+  "version": "4.0.0-alpha.18",
   "description": "",
   "main": "./lib/index.js",
   "publishConfig": {
@@ -14,15 +14,12 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    
-  },
   "peerDependencies": {
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@dura/types": "^4.0.0-alpha.17",
     "@dura/lub": "^4.0.0-alpha.11",
+    "@dura/types": "^4.0.0-alpha.17",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.throttle": "^4.1.6",
     "lodash.debounce": "^4.0.8",
