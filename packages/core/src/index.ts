@@ -10,8 +10,6 @@ import type {
   EffectsMapOfStoreSlice,
   CreateStoreReturn,
   EffectsMapOfStore,
-  Action,
-  Loading,
   ExtractLoadingTypes,
 } from '@dura/types';
 import {

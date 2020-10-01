@@ -10,9 +10,9 @@ const App = () => {
   const state = store.useStore();
   return (
     <div style={{ margin: '0px auto', height: 550, border: '1px solid gray' }}>
-      <Block1 />
+      {/* <Block1 /> */}
       <Block2 />
-      {state.user.isShowBlock3 ? <Block3 /> : null}
+      {/* {state.user.isShowBlock3 ? <Block3 /> : null} */}
       {/* <Block3 /> */}
     </div>
   );

@@ -63,46 +63,41 @@ const order = defineStoreSlice({
 });
 
 describe('test @dura/react', function () {
-  it('test basic store', function () {
-    const createStore = configura();
-    const store1 = createStore(user);
-
-    const hooks1 = renderHook(() => {
-      const store = store1.useStore();
-      const actions = store1.useActions();
-      store.user.name;
-      return {
-        store,
-        actions,
-      };
-    });
-
-    expect(hooks1.result.current.store.user.name).toEqual('张三');
-    act(() => {
-      hooks1.result.current.actions.user.onChangeName({
-        name: '李四',
-      });
-    });
-
-    expect(hooks1.result.current.store.user.name).toEqual('李四');
-    expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
-      'user.name',
-    ]);
-    act(() => {
-      hooks1.result.current.actions.user.onChangeName({
-        name: '王五',
-      });
-    });
-    expect(hooks1.result.current.store.user.name).toEqual('王五');
-    expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
-      'user.name',
-    ]);
-  });
-
+  // it('test basic store', function () {
+  //   const createStore = configura();
+  //   const store1 = createStore(user);
+  //   const hooks1 = renderHook(() => {
+  //     const store = store1.useStore();
+  //     const actions = store1.useActions();
+  //     store.user.name;
+  //     return {
+  //       store,
+  //       actions,
+  //     };
+  //   });
+  //   expect(hooks1.result.current.store.user.name).toEqual('张三');
+  //   act(() => {
+  //     hooks1.result.current.actions.user.onChangeName({
+  //       name: '李四',
+  //     });
+  //   });
+  //   expect(hooks1.result.current.store.user.name).toEqual('李四');
+  //   expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
+  //     'user.name',
+  //   ]);
+  //   act(() => {
+  //     hooks1.result.current.actions.user.onChangeName({
+  //       name: '王五',
+  //     });
+  //   });
+  //   expect(hooks1.result.current.store.user.name).toEqual('王五');
+  //   expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
+  //     'user.name',
+  //   ]);
+  // });
   // it('test next store', function () {
   //   const createStore = configura();
   //   const store2 = createStore(user);
-
   //   const hooks2 = renderHook(() => {
   //     const mount = store2.useMount();
   //     const store = store2.useStore();
@@ -131,7 +126,6 @@ describe('test @dura/react', function () {
   //       newName: '新的手机',
   //     });
   //   });
-
   //   expect(hooks2.result.current.store.order.skuSource[1].name).toEqual(
   //     '新的手机',
   //   );
@@ -140,7 +134,6 @@ describe('test @dura/react', function () {
   //     '新的手机',
   //   );
   //   hooks2.unmount();
-
   //   expect(store2.getState().order).toBeUndefined();
   //   expect(store2.actions.order).toBeUndefined();
   // });

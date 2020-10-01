@@ -31,7 +31,6 @@
   },
   "peerDependencies": {
     "immer": ">=7.0.0",
-    "invariant": ">=2.2.0",
     "react": ">=16.13.0",
     "redux": ">=4.0.0"
   },

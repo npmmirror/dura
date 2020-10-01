@@ -19,12 +19,13 @@ describe('test throttleDispatch', function () {
     expect(cache.size).toEqual(2);
     expect(cache.has('test/throttle')).toBeTruthy();
     expect(cache.has('test/throttle/clear')).toBeTruthy();
+
     setTimeout(() => {
       expect(name).toEqual(3);
       expect(cache.size).toEqual(0);
       expect(cache.has('test/throttle')).toBeFalsy();
       expect(cache.has('test/throttle/clear')).toBeFalsy();
-    }, 500);
+    }, 510);
 
     setTimeout(() => {
       dispatchThrottle(cache, type, 500, dispatch)(4);
@@ -39,8 +40,8 @@ describe('test throttleDispatch', function () {
         expect(cache.has('test/throttle')).toBeFalsy();
         expect(cache.has('test/throttle/clear')).toBeFalsy();
         done();
-      }, 600);
-    }, 500);
+      }, 510);
+    }, 510);
   });
 
   it('test iife throttle', function (done) {
@@ -68,7 +69,7 @@ describe('test throttleDispatch', function () {
       expect(cache.size).toEqual(0);
       expect(cache.has('test/throttle')).toBeFalsy();
       expect(cache.has('test/throttle/clear')).toBeFalsy();
-    }, 500);
+    }, 510);
 
     setTimeout(() => {
       dispatchThrottle(cache, type, meta, dispatch)(4);
@@ -83,7 +84,7 @@ describe('test throttleDispatch', function () {
         expect(cache.has('test/throttle')).toBeFalsy();
         expect(cache.has('test/throttle/clear')).toBeFalsy();
         done();
-      }, 500);
-    }, 500);
+      }, 512);
+    }, 510);
   });
 });

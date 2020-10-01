@@ -36,7 +36,6 @@ describe('test debounceDispatch', function () {
     const meta = {
       wait: 500,
       leading: true,
-      trailing: false,
     };
     let name = 'default';
     const dispatch = (nextName) => {
@@ -55,18 +54,18 @@ describe('test debounceDispatch', function () {
         expect(cache.has('test/debounce')).toBeFalsy();
         expect(cache.has('test/debounce/clear')).toBeFalsy();
         done();
-      }, 500);
-    }, 501);
+      }, 510);
+    }, 600);
 
     expect(name).toEqual(1);
     expect(cache.size).toEqual(2);
     expect(cache.has('test/debounce')).toBeTruthy();
     expect(cache.has('test/debounce/clear')).toBeTruthy();
     setTimeout(() => {
-      expect(name).toEqual(1);
+      expect(name).toEqual(3);
       expect(cache.size).toEqual(0);
       expect(cache.has('test/debounce')).toBeFalsy();
       expect(cache.has('test/debounce/clear')).toBeFalsy();
-    }, 500);
+    }, 510);
   });
 });

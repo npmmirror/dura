@@ -26,7 +26,7 @@ export function dispatchThrottle(
     const timeId = setTimeout(() => {
       cache.delete(throttleKey);
       cache.delete(clearKey);
-    }, wait);
+    }, wait + 10);
     cache.set(clearKey, timeId);
   }
 

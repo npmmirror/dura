@@ -35,8 +35,6 @@ export default memo(function Block2(props) {
 
   const state = store.useStore();
 
-  const actions = store.useActions();
-
   console.log('block2', state.DURA.LOADING?.user?.onAsyncQuery?.status);
   return (
     <div
