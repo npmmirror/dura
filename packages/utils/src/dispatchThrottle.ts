@@ -1,51 +1,45 @@
 import type { ThrottleSettings } from '@dura/types';
+import throttle from 'lodash.throttle';
 
 export function dispatchThrottle(
   cache: Map<string, any>,
   type: string,
   throttleSettings: number | ThrottleSettings,
-  fn: () => any,
+  fn: any,
 ) {
   const throttleKey = `${type}/throttle`;
   const clearKey = `${throttleKey}/clear`;
   const has = cache.has(throttleKey);
-
-  if (has) {
-    return;
-  }
 
   const wait =
     typeof throttleSettings === 'number'
       ? throttleSettings
       : throttleSettings.wait;
 
-  const iife =
+  const throttleFn =
     typeof throttleSettings === 'number'
-      ? false
-      : throttleSettings.iife ?? false;
+      ? throttle(fn, throttleSettings)
+      : throttle(fn, throttleSettings.wait, {
+          leading: throttleSettings.leading ?? true,
+          trailing: throttleSettings.trailing ?? true,
+        });
 
-  const timerId = setTimeout(() => {
-    cache.delete(throttleKey);
-    cache.delete(clearKey);
-  }, wait);
-
-  if (iife && !has) {
-    fn();
-    cache.set(
-      throttleKey,
-      setTimeout(() => false, wait),
-    );
-    cache.set(clearKey, timerId);
-    return;
+  function resetClearTime() {
+    cache.get(clearKey) && clearTimeout(cache.get(clearKey));
+    const timeId = setTimeout(() => {
+      cache.delete(throttleKey);
+      cache.delete(clearKey);
+    }, wait);
+    cache.set(clearKey, timeId);
   }
 
-  const executor = setTimeout(fn, wait);
+  if (has) {
+    resetClearTime();
+    return cache.get(throttleKey);
+  }
 
-  clearTimeout(cache.get(throttleKey));
-  clearTimeout(cache.get(clearKey));
-  cache.delete(throttleKey);
-  cache.delete(clearKey);
+  cache.set(throttleKey, throttleFn);
+  resetClearTime();
 
-  cache.set(throttleKey, executor);
-  cache.set(clearKey, timerId);
+  return throttleFn;
 }

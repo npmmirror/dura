@@ -8,15 +8,21 @@ export interface Loading {
 export interface DebounceSettings {
   /** 需要延迟的毫秒数 */
   wait: number;
-  /** 是否立即执行 */
-  iife?: boolean;
+  /** 指定在延迟开始前调用 */
+  leading?: boolean;
+  /** 设置 func 允许被延迟的最大值。 */
+  maxWait?: number;
+  /** 指定在延迟结束后调用 */
+  trailing?: boolean;
 }
 
 export interface ThrottleSettings {
   /** 需要延迟的毫秒数 */
   wait: number;
-  /** 是否立即执行 */
-  iife?: boolean;
+  /** 指定在延迟开始前调用 */
+  leading?: boolean;
+  /** 指定在延迟结束后调用 */
+  trailing?: boolean;
 }
 
 export interface LoadingSettings {

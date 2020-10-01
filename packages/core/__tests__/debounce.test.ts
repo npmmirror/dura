@@ -39,7 +39,8 @@ describe('test debounce', function () {
     const meta = {
       debounce: {
         wait: 50,
-        iife: true,
+        leading: true,
+        trailing: false,
       },
     };
     store.actions.user.asyncChangeName({ name: 'xx1' }, meta);
@@ -50,7 +51,7 @@ describe('test debounce', function () {
       expect(store.getState().user.name).not.toEqual('xx3');
       expect(store.getState().user.name).toEqual('xx1');
       setTimeout(() => {
-        expect(store.getState().user.name).toEqual('xx3');
+        expect(store.getState().user.name).toEqual('xx1');
         done();
       }, 10);
     }, 40);

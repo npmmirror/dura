@@ -26,12 +26,12 @@ describe('test throttle', function () {
     store.actions.user.asyncChangeName({ name: 'xx1' }, { throttle: 50 });
     store.actions.user.asyncChangeName({ name: 'xx2' }, { throttle: 50 });
     store.actions.user.asyncChangeName({ name: 'xx3' }, { throttle: 50 });
-    expect(store.getState().user.name).toEqual('default');
+    expect(store.getState().user.name).toEqual('xx1');
     setTimeout(() => {
       expect(store.getState().user.name).not.toEqual('xx3');
-      expect(store.getState().user.name).toEqual('default');
+      expect(store.getState().user.name).toEqual('xx1');
       setTimeout(() => {
-        expect(store.getState().user.name).toEqual('xx1');
+        expect(store.getState().user.name).toEqual('xx3');
         done();
       }, 10);
     }, 40);
@@ -41,7 +41,7 @@ describe('test throttle', function () {
     const meta = {
       throttle: {
         wait: 50,
-        iife: true,
+        leading: true,
       },
     };
     store.actions.user.asyncChangeName({ name: 'xx11' }, meta);
@@ -52,7 +52,7 @@ describe('test throttle', function () {
       expect(store.getState().user.name).not.toEqual('xx3');
       expect(store.getState().user.name).toEqual('xx11');
       setTimeout(() => {
-        expect(store.getState().user.name).toEqual('xx11');
+        expect(store.getState().user.name).toEqual('xx3');
         done();
       }, 10);
     }, 40);
