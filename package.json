@@ -33,6 +33,9 @@
     "tslib": "^2.0.1",
     "typescript": "^4.0.2"
   },
+  "dependencies": {
+    "react": "16.13.1"
+  },
   "peerDependencies": {
     "immer": "^7.0.9",
     "invariant": "^2.2.4",

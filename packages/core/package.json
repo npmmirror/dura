@@ -16,7 +16,10 @@
   "license": "MIT",
   "peerDependencies": {
     "immer": ">=7.0.0",
-    "redux": ">=4.0.0"
+    "redux": ">=4.0.0",
+    "@dura/types": "^4.0.0-alpha.17",
+    "@dura/utils": "^4.0.0-alpha.18",
+    "@dura/async": "^4.0.0-alpha.18"
   },
   "devDependencies": {
     "@dura/async": "^4.0.0-alpha.18",
