@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "doc",
-  "version": "4.0.0-alpha.19",
+  "version": "4.0.0-alpha.20",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "@dura/react": "^4.0.0-alpha.19",
+    "@dura/react": "^4.0.0-alpha.20",
     "antd": "^4.6.5",
     "redux": "^4.0.5"
   },
