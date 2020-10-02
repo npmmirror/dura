@@ -63,38 +63,38 @@ const order = defineStoreSlice({
 });
 
 describe('test @dura/react', function () {
-  // it('test basic store', function () {
-  //   const createStore = configura();
-  //   const store1 = createStore(user);
-  //   const hooks1 = renderHook(() => {
-  //     const store = store1.useStore();
-  //     const actions = store1.useActions();
-  //     store.user.name;
-  //     return {
-  //       store,
-  //       actions,
-  //     };
-  //   });
-  //   expect(hooks1.result.current.store.user.name).toEqual('张三');
-  //   act(() => {
-  //     hooks1.result.current.actions.user.onChangeName({
-  //       name: '李四',
-  //     });
-  //   });
-  //   expect(hooks1.result.current.store.user.name).toEqual('李四');
-  //   expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
-  //     'user.name',
-  //   ]);
-  //   act(() => {
-  //     hooks1.result.current.actions.user.onChangeName({
-  //       name: '王五',
-  //     });
-  //   });
-  //   expect(hooks1.result.current.store.user.name).toEqual('王五');
-  //   expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
-  //     'user.name',
-  //   ]);
-  // });
+  it('test basic store', function () {
+    const createStore = configura();
+    const store1 = createStore(user);
+    const hooks1 = renderHook(() => {
+      const store = store1.useStore();
+      const actions = store1.useActions();
+      store.user.name;
+      return {
+        store,
+        actions,
+      };
+    });
+    expect(hooks1.result.current.store.user.name).toEqual('张三');
+    act(() => {
+      hooks1.result.current.actions.user.onChangeName({
+        name: '李四',
+      });
+    });
+    expect(hooks1.result.current.store.user.name).toEqual('李四');
+    expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
+      'user.name',
+    ]);
+    act(() => {
+      hooks1.result.current.actions.user.onChangeName({
+        name: '王五',
+      });
+    });
+    expect(hooks1.result.current.store.user.name).toEqual('王五');
+    expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
+      'user.name',
+    ]);
+  });
   // it('test next store', function () {
   //   const createStore = configura();
   //   const store2 = createStore(user);
