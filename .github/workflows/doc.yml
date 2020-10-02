@@ -14,8 +14,9 @@ jobs:
           node-version: "13.10.1"
       - name: Build docs
         run: |
+          npm i
           cd packages/docs
-          npm install
+          npm i
           npm run docs:build
       - uses: manyuanrong/setup-ossutil@v1.0
         with:
