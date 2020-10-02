@@ -140,11 +140,13 @@ export function configura(options?: ConfiguraOptions) {
       actions: globalActions,
       ...reduxStore,
     };
+
     defineHiddenConstantProperty(
       duraStore,
       DURA_STORE_REDUCERS,
       globalReducers,
     );
+
     defineHiddenConstantProperty(duraStore, DURA_STORE_EFFECTS, globalEffects);
 
     function refresh(prefix: string) {

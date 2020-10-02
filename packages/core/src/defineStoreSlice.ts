@@ -14,7 +14,6 @@ import {
   defineHiddenConstantProperty,
   DURA_PATCHES_SYMBOL,
 } from '@dura/utils';
-import type { Store as ReduxStore } from 'redux';
 
 export type WrapStoreSlice<N, S, R, E> = {
   namespace: N;

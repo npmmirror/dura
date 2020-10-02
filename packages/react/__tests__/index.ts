@@ -12,10 +12,14 @@ const user = defineStoreSlice({
   state: {
     /** 姓名 */
     name: '张三',
+    age: 12,
   },
   reducers: {
     onChangeName(state, action: Action<{ name: string }>) {
       state.name = action.payload.name;
+    },
+    onChangeAge(state, action: Action<{ newAge: number }>) {
+      state.age = action.payload.newAge;
     },
   },
   effects: {
@@ -94,6 +98,8 @@ describe('test @dura/react', function () {
     expect(hooks1.result.current.store.user[DURA_PATCHES_SYMBOL]).toEqual([
       'user.name',
     ]);
+
+    act(() => hooks1.result.current.actions.user.onChangeAge({ newAge: 12 }));
   });
   // it('test next store', function () {
   //   const createStore = configura();
