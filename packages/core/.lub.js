@@ -5,7 +5,6 @@ export default defineRollupConfigura({
   external: [
     'redux',
     'immer',
-    'invariant',
     '@dura/utils',
     '@dura/async',
     '@dura/types',

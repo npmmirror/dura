@@ -1,12 +1,11 @@
 {
   "private": true,
   "name": "doc",
-  "version": "1.0.0",
+  "version": "4.0.0-alpha.19",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
-    "build": "father-build",
     "deploy": "npm run docs:build && npm run docs:deploy",
     "release": "npm run build && npm publish",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
@@ -28,10 +27,8 @@
     ]
   },
   "dependencies": {
-    "@dura/react": "^4.0.0-alpha.16",
+    "@dura/react": "^4.0.0-alpha.19",
     "antd": "^4.6.5",
-    "lodash.isplainobject": "^4.0.6",
-    "react": "^16.12.0",
     "redux": "^4.0.5"
   },
   "devDependencies": {

@@ -5,5 +5,5 @@ export default defineRollupConfigura({
   globals: {
     isPlainObject: 'lodash.isplainobject',
   },
-  external: ['lodash.isplainobject', 'react', 'immer', 'invariant', 'redux'],
+  external: ['react', 'immer', 'redux'],
 });

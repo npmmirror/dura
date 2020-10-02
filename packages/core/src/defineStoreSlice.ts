@@ -47,13 +47,23 @@ export function defineStoreSlice<
     ...store,
     effects: keys(store.effects ?? {})
       .map((x) => ({
-        [x]: (action, reduxStore) => {
+        [x]: async (action, reduxStore) => {
           const type = `${store.namespace}/${x}`;
           const fn = async () => await store.effects[x](action);
           if (action.meta?.debounce) {
-            dispatchDebounce(cache, type, action.meta.debounce, fn);
+            await dispatchDebounce(
+              cache,
+              type,
+              action.meta.debounce,
+              store.effects[x],
+            )(action);
           } else if (action.meta?.throttle) {
-            dispatchThrottle(cache, type, action.meta.throttle, fn);
+            await dispatchThrottle(
+              cache,
+              type,
+              action.meta.throttle,
+              store.effects[x],
+            )(action);
           } else if (action.meta?.loading) {
             dispatchLoading(reduxStore, type, action.meta.loading, fn);
           } else {

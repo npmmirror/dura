@@ -10,7 +10,6 @@ export function createProxy<T extends object>(
   const proxy = new Proxy(state, {
     get(target, property, receiver) {
       const value = Reflect.get(target, property, receiver);
-      console.log('createProxy', property, value);
 
       //如果不是我自身定义的属性
       if (!target.hasOwnProperty(property) && value !== void 0) {

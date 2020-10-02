@@ -20,7 +20,12 @@ function useBlock2() {
     //   id: index,
     //   streetAddress: faker.address.streetAddress(),
     // });
-    actions.user.onAsyncQuery(null, { loading: true });
+    actions.user.onAsyncQuery(null, {
+      debounce: {
+        leading: true,
+        wait: 500,
+      },
+    });
   }, []);
   return { onClick, index, onClickAsync };
 }
