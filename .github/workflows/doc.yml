@@ -27,5 +27,5 @@ jobs:
           access-key-secret: ${{ secrets.ACCESS_KEY_SECRET }}
       - name: Deply To OSS
         run: |
-          cd docs
+          cd packages/docs
           ossutil cp docs-dist oss://dura/ -rf
