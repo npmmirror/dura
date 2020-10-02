@@ -11,13 +11,11 @@ import type {
   CreateStoreReturn,
   ExtractLoadingTypes,
 } from '@dura/types';
-import { getUseMount } from './useMount';
 import { getUseMonitor } from './useMonitor';
 import { createActionsFactory } from '@dura/utils';
 import { useMemo } from 'react';
 
 export interface Return<S, A> extends CreateStoreReturn<S, A> {
-  // useMount: () => void;
   useStore: <T>(deps?: T[]) => S;
   useActions: () => A;
 }
@@ -58,11 +56,6 @@ export function configura(options?: ConfiguraOptions) {
     const duraStore = createStore(...stores);
     const key = stores.map((n) => n.namespace).join('.');
 
-    // const moment = () => duraStore.use(...stores).refresh(key);
-    // const unMoment = () => duraStore.unUse(...stores).refresh(key);
-
-    // const useMount = getUseMount(moment, unMoment);
-
     const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
 
     const useActions = function () {
@@ -75,30 +68,5 @@ export function configura(options?: ConfiguraOptions) {
       useStore,
       useActions,
     } as any;
-
-    // return function next(...nextStores) {
-    //   const key = nextStores.map((n) => n.namespace).join('.');
-
-    //   const moment = () => duraStore.use(...nextStores).refresh(key);
-    //   const unMoment = () => duraStore.unUse(...nextStores).refresh(key);
-
-    //   const useMount = getUseMount(moment, unMoment);
-
-    //   const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
-
-    //   const useActions = function () {
-    //     const createActions = createActionsFactory(duraStore);
-    //     return useMemo(() => createActions(...stores, ...nextStores), []);
-    //   };
-
-    //   const duraReact = {
-    //     ...duraStore,
-    //     useMount,
-    //     useStore,
-    //     useActions,
-    //   };
-
-    //   return duraReact;
-    // } as any;
   };
 }
