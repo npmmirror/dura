@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "4.0.0-alpha.20",
+  "version": "4.0.0-alpha.21",
   "description": "> TODO: description",
   "author": "ityuany <519495771@qq.com>",
   "homepage": "https://github.com/ityuany/dura#readme",
@@ -61,7 +61,7 @@
     "webpackbar": "^4.0.0"
   },
   "dependencies": {
-    "@dura/react": "^4.0.0-alpha.20",
+    "@dura/react": "^4.0.0-alpha.21",
     "@soapi/schema": "^1.1.37",
     "@umijs/hooks": "^1.9.3",
     "antd": "^4.5.1",
@@ -71,7 +71,6 @@
     "lodash": "^4.17.19",
     "lodash.isplainobject": "^4.0.6",
     "proxy-frozen-object": "^1.0.1",
-    "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",

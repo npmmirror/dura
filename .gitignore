@@ -1,6 +1,12 @@
 packages/**/coverage
 packages/**/lib
 packages/**/node_modules
+packages/**/dist
+packages/**/docs-dist
+packages/**/.umi
+packages/**/.umi-production
+packages/**/.umi-test
+packages/**/.env.local
 node_modules
 coverage
 .coveralls.yml
