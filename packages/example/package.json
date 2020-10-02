@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "4.0.0-alpha.19",
+  "version": "4.0.0-alpha.20",
   "description": "> TODO: description",
   "author": "ityuany <519495771@qq.com>",
   "homepage": "https://github.com/ityuany/dura#readme",
@@ -61,7 +61,7 @@
     "webpackbar": "^4.0.0"
   },
   "dependencies": {
-    "@dura/react": "^4.0.0-alpha.19",
+    "@dura/react": "^4.0.0-alpha.20",
     "@soapi/schema": "^1.1.37",
     "@umijs/hooks": "^1.9.3",
     "antd": "^4.5.1",
