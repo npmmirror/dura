@@ -15,48 +15,31 @@
 [![IMMER](https://img.shields.io/npm/dependency-version/@dura/react/peer/immer?logo=twoo&logoColor=44B89D&style=flat&color=44B89D)](https://immerjs.github.io/immer/docs/introduction)
 [![TYPESCRIPT](https://img.shields.io/github/package-json/dependency-version/ityuany/dura/dev/typescript/master?logo=typescript&style=flat)](https://www.typescriptlang.org/)
 
-[_点我去看 4.0.0 开发者预览版演示 demo_](https://codesandbox.io/s/dura4x-bcme2?file=/src/App.tsx)
+[_官网文档_](https://dura.onecoc.com/)
 
 **4.0.0 特性开发计划**
 
-- 更加友好的 ts 类型推导
-- 完善的依赖收集
-- 完善的 hooks api 支持
-- 状态机 watch 机制
-- 状态机 computed 机制
-- 对微前端更加友好的支持
-- 多 store 的友好支持
-- auto-loaing 全新的设计机制（支持针对同一个 effect 按照不同的 key 来区分 loading 状态 ）
-- 状态机内置可动态配置化的 节流 和 防抖
-- 鲁班 统一打包、测试逻辑
+- 🚀 ✅ 完善友好的 [**typescript**](https://www.typescriptlang.org/) 类型推导。
+- 💥 ✅ 依赖收集、从此告别 [**mapStateToProps**](https://react-redux.js.org/api/connect)，早点下班。
+- 🔨 ✅ 完善的 [**hooks api**](https://reactjs.org/docs/hooks-intro.html) 支持。
+- 🗳️ ✅ 对 [**微前端**](https://micro-frontends.org/) 友好。
+- 👬 ✅ 支持多个 **Store** 实例。
+- 💫 ✅ **super-auto-loading**，支持针对同一个 effect 按照不同的 key 来区分不同的 loading 状态。
+- 🚰 ✅ 内置命令式 [**节流**](https://css-tricks.com/debouncing-throttling-explained-examples/) 方案
+- 🙈 ✅ 内置命令式 [**防抖**](https://css-tricks.com/debouncing-throttling-explained-examples/) 方案
+- 👀 ✅ 内置 **状态监听器**
+- 🎮 ❌ 内置 **记忆函数**
+- 👩‍❤️‍💋‍👩 ❌ 内置 **双向状态绑定**
 
 **让人痛哭流涕、老泪纵横的开发体验**
 
-- 基于 [redux](https://github.com/reduxjs/redux) 插件化、可拔插 的前端数据流管理框架。
+- 基于 [redux](https://github.com/reduxjs/redux)
 
-- 灵感来源于 [dva](https://github.com/dvajs/dva)、[mirror](https://github.com/mirrorjs/mirror)、[rematch](https://github.com/rematch/rematch)
+- 灵感来源于 [dva](https://github.com/dvajs/dva)、[mirror](https://github.com/mirrorjs/mirror)、[rematch](https://github.com/rematch/rematch)、[vue](https://cn.vuejs.org/index.html)
 
 - 遵循[Semantic Versioning 2.0.0](https://semver.org/lang/zh-CN/) 语义化版本规范。
 
-- 不想写详细的文档，一切看 demo，本身也没太多复杂的功能
-
 ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-l.gif?raw=true) ![](https://github.com/CN-YUANYU/dura/blob/v2.x/image/timg-r.gif?raw=true)
-
-## 文档
-
-    本文假设你至少掌握redux ， 最好掌握dvajs
-
-    我们遵循dvajs的model设计，在实际业务考量中，我们发现单纯的reducers事实上难以完成一个业务行为。
-
-    因为我们大多数的业务都伴随着与服务端的交互，也就是说，我们一定会产生effects。
-
-    在过去，我们尝试过 dvajs 框架，我们发现如果项目没有进行合适的领域划分，拆分成足够小的业务单元，
-
-    那么项目成长的一定程度的时候将是灾难，因为 dispatch action 的type属性会让项目充斥着大量的魔鬼字符串，
-
-    当然，你也可以说定义常量来解决这个问题，但是这样意味着我们需要额外产生大量的样板代码。
-
-    至此，我们利用typescript与redux完美结合，产生了一些化学反应。
 
 ## 技术支持
 

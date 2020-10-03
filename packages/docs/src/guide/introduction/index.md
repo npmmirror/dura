@@ -25,7 +25,7 @@ Since the birth of dura, as of the time you read this document, a total of 4 maj
 - 💫 ✅ **super-auto-loading**, supports different loading states for the same effect according to different keys.
 - 🚰 ✅ Built-in imperative [**throttling**](https://css-tricks.com/debouncing-throttling-explained-examples/) scheme
 - 🙈 ✅ Built-in imperative [**debouncing**](https://css-tricks.com/debouncing-throttling-explained-examples/) solution
-- 👀 ❌ Built-in **Status Listener**
+- 👀 ✅ Built-in **Status Listener**
 - 🎮 ❌ Built-in **memory function**
 - 👩‍❤️‍💋‍👩 ❌ Built-in **two-way state binding**
 
