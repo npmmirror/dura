@@ -33,7 +33,7 @@ describe('test throttle', function () {
       setTimeout(() => {
         expect(store.getState().user.name).toEqual('xx3');
         done();
-      }, 10);
+      }, 15);
     }, 40);
   });
 

@@ -101,46 +101,4 @@ describe('test @dura/react', function () {
 
     act(() => hooks1.result.current.actions.user.onChangeAge({ newAge: 12 }));
   });
-  // it('test next store', function () {
-  //   const createStore = configura();
-  //   const store2 = createStore(user);
-  //   const hooks2 = renderHook(() => {
-  //     const mount = store2.useMount();
-  //     const store = store2.useStore();
-  //     const actions = store2.useActions();
-  //     store.order.id;
-  //     store.order.skuSource.forEach((n) => {
-  //       n.name;
-  //       n.id;
-  //       n.price;
-  //     });
-  //     return { mount, store, actions };
-  //   });
-  //   expect(hooks2.result.current.store.order.id).toEqual(12);
-  //   act(() => {
-  //     hooks2.result.current.actions.order.onChangeId({
-  //       id: 99,
-  //     });
-  //   });
-  //   expect(hooks2.result.current.store.order.id).toEqual(99);
-  //   expect(hooks2.result.current.store.order[DURA_PATCHES_SYMBOL]).toEqual([
-  //     'order.id',
-  //   ]);
-  //   act(() => {
-  //     hooks2.result.current.actions.order.onChangeSku({
-  //       id: 2,
-  //       newName: '新的手机',
-  //     });
-  //   });
-  //   expect(hooks2.result.current.store.order.skuSource[1].name).toEqual(
-  //     '新的手机',
-  //   );
-  //   hooks2.rerender();
-  //   expect(hooks2.result.current.store.order.skuSource[1].name).toEqual(
-  //     '新的手机',
-  //   );
-  //   hooks2.unmount();
-  //   expect(store2.getState().order).toBeUndefined();
-  //   expect(store2.actions.order).toBeUndefined();
-  // });
 });

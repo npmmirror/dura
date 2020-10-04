@@ -31,7 +31,7 @@ describe('test debounce', function () {
       setTimeout(() => {
         expect(store.getState().user.name).toEqual('xx3');
         done();
-      }, 10);
+      }, 16);
     }, 40);
   });
 
