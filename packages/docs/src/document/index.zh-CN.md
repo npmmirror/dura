@@ -33,7 +33,3 @@ npm i @dura/react -S
 # 节流
 
 <code title="节流" desc="这里展示的是节流" src="../example/dura-effects-throttle/index.tsx" >
-
-# watches
-
-<code title="节流" desc="这里展示的是节流" src="../example/dura-watch/index.tsx" >

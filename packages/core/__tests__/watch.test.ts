@@ -28,6 +28,12 @@ const user = defineStoreSlice({
       },
       immediate: true,
     },
+    b: {
+      dep: (state) => [state.age],
+      handler: async (state) => {
+        console.log(state.age);
+      },
+    },
   },
 });
 const createStore = configura();
@@ -35,10 +41,10 @@ const store = createStore(user);
 
 describe('test watch', function () {
   it('test plain watch', function () {
-    store.actions.user.asyncChangeName({ name: 'xx1' });
-    store.actions.user.asyncChangeName({ name: 'xx2' });
-    store.actions.user.onChangeName({ name: 'xx2' });
-    expect(store.getState().user.name).toEqual('xx2');
-    expect(store.getState().user.age).toEqual(12);
+    // store.actions.user.asyncChangeName({ name: 'xx1' });
+    // store.actions.user.asyncChangeName({ name: 'xx2' });
+    // store.actions.user.onChangeName({ name: 'xx2' });
+    // expect(store.getState().user.name).toEqual('xx2');
+    // expect(store.getState().user.age).toEqual(12);
   });
 });

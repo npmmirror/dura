@@ -1,6 +1,6 @@
 import { DURA_PATCHES_SYMBOL, defineHiddenConstantProperty } from '@dura/utils';
 import { produceWithPatches } from 'immer';
-export function createReducers(store, interceptors) {
+export function createReducers(store) {
   return function (state = store.state, action) {
     const [, reducerName] = action.type.split('/');
     const [nextState, patches] = produceWithPatches(function (draftState) {
@@ -12,10 +12,6 @@ export function createReducers(store, interceptors) {
     );
 
     defineHiddenConstantProperty(nextState, DURA_PATCHES_SYMBOL, stringPatches);
-
-    Promise.resolve().then(() =>
-      interceptors?.forEach((fn) => fn(store, nextState, state, stringPatches)),
-    );
 
     return nextState;
   };

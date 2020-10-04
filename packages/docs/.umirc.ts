@@ -1,7 +1,9 @@
 import { defineConfig, utils } from 'dumi';
 
+const version = require('./package.json')['dependencies']['@dura/react'];
+
 export default defineConfig({
-  title: 'dura',
+  title: `dura ${version.replace('^', '')}`,
   // base: '/dura/',
   // publicPath: '/dura/',
 

@@ -21,7 +21,9 @@ import {
 import {
   DURA_STORE_EFFECTS,
   DURA_STORE_REDUCERS,
+  DURA_PATCHES_SYMBOL,
   createActionsFactory,
+  createProxy,
   defineHiddenConstantProperty,
 } from '@dura/utils';
 import invariant from 'invariant';
@@ -82,7 +84,7 @@ export function configura(options?: ConfiguraOptions) {
           !UNSAFE_has(store),
           'store already exists, please note that the namespace needs to be unique!',
         );
-        globalReducers[store.namespace] = createReducers(store, [createWatch]);
+        globalReducers[store.namespace] = createReducers(store);
         globalWatchs[store.namespace] = store.watchs;
         globalEffects[store.namespace] = store.effects;
       }
@@ -175,6 +177,28 @@ export function configura(options?: ConfiguraOptions) {
       reduxStore.replaceReducer(combineReducers(globalReducers));
       return duraStore;
     }
+
+    // stores.forEach((x) => {
+    //   Object.entries(x.watchs).forEach(([, watch]) => {
+    //     const deps = new Map<string, number>();
+    //     const currState = reduxStore.getState()[x.namespace];
+    //     const proxy = createProxy(currState, deps, x.namespace);
+    //     watch.dep(proxy);
+    //     defineHiddenConstantProperty(watch, DURA_PATCHES_SYMBOL, deps);
+    //     if (watch.immediate) {
+    //       setTimeout(() => watch.handler(proxy), 0);
+    //     }
+    //   });
+    // });
+
+    // reduxStore.subscribe(() => {
+    //   Object.entries(reduxStore.getState()).map(([k, v]) => {
+    //     const store = stores.find((n) => n.namespace === k);
+    //     if (store) {
+    //       createWatch(store, v, null, v[DURA_PATCHES_SYMBOL]);
+    //     }
+    //   });
+    // });
 
     return duraStore as any;
   };

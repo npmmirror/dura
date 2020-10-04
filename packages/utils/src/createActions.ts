@@ -17,41 +17,12 @@ export function createDispatch<S>(
   namespace: string,
   methodName: string,
 ) {
-  const cache = new Map<string, any>();
-
-  return function (payload, meta?: Meta) {
+  const dispatchFn = function (payload, meta?: Meta) {
     const type = `${namespace}/${methodName}`;
     reduxStore.dispatch({ type, payload, meta });
-    // const dispatchFn = () =>
-    //   reduxStore.dispatch({
-    //     type: `${namespace}/${methodName}`,
-    //     payload,
-    //   });
-    // if (meta?.debounce) {
-    //   dispatchDebounce(cache, type, meta.debounce, dispatchFn);
-    // } else if (meta?.throttle) {
-    //   dispatchThrottle(cache, type, meta.throttle, dispatchFn);
-    // } else if (meta?.loading) {
-    //   if (typeof meta?.loading === 'boolean') {
-    //     reduxStore.dispatch({
-    //       type: 'DURA/CHANGE_LOADING',
-    //       payload: {
-    //         k: type,
-    //         value: true,
-    //       },
-    //     });
-    //     reduxStore.dispatch({
-    //       type: 'DURA/CHANGE_LOADING',
-    //       payload: {
-    //         k: type,
-    //         value: false,
-    //       },
-    //     });
-    //   }
-    // } else {
-    //   dispatchFn();
-    // }
   };
+
+  return dispatchFn;
 }
 
 export function createActionsFactory<S>(reduxStore: ReduxStore<S>) {
