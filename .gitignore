@@ -1,16 +1,21 @@
-packages/**/coverage
-packages/**/lib
-packages/**/node_modules
-packages/**/dist
-packages/**/docs-dist
-packages/**/.umi
-packages/**/.umi-production
-packages/**/.umi-test
-packages/**/.env.local
-node_modules
-coverage
-.coveralls.yml
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# dependencies
+/node_modules
+/npm-debug.log*
+/yarn-error.log
+/yarn.lock
+/package-lock.json
+
+# production
+/dist
+/docs-dist
+
+# misc
 .DS_Store
 
-
+# umi
+.umi
+.umi-production
+.umi-test
+.env.local

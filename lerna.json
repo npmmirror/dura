@@ -1,16 +1,4 @@
 {
-  "changelog": {
-    "labels": {
-      "enhancement": ":rocket: Enhancement",
-      "bug": ":bug: Bug Fix",
-      "documentation": ":book: Documentation",
-      "dependency": ":deciduous_tree: Dependency",
-      "chore": ":turtle: Chore"
-    },
-    "cacheDir": ".changelog"
-  },
-  "packages": [
-    "packages/*"
-  ],
-  "version": "4.0.0-alpha.21"
+  "packages": ["packages/*"],
+  "version": "v4.0.0-alpha.21"
 }

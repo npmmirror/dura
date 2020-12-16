@@ -1,72 +1,99 @@
-import { configura as coreConfigura, defineStoreSlice } from '@dura/core';
-import type {
-  ConfiguraOptions,
-  JsonObject,
-  ReducersMapOfStoreSlice,
-  EffectsMapOfStoreSlice,
-  StoreSlice,
-  UnionToIntersection,
-  ExtractAction,
-  ExtractStateByStoreUnion,
-  CreateStoreReturn,
-  ExtractLoadingTypes,
-} from '@dura/types';
-import { getUseMonitor } from './useMonitor';
-import { createActionsFactory } from '@dura/utils';
-import { useMemo } from 'react';
+import {
+  createStore as reduxCreateStore,
+  combineReducers,
+  compose,
+  ReducersMapObject,
+  applyMiddleware,
+  AnyAction,
+  Dispatch,
+  Store,
+  Middleware,
+} from 'redux';
+import { createDefineReducer } from './createDefineReducer';
+import { createUseMount } from './createUseMount';
+import { createUseSliceStore } from './createUseSliceStore';
 
-export interface Return<S, A> extends CreateStoreReturn<S, A> {
-  useStore: <T>(deps?: T[]) => S;
-  useActions: () => A;
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        name: 'dura4.x-draft',
+        trace: true,
+      })
+    : compose;
+
+function duraReducer(state = {}, action: AnyAction) {
+  return state;
 }
 
-export interface Next<SS, A> {
-  <
-    N extends string,
-    S extends JsonObject,
-    R extends ReducersMapOfStoreSlice<S>,
-    E extends EffectsMapOfStoreSlice,
-    STORES extends StoreSlice<N, S, R, E>[] = StoreSlice<N, S, R, E>[],
-    GA = UnionToIntersection<ExtractAction<STORES[number]>>,
-    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>>
-  >(
-    ...stores: STORES
-  ): Return<GS & SS, GA & A>;
-}
-export { defineStoreSlice };
-export * from '@dura/types';
-export * from '@dura/utils';
+function configura() {
+  let globalReducers: ReducersMapObject = {};
+  let globalSideEffects: {
+    [name: string]: { [name: string]: (...args: any[]) => any };
+  } = {};
+  let sliceRefCount: SliceRefCount = {};
 
-export function configura(options?: ConfiguraOptions) {
-  return function create<
-    N extends string,
-    S extends JsonObject,
-    R extends ReducersMapOfStoreSlice<S>,
-    E extends EffectsMapOfStoreSlice,
-    STORES extends StoreSlice<N, S, R, E>[] = StoreSlice<N, S, R, E>[],
-    GA = UnionToIntersection<ExtractAction<STORES[number]>>,
-    GS = UnionToIntersection<ExtractStateByStoreUnion<STORES[number]>> & {
-      D: {
-        LOADING: UnionToIntersection<ExtractLoadingTypes<STORES[number]>>;
+  const middleware = ((store: Store) => (next: Dispatch<AnyAction>) => (
+    action: AnyAction,
+  ) => {
+    const [namespace, methodName] = action.type.split('/');
+    const effect = globalSideEffects[namespace][methodName];
+    effect?.();
+    return next(action);
+  }) as Middleware;
+
+  return function createStore() {
+    const store = reduxCreateStore(
+      combineReducers({
+        D: duraReducer,
+      }),
+      composeEnhancers(applyMiddleware(middleware)),
+    );
+
+    function createSlice<S>(name: string, initialState: S) {
+      globalSideEffects[name] = {};
+      let sliceReducers: any = {};
+      let sliceSideEffects: any = {};
+
+      const defineReducers = createDefineReducer(name, store, sliceReducers);
+
+      function defineSideEffect(fn: any) {
+        sliceSideEffects[fn.name] = fn;
+        return () => store.dispatch({ type: `${name}/${fn.name}` });
+      }
+
+      const useMount = createUseMount(
+        name,
+        initialState,
+        store,
+        sliceReducers,
+        sliceSideEffects,
+        globalReducers,
+        globalSideEffects,
+        sliceRefCount,
+      );
+
+      const useSliceStore = createUseSliceStore(name, store);
+
+      return {
+        defineReducers,
+        defineSideEffect,
+        useMount,
+        useSliceStore,
+        getState: () => store.getState()[name],
       };
     }
-  >(...stores: STORES): Return<GS, GA> {
-    const createStore = coreConfigura(options);
 
-    const duraStore = createStore(...stores);
-    const key = stores.map((n) => n.namespace).join('.');
-
-    const useStore = (deps = []) => getUseMonitor(key, duraStore)(deps);
-
-    const useActions = function () {
-      const createActions = createActionsFactory(duraStore);
-      return useMemo(() => createActions(...stores, ...stores), []);
-    };
-
-    return {
-      ...duraStore,
-      useStore,
-      useActions,
-    } as any;
+    return { createSlice, store };
   };
 }
+
+export { configura };
+
+// const crea = configura();
+// const store = crea();
+
+// store
+//   .createSlice('xx', { name: '' })
+//   .defineReducers(function f(state, action: AnyAction) {
+//     state.name = '12';
+//   });
