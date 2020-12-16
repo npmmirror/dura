@@ -4,6 +4,11 @@ import progress from 'rollup-plugin-progress';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
+import pkg from './package.json';
+const external = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.devDependencies || {}),
+];
 
 export default [
   {
@@ -15,7 +20,7 @@ export default [
       sourcemap: true,
       exports: 'named',
     },
-    external: ['react'],
+    external,
     plugins: [
       terser(),
       progress(),

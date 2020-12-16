@@ -88,12 +88,3 @@ function configura() {
 }
 
 export { configura };
-
-// const crea = configura();
-// const store = crea();
-
-// store
-//   .createSlice('xx', { name: '' })
-//   .defineReducers(function f(state, action: AnyAction) {
-//     state.name = '12';
-//   });
