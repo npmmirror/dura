@@ -1,6 +1,6 @@
 {
   "name": "@dura/react",
-  "version": "4.0.0-alpha.24",
+  "version": "4.0.0-alpha.25",
   "description": "> TODO: description",
   "author": "ityuany <519495771@qq.com>",
   "homepage": "https://github.com/ityuany/dura#readme",
@@ -28,7 +28,7 @@
     "url": "https://github.com/ityuany/dura/issues"
   },
   "peerDependencies": {
-    "react":">=16.8.0"
+    "react": ">=16.8.0"
   },
   "dependencies": {
     "@onecocjs/snake": "^1.0.4",
