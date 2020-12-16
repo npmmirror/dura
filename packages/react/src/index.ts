@@ -79,7 +79,7 @@ function configura() {
         defineSideEffect,
         useMount,
         useSliceStore,
-        getState: () => store.getState()[name],
+        getState: () => (store.getState() as any)[name],
       };
     }
 

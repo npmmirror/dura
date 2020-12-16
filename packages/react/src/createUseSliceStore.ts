@@ -32,7 +32,7 @@ function deepEqualProxyStore<P, D extends Map<string, number>>(
   nextPropsStore: P,
   deps: D,
 ) {
-  const patches = nextPropsStore[DURA_SYMBOL];
+  const patches = (nextPropsStore as any)[DURA_SYMBOL];
   if (patches?.length > 0) {
     return !patches.some((n: string) => {
       const iterator = Array.from(deps.keys());
