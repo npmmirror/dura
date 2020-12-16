@@ -3,14 +3,14 @@ import { Store } from 'redux';
 import { createProxy } from '@onecocjs/snake';
 import { DURA_SYMBOL } from './symbol';
 
-export function createUseSliceStore(name: string, store: Store) {
+export function createUseSliceStore<S>(name: string, store: Store) {
   return function useSliceStore() {
     const [count, update] = useState(0);
     const deps = useRef<Map<string, number>>(new Map<string, number>());
-    const storeProxyRef = useRef(
+    const storeProxyRef = useRef<S>(
       createProxy(store.getState()[name], deps.current),
     );
-    const storeOriginalRef = useRef(store.getState()[name]);
+    const storeOriginalRef = useRef<S>(store.getState()[name]);
     useEffect(() => {
       return store.subscribe(() => {
         const originalStore = store.getState()[name];

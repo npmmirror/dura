@@ -21,6 +21,14 @@ const composeEnhancers =
       })
     : compose;
 
+// const createStore = configura();
+
+// const store = createStore();
+
+// const { useSliceStore } = store.createSlice('user', { name: 'xx' });
+
+// const s = useSliceStore();
+
 function duraReducer(state = {}, action: AnyAction) {
   return state;
 }
@@ -43,7 +51,7 @@ function configura() {
 
   return function createStore() {
     const store = reduxCreateStore(
-      combineReducers({
+      combineReducers<any>({
         D: duraReducer,
       }),
       composeEnhancers(applyMiddleware(middleware)),
@@ -72,7 +80,7 @@ function configura() {
         sliceRefCount,
       );
 
-      const useSliceStore = createUseSliceStore(name, store);
+      const useSliceStore = createUseSliceStore<S>(name, store);
 
       return {
         defineReducers,
