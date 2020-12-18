@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { configura } from '@dura/react';
 import { Button } from 'antd';
+import { AnyAction } from 'redux';
 
 const createStore = configura();
 

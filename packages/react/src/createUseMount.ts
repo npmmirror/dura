@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import { Store, ReducersMapObject, AnyAction, combineReducers } from 'redux';
 import { produceWithPatches, enablePatches, setAutoFreeze } from 'immer';
 import { DURA_SYMBOL } from './symbol';
+import { SliceReducersMapObject, SliceRefCount } from './type';
 
 enablePatches();
 setAutoFreeze(false);

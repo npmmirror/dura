@@ -21,13 +21,15 @@ const composeEnhancers =
       })
     : compose;
 
-// const createStore = configura();
+const createStore = configura();
 
-// const store = createStore();
+const store = createStore();
 
-// const { useSliceStore } = store.createSlice('user', { name: 'xx' });
+const { useSliceStore, defineReducers } = store.createSlice('user', {
+  name: 'xx',
+});
 
-// const s = useSliceStore();
+const s = useSliceStore();
 
 function duraReducer(state = {}, action: AnyAction) {
   return state;
@@ -62,11 +64,12 @@ function configura() {
       let sliceReducers: any = {};
       let sliceSideEffects: any = {};
 
-      const defineReducers = createDefineReducer(name, store, sliceReducers);
+      const defineReducers = createDefineReducer<S>(name, store, sliceReducers);
 
       function defineSideEffect(fn: any) {
         sliceSideEffects[fn.name] = fn;
-        return () => store.dispatch({ type: `${name}/${fn.name}` });
+        const dispatchFn = () => store.dispatch({ type: `${name}/${fn.name}` });
+        return dispatchFn;
       }
 
       const useMount = createUseMount(
@@ -87,7 +90,7 @@ function configura() {
         defineSideEffect,
         useMount,
         useSliceStore,
-        getState: () => (store.getState() as any)[name],
+        getState: (): S => store.getState()[name],
       };
     }
 

@@ -10,6 +10,6 @@
     "declaration": true,
     "declarationDir": "lib"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "__tests__"]
+  "include": ["src", "typings.d.ts"],
+  "exclude": ["node_modules"]
 }
