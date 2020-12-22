@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "moduleResolution": "Node",
-    "target": "ES5",
+    "target": "ESNext",
     "esModuleInterop": true,
     "jsx": "react",
     "sourceMap": true,

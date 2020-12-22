@@ -1,34 +1,31 @@
 import { useRef, useEffect } from 'react';
-import { Store, ReducersMapObject, AnyAction, combineReducers } from 'redux';
+import { Store, combineReducers } from 'redux';
 import { produceWithPatches, enablePatches, setAutoFreeze } from 'immer';
 import { DURA_SYMBOL } from './symbol';
-import { SliceReducersMapObject, SliceRefCount } from './type';
+import { Action, GlobalStorage, SliceStorage } from './@types';
 
 enablePatches();
 setAutoFreeze(false);
+
 export function createUseMount<S>(
   name: string,
   initialState: S,
   store: Store,
-  sliceReducers: SliceReducersMapObject,
-  sliceSideEffects: any,
-  globalReducers: ReducersMapObject,
-  globalSideEffects: any,
-  sliceRefCount: SliceRefCount,
+  sliceStorage: SliceStorage,
+  global: GlobalStorage,
 ) {
   return function useMount() {
     const tagRef = useRef(true);
-    if (tagRef.current && !globalReducers[name]) {
-      globalSideEffects[name] = sliceSideEffects;
-      globalReducers[name] = function(state = initialState, action: AnyAction) {
+    if (tagRef.current && !global.reducers[name]) {
+      global.effects[name] = sliceStorage.effects;
+      global.reducers[name] = function (state = initialState, action: Action) {
         const [, reducerName] = action.type.split('/');
         const [nextState, patches, inversePatches] = produceWithPatches(
           (draft: S) => {
-            sliceReducers?.[reducerName]?.(draft, action);
+            sliceStorage?.reducers?.[reducerName]?.(draft, action);
           },
         )(state);
         const stringPatches = patches.map(({ path }) => `${path.join('.')}`);
-
         Object.defineProperty(nextState, DURA_SYMBOL, {
           value: stringPatches,
           enumerable: false,
@@ -37,20 +34,23 @@ export function createUseMount<S>(
         });
         return nextState;
       };
-      store.replaceReducer(combineReducers(globalReducers));
-      tagRef.current = true;
+      store.replaceReducer(
+        combineReducers({ ...global.reducers, ...global.coreReducers }),
+      );
+      tagRef.current = false;
     }
-    useEffect(
-      () => () => {
-        if (sliceRefCount[name] === 0) {
-          delete globalSideEffects[name];
-          delete globalReducers[name];
-          store.replaceReducer(combineReducers(globalReducers));
-        } else {
-          sliceRefCount[name] = --sliceRefCount[name];
+    useEffect(() => {
+      global.refCount[name] = (global.refCount[name] ?? 0) + 1;
+      return () => {
+        --global.refCount[name];
+        if (global.refCount[name] === 0) {
+          delete global.effects[name];
+          delete global.reducers[name];
+          store.replaceReducer(
+            combineReducers({ ...global.reducers, ...global.coreReducers }),
+          );
         }
-      },
-      [],
-    );
+      };
+    }, []);
   };
 }

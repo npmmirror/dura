@@ -1,20 +1,20 @@
 import { Store } from 'redux';
-import { Reducer, ReducerAction, SliceStorage, UseFn } from './@types';
+import { Effect, SliceStorage, ReducerAction, UseFn } from './@types';
 import { createAction, createUseAction } from './createAction';
 
-export function createDefineReducer<S>(
+export function createDefineEffect(
   name: string,
   store: Store,
   sliceStorage: SliceStorage,
 ) {
-  return function defineReducer<P, M, F extends Reducer<S, P, M>>(
-    fn: F,
+  return function defineEffect<P, M, E extends Effect<P, M>>(
+    effectFn: E,
   ): {
     run: ReducerAction<P, M>;
     useAction: UseFn<ReducerAction<P, M>>;
   } {
-    sliceStorage.reducers[fn.name] = fn;
-    const run = createAction(name, store, fn) as any;
+    sliceStorage.effects[effectFn.name] = effectFn;
+    const run = createAction(name, store, effectFn) as any;
     const useAction = createUseAction(run) as any;
     return {
       run,

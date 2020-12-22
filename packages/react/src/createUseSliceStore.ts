@@ -14,6 +14,10 @@ export function createUseSliceStore<S>(name: string, store: Store) {
     useEffect(() => {
       return store.subscribe(() => {
         const originalStore = store.getState()[name];
+        if (!originalStore) {
+          update(count + 1);
+          return;
+        }
         const proxyStore = createProxy(originalStore, deps.current);
         const memo = deepEqualProxyStore(proxyStore, deps.current);
         if (!memo) {

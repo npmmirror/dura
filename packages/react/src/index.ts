@@ -2,16 +2,15 @@ import {
   createStore as reduxCreateStore,
   combineReducers,
   compose,
-  ReducersMapObject,
   applyMiddleware,
   AnyAction,
-  Dispatch,
-  Store,
-  Middleware,
 } from 'redux';
 import { createDefineReducer } from './createDefineReducer';
+import { createDefineEffect } from './createDefineEffect';
 import { createUseMount } from './createUseMount';
 import { createUseSliceStore } from './createUseSliceStore';
+import { createAsyncMiddleware } from './middleware';
+import { createGlobalStorage, createSliceStorage } from './createStorage';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -21,66 +20,30 @@ const composeEnhancers =
       })
     : compose;
 
-const createStore = configura();
-
-const store = createStore();
-
-const { useSliceStore, defineReducers } = store.createSlice('user', {
-  name: 'xx',
-});
-
-const s = useSliceStore();
-
-function duraReducer(state = {}, action: AnyAction) {
-  return state;
-}
-
 function configura() {
-  let globalReducers: ReducersMapObject = {};
-  let globalSideEffects: {
-    [name: string]: { [name: string]: (...args: any[]) => any };
-  } = {};
-  let sliceRefCount: SliceRefCount = {};
-
-  const middleware = ((store: Store) => (next: Dispatch<AnyAction>) => (
-    action: AnyAction,
-  ) => {
-    const [namespace, methodName] = action.type.split('/');
-    const effect = globalSideEffects[namespace][methodName];
-    effect?.();
-    return next(action);
-  }) as Middleware;
+  const globalStorage = createGlobalStorage();
+  const middleware = createAsyncMiddleware(globalStorage);
 
   return function createStore() {
     const store = reduxCreateStore(
       combineReducers<any>({
-        D: duraReducer,
+        ...globalStorage.reducers,
+        ...globalStorage.coreReducers,
       }),
       composeEnhancers(applyMiddleware(middleware)),
     );
 
     function createSlice<S>(name: string, initialState: S) {
-      globalSideEffects[name] = {};
-      let sliceReducers: any = {};
-      let sliceSideEffects: any = {};
-
-      const defineReducers = createDefineReducer<S>(name, store, sliceReducers);
-
-      function defineSideEffect(fn: any) {
-        sliceSideEffects[fn.name] = fn;
-        const dispatchFn = () => store.dispatch({ type: `${name}/${fn.name}` });
-        return dispatchFn;
-      }
-
+      globalStorage.effects[name] = {};
+      const sliceStorage = createSliceStorage();
+      const defineReducers = createDefineReducer<S>(name, store, sliceStorage);
+      const defineSideEffect = createDefineEffect(name, store, sliceStorage);
       const useMount = createUseMount(
         name,
         initialState,
         store,
-        sliceReducers,
-        sliceSideEffects,
-        globalReducers,
-        globalSideEffects,
-        sliceRefCount,
+        sliceStorage,
+        globalStorage,
       );
 
       const useSliceStore = createUseSliceStore<S>(name, store);
@@ -99,3 +62,5 @@ function configura() {
 }
 
 export { configura };
+export * from './@types';
+export * from './transform';
