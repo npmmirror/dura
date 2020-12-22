@@ -3,7 +3,6 @@ import {
   combineReducers,
   compose,
   applyMiddleware,
-  AnyAction,
 } from 'redux';
 import { createDefineReducer } from './createDefineReducer';
 import { createDefineEffect } from './createDefineEffect';
@@ -26,7 +25,7 @@ function configura() {
 
   return function createStore() {
     const store = reduxCreateStore(
-      combineReducers<any>({
+      combineReducers({
         ...globalStorage.reducers,
         ...globalStorage.coreReducers,
       }),

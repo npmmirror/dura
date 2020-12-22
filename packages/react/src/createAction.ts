@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 export const createAction = <F extends Function>(
   name: string,
@@ -12,7 +12,16 @@ export const createAction = <F extends Function>(
     meta,
   });
 
-export const createUseAction = (run: Function) => (transform?: Function) => {
-  const fn = useCallback((e) => run(transform?.(e)), [transform]);
+export const createUseAction = (run: Function) => <
+  F extends (...args: any) => []
+>(
+  transform?: F,
+) => {
+  const transformRef = useRef<F | undefined>(undefined);
+  transformRef.current = transform;
+  const fn = useCallback(
+    <T>(...args: T[]) => run(...transformRef.current?.(...args)),
+    [transformRef],
+  );
   return typeof transform === 'function' ? fn : run;
 };

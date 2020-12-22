@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { configura, Action, createEventTransform } from '@dura/react';
-import { Button, Input, InputNumber } from 'antd';
+import {
+  configura,
+  Action,
+  createEventTransform,
+  createNoopTransform,
+} from '@dura/react';
+import { Button, Input } from 'antd';
 
 const createStore = configura();
 
@@ -39,7 +44,7 @@ function App() {
   useMount();
   const state = useSliceStore();
 
-  const xxAge = xx2.useAction(() => ({}));
+  const xxAge = xx2.useAction(createNoopTransform());
 
   const changeName = xx.useAction(createEventTransform('name'));
 
