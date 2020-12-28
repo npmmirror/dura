@@ -7,17 +7,21 @@ import { useMount, useSliceStore, xx2, asy, xx } from './store';
 function App() {
   const state = useSliceStore();
 
-  const xxAge = xx2.useAction(createNoopTransform());
-
-  const changeName = xx.useAction(createEventTransform('name'));
-
-  xx2.useAction({
-    transform: {},
-    loading: false,
-    immediate: {
-      args: [],
-    },
+  const xxAge = xx2.useAction({
+    // transform: createNoopTransform(),
   });
+
+  const changeName = xx.useAction({
+    transform: createEventTransform('name'),
+  });
+
+  // xx2.useAction({
+  //   transform: {},
+  //   loading: false,
+  //   immediate: {
+  //     args: [],
+  //   },
+  // });
 
   return (
     <>

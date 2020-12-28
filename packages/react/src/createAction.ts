@@ -1,5 +1,7 @@
 import { Store } from 'redux';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useMemo } from 'react';
+import { CreateUseActionOptions } from './@types';
+import debounce from 'lodash.debounce';
 
 export const createAction = (name: string, store: Store, fnName: string) => <
   P,
@@ -14,16 +16,17 @@ export const createAction = (name: string, store: Store, fnName: string) => <
     meta,
   });
 
-export const createUseAction = (run: Function) => <
-  F extends (...args: any) => []
->(
-  transform?: F,
+export const createUseAction = (run: Function) => <T extends Function>(
+  options?: CreateUseActionOptions<T>,
 ) => {
-  const transformRef = useRef<F | undefined>(undefined);
-  transformRef.current = transform;
+  const transformRef = useRef<T | undefined>(undefined);
+  transformRef.current = options.transform;
   const fn = useCallback(
-    <T>(...args: T[]) => run(...transformRef.current?.(...args)),
+    <T>(...args: T[]) => {
+      return run(...transformRef.current?.(...args));
+    },
     [transformRef],
   );
-  return typeof transform === 'function' ? fn : run;
+  const realFn = typeof options.transform === 'function' ? fn : run;
+  return realFn;
 };

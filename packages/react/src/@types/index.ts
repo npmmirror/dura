@@ -31,13 +31,10 @@ export type ReducerAction<P, M> = P extends object
     : (payload: P) => void
   : () => void;
 
-export interface UseActionFn<A> {
-  (): A;
-  <T>(
-    transform: (arg: React.ChangeEvent<T>) => any,
-  ): React.ChangeEventHandler<T>;
-  <T>(transform: (arg: T) => any, options: {}): T;
-  <T>(options: {}): A;
+export interface UseFn<R> {
+  <T = undefined>(options: CreateUseActionOptions<T>): T extends undefined
+    ? R
+    : T;
 }
 
 export interface GlobalStorage {
@@ -51,11 +48,7 @@ export interface SliceStorage {
   reducers: SliceReducersMapObject;
   effects: SliceEffectsMapObject;
 }
-export interface UseFn<R> {
-  (): R;
-  <T>(
-    transform: (arg: React.ChangeEvent<T>) => any,
-  ): React.ChangeEventHandler<T>;
-  <T>(transform: (arg: T) => any, options: {}): T;
-  <T>(options: {}): R;
+
+export interface CreateUseActionOptions<T> {
+  transform?: T;
 }
