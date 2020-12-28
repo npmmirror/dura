@@ -7,14 +7,17 @@ export function createDefineReducer<S>(
   store: Store,
   sliceStorage: SliceStorage,
 ) {
+  let index = 0;
   return function defineReducer<P, M, F extends Reducer<S, P, M>>(
     fn: F,
   ): {
     run: ReducerAction<P, M>;
     useAction: UseFn<ReducerAction<P, M>>;
   } {
-    sliceStorage.reducers[fn.name] = fn;
-    const run = createAction(name, store, fn) as any;
+    const fnName =
+      fn.name || `@@DURA.REDUCER.${(index = (index + 1) % 1_000_000)}`;
+    sliceStorage.reducers[fnName] = fn;
+    const run = createAction(name, store, fnName) as any;
     const useAction = createUseAction(run) as any;
     return {
       run,

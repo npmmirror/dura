@@ -11,6 +11,9 @@ export default defineConfig({
   resolve: {
     includes: ['docs', 'packages'],
   },
+  dynamicImport: {
+    loading: '@/Loading',
+  },
   extraBabelPlugins: [
     [
       'babel-plugin-import',

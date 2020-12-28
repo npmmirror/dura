@@ -1,13 +1,15 @@
 import { Store } from 'redux';
 import { useCallback, useRef } from 'react';
 
-export const createAction = <F extends Function>(
-  name: string,
-  store: Store,
-  fn: F,
-) => <P, M>(payload: P, meta: M) =>
+export const createAction = (name: string, store: Store, fnName: string) => <
+  P,
+  M
+>(
+  payload: P,
+  meta: M,
+) =>
   store.dispatch({
-    type: `${name}/${fn.name}`,
+    type: `${name}/${fnName}`,
     payload,
     meta,
   });

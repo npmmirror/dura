@@ -1,57 +1,27 @@
 import React, { useState } from 'react';
-import {
-  configura,
-  Action,
-  createEventTransform,
-  createNoopTransform,
-} from '@dura/react';
+import { createEventTransform, createNoopTransform } from '@dura/react';
 import { Button, Input } from 'antd';
 
-const createStore = configura();
-
-const store = createStore();
-
-const {
-  defineReducers,
-  useMount,
-  useSliceStore,
-  defineSideEffect,
-  getState,
-} = store.createSlice('xxx', {
-  name: 'xx',
-  age: 12,
-});
-
-const xx = defineReducers(function xx(state, action: Action<{ name: string }>) {
-  state.name = action.payload.name;
-});
-
-const xx2 = defineReducers(function xx2(state) {
-  state.age = 33 + Math.random();
-});
-
-const asy = defineSideEffect(async function asy(
-  action: Action<{ name: string }>,
-) {
-  console.log(action.payload);
-
-  xx.run({ name: action.payload.name });
-  console.log('hello async', getState());
-  xx2.run();
-});
+import { useMount, useSliceStore, xx2, asy, xx } from './store';
 
 function App() {
-  useMount();
   const state = useSliceStore();
 
   const xxAge = xx2.useAction(createNoopTransform());
 
   const changeName = xx.useAction(createEventTransform('name'));
 
+  xx2.useAction({
+    transform: {},
+    loading: false,
+    immediate: {
+      args: [],
+    },
+  });
+
   return (
     <>
-      <Input onChange={changeName} />
-
+      <Input onChange={changeName} width={300} />
       <Button onClick={xxAge}>A</Button>
       <Button onClick={() => asy.run({ name: 'async' })}>async</Button>
       <h1>xx</h1>
@@ -70,9 +40,17 @@ function H() {
     </>
   );
 }
-
+const randomString = () =>
+  Math.random().toString(36).substring(7).split('').join('.');
 export default function () {
+  useMount();
   const [state, updateState] = useState(0);
+  const set = new Set();
+  for (let index = 0; index < 10000; index++) {
+    set.add(randomString() + '.' + randomString());
+  }
+  console.log(set.size);
+
   return (
     <>
       <Button type="primary" onClick={() => updateState(state === 0 ? 1 : 0)}>

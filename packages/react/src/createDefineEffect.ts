@@ -7,14 +7,17 @@ export function createDefineEffect(
   store: Store,
   sliceStorage: SliceStorage,
 ) {
+  let index = 0;
   return function defineEffect<P, M, E extends Effect<P, M>>(
-    effectFn: E,
+    fn: E,
   ): {
     run: ReducerAction<P, M>;
     useAction: UseFn<ReducerAction<P, M>>;
   } {
-    sliceStorage.effects[effectFn.name] = effectFn;
-    const run = createAction(name, store, effectFn) as any;
+    const fnName =
+      fn.name || `@@DURA.EFFECT.${(index = (index + 1) % 1_000_000)}`;
+    sliceStorage.effects[fnName] = fn;
+    const run = createAction(name, store, fnName) as any;
     const useAction = createUseAction(run) as any;
     return {
       run,

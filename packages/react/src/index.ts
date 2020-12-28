@@ -1,8 +1,10 @@
 import {
   createStore as reduxCreateStore,
   combineReducers,
-  compose,
   applyMiddleware,
+  PreloadedState,
+  ReducersMapObject,
+  StoreEnhancer,
 } from 'redux';
 import { createDefineReducer } from './createDefineReducer';
 import { createDefineEffect } from './createDefineEffect';
@@ -10,26 +12,32 @@ import { createUseMount } from './createUseMount';
 import { createUseSliceStore } from './createUseSliceStore';
 import { createAsyncMiddleware } from './middleware';
 import { createGlobalStorage, createSliceStorage } from './createStorage';
+import { Action } from './@types';
+import { createCompose } from './createCompose';
 
-const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        name: 'dura4.x-draft',
-        trace: true,
-      })
-    : compose;
-
-function configura() {
+function configura<S, A extends Action>(
+  reducer: ReducersMapObject = {},
+  preloadedState?: PreloadedState<any>,
+  enhancer?: StoreEnhancer,
+) {
   const globalStorage = createGlobalStorage();
+  globalStorage.reducers = reducer;
   const middleware = createAsyncMiddleware(globalStorage);
-
   return function createStore() {
+    const compose = createCompose('dura');
+    let _enhancer;
+    if (enhancer) {
+      compose(enhancer, applyMiddleware(middleware));
+    } else {
+      _enhancer = compose(applyMiddleware(middleware));
+    }
     const store = reduxCreateStore(
       combineReducers({
         ...globalStorage.reducers,
         ...globalStorage.coreReducers,
       }),
-      composeEnhancers(applyMiddleware(middleware)),
+      preloadedState,
+      _enhancer,
     );
 
     function createSlice<S>(name: string, initialState: S) {
