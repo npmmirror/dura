@@ -1,16 +1,17 @@
-//React.ChangeEventHandler<T>
 export const createEventTransform = <
   T extends HTMLInputElement = HTMLInputElement
 >(
   name?: string,
-): React.ChangeEventHandler<T> => (e) => [
-  name
-    ? {
-        [name]: e.target.value,
-      }
-    : e.target.value,
-  undefined,
-];
+): React.ChangeEventHandler<T> => (e) => {
+  return [
+    name
+      ? {
+          [name]: e?.target?.value,
+        }
+      : e.target.value,
+    undefined,
+  ];
+};
 
 export const createNoopTransform = () => (): void =>
   [undefined, undefined] as any;

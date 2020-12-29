@@ -1,5 +1,6 @@
 import { ReducersMapObject } from 'redux';
 
+export type Func = (...args: any[]) => any;
 export interface SliceReducersMapObject {
   [name: string]: Reducer;
 }
@@ -32,7 +33,7 @@ export type ReducerAction<P, M> = P extends object
   : () => void;
 
 export interface UseFn<R> {
-  <T = undefined>(options: CreateUseActionOptions<T>): T extends undefined
+  <T = undefined>(options?: CreateUseActionOptions<T>): T extends undefined
     ? R
     : T;
 }
@@ -49,6 +50,93 @@ export interface SliceStorage {
   effects: SliceEffectsMapObject;
 }
 
+export interface UseAction<D> {
+  (): [D];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+  }): [T];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+    debounce?: {
+      wait?: number;
+      leading?: boolean;
+    };
+  }): [T];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+    throttle?: {
+      wait?: number;
+      leading?: boolean;
+    };
+  }): [T];
+}
+
+export interface UseAsyncAction<D> extends UseAction<D> {
+  (): [D, { loading: boolean }];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+    loading?: {
+      delay?: number;
+    };
+  }): [D, { loading: boolean }];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+    loading?: {
+      delay?: number;
+    };
+    debounce?: {
+      wait?: number;
+      leading?: boolean;
+    };
+  }): [D, { loading: boolean }];
+  <T extends Func>(options?: {
+    transform?: T;
+    immediate?: {
+      transform?: () => [any, any];
+    };
+    loading?: {
+      delay?: number;
+    };
+    throttle?: {
+      wait?: number;
+      leading?: boolean;
+    };
+  }): [D, { loading: boolean }];
+}
+
 export interface CreateUseActionOptions<T> {
   transform?: T;
+  immediate?: {
+    transform: () => [any, any];
+  };
+  debounce?: {
+    wait?: number;
+    leading?: boolean;
+  };
+  throttle?: {
+    wait?: number;
+    leading?: boolean;
+  };
+}
+
+export interface CreateUseAsyncActionOptions<T>
+  extends CreateUseActionOptions<T> {
+  loading?: {
+    delay?: number;
+  };
 }

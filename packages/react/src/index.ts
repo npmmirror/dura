@@ -45,6 +45,7 @@ function configura<S, A extends Action>(
       const sliceStorage = createSliceStorage();
       const defineReducers = createDefineReducer<S>(name, store, sliceStorage);
       const defineSideEffect = createDefineEffect(name, store, sliceStorage);
+
       const useMount = createUseMount(
         name,
         initialState,
@@ -61,6 +62,7 @@ function configura<S, A extends Action>(
         useMount,
         useSliceStore,
         getState: (): S => store.getState()[name],
+        store,
       };
     }
 

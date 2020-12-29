@@ -25,7 +25,9 @@ export default [
     plugins: [
       terser(),
       progress(),
-      typescript(),
+      typescript({
+        clean: true,
+      }),
       commonjs(),
       json(),
       nodeResolve(),

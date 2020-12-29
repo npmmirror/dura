@@ -1,32 +1,17 @@
 import { Store } from 'redux';
-import { useCallback, useRef, useMemo } from 'react';
-import { CreateUseActionOptions } from './@types';
-import debounce from 'lodash.debounce';
+import { ReducerAction } from './@types';
+import { createActionType } from './createNamed';
 
-export const createAction = (name: string, store: Store, fnName: string) => <
-  P,
-  M
->(
-  payload: P,
-  meta: M,
-) =>
-  store.dispatch({
-    type: `${name}/${fnName}`,
-    payload,
-    meta,
-  });
-
-export const createUseAction = (run: Function) => <T extends Function>(
-  options?: CreateUseActionOptions<T>,
-) => {
-  const transformRef = useRef<T | undefined>(undefined);
-  transformRef.current = options.transform;
-  const fn = useCallback(
-    <T>(...args: T[]) => {
-      return run(...transformRef.current?.(...args));
-    },
-    [transformRef],
-  );
-  const realFn = typeof options.transform === 'function' ? fn : run;
-  return realFn;
-};
+export function createAction<P, M>(
+  name: string,
+  store: Store,
+  fnName: string,
+): ReducerAction<P, M> {
+  return function (payload: P, meta: M) {
+    return store.dispatch({
+      type: createActionType(name, fnName),
+      payload,
+      meta,
+    });
+  } as any;
+}

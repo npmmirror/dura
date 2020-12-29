@@ -1,33 +1,47 @@
 import React, { useState } from 'react';
-import { createEventTransform, createNoopTransform } from '@dura/react';
+import {
+  createEventTransform,
+  createValueTransform,
+  createNoopTransform,
+} from '@dura/react';
 import { Button, Input } from 'antd';
 
 import { useMount, useSliceStore, xx2, asy, xx } from './store';
-
+window.addEventListener('visibilitychange', function () {
+  console.log(document.visibilityState);
+});
 function App() {
   const state = useSliceStore();
 
-  const xxAge = xx2.useAction({
-    // transform: createNoopTransform(),
+  const [xxAge] = xx2.useAction({
+    transform: createNoopTransform(),
   });
 
-  const changeName = xx.useAction({
+  const [changeName] = xx.useAction({
     transform: createEventTransform('name'),
+    throttle: {
+      wait: 300,
+      leading: true,
+    },
   });
 
-  // xx2.useAction({
-  //   transform: {},
-  //   loading: false,
-  //   immediate: {
-  //     args: [],
-  //   },
-  // });
+  const [run, { loading }] = asy.useAsyncAction({
+    transform: createValueTransform(),
+    loading: {
+      delay: 100,
+    },
+  });
 
   return (
     <>
       <Input onChange={changeName} width={300} />
       <Button onClick={xxAge}>A</Button>
-      <Button onClick={() => asy.run({ name: 'async' })}>async</Button>
+      <Button
+        loading={loading}
+        onClick={() => run({ name: 'async' + Math.random() })}
+      >
+        async
+      </Button>
       <h1>xx</h1>
       <h1>name:{state?.name}</h1>
     </>
@@ -36,7 +50,6 @@ function App() {
 
 function H() {
   const state = useSliceStore();
-  console.log('HH');
 
   return (
     <>

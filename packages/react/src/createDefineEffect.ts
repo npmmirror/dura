@@ -1,27 +1,27 @@
 import { Store } from 'redux';
-import { Effect, SliceStorage, ReducerAction, UseFn } from './@types';
-import { createAction, createUseAction } from './createAction';
+import { Effect, SliceStorage } from './@types';
+import { createAction } from './createAction';
+import { createUseAsyncAction } from './createUseAsyncAction';
+import { createEffectName } from './createNamed';
 
 export function createDefineEffect(
   name: string,
   store: Store,
   sliceStorage: SliceStorage,
 ) {
-  let index = 0;
-  return function defineEffect<P, M, E extends Effect<P, M>>(
-    fn: E,
-  ): {
-    run: ReducerAction<P, M>;
-    useAction: UseFn<ReducerAction<P, M>>;
-  } {
-    const fnName =
-      fn.name || `@@DURA.EFFECT.${(index = (index + 1) % 1_000_000)}`;
-    sliceStorage.effects[fnName] = fn;
-    const run = createAction(name, store, fnName) as any;
-    const useAction = createUseAction(run) as any;
+  let count = 0;
+  return function defineEffect<
+    P,
+    M,
+    E extends Effect<P, M & { loading?: boolean }>
+  >(fn: E) {
+    const funcName = createEffectName(fn.name, count);
+    sliceStorage.effects[funcName] = fn;
+    const run = createAction<P, M>(name, store, funcName);
+    const useAsyncAction = createUseAsyncAction(name, funcName, store, run);
     return {
       run,
-      useAction,
+      useAsyncAction,
     };
   };
 }
