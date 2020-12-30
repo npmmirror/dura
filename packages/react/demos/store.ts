@@ -28,7 +28,9 @@ export const xx2 = defineReducers(function changeAge(state) {
 export const asy = defineSideEffect(async function asyChange(
   action: Action<{ name: string }>,
 ) {
-  await new Promise((resolve, reject) => setTimeout(resolve, 400));
+  await new Promise((resolve, reject) => setTimeout(resolve, 1000));
+  console.log('asyChange');
+
   xx.run({ name: action.payload.name });
   console.log('hello async', getState());
   xx2.run();

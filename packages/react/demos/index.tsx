@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createEventTransform,
   createValueTransform,
   createNoopTransform,
 } from '@dura/react';
-import { Button, Input } from 'antd';
+import { Button, Input, Form } from 'antd';
+import {
+  UseAsyncActionReturn,
+  UseAsyncActionDebounceOptions,
+  UseAsyncActionThrottleOptions,
+  UseAsyncActionPollingIntervalOptions,
+  UseAsyncActionRefreshOnWindowFocusOptions,
+} from '@dura/react';
+
+interface AAA {
+  <T>(options: UseAsyncActionDebounceOptions<T>): UseAsyncActionReturn<T>;
+  (options: UseAsyncActionThrottleOptions<any>): UseAsyncActionReturn<any>;
+  (
+    options: UseAsyncActionPollingIntervalOptions<any>,
+  ): UseAsyncActionReturn<any>;
+  <T>(
+    options: UseAsyncActionRefreshOnWindowFocusOptions<any>,
+  ): UseAsyncActionReturn<T>;
+  // (options: UseAsyncActionBasicOptions<any>): UseAsyncActionReturn<any>;
+  // (): UseAsyncActionReturn<ReducerAction<P_1, M_1>>;
+}
+
+const a: AAA = null;
+
+a<() => void>({});
 
 import { useMount, useSliceStore, xx2, asy, xx } from './store';
-window.addEventListener('visibilitychange', function () {
-  console.log(document.visibilityState);
-});
+
 function App() {
   const state = useSliceStore();
 
@@ -28,13 +50,30 @@ function App() {
   const [run, { loading }] = asy.useAsyncAction({
     transform: createValueTransform(),
     loading: {
-      delay: 100,
+      // delay: 100,
+      key: 1,
     },
+  });
+
+  asy.useAsyncAction({
+    immediate: {
+      transform: () => [{ orderId: 'xx' + Math.random() }, undefined],
+    },
+    pollingInterval: {
+      immediate: true,
+    },
+  });
+
+  asy.useAsyncAction({});
+
+  const [s] = xx.useAction({
+    transform: () => [],
   });
 
   return (
     <>
       <Input onChange={changeName} width={300} />
+
       <Button onClick={xxAge}>A</Button>
       <Button
         loading={loading}

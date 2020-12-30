@@ -1,19 +1,28 @@
-import { useEffect, useRef, useMemo } from 'react';
-import { UseAction, Func, CreateUseActionOptions } from './@types';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
+import {
+  Func,
+  UseActionOptions,
+  UseActionBasicOptions,
+  UseActionDebounceOptions,
+  UseActionThrottleOptions,
+  UseActionPollingIntervalOptions,
+  UseActionRefreshOnWindowFocusOptions,
+} from './@types';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
-export function createUseAction<D extends any>(run: D): UseAction<D>;
-
-export function createUseAction<D extends any>(run: D): UseAction<D>;
-
-export function createUseAction<D extends any>(run: D): UseAction<D>;
-
-export function createUseAction<D extends any>(run: D): UseAction<D>;
 
 export function createUseAction<D extends Func>(run: D) {
-  return function useAction<T extends Func>(
-    options?: CreateUseActionOptions<T>,
-  ) {
+  function useAction(): [D];
+
+  function useAction(options: UseActionDebounceOptions<any>): [any];
+
+  function useAction(options: UseActionThrottleOptions<any>): [any];
+
+  function useAction(options: UseActionPollingIntervalOptions<any>): [any];
+
+  function useAction(options: UseActionRefreshOnWindowFocusOptions<any>): [any];
+
+  function useAction(options?: UseActionOptions<any>) {
     const ref = useRef({
       transform: undefined,
       dispatch: undefined,
@@ -55,6 +64,12 @@ export function createUseAction<D extends Func>(run: D) {
       ? transformFn
       : ref.current.dispatch;
 
+    const sideRun = useCallback(() => {
+      if (document.visibilityState === 'visible') {
+        finish(...(options?.refreshOnWindowFocus?.transform?.() ?? []));
+      }
+    }, []);
+
     useEffect(
       () =>
         void options?.immediate &&
@@ -62,6 +77,18 @@ export function createUseAction<D extends Func>(run: D) {
       [],
     );
 
+    useEffect(() => {
+      if (options?.refreshOnWindowFocus) {
+        window.addEventListener('visibilitychange', sideRun);
+        window.addEventListener('focus', sideRun);
+        return () => {
+          window.removeEventListener('visibilitychange', sideRun);
+          window.removeEventListener('focus', sideRun);
+        };
+      }
+    }, []);
+
     return [finish];
-  };
+  }
+  return useAction;
 }

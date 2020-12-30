@@ -21,11 +21,15 @@ function createUpdateLoading(
 export const createAsyncMiddleware = (global: GlobalStorage) => (
   store: Store,
 ) => (next: Dispatch<AnyAction>) => (
-  action: Action<any, { loading?: { delay?: number } }>,
+  action: Action<any, { loading?: { delay?: number; key?: string | number } }>,
 ) => {
   const [namespace, methodName] = action.type.split(ACTION_TYPE_SEP);
   let effectMethod = global.effects?.[namespace]?.[methodName];
-  const updateLoading = createUpdateLoading(store, namespace, methodName);
+  const updateLoading = createUpdateLoading(
+    store,
+    namespace,
+    `${methodName}.${action?.meta?.loading?.key ?? 'default'}`,
+  );
   if (action?.meta?.loading) {
     effectMethod = async () => {
       let timerId;

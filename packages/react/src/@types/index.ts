@@ -32,12 +32,6 @@ export type ReducerAction<P, M> = P extends object
     : (payload: P) => void
   : () => void;
 
-export interface UseFn<R> {
-  <T = undefined>(options?: CreateUseActionOptions<T>): T extends undefined
-    ? R
-    : T;
-}
-
 export interface GlobalStorage {
   reducers: ReducersMapObject;
   effects: EffectsMapObject;
@@ -50,93 +44,94 @@ export interface SliceStorage {
   effects: SliceEffectsMapObject;
 }
 
-export interface UseAction<D> {
-  (): [D];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-  }): [T];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-    debounce?: {
-      wait?: number;
-      leading?: boolean;
-    };
-  }): [T];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-    throttle?: {
-      wait?: number;
-      leading?: boolean;
-    };
-  }): [T];
-}
+export type PayloadAndMeta = any[];
 
-export interface UseAsyncAction<D> extends UseAction<D> {
-  (): [D, { loading: boolean }];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-    loading?: {
-      delay?: number;
-    };
-  }): [D, { loading: boolean }];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-    loading?: {
-      delay?: number;
-    };
-    debounce?: {
-      wait?: number;
-      leading?: boolean;
-    };
-  }): [D, { loading: boolean }];
-  <T extends Func>(options?: {
-    transform?: T;
-    immediate?: {
-      transform?: () => [any, any];
-    };
-    loading?: {
-      delay?: number;
-    };
-    throttle?: {
-      wait?: number;
-      leading?: boolean;
-    };
-  }): [D, { loading: boolean }];
-}
-
-export interface CreateUseActionOptions<T> {
+export interface UseActionBasicOptions<T> {
   transform?: T;
   immediate?: {
-    transform: () => [any, any];
+    transform?: () => [any, any];
   };
+}
+
+export interface RefreshOnWindowFocus {
+  refreshOnWindowFocus?: {
+    leading?: boolean;
+    transform?: () => PayloadAndMeta;
+  };
+}
+
+export interface PollingIntervalOptions {
+  pollingInterval?: {
+    pollingWhenHidden?: boolean;
+    immediate?: boolean;
+    transform?: () => [any, any];
+  };
+}
+export interface DebounceOptions {
   debounce?: {
     wait?: number;
     leading?: boolean;
   };
+}
+
+export interface ThrottleOptions {
   throttle?: {
     wait?: number;
     leading?: boolean;
   };
 }
 
-export interface CreateUseAsyncActionOptions<T>
-  extends CreateUseActionOptions<T> {
+export interface UseActionDebounceOptions<T>
+  extends UseActionBasicOptions<T>,
+    DebounceOptions {}
+
+export interface UseActionThrottleOptions<T>
+  extends UseActionBasicOptions<T>,
+    ThrottleOptions {}
+
+export interface UseActionPollingIntervalOptions<T>
+  extends UseActionBasicOptions<T>,
+    PollingIntervalOptions {}
+
+export interface UseActionRefreshOnWindowFocusOptions<T>
+  extends UseActionBasicOptions<T>,
+    RefreshOnWindowFocus {}
+export interface UseActionOptions<T>
+  extends UseActionBasicOptions<T>,
+    DebounceOptions,
+    ThrottleOptions,
+    PollingIntervalOptions,
+    RefreshOnWindowFocus {}
+
+export interface UseAsyncActionBasicOptions<T>
+  extends UseActionBasicOptions<T> {
   loading?: {
     delay?: number;
+    key?: string | number;
   };
 }
+
+export interface UseAsyncActionDebounceOptions<T>
+  extends UseAsyncActionBasicOptions<T>,
+    DebounceOptions {}
+
+export interface UseAsyncActionThrottleOptions<T>
+  extends UseAsyncActionBasicOptions<T>,
+    ThrottleOptions {}
+
+export type UseAsyncActionReturn<R> = [R, { loading: boolean }];
+
+export interface UseAsyncActionOptions<T>
+  extends UseAsyncActionBasicOptions<T>,
+    DebounceOptions,
+    ThrottleOptions,
+    PollingIntervalOptions,
+    RefreshOnWindowFocus {}
+
+export interface UseAsyncActionPollingIntervalOptions<T>
+  extends UseAsyncActionBasicOptions<T>,
+    PollingIntervalOptions {}
+
+export interface UseAsyncActionRefreshOnWindowFocusOptions<T>
+  extends UseAsyncActionBasicOptions<T>,
+    RefreshOnWindowFocus {}

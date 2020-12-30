@@ -16,7 +16,8 @@ function updateLoadingReducer(
   state,
   action: Action<{ key: string; val: boolean }>,
 ) {
-  state[STATE_LOADING_MAPPING_KEY][action.payload.key] = action.payload.val;
+  const [methodName, key] = action.payload.key.split('.');
+  state[STATE_LOADING_MAPPING_KEY][methodName][key] = action.payload.val;
 }
 
 export function createUseMount<S>(
@@ -32,7 +33,11 @@ export function createUseMount<S>(
 
     // 初始化loading 的key
     const LOADING_MAPPING = Object.keys(sliceStorage.effects)
-      .map((x) => ({ [x]: false }))
+      .map((x) => ({
+        [x]: {
+          default: false,
+        },
+      }))
       .reduce((prev, next) => ({ ...prev, ...next }));
 
     const tagRef = useRef(true);
