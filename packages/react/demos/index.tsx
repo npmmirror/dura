@@ -7,28 +7,34 @@ import {
 import { Button, Input, Form } from 'antd';
 import {
   UseAsyncActionReturn,
+  UseAsyncActionBasicOptions,
+  DebounceOptions,
   UseAsyncActionDebounceOptions,
+  ThrottleOptions,
   UseAsyncActionThrottleOptions,
+  PollingIntervalOptions,
   UseAsyncActionPollingIntervalOptions,
   UseAsyncActionRefreshOnWindowFocusOptions,
 } from '@dura/react';
 
-interface AAA {
-  <T>(options: UseAsyncActionDebounceOptions<T>): UseAsyncActionReturn<T>;
-  (options: UseAsyncActionThrottleOptions<any>): UseAsyncActionReturn<any>;
+interface AAA<T> {
   (
-    options: UseAsyncActionPollingIntervalOptions<any>,
-  ): UseAsyncActionReturn<any>;
-  <T>(
-    options: UseAsyncActionRefreshOnWindowFocusOptions<any>,
+    options: DebounceOptions | UseAsyncActionBasicOptions<T>,
   ): UseAsyncActionReturn<T>;
+  (
+    options: ThrottleOptions | UseAsyncActionBasicOptions<T>,
+  ): UseAsyncActionReturn<any>;
+  (
+    options: PollingIntervalOptions | UseAsyncActionBasicOptions<T>,
+  ): UseAsyncActionReturn<any>;
+
   // (options: UseAsyncActionBasicOptions<any>): UseAsyncActionReturn<any>;
   // (): UseAsyncActionReturn<ReducerAction<P_1, M_1>>;
 }
 
-const a: AAA = null;
+const a: AAA<() => void> = null;
 
-a<() => void>({});
+a({});
 
 import { useMount, useSliceStore, xx2, asy, xx } from './store';
 
