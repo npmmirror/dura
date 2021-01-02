@@ -5,85 +5,65 @@ import {
   createNoopTransform,
 } from '@dura/react';
 import { Button, Input, Form } from 'antd';
-import {
-  UseAsyncActionReturn,
-  UseAsyncActionBasicOptions,
-  DebounceOptions,
-  UseAsyncActionDebounceOptions,
-  ThrottleOptions,
-  UseAsyncActionThrottleOptions,
-  PollingIntervalOptions,
-  UseAsyncActionPollingIntervalOptions,
-  UseAsyncActionRefreshOnWindowFocusOptions,
-} from '@dura/react';
+import { Func } from '@dura/react';
 
-interface AAA<T> {
-  (
-    options: DebounceOptions | UseAsyncActionBasicOptions<T>,
-  ): UseAsyncActionReturn<T>;
-  (
-    options: ThrottleOptions | UseAsyncActionBasicOptions<T>,
-  ): UseAsyncActionReturn<any>;
-  (
-    options: PollingIntervalOptions | UseAsyncActionBasicOptions<T>,
-  ): UseAsyncActionReturn<any>;
+// const a: AAA<() => void> = null;
 
-  // (options: UseAsyncActionBasicOptions<any>): UseAsyncActionReturn<any>;
-  // (): UseAsyncActionReturn<ReducerAction<P_1, M_1>>;
+// a({
+//   immediate: {},
+//   debounce: {},
+// });
+
+import { useMount, useState as useSliceStore, xx2, asy, xx } from './store';
+function A<T extends Func = undefined>(name: {
+  k?: T;
+}): T extends undefined ? 1 : 2 {
+  return null as any;
 }
-
-const a: AAA<() => void> = null;
-
-a({});
-
-import { useMount, useSliceStore, xx2, asy, xx } from './store';
+const res = A({});
 
 function App() {
   const state = useSliceStore();
 
-  const [xxAge] = xx2.useAction({
+  const xxAge = xx2.useAction({
     transform: createNoopTransform(),
   });
 
-  const [changeName] = xx.useAction({
+  const xxAction = xx.useAction({
     transform: createEventTransform('name'),
-    throttle: {
-      wait: 300,
-      leading: true,
+    performance: {
+      action: 'debounce',
+      wait: 800,
+      leading: false,
     },
   });
 
-  const [run, { loading }] = asy.useAsyncAction({
+  const asyAction = asy.useAsyncAction({
     transform: createValueTransform(),
+    immediate: {
+      args: [{ orderId: 'xx' + Math.random() }, undefined],
+    },
     loading: {
-      // delay: 100,
       key: 1,
     },
   });
 
-  asy.useAsyncAction({
-    immediate: {
-      transform: () => [{ orderId: 'xx' + Math.random() }, undefined],
-    },
-    pollingInterval: {
-      immediate: true,
-    },
-  });
-
-  asy.useAsyncAction({});
-
-  const [s] = xx.useAction({
-    transform: () => [],
-  });
+  // asy.useAsyncAction({
+  //   pollingInterval: {
+  //     pollingWhenHidden: false,
+  //     ms: 1000,
+  //     transform: () => [{ orderId: 'xx' + Math.random() }, undefined] as any,
+  //   },
+  // });
 
   return (
     <>
-      <Input onChange={changeName} width={300} />
+      <Input onChange={xxAction.run} width={300} />
 
-      <Button onClick={xxAge}>A</Button>
+      <Button onClick={xxAge.run}>A</Button>
       <Button
-        loading={loading}
-        onClick={() => run({ name: 'async' + Math.random() })}
+        loading={asyAction.loading}
+        onClick={() => asyAction.run({ name: 'async' + Math.random() })}
       >
         async
       </Button>

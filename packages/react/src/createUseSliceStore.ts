@@ -3,7 +3,7 @@ import { Store } from 'redux';
 import { createProxy } from '@onecocjs/snake';
 import { DURA_SYMBOL } from './symbol';
 
-export function createUseSliceStore<S>(name: string, store: Store) {
+export function createUseState<S>(name: string, store: Store) {
   return function useSliceStore() {
     const [count, update] = useState(0);
     const deps = useRef<Map<string, number>>(new Map<string, number>());

@@ -1,33 +1,17 @@
-import { useEffect, useRef, useMemo, useCallback } from 'react';
-import {
-  Func,
-  UseActionOptions,
-  UseActionBasicOptions,
-  UseActionDebounceOptions,
-  UseActionThrottleOptions,
-  UseActionPollingIntervalOptions,
-  UseActionRefreshOnWindowFocusOptions,
-} from './@types';
+import { useEffect, useRef, useMemo } from 'react';
+import { Func, UseActionBasicOptions } from './@types';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 
 export function createUseAction<D extends Func>(run: D) {
-  function useAction(): [D];
-
-  function useAction(options: UseActionDebounceOptions<any>): [any];
-
-  function useAction(options: UseActionThrottleOptions<any>): [any];
-
-  function useAction(options: UseActionPollingIntervalOptions<any>): [any];
-
-  function useAction(options: UseActionRefreshOnWindowFocusOptions<any>): [any];
-
-  function useAction(options?: UseActionOptions<any>) {
+  function useAction<T = undefined>(
+    options?: UseActionBasicOptions<T>,
+  ): T extends undefined ? { run: D } : { run: T } {
     const ref = useRef({
       transform: undefined,
       dispatch: undefined,
     });
-    ref.current.transform = options.transform;
+    ref.current.transform = options?.transform;
     ref.current.dispatch = run;
 
     const transformFn = useMemo(
@@ -37,7 +21,7 @@ export function createUseAction<D extends Func>(run: D) {
     );
 
     const debounceFn = useMemo(() => {
-      const { wait = 500, ...args } = options?.debounce ?? {};
+      const { wait = 500, ...args } = options?.performance ?? {};
       const debounced = debounce(
         options?.transform ? transformFn : ref.current.dispatch,
         wait,
@@ -47,7 +31,7 @@ export function createUseAction<D extends Func>(run: D) {
     }, [ref]);
 
     const throttleFn = useMemo(() => {
-      const { wait = 500, ...args } = options?.throttle ?? {};
+      const { wait = 500, ...args } = options?.performance ?? {};
       const throttled = throttle(
         options?.transform ? transformFn : ref.current.dispatch,
         wait,
@@ -56,39 +40,53 @@ export function createUseAction<D extends Func>(run: D) {
       return (...args) => (args?.[0]?.persist?.(), throttled(...args));
     }, [transformFn]);
 
-    const finish = options?.debounce
-      ? debounceFn
-      : options?.throttle
-      ? throttleFn
-      : options?.transform
-      ? transformFn
-      : ref.current.dispatch;
-
-    const sideRun = useCallback(() => {
-      if (document.visibilityState === 'visible') {
-        finish(...(options?.refreshOnWindowFocus?.transform?.() ?? []));
-      }
-    }, []);
-
+    // 立即执行
     useEffect(
       () =>
         void options?.immediate &&
-        finish(...(options?.immediate?.transform?.() ?? [])),
+        ref.current.dispatch(...options?.immediate?.args),
       [],
     );
 
-    useEffect(() => {
-      if (options?.refreshOnWindowFocus) {
-        window.addEventListener('visibilitychange', sideRun);
-        window.addEventListener('focus', sideRun);
-        return () => {
-          window.removeEventListener('visibilitychange', sideRun);
-          window.removeEventListener('focus', sideRun);
-        };
-      }
-    }, []);
+    //聚焦执行
+    // useEffect(() => {
+    //   if (options?.refreshOnWindowFocus) {
+    //     const listener = () =>
+    //       document.visibilityState === 'visible' &&
+    //       ref.current.dispatch(...options?.refreshOnWindowFocus?.args);
+    //     window.addEventListener('visibilitychange', listener);
+    //     window.addEventListener('focus', listener);
+    //     return () => {
+    //       window.removeEventListener('visibilitychange', listener);
+    //       window.removeEventListener('focus', listener);
+    //     };
+    //   }
+    // }, []);
 
-    return [finish];
+    //轮询
+    // useEffect(() => {
+    //   if (options?.pollingInterval) {
+    //     let timerId = setInterval(() => {
+    //       options?.pollingInterval?.pollingWhenHidden
+    //         ? ref.current.dispatch(...options?.pollingInterval?.args)
+    //         : document.visibilityState === 'visible' &&
+    //           document.hasFocus() &&
+    //           ref.current.dispatch(...options?.pollingInterval?.args);
+    //     }, options?.pollingInterval?.ms ?? 1000);
+    //     return () => clearInterval(timerId);
+    //   }
+    // }, []);
+
+    const finish =
+      options?.performance?.action === 'debounce'
+        ? debounceFn
+        : options?.performance?.action === 'throttle'
+        ? throttleFn
+        : options?.transform
+        ? transformFn
+        : ref.current.dispatch;
+
+    return { run: finish } as any;
   }
   return useAction;
 }

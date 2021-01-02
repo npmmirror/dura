@@ -9,7 +9,7 @@ import {
 import { createDefineReducer } from './createDefineReducer';
 import { createDefineEffect } from './createDefineEffect';
 import { createUseMount } from './createUseMount';
-import { createUseSliceStore } from './createUseSliceStore';
+import { createUseState } from './createUseSliceStore';
 import { createAsyncMiddleware } from './middleware';
 import { createGlobalStorage, createSliceStorage } from './createStorage';
 import { Action } from './@types';
@@ -45,7 +45,6 @@ function configura<S, A extends Action>(
       const sliceStorage = createSliceStorage();
       const defineReducers = createDefineReducer<S>(name, store, sliceStorage);
       const defineSideEffect = createDefineEffect(name, store, sliceStorage);
-
       const useMount = createUseMount(
         name,
         initialState,
@@ -53,14 +52,12 @@ function configura<S, A extends Action>(
         sliceStorage,
         globalStorage,
       );
-
-      const useSliceStore = createUseSliceStore<S>(name, store);
-
+      const useState = createUseState<S>(name, store);
       return {
         defineReducers,
         defineSideEffect,
         useMount,
-        useSliceStore,
+        useState,
         getState: (): S => store.getState()[name],
         store,
       };

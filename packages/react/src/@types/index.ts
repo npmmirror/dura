@@ -49,59 +49,24 @@ export type PayloadAndMeta = any[];
 export interface UseActionBasicOptions<T> {
   transform?: T;
   immediate?: {
-    transform?: () => [any, any];
+    args?: [any, any];
   };
-}
-
-export interface RefreshOnWindowFocus {
-  refreshOnWindowFocus?: {
-    leading?: boolean;
-    transform?: () => PayloadAndMeta;
-  };
-}
-
-export interface PollingIntervalOptions {
-  pollingInterval?: {
-    pollingWhenHidden?: boolean;
-    immediate?: boolean;
-    transform?: () => [any, any];
-  };
-}
-export interface DebounceOptions {
-  debounce?: {
+  performance?: {
+    action: 'debounce' | 'throttle';
     wait?: number;
     leading?: boolean;
   };
+  // refreshOnWindowFocus?: {
+  //   args?: [any, any];
+  // };
+  // pollingInterval?: {
+  //   ms?: number;
+  //   pollingWhenHidden?: boolean;
+  //   args?: [any, any];
+  // };
 }
 
-export interface ThrottleOptions {
-  throttle?: {
-    wait?: number;
-    leading?: boolean;
-  };
-}
-
-export interface UseActionDebounceOptions<T>
-  extends UseActionBasicOptions<T>,
-    DebounceOptions {}
-
-export interface UseActionThrottleOptions<T>
-  extends UseActionBasicOptions<T>,
-    ThrottleOptions {}
-
-export interface UseActionPollingIntervalOptions<T>
-  extends UseActionBasicOptions<T>,
-    PollingIntervalOptions {}
-
-export interface UseActionRefreshOnWindowFocusOptions<T>
-  extends UseActionBasicOptions<T>,
-    RefreshOnWindowFocus {}
-export interface UseActionOptions<T>
-  extends UseActionBasicOptions<T>,
-    DebounceOptions,
-    ThrottleOptions,
-    PollingIntervalOptions,
-    RefreshOnWindowFocus {}
+export interface UseActionOptions<T> extends UseActionBasicOptions<T> {}
 
 export interface UseAsyncActionBasicOptions<T>
   extends UseActionBasicOptions<T> {
@@ -111,27 +76,4 @@ export interface UseAsyncActionBasicOptions<T>
   };
 }
 
-export interface UseAsyncActionDebounceOptions<T>
-  extends UseAsyncActionBasicOptions<T>,
-    DebounceOptions {}
-
-export interface UseAsyncActionThrottleOptions<T>
-  extends UseAsyncActionBasicOptions<T>,
-    ThrottleOptions {}
-
 export type UseAsyncActionReturn<R> = [R, { loading: boolean }];
-
-export interface UseAsyncActionOptions<T>
-  extends UseAsyncActionBasicOptions<T>,
-    DebounceOptions,
-    ThrottleOptions,
-    PollingIntervalOptions,
-    RefreshOnWindowFocus {}
-
-export interface UseAsyncActionPollingIntervalOptions<T>
-  extends UseAsyncActionBasicOptions<T>,
-    PollingIntervalOptions {}
-
-export interface UseAsyncActionRefreshOnWindowFocusOptions<T>
-  extends UseAsyncActionBasicOptions<T>,
-    RefreshOnWindowFocus {}

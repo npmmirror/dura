@@ -6,7 +6,7 @@ const store = createStore();
 export const {
   defineReducers,
   useMount,
-  useSliceStore,
+  useState,
   defineSideEffect,
   getState,
 } = store.createSlice('xxx', {

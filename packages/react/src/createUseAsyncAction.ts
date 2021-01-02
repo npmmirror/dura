@@ -1,15 +1,6 @@
 import { Store } from 'redux';
 import { useEffect, useState } from 'react';
-import {
-  Func,
-  UseAsyncActionOptions,
-  UseAsyncActionBasicOptions,
-  UseAsyncActionDebounceOptions,
-  UseAsyncActionThrottleOptions,
-  UseAsyncActionPollingIntervalOptions,
-  UseAsyncActionRefreshOnWindowFocusOptions,
-  UseAsyncActionReturn,
-} from './@types';
+import { Func, UseAsyncActionBasicOptions } from './@types';
 import { createUseAction } from './createUseAction';
 
 export function createUseAsyncAction<D extends Func>(
@@ -18,31 +9,15 @@ export function createUseAsyncAction<D extends Func>(
   store: Store,
   run: D,
 ) {
-  function useAsyncAction(): UseAsyncActionReturn<D>;
-
-  function useAsyncAction(
-    options: UseAsyncActionDebounceOptions<any>,
-  ): UseAsyncActionReturn<any>;
-
-  function useAsyncAction(
-    options: UseAsyncActionThrottleOptions<any>,
-  ): UseAsyncActionReturn<any>;
-
-  function useAsyncAction(
-    options: UseAsyncActionPollingIntervalOptions<any>,
-  ): UseAsyncActionReturn<any>;
-
-  function useAsyncAction(
-    options: UseAsyncActionRefreshOnWindowFocusOptions<any>,
-  ): UseAsyncActionReturn<any>;
-
-  function useAsyncAction(options?: UseAsyncActionOptions<any>) {
+  function useAsyncAction<T = undefined>(
+    options?: UseAsyncActionBasicOptions<T>,
+  ): T extends undefined
+    ? { run: D; loading: boolean }
+    : { run: T; loading: boolean } {
     const [loading, updateLoading] = useState<boolean>(false);
-    const [finish] = options?.loading
-      ? createUseAction((payload, meta) =>
-          run(payload, { ...meta, loading: options.loading }),
-        )(options)
-      : createUseAction(run)(options);
+    const action = createUseAction((payload, meta) =>
+      run(payload, { ...meta, loading: options.loading ?? false }),
+    )(options);
     useEffect(() => {
       return store.subscribe(() => {
         const loading = store.getState()[namespace]['@@DURA.LOADING'][funcName][
@@ -51,7 +26,10 @@ export function createUseAsyncAction<D extends Func>(
         updateLoading(loading);
       });
     }, []);
-    return [finish, { loading }];
+    return {
+      loading,
+      ...action,
+    } as any;
   }
   return useAsyncAction;
 }
