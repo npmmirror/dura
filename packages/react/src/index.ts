@@ -7,9 +7,9 @@ import {
   StoreEnhancer,
 } from 'redux';
 import { createDefineReducer } from './createDefineReducer';
-import { createDefineEffect } from './createDefineEffect';
+import { createDefineAsync } from './createDefineAsync';
 import { createUseMount } from './createUseMount';
-import { createUseState } from './createUseSliceStore';
+import { createUseState } from './createUseState';
 import { createAsyncMiddleware } from './middleware';
 import { createGlobalStorage, createSliceStorage } from './createStorage';
 import { Action } from './@types';
@@ -43,8 +43,8 @@ function configura<S, A extends Action>(
     function createSlice<S>(name: string, initialState: S) {
       globalStorage.effects[name] = {};
       const sliceStorage = createSliceStorage();
-      const defineReducers = createDefineReducer<S>(name, store, sliceStorage);
-      const defineSideEffect = createDefineEffect(name, store, sliceStorage);
+      const defineReducer = createDefineReducer<S>(name, store, sliceStorage);
+      const defineAsync = createDefineAsync(name, store, sliceStorage);
       const useMount = createUseMount(
         name,
         initialState,
@@ -54,8 +54,8 @@ function configura<S, A extends Action>(
       );
       const useState = createUseState<S>(name, store);
       return {
-        defineReducers,
-        defineSideEffect,
+        defineReducer,
+        defineAsync,
         useMount,
         useState,
         getState: (): S => store.getState()[name],

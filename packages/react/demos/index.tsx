@@ -39,20 +39,20 @@ function App() {
   });
 
   const asyAction = asy.useAsyncAction({
-    transform: createValueTransform(),
     immediate: {
-      args: [{ orderId: 'xx' + Math.random() }, undefined],
+      args: [{ name: Math.random() }, undefined],
     },
-    loading: {
-      key: 1,
+    refreshOnWindowFocus: {
+      args: [{ name: Math.random() }, undefined],
     },
   });
 
   // asy.useAsyncAction({
   //   pollingInterval: {
+  //     leading: true,
   //     pollingWhenHidden: false,
   //     ms: 1000,
-  //     transform: () => [{ orderId: 'xx' + Math.random() }, undefined] as any,
+  //     args: [] as any,
   //   },
   // });
 
@@ -87,11 +87,6 @@ const randomString = () =>
 export default function () {
   useMount();
   const [state, updateState] = useState(0);
-  const set = new Set();
-  for (let index = 0; index < 10000; index++) {
-    set.add(randomString() + '.' + randomString());
-  }
-  console.log(set.size);
 
   return (
     <>

@@ -43,39 +43,46 @@ export function createUseAction<D extends Func>(run: D) {
     // 立即执行
     useEffect(
       () =>
-        void options?.immediate &&
-        ref.current.dispatch(...options?.immediate?.args),
+        void (
+          options?.immediate &&
+          ref.current.dispatch(...(options?.immediate?.args ?? []))
+        ),
       [],
     );
 
-    //聚焦执行
-    // useEffect(() => {
-    //   if (options?.refreshOnWindowFocus) {
-    //     const listener = () =>
-    //       document.visibilityState === 'visible' &&
-    //       ref.current.dispatch(...options?.refreshOnWindowFocus?.args);
-    //     window.addEventListener('visibilitychange', listener);
-    //     window.addEventListener('focus', listener);
-    //     return () => {
-    //       window.removeEventListener('visibilitychange', listener);
-    //       window.removeEventListener('focus', listener);
-    //     };
-    //   }
-    // }, []);
+    // 聚焦执行
+    useEffect(() => {
+      if (options?.refreshOnWindowFocus) {
+        options?.refreshOnWindowFocus?.leading &&
+          ref.current.dispatch(...(options?.refreshOnWindowFocus?.args ?? []));
 
-    //轮询
-    // useEffect(() => {
-    //   if (options?.pollingInterval) {
-    //     let timerId = setInterval(() => {
-    //       options?.pollingInterval?.pollingWhenHidden
-    //         ? ref.current.dispatch(...options?.pollingInterval?.args)
-    //         : document.visibilityState === 'visible' &&
-    //           document.hasFocus() &&
-    //           ref.current.dispatch(...options?.pollingInterval?.args);
-    //     }, options?.pollingInterval?.ms ?? 1000);
-    //     return () => clearInterval(timerId);
-    //   }
-    // }, []);
+        const listener = () =>
+          document.visibilityState === 'visible' &&
+          ref.current.dispatch(...(options?.refreshOnWindowFocus?.args ?? []));
+        window.addEventListener('visibilitychange', listener);
+        window.addEventListener('focus', listener);
+        return () => {
+          window.removeEventListener('visibilitychange', listener);
+          window.removeEventListener('focus', listener);
+        };
+      }
+    }, []);
+
+    // 轮询
+    useEffect(() => {
+      if (options?.pollingInterval) {
+        options?.pollingInterval?.leading &&
+          ref.current.dispatch(...(options?.pollingInterval?.args ?? []));
+        let timerId = setInterval(() => {
+          options?.pollingInterval?.pollingWhenHidden
+            ? ref.current.dispatch(...(options?.pollingInterval?.args ?? []))
+            : document.visibilityState === 'visible' &&
+              document.hasFocus() &&
+              ref.current.dispatch(...(options?.pollingInterval?.args ?? []));
+        }, options?.pollingInterval?.ms ?? 1000);
+        return () => clearInterval(timerId);
+      }
+    }, []);
 
     const finish =
       options?.performance?.action === 'debounce'

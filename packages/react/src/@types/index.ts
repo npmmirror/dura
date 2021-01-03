@@ -56,14 +56,16 @@ export interface UseActionBasicOptions<T> {
     wait?: number;
     leading?: boolean;
   };
-  // refreshOnWindowFocus?: {
-  //   args?: [any, any];
-  // };
-  // pollingInterval?: {
-  //   ms?: number;
-  //   pollingWhenHidden?: boolean;
-  //   args?: [any, any];
-  // };
+  refreshOnWindowFocus?: {
+    args?: [any, any];
+    leading?: boolean;
+  };
+  pollingInterval?: {
+    ms?: number;
+    pollingWhenHidden?: boolean;
+    args?: [any, any];
+    leading?: boolean;
+  };
 }
 
 export interface UseActionOptions<T> extends UseActionBasicOptions<T> {}

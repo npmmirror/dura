@@ -4,13 +4,13 @@ import { createAction } from './createAction';
 import { createUseAsyncAction } from './createUseAsyncAction';
 import { createEffectName } from './createNamed';
 
-export function createDefineEffect(
+export function createDefineAsync(
   name: string,
   store: Store,
   sliceStorage: SliceStorage,
 ) {
   let count = 0;
-  return function defineEffect<
+  return function defineAsync<
     P,
     M,
     E extends Effect<P, M & { loading?: boolean }>
