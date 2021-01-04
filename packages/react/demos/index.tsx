@@ -6,6 +6,7 @@ import {
 } from '@dura/react';
 import { Button, Input, Form } from 'antd';
 import { Func } from '@dura/react';
+import { useBindState } from './store';
 
 // const a: AAA<() => void> = null;
 
@@ -39,12 +40,13 @@ function App() {
   });
 
   const asyAction = asy.useAsyncAction({
-    immediate: {
-      args: [{ name: Math.random() }, undefined],
-    },
-    refreshOnWindowFocus: {
-      args: [{ name: Math.random() }, undefined],
-    },
+    // immediate: {
+    //   args: [{ name: Math.random() }, undefined],
+    // },
+    // refreshOnWindowFocus: {
+    //   args: [{ name: Math.random() }, undefined],
+    // },
+    loading: {},
   });
 
   // asy.useAsyncAction({
@@ -56,19 +58,25 @@ function App() {
   //   },
   // });
 
+  const options = useBindState({
+    transform: createEventTransform(),
+  });
+
   return (
     <>
-      <Input onChange={xxAction.run} width={300} />
+      <Input {...options('user.name')} style={{ width: 300 }} />
+      <Input {...options('name')} style={{ width: 300 }} />
 
-      <Button onClick={xxAge.run}>A</Button>
-      <Button
+      {/* <Button onClick={xxAge.run}>A</Button> */}
+      {/* <Button
         loading={asyAction.loading}
         onClick={() => asyAction.run({ name: 'async' + Math.random() })}
       >
         async
-      </Button>
+      </Button> */}
       <h1>xx</h1>
       <h1>name:{state?.name}</h1>
+      <h1>{state.user.name}</h1>
     </>
   );
 }
@@ -82,11 +90,9 @@ function H() {
     </>
   );
 }
-const randomString = () =>
-  Math.random().toString(36).substring(7).split('').join('.');
 export default function () {
   useMount();
-  const [state, updateState] = useState(0);
+  const [state, updateState] = useState(1);
 
   return (
     <>

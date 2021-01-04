@@ -1,5 +1,13 @@
 import { ReducersMapObject } from 'redux';
-
+export type PlainObject = { [name: string]: any };
+export type AddPrefix<Prefix, Keys> = Prefix extends ''
+  ? Keys
+  : `${Prefix & string}.${Keys & string}`;
+export type DeepState<State, Prefix> = {
+  [K in keyof State]: State[K] extends PlainObject
+    ? DeepState<State[K], AddPrefix<Prefix, K>>
+    : AddPrefix<Prefix, K>;
+}[keyof State];
 export type Func = (...args: any[]) => any;
 export interface SliceReducersMapObject {
   [name: string]: Reducer;

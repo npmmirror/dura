@@ -2,6 +2,7 @@ import { useEffect, useRef, useMemo } from 'react';
 import { Func, UseActionBasicOptions } from './@types';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
+import { useMemoized } from './useMemoized';
 
 export function createUseAction<D extends Func>(run: D) {
   function useAction<T = undefined>(
@@ -14,28 +15,26 @@ export function createUseAction<D extends Func>(run: D) {
     ref.current.transform = options?.transform;
     ref.current.dispatch = run;
 
-    const transformFn = useMemo(
+    const transformFn = useMemoized(
       () => (...args) =>
         ref.current.dispatch(...ref.current?.transform?.(...args)),
       [ref],
     );
 
-    const debounceFn = useMemo(() => {
-      const { wait = 500, ...args } = options?.performance ?? {};
-      const debounced = debounce(
-        options?.transform ? transformFn : ref.current.dispatch,
-        wait,
-        args,
-      );
-      return (...args) => (args?.[0]?.persist?.(), debounced(...args));
-    }, [ref]);
+    const debounceFn = useMemoized(() => {
+      const { wait = 500, ...performanceArgs } = options?.performance ?? {};
+      const debounced = debounce(ref.current.dispatch, wait, performanceArgs);
+      return (...args) => {
+        debounced(...ref.current?.transform?.(...args));
+      };
+    }, [ref, transformFn]);
 
-    const throttleFn = useMemo(() => {
-      const { wait = 500, ...args } = options?.performance ?? {};
+    const throttleFn = useMemoized(() => {
+      const { wait = 500, ...performanceArgs } = options?.performance ?? {};
       const throttled = throttle(
         options?.transform ? transformFn : ref.current.dispatch,
         wait,
-        args,
+        performanceArgs,
       );
       return (...args) => (args?.[0]?.persist?.(), throttled(...args));
     }, [transformFn]);

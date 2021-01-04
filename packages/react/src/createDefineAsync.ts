@@ -9,13 +9,11 @@ export function createDefineAsync(
   store: Store,
   sliceStorage: SliceStorage,
 ) {
-  let count = 0;
   return function defineAsync<
     P,
     M,
     E extends Effect<P, M & { loading?: boolean }>
-  >(fn: E) {
-    const funcName = createEffectName(fn.name, count);
+  >(funcName: string, fn: E) {
     sliceStorage.effects[funcName] = fn;
     const run = createAction<P, M>(name, store, funcName);
     const useAsyncAction = createUseAsyncAction(name, funcName, store, run);

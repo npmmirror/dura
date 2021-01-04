@@ -7,7 +7,9 @@ import {
   UPDATE_LOADING_REDUCER_NAME,
   STATE_LOADING_MAPPING_KEY,
   ACTION_TYPE_SEP,
+  SET_STATE_NAME,
 } from './createNamed';
+import set from 'lodash.set';
 
 enablePatches();
 setAutoFreeze(false);
@@ -20,6 +22,11 @@ function updateLoadingReducer(
   state[STATE_LOADING_MAPPING_KEY][methodName][key] = action.payload.val;
 }
 
+function setStateReducer(state, action: Action<[key: string, value: any]>) {
+  const [key, value] = action.payload;
+  set(state, key, value);
+}
+
 export function createUseMount<S>(
   name: string,
   initialState: S,
@@ -30,6 +37,7 @@ export function createUseMount<S>(
   return function useMount() {
     // 更新loading 状态的 reducer
     sliceStorage.reducers[UPDATE_LOADING_REDUCER_NAME] = updateLoadingReducer;
+    sliceStorage.reducers[SET_STATE_NAME] = setStateReducer;
 
     // 初始化loading 的key
     const LOADING_MAPPING = Object.keys(sliceStorage.effects)

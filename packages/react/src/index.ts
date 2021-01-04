@@ -12,8 +12,10 @@ import { createUseMount } from './createUseMount';
 import { createUseState } from './createUseState';
 import { createAsyncMiddleware } from './middleware';
 import { createGlobalStorage, createSliceStorage } from './createStorage';
-import { Action } from './@types';
+import { Action, Func, DeepState } from './@types';
 import { createCompose } from './createCompose';
+import { SET_STATE_NAME } from './createNamed';
+import { createUseAction } from './createUseAction';
 
 function configura<S, A extends Action>(
   reducer: ReducersMapObject = {},
@@ -53,10 +55,33 @@ function configura<S, A extends Action>(
         globalStorage,
       );
       const useState = createUseState<S>(name, store);
+
+      function useBindState<T extends Func>(options: {
+        transform?: T;
+        changeName?: string;
+      }) {
+        return function (path: DeepState<S, ''>) {
+          const run = (payload, meta) => {
+            store.dispatch({
+              type: `${name}/${SET_STATE_NAME}`,
+              payload: [path, payload.value],
+              meta,
+            });
+          };
+          return {
+            [options?.changeName ?? 'onChange']: createUseAction(run)({
+              transform: options?.transform,
+            }).run,
+            value: store.getState()[name][path],
+          };
+        };
+      }
+
       return {
         defineReducer,
         defineAsync,
         useMount,
+        useBindState,
         useState,
         getState: (): S => store.getState()[name],
         store,

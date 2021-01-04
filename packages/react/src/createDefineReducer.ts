@@ -9,9 +9,10 @@ export function createDefineReducer<S>(
   store: Store,
   sliceStorage: SliceStorage,
 ) {
-  let count = 0;
-  return function defineReducer<P, M, F extends Reducer<S, P, M>>(fn: F) {
-    const funcName = createReducerName(fn.name, count);
+  return function defineReducer<P, M, F extends Reducer<S, P, M>>(
+    funcName: string,
+    fn: F,
+  ) {
     sliceStorage.reducers[funcName] = fn;
     const run = createAction<P, M>(name, store, funcName);
     const useAction = createUseAction(run);

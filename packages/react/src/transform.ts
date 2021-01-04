@@ -3,23 +3,15 @@ export const createEventTransform = <
 >(
   name?: string,
 ): React.ChangeEventHandler<T> => (e) => {
-  return [
-    name
-      ? {
-          [name]: e?.target?.value,
-        }
-      : e.target.value,
-    undefined,
-  ];
+  return [{ [name ?? 'value']: e.target.value }, undefined];
 };
 
 export const createNoopTransform = () => (): void =>
   [undefined, undefined] as any;
 
 export const createValueTransform = (name?: string) => <T>(value: T) => [
-  name
-    ? {
-        [name]: value,
-      }
-    : value,
+  {
+    [name ?? 'value']: value,
+  },
+  undefined,
 ];
