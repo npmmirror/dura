@@ -33,13 +33,16 @@
   "dependencies": {
     "@onecocjs/snake": "^1.0.4",
     "immer": "^8.0.0",
+    "lodash.curry": "^4.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lodash.throttle": "^4.1.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@types/lodash.curry": "^4.1.6",
     "@types/lodash.debounce": "^4.0.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.set": "^4.3.6",

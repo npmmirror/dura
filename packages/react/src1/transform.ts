@@ -3,7 +3,10 @@ export const createEventTransform = <
 >(
   name?: string,
 ): React.ChangeEventHandler<T> => (e) => {
-  return [{ [name ?? 'value']: e.target.value }, undefined];
+  return {
+    payload: { [name ?? 'value']: e.target.value },
+    meta: undefined,
+  };
 };
 
 export const createNoopTransform = () => (): void =>

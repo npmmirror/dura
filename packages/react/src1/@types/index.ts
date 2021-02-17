@@ -54,10 +54,13 @@ export interface SliceStorage {
 
 export type PayloadAndMeta = any[];
 
-export interface UseActionBasicOptions<T> {
-  transform?: T;
+export interface UseActionBasicOptions<
+  T extends (...args: any[]) => any = undefined
+> {
+  transformArgs?: T;
   immediate?: {
-    args?: [any, any];
+    payload?: {};
+    meta?: {};
   };
   performance?: {
     action: 'debounce' | 'throttle';
@@ -65,21 +68,23 @@ export interface UseActionBasicOptions<T> {
     leading?: boolean;
   };
   refreshOnWindowFocus?: {
-    args?: [any, any];
-    leading?: boolean;
+    payload?: {};
+    meta?: {};
   };
   pollingInterval?: {
     ms?: number;
     pollingWhenHidden?: boolean;
-    args?: [any, any];
-    leading?: boolean;
+    payload?: {};
+    meta?: {};
   };
 }
 
-export interface UseActionOptions<T> extends UseActionBasicOptions<T> {}
+export interface UseActionOptions<T extends (...args: any[]) => any = undefined>
+  extends UseActionBasicOptions<T> {}
 
-export interface UseAsyncActionBasicOptions<T>
-  extends UseActionBasicOptions<T> {
+export interface UseAsyncActionBasicOptions<
+  T extends (...args: any[]) => any = undefined
+> extends UseActionBasicOptions<T> {
   loading?: {
     delay?: number;
     key?: string | number;
