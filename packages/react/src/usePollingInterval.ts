@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-import { usePersistFn } from './usePersistFn';
-import { useMemoized } from './useMemoized';
+import { useInterval } from './useInterval';
 
 export interface UsePollingInterval {
   ms?: number;
@@ -11,28 +9,19 @@ export function usePollingInterval(
   fn: () => void,
   options?: UsePollingInterval,
 ) {
-  const $fn = usePersistFn(fn);
-  const $options = useMemoized(() => options);
-
-  useEffect(() => {
-    let timerId;
-    if ($options) {
-      const { ms = 500, pollingWhenHidden = false } = $options;
-      timerId = setInterval(() => {
-        if (pollingWhenHidden) {
-          $fn();
-        }
-        if (
-          !pollingWhenHidden &&
+  useInterval(
+    () => {
+      if (options) {
+        const pollingWhenHidden = !!options?.pollingWhenHidden;
+        pollingWhenHidden && fn();
+        !pollingWhenHidden &&
           document.visibilityState === 'visible' &&
-          document.hasFocus()
-        ) {
-          $fn();
-        }
-      }, ms);
-    }
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [$fn, $options]);
+          document.hasFocus() &&
+          fn();
+      }
+    },
+    {
+      ms: options?.ms,
+    },
+  );
 }

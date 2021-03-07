@@ -1,5 +1,5 @@
 import type { Action, Store } from 'redux';
-import type { ReducersMap, CreateSliceOptions, UseOptions } from './types';
+import type { Use, AnyFunction, UseOptions } from './types';
 import { useImmediate } from './useImmediate';
 import { usePollingInterval } from './usePollingInterval';
 import { useRefreshOnWindowFocus } from './useRefreshOnWindowFocus';
@@ -19,37 +19,23 @@ const createMeta = (e: typeof automaticHooksNames[number], merge: {}) =>
     .map((x) => ({ [x]: x === e }))
     .reduce((prev, next) => ({ ...prev, ...next }), merge);
 
-export function createEachUseReducer<
-  N extends string,
-  S,
-  A extends Action,
-  M extends ReducersMap<S, A>
->(store: Store<S>, createSliceOptions: CreateSliceOptions<S, A, M>) {
-  return function each(name: N) {
-    const TYPE = `${createSliceOptions.namespace}/${name}`;
-    function execute(type, { payload, meta }) {
-      store.dispatch({ type, payload, meta });
-    }
-    const run = curry(execute)(TYPE);
-    function use<T extends (...args: any[]) => any>(useOptions: UseOptions<T>) {
-      useAutomaticHooks(run, useOptions);
-      return useManualHooks(run, useOptions);
-    }
-    return { [name]: { use, run } };
-  };
-}
+export const createUseReducer = <F extends AnyFunction>(run: F) => <
+  T extends AnyFunction
+>(
+  useOptions: UseOptions<T>,
+) => (useAutomaticHooks(run, useOptions), useManualHooks(run, useOptions));
 
 function useManualHooks<T extends (...args: any[]) => any>(
   run: any,
   useOptions: UseOptions<T>,
 ) {
   const wait = useOptions?.performance?.wait ?? 500;
-  const transform = usePersistFn(compose(run, useOptions?.transformArgs));
+  const transform = usePersistFn(compose(run, useOptions?.transform));
 
   const $debounced = useDebounceFn(run, wait, useOptions?.performance);
   const debounced = usePersistFn(
-    useOptions?.transformArgs
-      ? compose($debounced, useOptions?.transformArgs)
+    useOptions?.transform
+      ? compose($debounced, useOptions?.transform)
       : $debounced,
   );
   const $throttled = useDebounceFn(run, wait, {
@@ -57,8 +43,8 @@ function useManualHooks<T extends (...args: any[]) => any>(
     maxWait: wait,
   });
   const throttled = usePersistFn(
-    useOptions?.transformArgs
-      ? compose($throttled, useOptions?.transformArgs)
+    useOptions?.transform
+      ? compose($throttled, useOptions?.transform)
       : $throttled,
   );
 
@@ -68,7 +54,7 @@ function useManualHooks<T extends (...args: any[]) => any>(
         ? debounced
         : useOptions?.performance?.action === 'throttle'
         ? throttled
-        : useOptions?.transformArgs
+        : useOptions?.transform
         ? transform
         : run,
   };
@@ -88,17 +74,13 @@ function useAutomaticHooks<T extends (...args: any[]) => any>(
     'refreshOnWindowFocus',
     refreshOnWindowFocus?.meta,
   );
-  const immediateExecute = () =>
-    void run({ payload: immediate?.payload, meta: immediateMeta });
+  const immediateExecute = () => void run(immediate?.payload, immediateMeta);
 
   const pollingIntervalExecute = () =>
-    void run({ payload: pollingInterval?.payload, meta: pollingIntervalMeta });
+    void run(pollingInterval?.payload, pollingIntervalMeta);
 
   const refreshOnWindowFocusExecute = () =>
-    void run({
-      payload: refreshOnWindowFocus?.payload,
-      meta: refreshOnWindowFocusMeta,
-    });
+    void run(refreshOnWindowFocus?.payload, refreshOnWindowFocusMeta);
 
   useImmediate(immediateExecute, immediate);
   usePollingInterval(pollingIntervalExecute, pollingInterval);

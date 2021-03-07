@@ -1,4 +1,11 @@
-import type { Action } from 'redux';
+export type AnyFunction = (...args: any[]) => any;
+
+export type Action<P = any, M = any> = {
+  type: string;
+  payload?: P;
+  meta?: M;
+};
+
 export interface STORAGE {
   current: {
     reducerMap: {};
@@ -13,13 +20,12 @@ export interface CreateSliceOptions<
   initialState?: S;
   reducers?: M;
 }
-export interface ReducersMap<S, A extends Partial<Action>> {
-  $SET_STATE?: (state: S, action: A) => void;
+export interface ReducersMap<S, A extends Action> {
   [name: string]: (state: S, action: A) => void;
 }
 
-export interface UseOptions<T extends (...args: any[]) => any = undefined> {
-  transformArgs?: T;
+export interface UseOptions<T extends (...args: any[]) => any> {
+  transform?: T;
   immediate?: {
     payload?: {};
     meta?: {};
@@ -43,23 +49,23 @@ export interface UseOptions<T extends (...args: any[]) => any = undefined> {
 
 export interface InitialState {}
 
-export type Reducers<M, S> = {
-  [P in keyof M]: M[P] extends (...args: infer A) => Promise<void>
-    ? (this: { methods: M } & { state: S }, payload: A[0]) => Promise<void>
-    : M[P];
-};
-
-export interface CommitParameter<S> {
-  (preState: S): void;
-}
-
 export type Return<S, M> = {
-  [P in keyof M]: M[P] extends (...args: infer A) => any
+  [P in keyof M]: M[P] extends (state: S, action: Action<infer P>) => any
     ? {
-        use: <T extends (...args: any[]) => any = (action: A[1]) => void>(
-          options: UseOptions<T>,
-        ) => { run: T };
-        run: (action: A[1]) => void;
+        use: Use<P>;
+        run: (action: P) => void;
       }
     : M[P];
-} & { useMount: () => void; $commit: (fn: CommitParameter<S>) => void };
+} & {
+  useMount: () => void;
+};
+
+export type Use<P> = <T extends (...args: any[]) => any = (payload: P) => void>(
+  options: UseOptions<T>,
+) => { run: (...args: Parameters<T>) => void };
+
+export type UseAsync<R extends (...args: any[]) => any> = <
+  T extends (...args: any[]) => any = R
+>(
+  options: UseOptions<T>,
+) => { run: (...args: Parameters<T>) => void };

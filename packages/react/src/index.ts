@@ -1,21 +1,23 @@
+import { combineReducers } from 'redux';
+import type { StoreEnhancer } from 'redux';
 import {
-  createStore as reduxCreateStore,
-  combineReducers,
-  applyMiddleware,
-  compose,
-} from 'redux';
-import { STORAGE } from './types';
-import { createSliceFactory } from './createSliceFactory';
+  STORAGE,
+  ReducersMap,
+  Action,
+  CreateSliceOptions,
+  Return,
+} from './types';
+import { createUseReducer } from './createEachUseReducer';
+import { createUseMount } from './createUseMount';
+import merge from 'lodash.merge';
 
-const $compose =
-  typeof window === 'object' && window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']
-    ? window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']({
-        name: 'dura',
-        trace: true,
-      })
-    : compose;
+export type DuraEnhancer = StoreEnhancer<{
+  createSlice: <S, A extends Action, M extends ReducersMap<S, A>>(
+    options: CreateSliceOptions<S, A, M>,
+  ) => Return<S, M>;
+}>;
 
-export function configuration() {
+export function createDuraEnhancer(): DuraEnhancer {
   const storage: STORAGE = {
     current: {
       reducerMap: {
@@ -23,14 +25,35 @@ export function configuration() {
       },
     },
   };
-  return function createStore() {
-    const reduxStore = reduxCreateStore(
-      combineReducers(storage.current.reducerMap),
-      $compose(applyMiddleware()),
-    );
-    const createSlice = createSliceFactory(reduxStore as any, storage);
-    return {
-      createSlice,
+  return function duraEnhancer(createStore) {
+    return function (reducer, preloadedState) {
+      const store = createStore(
+        combineReducers({ ...storage.current.reducerMap, ...reducer }),
+        preloadedState,
+      );
+      function createSlice<S, A extends Action, M extends ReducersMap<S, A>>(
+        options: CreateSliceOptions<S, A, M>,
+      ): Return<S, M> {
+        const { reducers = {}, namespace } = options;
+        const useMount = createUseMount(options, store, storage);
+        const mapTo = (name: string) => {
+          const execute = (payload, meta) =>
+            store.dispatch({ type: `${namespace}/${name}`, payload, meta });
+          const use = createUseReducer(execute);
+          return { [name]: { use, run: execute } };
+        };
+        return Object.keys(reducers).map(mapTo).reduce(merge, {
+          useMount,
+        }) as any;
+      }
+
+      return {
+        ...store,
+        createSlice,
+      };
     };
-  };
+  } as any;
 }
+
+export * from './types';
+export * from './useAsync';
