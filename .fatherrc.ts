@@ -1,4 +1,5 @@
 export default {
-  entry: 'src/index.ts',
-  esm: 'babel',
+  entry: './src/index.ts',
+  esm: 'rollup',
+  cjs: 'rollup',
 };

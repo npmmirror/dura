@@ -57,7 +57,7 @@ export function createSliceCreator<S = any, A extends Action = AnyAction>(
   };
 }
 
-function createImmerReducer<S>(initialState: S, reducers) {
+function createImmerReducer<S>(initialState: S, reducers:any) {
   return function immerReducer(state = initialState, action: FluxAction) {
     const [, $name] = action?.type?.split('/');
     return produce(state, (draft) => {
@@ -74,7 +74,7 @@ function createUse(execute: any) {
     const throttledOptions = { ...options?.performance, maxWait: wait };
     const $debounced = useDebounceFn(execute, wait, options?.performance);
     const $throttled = useDebounceFn(execute, wait, throttledOptions);
-    const transformFn = compose(execute, options?.transform);
+    const transformFn = compose(execute, options?.transform as any);
     const debounced = options?.transform
       ? compose($debounced, options.transform)
       : $debounced;
@@ -91,8 +91,13 @@ function createUse(execute: any) {
   };
 }
 
+export interface UseStateOptions {
+  duplicateId?: string | number
+  selector: (...args:any) => any
+}
+
 function createUseState(namespace: string, reduxStore: Store) {
-  return function useState() {
+  return function useState(options?:UseStateOptions) {
     const update = useUpdate();
 
     const proxyRef = useRef(undefined);
@@ -138,7 +143,7 @@ function createUseMount<S, A extends Action = AnyAction>(
   immerReducer: any,
 ) {
   return function useMount() {
-    const ref = useRef(undefined);
+    const ref = useRef<(() => void)|undefined>(undefined);
 
     if (!reducersCache[namespace]) {
       reducersCache[namespace] = immerReducer;

@@ -19,5 +19,7 @@
 .umi-production
 .umi-test
 .env.local
-packages/react/node_modules
-packages/react/lib
+
+# ide
+/.vscode
+/.idea

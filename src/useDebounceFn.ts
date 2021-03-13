@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { useMemoized } from './useMemoized';
 
 interface UseDebounceFnOptions {

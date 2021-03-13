@@ -2,7 +2,7 @@ import isPlainObject from 'lodash.isplainobject';
 
 export const SNAKE_SYMBOL = Symbol('@@SNAKE_SYMBOL');
 
-function caclPath(parentPath, property) {
+function caclPath(parentPath: any, property: any) {
   return parentPath ? `${parentPath}.${property}` : `${property}`;
 }
 function defineHiddenConstantProperty<T, S extends symbol | string, V>(

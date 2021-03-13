@@ -1,9 +1,7 @@
 import { defineConfig, utils } from 'dumi';
 
-const version = require('./lerna.json')['version'];
-
 export default defineConfig({
-  title: `duraStat ${version}`,
+  title: `duraStat `,
   favicon: 'https://dura.oss-cn-hangzhou.aliyuncs.com/logo.png',
   logo: 'https://dura.oss-cn-hangzhou.aliyuncs.com/logo.png',
   outputPath: 'docs-dist',
@@ -11,9 +9,7 @@ export default defineConfig({
   resolve: {
     includes: ['docs', 'packages'],
   },
-  dynamicImport: {
-    loading: '@/Loading',
-  },
+  dynamicImport: {},
   extraBabelPlugins: [
     [
       'babel-plugin-import',
