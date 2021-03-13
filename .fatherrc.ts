@@ -1,3 +1,4 @@
 export default {
-  cjs: 'rollup',
+  entry: 'src/index.ts',
+  esm: 'babel',
 };

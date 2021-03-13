@@ -29,15 +29,27 @@
   },
   "dependencies": {
     "antd": "^4.9.3",
-    "react": "^16.12.0"
+    "immer": "^8.0.1",
+    "lodash.get": "^4.4.2",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.merge": "^4.6.2",
+    "react": "^16.12.0",
+    "redux": "^4.0.5"
+  },
+  "resolutions": {
+    "@types/react": "^16.14.2",
+    "@types/react-dom": "^16.14.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.isplainobject": "^4.0.6",
+    "@types/lodash.merge": "^4.6.6",
     "@umijs/test": "^3.0.5",
-    "dumi": "^1.1.7",
-    "father-build": "^1.17.2",
+    "dumi": "^1.1.6",
+    "father-build": "^1.19.2",
     "gh-pages": "^3.0.0",
     "lerna": "^3.22.1",
     "lint-staged": "^10.0.7",
