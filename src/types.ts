@@ -1,4 +1,4 @@
-import type { Action } from 'redux';
+import { Action } from 'redux';
 
 export interface FluxAction<P extends {} = {}, M extends {} = {}>
   extends Action<any> {

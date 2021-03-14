@@ -1,4 +1,4 @@
-import type {
+import {
   StoreEnhancerStoreCreator,
   AnyAction,
   Action,
@@ -7,11 +7,11 @@ import type {
 } from 'redux';
 import { createSliceCreator } from './createSliceCreator';
 import { setAutoFreeze } from 'immer';
-import type { CreateSlice } from './types';
+import { CreateSlice } from './types';
 
 setAutoFreeze(false);
 
-export function create(options: any) {
+export function create() {
   // 缓存
   const reducersCache = {
     DURA: (state = {}) => state,
@@ -36,4 +36,4 @@ export function create(options: any) {
   };
 }
 
-export * from "./types"
+export * from './types';

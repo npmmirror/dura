@@ -1,15 +1,21 @@
-import type {
+import {
   FluxAction,
   ReducersMapObjectOfSlice,
   UseOptions,
   SliceOptions,
 } from './types';
-import type { Action, AnyAction, Reducer, Store } from 'redux';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import { produce } from 'immer';
 import { useRef, useLayoutEffect, useState as _useState } from 'react';
-import { compose, combineReducers } from 'redux';
+import {
+  compose,
+  combineReducers,
+  Action,
+  AnyAction,
+  Reducer,
+  Store,
+} from 'redux';
 import { useDebounceFn } from './useDebounceFn';
 import { useUpdate } from './useUpdate';
 import { createProxy } from './createProxy';
@@ -57,10 +63,10 @@ export function createSliceCreator<S = any, A extends Action = AnyAction>(
   };
 }
 
-function createImmerReducer<S>(initialState: S, reducers:any) {
+function createImmerReducer<S>(initialState: S, reducers: any) {
   return function immerReducer(state = initialState, action: FluxAction) {
     const [, $name] = action?.type?.split('/');
-    return produce(state, (draft) => {
+    return produce(state, draft => {
       reducers[$name]?.(draft, action);
     });
   };
@@ -92,12 +98,12 @@ function createUse(execute: any) {
 }
 
 export interface UseStateOptions {
-  duplicateId?: string | number
-  selector: (...args:any) => any
+  duplicateId?: string | number;
+  selector: (...args: any) => any;
 }
 
 function createUseState(namespace: string, reduxStore: Store) {
-  return function useState(options?:UseStateOptions) {
+  return function useState(options?: UseStateOptions) {
     const update = useUpdate();
 
     const proxyRef = useRef(undefined);
@@ -143,7 +149,7 @@ function createUseMount<S, A extends Action = AnyAction>(
   immerReducer: any,
 ) {
   return function useMount() {
-    const ref = useRef<(() => void)|undefined>(undefined);
+    const ref = useRef<(() => void) | undefined>(undefined);
 
     if (!reducersCache[namespace]) {
       reducersCache[namespace] = immerReducer;
