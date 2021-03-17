@@ -20,15 +20,6 @@ export type ReducersMapObjectOfSlice<
 
 export interface UseOptions<T extends (...args: any[]) => any> {
   transform?: T;
-  immediate?: {
-    payload?: {};
-    meta?: {};
-  };
-  performance?: {
-    action: 'debounce' | 'throttle';
-    wait?: number;
-    leading?: boolean;
-  };
 }
 
 export interface SliceOptions<NAME_SPACE extends string, STATE, REDUCERS> {
@@ -36,7 +27,13 @@ export interface SliceOptions<NAME_SPACE extends string, STATE, REDUCERS> {
   initialState: STATE;
   reducers?: REDUCERS;
 }
-
+export interface UseStateOptions {
+  id?: string | number;
+  selector?: (...args: any) => any;
+}
+export interface UseMountOptions {
+  id?: string | number;
+}
 export type CreateSlice = <
   NAME_SPACE extends string,
   S,
@@ -46,12 +43,15 @@ export type CreateSlice = <
   options: SliceOptions<NAME_SPACE, S, REDUCERS>,
 ) => {
   [K in keyof REDUCERS]: {
-    use: <T extends (...args: any[]) => any = undefined>(
+    use: <T extends (...args: any[]) => any = never>(
       options?: UseOptions<T>,
-    ) => T extends undefined
+    ) => T extends never
       ? REDUCERS[K] extends (state: S, action: FluxAction<infer P>) => void
         ? (payload: P) => void
         : never
       : (...args: Parameters<T>) => void;
   };
-} & { useMount: () => void; useState: () => S };
+} & {
+  useMount: (options?: UseMountOptions) => void;
+  useState: (options?: UseStateOptions) => S;
+};

@@ -2,7 +2,9 @@ import {
   FluxAction,
   ReducersMapObjectOfSlice,
   UseOptions,
+  UseMountOptions,
   SliceOptions,
+  UseStateOptions,
 } from './types';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
@@ -16,7 +18,6 @@ import {
   Reducer,
   Store,
 } from 'redux';
-import { useDebounceFn } from './useDebounceFn';
 import { useUpdate } from './useUpdate';
 import { createProxy } from './createProxy';
 import { useMemoized } from './useMemoized';
@@ -76,49 +77,29 @@ function createUse(execute: any) {
   return function use<T extends (...args: any[]) => any>(
     options?: UseOptions<T>,
   ) {
-    const wait = options?.performance?.wait ?? 500;
-    const throttledOptions = { ...options?.performance, maxWait: wait };
-    const $debounced = useDebounceFn(execute, wait, options?.performance);
-    const $throttled = useDebounceFn(execute, wait, throttledOptions);
     const transformFn = compose(execute, options?.transform as any);
-    const debounced = options?.transform
-      ? compose($debounced, options.transform)
-      : $debounced;
-    const throttled = options?.transform
-      ? compose($throttled, options?.transform)
-      : $throttled;
-    return options?.performance?.action === 'debounce'
-      ? debounced
-      : options?.performance?.action === 'throttle'
-      ? throttled
-      : options?.transform
-      ? transformFn
-      : execute;
+    return options?.transform ? transformFn : execute;
   };
-}
-
-export interface UseStateOptions {
-  duplicateId?: string | number;
-  selector: (...args: any) => any;
 }
 
 function createUseState(namespace: string, reduxStore: Store) {
   return function useState(options?: UseStateOptions) {
     const update = useUpdate();
+    const $namespace = [namespace, options?.id].filter(x => !!x).join('.');
 
     const proxyRef = useRef(undefined);
     const originalRef = useRef(undefined);
     const cacheRef = useMemoized(() => new Map());
 
-    originalRef.current = reduxStore.getState()[namespace];
+    originalRef.current = reduxStore.getState()[$namespace];
     proxyRef.current = createProxy(
-      reduxStore.getState()[namespace] ?? {},
+      reduxStore.getState()[$namespace] ?? {},
       cacheRef,
     );
 
     useLayoutEffect(() => {
       return reduxStore.subscribe(() => {
-        const current = reduxStore.getState()[namespace];
+        const current = reduxStore.getState()[$namespace];
         let isUpdate = false;
         for (const [key] of cacheRef) {
           if (get(current, key) !== get(originalRef.current, key)) {
@@ -128,15 +109,15 @@ function createUseState(namespace: string, reduxStore: Store) {
         }
         if (isUpdate) {
           cacheRef.clear();
-          originalRef.current = reduxStore.getState()[namespace];
+          originalRef.current = reduxStore.getState()[$namespace];
           proxyRef.current = createProxy(
-            reduxStore.getState()[namespace] ?? {},
+            reduxStore.getState()[$namespace] ?? {},
             cacheRef,
           );
           update();
         }
       });
-    }, [reduxStore.getState, namespace]);
+    }, [reduxStore.getState, $namespace]);
     return proxyRef.current;
   };
 }
@@ -148,19 +129,19 @@ function createUseMount<S, A extends Action = AnyAction>(
   reducer: Reducer<S, A>,
   immerReducer: any,
 ) {
-  return function useMount() {
+  return function useMount(options?: UseMountOptions) {
     const ref = useRef<(() => void) | undefined>(undefined);
-
-    if (!reducersCache[namespace]) {
-      reducersCache[namespace] = immerReducer;
+    const $namespace = [namespace, options?.id].filter(x => !!x).join('.');
+    if (!reducersCache[$namespace]) {
+      reducersCache[$namespace] = immerReducer;
       reduxStore.replaceReducer(
         compose(reducer, combineReducers(reducersCache)),
       );
     }
 
     function unmount() {
-      if (reducersCache[namespace]) {
-        delete reducersCache[namespace];
+      if (reducersCache[$namespace]) {
+        delete reducersCache[$namespace];
         reduxStore.replaceReducer(
           compose(reducer, combineReducers(reducersCache)),
         );
