@@ -1,8 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { create, FluxAction } from '../../../src/index';
+import { createDura, FluxAction } from '../../../src/run';
 
-const store = createStore((state = {}) => state, composeWithDevTools(create()));
+const store = createStore(
+  (state = {}) => state,
+  composeWithDevTools(createDura()),
+);
 
 export const user = store.createSlice({
   namespace: 'user',
