@@ -67,7 +67,7 @@ export function createSliceCreator<S = any, A extends Action = AnyAction>(
 function createImmerReducer<S>(initialState: S, reducers: any) {
   return function immerReducer(state = initialState, action: FluxAction) {
     const [, $name] = action?.type?.split('/');
-    return produce(state, draft => {
+    return produce(state, (draft) => {
       reducers[$name]?.(draft, action);
     });
   };
@@ -85,7 +85,7 @@ function createUse(execute: any) {
 function createUseState(namespace: string, reduxStore: Store) {
   return function useState(options?: UseStateOptions) {
     const update = useUpdate();
-    const $namespace = [namespace, options?.id].filter(x => !!x).join('.');
+    const $namespace = [namespace, options?.id].filter((x) => !!x).join('.');
 
     const proxyRef = useRef(undefined);
     const originalRef = useRef(undefined);
@@ -131,7 +131,7 @@ function createUseMount<S, A extends Action = AnyAction>(
 ) {
   return function useMount(options?: UseMountOptions) {
     const ref = useRef<(() => void) | undefined>(undefined);
-    const $namespace = [namespace, options?.id].filter(x => !!x).join('.');
+    const $namespace = [namespace, options?.id].filter((x) => !!x).join('.');
     if (!reducersCache[$namespace]) {
       reducersCache[$namespace] = immerReducer;
       reduxStore.replaceReducer(

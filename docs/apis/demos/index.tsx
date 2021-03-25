@@ -1,5 +1,5 @@
 import { ChangeEvent, UIEventHandler, UIEvent } from 'react';
-import { Input } from 'antd';
+import { Input, Checkbox, DatePicker } from 'antd';
 import { user } from './store';
 /**
  * debug: true
@@ -27,13 +27,26 @@ export default function () {
 
   const setName = user.useSetState('name', {
     id: 1,
-    transform: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+    transform: 'html',
   });
 
   return (
     <>
-      <Input onChange={setName} />
+      <Input type="email" onChange={setName} />
+      <Checkbox onChange={setName} />
+      <DatePicker
+        onChange={(e) => {
+          setName(e);
+        }}
+      />
 
+      <input
+        required
+        type="text"
+        onChange={(e) => {
+          console.log(e.target.value);
+        }}
+      />
       <h1>{state.name}</h1>
       <Input
         placeholder="请输入用户名"

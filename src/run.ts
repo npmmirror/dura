@@ -9,11 +9,12 @@ import {
   combineReducers,
 } from 'redux';
 import { setAutoFreeze, produce } from 'immer';
-import { get, merge, set, upperFirst } from 'lodash-es';
+import { get, merge, set, upperFirst, isPlainObject } from 'lodash-es';
 import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
 import { usePersistFn } from './usePersistFn';
+setAutoFreeze(false);
 
 export interface Id {
   id?: string | number;
@@ -54,7 +55,7 @@ export interface UseOptions<T extends (...args: any[]) => any> extends Id {
 }
 
 export interface UseBindOptions<T extends (...args: any[]) => any> extends Id {
-  transform?: T;
+  transform?: T | 'html';
 }
 
 export function createDura() {
@@ -204,13 +205,55 @@ export function createDura() {
           optionsUseBind: UseBindOptions<T>,
         ) {
           const $namespace = convertNamespace(optionsUseBind?.id);
-          return usePersistFn((...args: unknown[]) => {
-            const payload = optionsUseBind?.transform?.(...args) ?? args[0];
+          return usePersistFn((firstArg, ...otherArgs) => {
+            const $transform = optionsUseBind?.transform ?? 'html';
+            let val;
+            console.log(
+              firstArg?.target?.tagName,
+              firstArg?.target?.type,
+              firstArg?.target?.value,
+              firstArg,
+              isPlainObject(firstArg),
+            );
+            // TODO
+            if ($transform === 'html') {
+              switch (firstArg?.target?.type) {
+                case 'text':
+                case 'date':
+                case 'datetime-local':
+                case 'email':
+                case 'month':
+                case 'number':
+                case 'password':
+                case 'range':
+                case 'search':
+                case 'tel':
+                case 'time':
+                case 'url':
+                case 'week':
+                case 'datetime':
+                  val = firstArg.target.value;
+                  break;
+                case 'checkbox':
+                case 'radio':
+                  val = firstArg.target.checked;
+                  break;
+                default:
+                  isPlainObject(firstArg) && (val = firstArg);
+                  break;
+              }
+            } else if (typeof $transform === 'function') {
+              val = $transform?.(firstArg, ...otherArgs);
+            } else if (isPlainObject(firstArg)) {
+              val = firstArg;
+            } else {
+              val = null;
+            }
             const action = {
               type: `${$namespace}/@@SET_STATE`,
               payload: {
                 key: path,
-                val: payload,
+                val,
               },
             };
             reduxStore.dispatch(action as never);
@@ -232,8 +275,6 @@ export function createDura() {
               >(optionsUse?: UseOptions<T>) {
                 const $namespace = convertNamespace(optionsUse?.id);
                 const fn = usePersistFn((payload: unknown) => {
-                  console.log(createAction($namespace, payload));
-
                   reduxStore.dispatch(createAction($namespace, payload));
                 });
                 const transformFn = compose(fn, optionsUse?.transform as any);
