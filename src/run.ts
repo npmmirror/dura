@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import {
   StoreEnhancerStoreCreator,
   AnyAction,
-
   Reducer,
   PreloadedState,
   createStore,
@@ -10,7 +9,7 @@ import {
   combineReducers,
 } from 'redux';
 import { setAutoFreeze, produce } from 'immer';
-import { get, merge } from 'lodash-es';
+import { get, merge, set, upperFirst } from 'lodash-es';
 import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
@@ -51,6 +50,10 @@ export interface UseStateOptions extends Id {
 }
 
 export interface UseOptions<T extends (...args: any[]) => any> extends Id {
+  transform?: T;
+}
+
+export interface UseBindOptions<T extends (...args: any[]) => any> extends Id {
   transform?: T;
 }
 
@@ -99,13 +102,16 @@ export function createDura() {
         function createImmerReducer($namespace: string) {
           return function immerReducer(
             state = initialState,
-            action: FluxAction,
+            action: FluxAction<{ key?: string; val?: string }>,
           ) {
             const [_namespace, $name] = action?.type?.split('/');
             if (_namespace !== $namespace) {
               return state;
             }
-            return produce(state, (draft) => {
+            return produce(state, (draft: never) => {
+              if ($name === '@@SET_STATE') {
+                set(draft, action?.payload?.key as never, action?.payload?.val);
+              }
               reducers[$name]?.(draft, action);
             });
           };
@@ -190,6 +196,27 @@ export function createDura() {
           return refProxy.current;
         }
 
+        /**
+         * 绑定数据
+         */
+        function useSetState<T extends (...args: any[]) => any>(
+          path: string,
+          optionsUseBind: UseBindOptions<T>,
+        ) {
+          const $namespace = convertNamespace(optionsUseBind?.id);
+          return usePersistFn((...args: unknown[]) => {
+            const payload = optionsUseBind?.transform?.(...args) ?? args[0];
+            const action = {
+              type: `${$namespace}/@@SET_STATE`,
+              payload: {
+                key: path,
+                val: payload,
+              },
+            };
+            reduxStore.dispatch(action as never);
+          });
+        }
+
         const use = Object.keys(reducers)
           .map((name) => {
             function createAction($namespace: string, payload: unknown) {
@@ -198,26 +225,25 @@ export function createDura() {
                 payload,
               } as never;
             }
-            return {
-              [name]: {
-                use: function use<T extends (...args: any[]) => any>(
-                  optionsUse?: UseOptions<T>,
-                ) {
-                  const $namespace = convertNamespace(optionsUse?.id);
-                  const fn = usePersistFn((payload: unknown) => {
-                    console.log(createAction($namespace, payload));
 
-                    reduxStore.dispatch(createAction($namespace, payload));
-                  });
-                  const transformFn = compose(fn, optionsUse?.transform as any);
-                  return optionsUse?.transform ? transformFn : fn;
-                },
+            return {
+              [`use${upperFirst(name)}`]: function use<
+                T extends (...args: any[]) => any
+              >(optionsUse?: UseOptions<T>) {
+                const $namespace = convertNamespace(optionsUse?.id);
+                const fn = usePersistFn((payload: unknown) => {
+                  console.log(createAction($namespace, payload));
+
+                  reduxStore.dispatch(createAction($namespace, payload));
+                });
+                const transformFn = compose(fn, optionsUse?.transform as any);
+                return optionsUse?.transform ? transformFn : fn;
               },
             };
           })
           .reduce(merge);
 
-        return { ...use, useMount, useState } as never;
+        return { ...use, useMount, useState, useSetState } as never;
       }
 
       return {
@@ -235,69 +261,66 @@ const _ = createDura();
 const res = createStore((state = {}) => state, compose(_));
 
 res.createSlice;
- 
 
-interface Action<P = undefined,M = undefined>{
-  type:string;
-  payload?:P,
-  meta?:M
-}
- 
-type ReducerBase<S> = Record<string, (state:S,action:Action<never,never>) => any>;
+// interface Action<P = undefined,M = undefined>{
+//   type:string;
+//   payload?:P,
+//   meta?:M
+// }
 
-type ActionPick<A extends Action,F extends keyof A> = Pick<A,F>[F]
+// type ReducerBase<S> = Record<string, (state:S,action:Action<never,never>) => any>;
 
-declare function f<
- S,
- R extends ReducerBase<S>
->(params:{ namespace: string,state:S,reducers:R }): {
- [K in keyof R & string as `use${Capitalize<K>}`]: (payload:ActionPick<Parameters<R[K]>[1],"payload">,meta:ActionPick<Parameters<R[K]>[1],"meta">) => void
-}
+// type ActionPick<A extends Action,F extends keyof A> = Pick<A,F>[F]
 
-const r1 = f({
- namespace: 'sss',
- state: { name: '' },
- reducers: { 
-   changeName: (state,action:Action<{name:string}>) => {
+// declare function f<
+//  S,
+//  R extends ReducerBase<S>
+// >(params:{ namespace: string,state:S,reducers:R }): {
+//  [K in keyof R & string as `use${Capitalize<K>}`]: (payload:ActionPick<Parameters<R[K]>[1],"payload">,meta:ActionPick<Parameters<R[K]>[1],"meta">) => void
+// }
 
-   } 
- },
-})
+// const r1 = f({
+//  namespace: 'sss',
+//  state: { name: '' },
+//  reducers: {
+//    changeName: (state,action:Action<{name:string}>) => {
 
-r1.useChangeName({name:""},undefined);
- 
+//    }
+//  },
+// })
 
-type PathKeys<T> = object extends T
-  ? string
-  : T extends readonly any[]
-  ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>>
-  : T extends object
-  ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>>
-  : never;
-type SubKeys<T, K extends string> = K extends keyof T
-  ? `${K}.${PathKeys<T[K]>}`
-  : never;
-type PropType<T, Path extends string> = Path extends keyof T
-  ? T[Path]
-  : Path extends `${infer K}.${infer R}`
-  ? K extends keyof T
-    ? PropType<T[K], R>
-    : unknown
-  : unknown;
+// r1.useChangeName({name:""},undefined);
 
-declare function getProp<T, P extends PathKeys<T>>(
-  obj: T,
-  path: P,
-): PropType<T, P>;
+// type PathKeys<T> = object extends T
+//   ? string
+//   : T extends readonly any[]
+//   ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>>
+//   : T extends object
+//   ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>>
+//   : never;
+// type SubKeys<T, K extends string> = K extends keyof T
+//   ? `${K}.${PathKeys<T[K]>}`
+//   : never;
+// type PropType<T, Path extends string> = Path extends keyof T
+//   ? T[Path]
+//   : Path extends `${infer K}.${infer R}`
+//   ? K extends keyof T
+//     ? PropType<T[K], R>
+//     : unknown
+//   : unknown;
 
-const obj = {
-  name: 'John',
-  age: 42,
-  cars: [
-    { make: 'Ford', age: 10 },
-    { make: 'Trabant', age: 35 },
-  ],
-} as const;
+// declare function getProp<T, P extends PathKeys<T>>(
+//   obj: T,
+//   path: P,
+// ): PropType<T, P>;
 
-let make = getProp(obj, "cars.0.age");
+// const obj = {
+//   name: 'John',
+//   age: 42,
+//   cars: [
+//     { make: 'Ford', age: 10 },
+//     { make: 'Trabant', age: 35 },
+//   ],
+// } as const;
 
+// let make = getProp(obj, "cars.0.age");

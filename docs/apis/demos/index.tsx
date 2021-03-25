@@ -4,28 +4,29 @@ import { user } from './store';
 /**
  * debug: true
  */
-export default function() {
+export default function () {
   user.useMount({
     id: 1,
   });
   const state = user.useState({
     id: 1,
   });
-  const changeName = user.onChangeName.use({
+  const changeName = user.useOnChangeName({
     id: 1,
     transform: (e: ChangeEvent<HTMLInputElement>) => ({
       newName: e.target.value,
     }),
   });
 
-  const changeName1 = user.onChangeName.use({
+  const changeName1 = user.useOnChangeName({
     id: 1,
     transform: (e: ChangeEvent<HTMLInputElement>) => ({
       newName: e.target.scrollTop,
     }),
   });
 
-  const setName = user.useSetState('a.b.c', {
+  const setName = user.useSetState('name', {
+    id: 1,
     transform: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
   });
 
