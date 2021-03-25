@@ -4,7 +4,7 @@ import { user } from './store';
 /**
  * debug: true
  */
-export default function () {
+export default function() {
   user.useMount({
     id: 1,
   });
@@ -25,8 +25,14 @@ export default function () {
     }),
   });
 
+  const setName = user.useSetState('a.b.c', {
+    transform: (e: ChangeEvent<HTMLInputElement>) => e.target.value,
+  });
+
   return (
     <>
+      <Input onChange={setName} />
+
       <h1>{state.name}</h1>
       <Input
         placeholder="请输入用户名"

@@ -1,8 +1,7 @@
 ---
 title: debug
-nav: 
-    title: Api
+nav:
+  title: Api
 ---
-
 
 <code src="./demos/index.tsx"></code>

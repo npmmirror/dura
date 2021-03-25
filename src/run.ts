@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import {
   StoreEnhancerStoreCreator,
   AnyAction,
-  Action,
+
   Reducer,
   PreloadedState,
   createStore,
@@ -235,27 +235,37 @@ const _ = createDura();
 const res = createStore((state = {}) => state, compose(_));
 
 res.createSlice;
-function name<
-  S,
-  M extends {
-    namespace: string;
-    state: S;
-    reducers: { [name: string]: (state: S) => any };
-  }
->(
-  params: M,
-): {
-  [K in keyof M['reducers'] &
-    string as `use${Capitalize<K>}`]: M['reducers'][K];
-} {
-  return null as never;
+ 
+
+interface Action<P = undefined,M = undefined>{
+  type:string;
+  payload?:P,
+  meta?:M
+}
+ 
+type ReducerBase<S> = Record<string, (state:S,action:Action<never,never>) => any>;
+
+type ActionPick<A extends Action,F extends keyof A> = Pick<A,F>[F]
+
+declare function f<
+ S,
+ R extends ReducerBase<S>
+>(params:{ namespace: string,state:S,reducers:R }): {
+ [K in keyof R & string as `use${Capitalize<K>}`]: (payload:ActionPick<Parameters<R[K]>[1],"payload">,meta:ActionPick<Parameters<R[K]>[1],"meta">) => void
 }
 
-const r = name(<const>{
-  namespace: 'sss',
-  state: { name: '' },
-  reducers: { changeName: (state) => state },
-});
+const r1 = f({
+ namespace: 'sss',
+ state: { name: '' },
+ reducers: { 
+   changeName: (state,action:Action<{name:string}>) => {
+
+   } 
+ },
+})
+
+r1.useChangeName({name:""},undefined);
+ 
 
 type PathKeys<T> = object extends T
   ? string
@@ -289,4 +299,5 @@ const obj = {
   ],
 } as const;
 
-let make = getProp(obj, 'cars.1.age');
+let make = getProp(obj, "cars.0.age");
+
