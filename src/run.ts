@@ -81,6 +81,19 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
+        //TODO
+        const resolveOnChange = (transform: unknown, ...args: unknown[]) => {
+          if (typeof transform === 'number') {
+            return args[transform];
+          } else if (typeof transform === 'function') {
+            return transform(...args);
+          } else {
+            const [first] = args;
+            // if (['text'].includes(first?.target?.type)) {
+            // }
+          }
+        };
+
         /**
          * 转换 namespace
          */
@@ -205,19 +218,14 @@ export function createDura() {
           optionsUseBind: UseBindOptions<T>,
         ) {
           const $namespace = convertNamespace(optionsUseBind?.id);
-          return usePersistFn((firstArg, ...otherArgs) => {
+          return usePersistFn((...args) => {
+            const [first] = args;
             const $transform = optionsUseBind?.transform ?? 'html';
             let val;
-            console.log(
-              firstArg?.target?.tagName,
-              firstArg?.target?.type,
-              firstArg?.target?.value,
-              firstArg,
-              isPlainObject(firstArg),
-            );
+
             // TODO
             if ($transform === 'html') {
-              switch (firstArg?.target?.type) {
+              switch (first?.target?.type) {
                 case 'text':
                 case 'date':
                 case 'datetime-local':
@@ -232,22 +240,29 @@ export function createDura() {
                 case 'url':
                 case 'week':
                 case 'datetime':
-                  val = firstArg.target.value;
+                  val = first.target.value;
                   break;
                 case 'checkbox':
                 case 'radio':
-                  val = firstArg.target.checked;
+                  val = first.target.checked;
                   break;
                 default:
-                  isPlainObject(firstArg) && (val = firstArg);
-                  break;
+                  if (isPlainObject(first)) {
+                    val = first;
+                  } else {
+                    throw new Error(
+                      'The value of useSetState must be a PlainObject',
+                    );
+                  }
               }
+            } else if (typeof $transform === 'number') {
+              val = args[$transform];
             } else if (typeof $transform === 'function') {
-              val = $transform?.(firstArg, ...otherArgs);
-            } else if (isPlainObject(firstArg)) {
-              val = firstArg;
+              val = $transform?.(...args);
+            } else if (isPlainObject(first)) {
+              val = first;
             } else {
-              val = null;
+              throw new Error('The value of useSetState must be a PlainObject');
             }
             const action = {
               type: `${$namespace}/@@SET_STATE`,

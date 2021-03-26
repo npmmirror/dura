@@ -27,18 +27,18 @@ export default function () {
 
   const setName = user.useSetState('name', {
     id: 1,
-    transform: 'html',
+    transform: 1,
   });
 
   return (
     <>
       <Input type="email" onChange={setName} />
-      <Checkbox onChange={setName} />
-      <DatePicker
+      <Checkbox
         onChange={(e) => {
-          setName(e);
+          console.log(e);
         }}
       />
+      <DatePicker format="YYYY-MM-DD" onChange={setName} />
 
       <input
         required
