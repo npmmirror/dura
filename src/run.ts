@@ -54,8 +54,9 @@ export interface UseOptions<T extends (...args: any[]) => any> extends Id {
   transform?: T;
 }
 
-export interface UseBindOptions<T extends (...args: any[]) => any> extends Id {
-  transform?: T | 'html';
+export interface UseBindOptions<T extends (...args: unknown[]) => unknown>
+  extends Id {
+  transform?: T | string | number;
 }
 
 export function createDura() {
@@ -81,16 +82,51 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
+        const resolveHtmlInputValue = (
+          transform: string,
+          event: React.ChangeEvent<HTMLInputElement>,
+        ) => {
+          switch (transform) {
+            case 'text':
+            case 'date':
+            case 'datetime-local':
+            case 'email':
+            case 'month':
+            case 'number':
+            case 'password':
+            case 'range':
+            case 'search':
+            case 'tel':
+            case 'time':
+            case 'url':
+            case 'week':
+            case 'datetime':
+              return event.target.value;
+            case 'checkbox':
+            case 'radio':
+              return event.target.checked;
+            default:
+              throw new Error('error');
+          }
+        };
         //TODO
-        const resolveOnChange = (transform: unknown, ...args: unknown[]) => {
-          if (typeof transform === 'number') {
+        const resolveOnChange = (
+          transform:
+            | ((...args: unknown[]) => unknown)
+            | string
+            | number
+            | undefined,
+          ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+        ) => {
+          const [event] = args;
+          if (typeof transform === 'string') {
+            return resolveHtmlInputValue(transform, event);
+          } else if (typeof transform === 'number') {
             return args[transform];
           } else if (typeof transform === 'function') {
             return transform(...args);
           } else {
-            const [first] = args;
-            // if (['text'].includes(first?.target?.type)) {
-            // }
+            return resolveHtmlInputValue(event.target.type, event);
           }
         };
 
@@ -123,7 +159,7 @@ export function createDura() {
               return state;
             }
             return produce(state, (draft: never) => {
-              if ($name === '@@SET_STATE') {
+              if ($name === '@@CHANGE_STATE') {
                 set(draft, action?.payload?.key as never, action?.payload?.val);
               }
               reducers[$name]?.(draft, action);
@@ -213,66 +249,24 @@ export function createDura() {
         /**
          * 绑定数据
          */
-        function useSetState<T extends (...args: any[]) => any>(
+        function useChange<T extends (...args: any[]) => any>(
           path: string,
           optionsUseBind: UseBindOptions<T>,
         ) {
           const $namespace = convertNamespace(optionsUseBind?.id);
-          return usePersistFn((...args) => {
-            const [first] = args;
-            const $transform = optionsUseBind?.transform ?? 'html';
-            let val;
-
-            // TODO
-            if ($transform === 'html') {
-              switch (first?.target?.type) {
-                case 'text':
-                case 'date':
-                case 'datetime-local':
-                case 'email':
-                case 'month':
-                case 'number':
-                case 'password':
-                case 'range':
-                case 'search':
-                case 'tel':
-                case 'time':
-                case 'url':
-                case 'week':
-                case 'datetime':
-                  val = first.target.value;
-                  break;
-                case 'checkbox':
-                case 'radio':
-                  val = first.target.checked;
-                  break;
-                default:
-                  if (isPlainObject(first)) {
-                    val = first;
-                  } else {
-                    throw new Error(
-                      'The value of useSetState must be a PlainObject',
-                    );
-                  }
-              }
-            } else if (typeof $transform === 'number') {
-              val = args[$transform];
-            } else if (typeof $transform === 'function') {
-              val = $transform?.(...args);
-            } else if (isPlainObject(first)) {
-              val = first;
-            } else {
-              throw new Error('The value of useSetState must be a PlainObject');
-            }
-            const action = {
-              type: `${$namespace}/@@SET_STATE`,
-              payload: {
-                key: path,
-                val,
-              },
-            };
-            reduxStore.dispatch(action as never);
-          });
+          return usePersistFn(
+            (...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]) => {
+              const value = resolveOnChange(optionsUseBind?.transform, ...args);
+              const action = {
+                type: `${$namespace}/@@CHANGE_STATE`,
+                payload: {
+                  key: path,
+                  val: value,
+                },
+              };
+              reduxStore.dispatch(action as never);
+            },
+          );
         }
 
         const use = Object.keys(reducers)
@@ -299,7 +293,10 @@ export function createDura() {
           })
           .reduce(merge);
 
-        return { ...use, useMount, useState, useSetState } as never;
+        //TODO
+        function createDuplicate(id: Id) {}
+
+        return { ...use, useMount, useState, useChange } as never;
       }
 
       return {
