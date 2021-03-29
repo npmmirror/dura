@@ -1,10 +1,10 @@
 import { ChangeEvent, UIEventHandler, UIEvent } from 'react';
-import { Input, Checkbox, DatePicker } from 'antd';
+import { Input, Checkbox, DatePicker, Button } from 'antd';
 import { user } from './store';
 /**
  * debug: true
  */
-export default function() {
+export default function () {
   user.useMount();
 
   const state = user.useState();
@@ -23,9 +23,17 @@ export default function() {
       <DatePicker format="YYYY-MM-DD" onChange={setName} />
       <input required type="checkbox" onChange={setName1} />
       <h1>{state.name}</h1>
+      <Button
+        type="primary"
+        onClick={() => {
+          user.onChangeName('xx', 12);
+        }}
+      >
+        普通调用
+      </Button>
       <Input
         placeholder="请输入用户名"
-        onChange={e => {
+        onChange={(e) => {
           changeName(e.target.value, 12);
         }}
         value={state.name}

@@ -113,10 +113,11 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
-        const createAction: CreateActionFn = (type, ...args) => ({
-          type,
-          payload: args,
-        });
+        const createAction: CreateActionFn = (type, ...args) =>
+          ({
+            type,
+            payload: args,
+          } as never);
 
         const isPrimitive: IsPrimitiveFn = (value) =>
           ['bigint', 'boolean', 'number', 'string', 'undefined'].includes(
@@ -324,34 +325,37 @@ export function createDura() {
           );
         }
 
-        const use = Object.keys(reducers)
-          .map((name) => {
-            function use<T extends (...args: any[]) => any>(
-              optionsUse?: UseOptions<T>,
-            ) {
-              const $namespace = convertNamespace(optionsUse?.id);
-              const fn = usePersistFn(
-                (
-                  ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
-                ) => {
-                  const type = `${$namespace}/${name}`;
-                  const value = resolveOnChange(optionsUse?.transform, ...args);
-                  if (isArray(value)) {
-                    reduxStore.dispatch(createAction(type, ...value));
-                  } else {
-                    reduxStore.dispatch(createAction(type, value));
-                  }
-                },
-              );
-              // const transformFn = compose(fn, optionsUse?.transform as any);
-              return fn;
-            }
+        const mapToUse = (name: string) => {
+          function use<T extends (...args: any[]) => any>(
+            optionsUse?: UseOptions<T>,
+          ) {
+            const $namespace = convertNamespace(optionsUse?.id);
+            const type = `${$namespace}/${name}`;
+            const fn = usePersistFn(
+              (
+                ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+              ) => {
+                const value = resolveOnChange(optionsUse?.transform, ...args);
+                if (isArray(value)) {
+                  reduxStore.dispatch(createAction(type, ...value));
+                } else {
+                  reduxStore.dispatch(createAction(type, value));
+                }
+              },
+            );
+            return fn;
+          }
 
-            return {
-              [`use${upperFirst(name)}`]: use,
-            };
-          })
-          .reduce(merge);
+          return {
+            [`use${upperFirst(name)}`]: use,
+            [name]: function (...args: unknown[]) {
+              const type = `${namespace}/${name}`;
+              reduxStore.dispatch(createAction(type, ...args));
+            },
+          };
+        };
+
+        const use = Object.keys(reducers).map(mapToUse).reduce(merge);
 
         //TODO
         function createDuplicate(id: Id) {}
