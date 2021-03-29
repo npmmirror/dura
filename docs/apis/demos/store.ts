@@ -11,10 +11,12 @@ export const user = store.createSlice({
   namespace: 'user',
   initialState: {
     name: '张三',
+    age: 0,
   },
   reducers: {
-    onChangeName(state, action: FluxAction<{ newName }>) {
-      state.name = action.payload.newName;
+    onChangeName(state, newName: string, age: number) {
+      state.name = newName;
+      state.age = age;
     },
   },
 });

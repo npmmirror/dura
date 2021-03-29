@@ -9,7 +9,7 @@ import {
   combineReducers,
 } from 'redux';
 import { setAutoFreeze, produce } from 'immer';
-import { get, merge, set, upperFirst, isPlainObject } from 'lodash-es';
+import { get, merge, set, upperFirst, isPlainObject, isArray } from 'lodash-es';
 import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
@@ -25,7 +25,7 @@ export interface PlainObject {
 }
 
 export interface FluxAction<P = undefined, M = undefined> extends AnyAction {
-  payload?: P;
+  payload: P[];
   meta?: M;
 }
 
@@ -106,10 +106,23 @@ export function createDura() {
             case 'radio':
               return event.target.checked;
             default:
-              throw new Error('error');
+              const isPrimitive = [
+                'bigint',
+                'boolean',
+                'number',
+                'string',
+                'undefined',
+              ].includes(typeof event);
+              if (isPrimitive) {
+                return event;
+              } else if (isPlainObject(event)) {
+                return event;
+              } else {
+                throw new Error('error');
+              }
           }
         };
-        //TODO
+
         const resolveOnChange = (
           transform:
             | ((...args: unknown[]) => unknown)
@@ -119,14 +132,16 @@ export function createDura() {
           ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
         ) => {
           const [event] = args;
-          if (typeof transform === 'string') {
+          if (typeof transform === 'function') {
+            return transform(...args);
+          } else if (typeof transform === 'string') {
             return resolveHtmlInputValue(transform, event);
           } else if (typeof transform === 'number') {
             return args[transform];
-          } else if (typeof transform === 'function') {
-            return transform(...args);
+          } else if (typeof event?.target?.type === 'string') {
+            return resolveHtmlInputValue(event?.target?.type, event);
           } else {
-            return resolveHtmlInputValue(event.target.type, event);
+            return args;
           }
         };
 
@@ -134,7 +149,7 @@ export function createDura() {
          * 转换 namespace
          */
         function convertNamespace(id?: string | number) {
-          return [namespace, id].filter((x) => !!x).join('.');
+          return [namespace, id].filter(x => !!x).join('.');
         }
 
         /**
@@ -152,7 +167,7 @@ export function createDura() {
         function createImmerReducer($namespace: string) {
           return function immerReducer(
             state = initialState,
-            action: FluxAction<{ key?: string; val?: string }>,
+            action: FluxAction<{ key: string[]; val?: string }>,
           ) {
             const [_namespace, $name] = action?.type?.split('/');
             if (_namespace !== $namespace) {
@@ -160,9 +175,10 @@ export function createDura() {
             }
             return produce(state, (draft: never) => {
               if ($name === '@@CHANGE_STATE') {
-                set(draft, action?.payload?.key as never, action?.payload?.val);
+                const [key, val] = action.payload;
+                set(draft, key as never, val);
               }
-              reducers[$name]?.(draft, action);
+              reducers[$name]?.(draft, ...action.payload);
             });
           };
         }
@@ -259,10 +275,7 @@ export function createDura() {
               const value = resolveOnChange(optionsUseBind?.transform, ...args);
               const action = {
                 type: `${$namespace}/@@CHANGE_STATE`,
-                payload: {
-                  key: path,
-                  val: value,
-                },
+                payload: [path, value],
               };
               reduxStore.dispatch(action as never);
             },
@@ -270,11 +283,11 @@ export function createDura() {
         }
 
         const use = Object.keys(reducers)
-          .map((name) => {
-            function createAction($namespace: string, payload: unknown) {
+          .map(name => {
+            function createAction($namespace: string, ...args: never[]) {
               return {
                 type: `${$namespace}/${name}`,
-                payload,
+                payload: args,
               } as never;
             }
 
@@ -283,9 +296,24 @@ export function createDura() {
                 T extends (...args: any[]) => any
               >(optionsUse?: UseOptions<T>) {
                 const $namespace = convertNamespace(optionsUse?.id);
-                const fn = usePersistFn((payload: unknown) => {
-                  reduxStore.dispatch(createAction($namespace, payload));
-                });
+                const fn = usePersistFn(
+                  (
+                    ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+                  ) => {
+                    const value = resolveOnChange(
+                      optionsUse?.transform,
+                      ...args,
+                    );
+                    console.log('value-->', value, args);
+
+                    if (isArray(value)) {
+                      reduxStore.dispatch(createAction($namespace, ...value));
+                    } else {
+                      reduxStore.dispatch(createAction($namespace, value));
+                    }
+                  },
+                );
+
                 const transformFn = compose(fn, optionsUse?.transform as any);
                 return optionsUse?.transform ? transformFn : fn;
               },
@@ -321,28 +349,33 @@ res.createSlice;
 //   meta?:M
 // }
 
-// type ReducerBase<S> = Record<string, (state:S,action:Action<never,never>) => any>;
+// type ReducerBase<S> = Record<string, (state:S,...args:never[]) => any>;
 
 // type ActionPick<A extends Action,F extends keyof A> = Pick<A,F>[F]
+
+// type ShiftAction<T extends any[]> = ((...args: T) => any) extends ((arg1: any, ...rest: infer R) => any) ? R : never;
 
 // declare function f<
 //  S,
 //  R extends ReducerBase<S>
 // >(params:{ namespace: string,state:S,reducers:R }): {
-//  [K in keyof R & string as `use${Capitalize<K>}`]: (payload:ActionPick<Parameters<R[K]>[1],"payload">,meta:ActionPick<Parameters<R[K]>[1],"meta">) => void
+//  [K in keyof R & string as `use${Capitalize<K>}`]: (...args:ShiftAction<Parameters<R[K]>>) => void
 // }
-
+// type User = {
+//   name:string,
+//   age:number
+// }
 // const r1 = f({
 //  namespace: 'sss',
 //  state: { name: '' },
 //  reducers: {
-//    changeName: (state,action:Action<{name:string}>) => {
+//    changeName: (state,name:string,age:number,user:User) => {
 
 //    }
 //  },
 // })
 
-// r1.useChangeName({name:""},undefined);
+// r1.useChangeName("",12,{name:"张三",age:12})
 
 // type PathKeys<T> = object extends T
 //   ? string
@@ -376,4 +409,4 @@ res.createSlice;
 //   ],
 // } as const;
 
-// let make = getProp(obj, "cars.0.age");
+// let make = getProp(obj, "cars.1.age");

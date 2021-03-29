@@ -4,32 +4,17 @@ import { user } from './store';
 /**
  * debug: true
  */
-export default function () {
-  user.useMount({
-    id: 1,
-  });
-  const state = user.useState({
-    id: 1,
-  });
-  const changeName = user.useOnChangeName({
-    id: 1,
-    transform: (e: ChangeEvent<HTMLInputElement>) => {
-      console.log(e);
+export default function() {
+  user.useMount();
 
-      return {
-        newName: e.target.value,
-      };
-    },
-  });
+  const state = user.useState();
+  const changeName = user.useOnChangeName();
 
   const setName = user.useChange('name', {
-    id: 1,
     transform: 1,
   });
 
-  const setName1 = user.useChange('name', {
-    id: 1,
-  });
+  const setName1 = user.useChange('name');
 
   return (
     <>
