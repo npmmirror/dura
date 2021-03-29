@@ -9,7 +9,15 @@ import {
   combineReducers,
 } from 'redux';
 import { setAutoFreeze, produce } from 'immer';
-import { get, merge, set, upperFirst, isPlainObject, isArray } from 'lodash-es';
+import {
+  get,
+  merge,
+  set,
+  upperFirst,
+  isPlainObject,
+  isArray,
+  every,
+} from 'lodash-es';
 import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
@@ -82,8 +90,13 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
+        const isPrimitive = (value: string) =>
+          ['bigint', 'boolean', 'number', 'string', 'undefined'].includes(
+            value,
+          );
+
         const resolveHtmlInputValue = (
-          transform: string,
+          transform: string | number,
           event: React.ChangeEvent<HTMLInputElement>,
         ) => {
           switch (transform) {
@@ -106,14 +119,7 @@ export function createDura() {
             case 'radio':
               return event.target.checked;
             default:
-              const isPrimitive = [
-                'bigint',
-                'boolean',
-                'number',
-                'string',
-                'undefined',
-              ].includes(typeof event);
-              if (isPrimitive) {
+              if (isPrimitive(typeof event)) {
                 return event;
               } else if (isPlainObject(event)) {
                 return event;
@@ -132,15 +138,27 @@ export function createDura() {
           ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
         ) => {
           const [event] = args;
+          const eventType = event?.target?.type;
           if (typeof transform === 'function') {
             return transform(...args);
-          } else if (typeof transform === 'string') {
-            return resolveHtmlInputValue(transform, event);
+          } else if (
+            typeof transform === 'string' ||
+            typeof eventType === 'string'
+          ) {
+            return resolveHtmlInputValue(transform ?? eventType, event);
           } else if (typeof transform === 'number') {
             return args[transform];
-          } else if (typeof event?.target?.type === 'string') {
-            return resolveHtmlInputValue(event?.target?.type, event);
           } else {
+            // TODO 这里关于非 plain object 的处理逻辑要考虑
+
+            // const everyIsPlainObject = every(
+            //   args,
+            //   (x: string) => isPlainObject(x) || isPrimitive(x),
+            // );
+            // if (everyIsPlainObject) {
+            //   return args;
+            // }
+            // throw new Error(' ERROR ');
             return args;
           }
         };
@@ -291,32 +309,32 @@ export function createDura() {
               } as never;
             }
 
-            return {
-              [`use${upperFirst(name)}`]: function use<
-                T extends (...args: any[]) => any
-              >(optionsUse?: UseOptions<T>) {
-                const $namespace = convertNamespace(optionsUse?.id);
-                const fn = usePersistFn(
-                  (
-                    ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
-                  ) => {
-                    const value = resolveOnChange(
-                      optionsUse?.transform,
-                      ...args,
+            function use<T extends (...args: any[]) => any>(
+              optionsUse?: UseOptions<T>,
+            ) {
+              const $namespace = convertNamespace(optionsUse?.id);
+              const fn = usePersistFn(
+                (
+                  ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+                ) => {
+                  const value = resolveOnChange(optionsUse?.transform, ...args);
+                  if (isArray(value)) {
+                    reduxStore.dispatch(
+                      createAction($namespace, ...(value as never[])),
                     );
-                    console.log('value-->', value, args);
+                  } else {
+                    reduxStore.dispatch(
+                      createAction($namespace, value as never),
+                    );
+                  }
+                },
+              );
+              // const transformFn = compose(fn, optionsUse?.transform as any);
+              return fn;
+            }
 
-                    if (isArray(value)) {
-                      reduxStore.dispatch(createAction($namespace, ...value));
-                    } else {
-                      reduxStore.dispatch(createAction($namespace, value));
-                    }
-                  },
-                );
-
-                const transformFn = compose(fn, optionsUse?.transform as any);
-                return optionsUse?.transform ? transformFn : fn;
-              },
+            return {
+              [`use${upperFirst(name)}`]: use,
             };
           })
           .reduce(merge);

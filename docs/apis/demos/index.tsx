@@ -11,7 +11,7 @@ export default function() {
   const changeName = user.useOnChangeName();
 
   const setName = user.useChange('name', {
-    transform: 1,
+    // transform: 1,
   });
 
   const setName1 = user.useChange('name');
@@ -25,7 +25,9 @@ export default function() {
       <h1>{state.name}</h1>
       <Input
         placeholder="请输入用户名"
-        onChange={changeName}
+        onChange={e => {
+          changeName(e.target.value, 12);
+        }}
         value={state.name}
       />
       <div style={{ overflow: 'scroll', height: 300 }}>
