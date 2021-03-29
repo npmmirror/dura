@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import {
   StoreEnhancerStoreCreator,
   AnyAction,
+  Action,
   Reducer,
   PreloadedState,
   createStore,
@@ -23,6 +24,26 @@ import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
 import { usePersistFn } from './usePersistFn';
 setAutoFreeze(false);
+
+export type IsPrimitiveFn = (value: string) => boolean;
+
+export type Transform =
+  | ((...args: unknown[]) => unknown)
+  | string
+  | number
+  | undefined;
+
+export type ResolveHtmlInputValueFn = (
+  transform: string | number,
+  event: React.ChangeEvent<HTMLInputElement>,
+) => string | boolean;
+
+export type ResolveOnChangeFn = (
+  transform: Transform,
+  ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+) => unknown;
+
+export type ConvertNamespaceFn = (id?: string | number) => string;
 
 export interface Id {
   id?: string | number;
@@ -76,7 +97,7 @@ export function createDura() {
   function duraEnhancerStoreCreator(
     createStore: StoreEnhancerStoreCreator<PlainObject, PlainObject>,
   ): StoreEnhancerStoreCreator<{ createSlice: unknown }> {
-    function _createStore<S = PlainObject, A extends FluxAction = FluxAction>(
+    function _createStore<S = PlainObject, A extends Action = AnyAction>(
       reducer: Reducer<S, A>,
       preloadedState?: PreloadedState<S>,
     ) {
@@ -90,14 +111,14 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
-        const isPrimitive = (value: string) =>
+        const isPrimitive: IsPrimitiveFn = value =>
           ['bigint', 'boolean', 'number', 'string', 'undefined'].includes(
             value,
           );
 
-        const resolveHtmlInputValue = (
-          transform: string | number,
-          event: React.ChangeEvent<HTMLInputElement>,
+        const resolveHtmlInputValue: ResolveHtmlInputValueFn = (
+          transform,
+          event,
         ) => {
           switch (transform) {
             case 'text':
@@ -119,24 +140,18 @@ export function createDura() {
             case 'radio':
               return event.target.checked;
             default:
-              if (isPrimitive(typeof event)) {
-                return event;
-              } else if (isPlainObject(event)) {
-                return event;
-              } else {
-                throw new Error('error');
-              }
+              throw new Error('error');
+            // if (isPrimitive(typeof event)) {
+            //   return event;
+            // } else if (isPlainObject(event)) {
+            //   return event;
+            // } else {
+            //   throw new Error('error');
+            // }
           }
         };
 
-        const resolveOnChange = (
-          transform:
-            | ((...args: unknown[]) => unknown)
-            | string
-            | number
-            | undefined,
-          ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
-        ) => {
+        const resolveOnChange: ResolveOnChangeFn = (transform, ...args) => {
           const [event] = args;
           const eventType = event?.target?.type;
           if (typeof transform === 'function') {
@@ -166,9 +181,8 @@ export function createDura() {
         /**
          * 转换 namespace
          */
-        function convertNamespace(id?: string | number) {
-          return [namespace, id].filter(x => !!x).join('.');
-        }
+        const convertNamespace: ConvertNamespaceFn = (id?: string | number) =>
+          [namespace, id].filter(x => !!x).join('.');
 
         /**
          * 刷新 redux 数据
