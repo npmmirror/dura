@@ -27,6 +27,8 @@ setAutoFreeze(false);
 
 export type IsPrimitiveFn = (value: string) => boolean;
 
+export type CreateActionFn = (type: string, ...args: unknown[]) => never;
+
 export type Transform =
   | ((...args: unknown[]) => unknown)
   | string
@@ -41,7 +43,7 @@ export type ResolveHtmlInputValueFn = (
 export type ResolveOnChangeFn = (
   transform: Transform,
   ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
-) => unknown;
+) => never | never[];
 
 export type ConvertNamespaceFn = (id?: string | number) => string;
 
@@ -111,7 +113,12 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
-        const isPrimitive: IsPrimitiveFn = value =>
+        const createAction: CreateActionFn = (type, ...args) => ({
+          type,
+          payload: args,
+        });
+
+        const isPrimitive: IsPrimitiveFn = (value) =>
           ['bigint', 'boolean', 'number', 'string', 'undefined'].includes(
             value,
           );
@@ -155,14 +162,17 @@ export function createDura() {
           const [event] = args;
           const eventType = event?.target?.type;
           if (typeof transform === 'function') {
-            return transform(...args);
+            return transform(...args) as never;
           } else if (
             typeof transform === 'string' ||
             typeof eventType === 'string'
           ) {
-            return resolveHtmlInputValue(transform ?? eventType, event);
+            return resolveHtmlInputValue(
+              transform ?? eventType,
+              event,
+            ) as never;
           } else if (typeof transform === 'number') {
-            return args[transform];
+            return args[transform] as never;
           } else {
             // TODO 这里关于非 plain object 的处理逻辑要考虑
 
@@ -174,7 +184,7 @@ export function createDura() {
             //   return args;
             // }
             // throw new Error(' ERROR ');
-            return args;
+            return args as never;
           }
         };
 
@@ -182,7 +192,7 @@ export function createDura() {
          * 转换 namespace
          */
         const convertNamespace: ConvertNamespaceFn = (id?: string | number) =>
-          [namespace, id].filter(x => !!x).join('.');
+          [namespace, id].filter((x) => !!x).join('.');
 
         /**
          * 刷新 redux 数据
@@ -315,14 +325,7 @@ export function createDura() {
         }
 
         const use = Object.keys(reducers)
-          .map(name => {
-            function createAction($namespace: string, ...args: never[]) {
-              return {
-                type: `${$namespace}/${name}`,
-                payload: args,
-              } as never;
-            }
-
+          .map((name) => {
             function use<T extends (...args: any[]) => any>(
               optionsUse?: UseOptions<T>,
             ) {
@@ -331,15 +334,12 @@ export function createDura() {
                 (
                   ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
                 ) => {
+                  const type = `${$namespace}/${name}`;
                   const value = resolveOnChange(optionsUse?.transform, ...args);
                   if (isArray(value)) {
-                    reduxStore.dispatch(
-                      createAction($namespace, ...(value as never[])),
-                    );
+                    reduxStore.dispatch(createAction(type, ...value));
                   } else {
-                    reduxStore.dispatch(
-                      createAction($namespace, value as never),
-                    );
+                    reduxStore.dispatch(createAction(type, value));
                   }
                 },
               );
