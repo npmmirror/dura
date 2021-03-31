@@ -75,9 +75,7 @@ export interface OptionsCreateSlice<N extends string, S> {
   reducers?: ReducerMapOfSlice;
 }
 
-export interface UseMountOptions extends Id {}
-
-export interface UseStateOptions extends Id {
+export interface UseStateOptions {
   selector?: (...args: any) => any;
 }
 
@@ -85,8 +83,7 @@ export interface UseOptions<T extends (...args: any[]) => any> extends Id {
   transform?: T;
 }
 
-export interface UseBindOptions<T extends (...args: unknown[]) => unknown>
-  extends Id {
+export interface UseBindOptions<T extends (...args: unknown[]) => unknown> {
   transform?: T | string | number;
 }
 
@@ -213,7 +210,13 @@ export function createDura() {
             action: FluxAction<{ key: string[]; val?: string }>,
           ) {
             const [_namespace, $name] = action?.type?.split('/');
-            if (_namespace !== $namespace) {
+            console.log($namespace, _namespace);
+
+            if (
+              _namespace !== $namespace &&
+              // TODO 广播模式 等待优化
+              !$namespace.startsWith(_namespace)
+            ) {
               return state;
             }
             return produce(state, (draft: never) => {
@@ -226,141 +229,154 @@ export function createDura() {
           };
         }
 
-        /**
-         * 挂载节点
-         */
-        function useMount(optionsUseMount?: UseMountOptions) {
-          const $namespace = convertNamespace(optionsUseMount?.id);
+        function id(id?: string | number) {
+          const $namespace = convertNamespace(id);
 
-          /** 卸载 */
-          const ref = useRef<(() => void) | undefined>(undefined);
-          ref.current = function unmount() {
-            if (_SLICE_REDUCERS[$namespace]) {
-              delete _SLICE_REDUCERS[$namespace];
+          /**
+           * 挂载节点
+           */
+          function useMount() {
+            /** 卸载 */
+            const ref = useRef<(() => void) | undefined>(undefined);
+            ref.current = function unmount() {
+              if (_SLICE_REDUCERS[$namespace]) {
+                delete _SLICE_REDUCERS[$namespace];
+                refreshRedux();
+              }
+            };
+
+            /** 挂载 */
+            if (!_SLICE_REDUCERS[$namespace]) {
+              _SLICE_REDUCERS[$namespace] = createImmerReducer($namespace);
               refreshRedux();
             }
-          };
-
-          /** 挂载 */
-          if (!_SLICE_REDUCERS[$namespace]) {
-            _SLICE_REDUCERS[$namespace] = createImmerReducer($namespace);
-            refreshRedux();
-          }
-          useLayoutEffect(() => ref.current, [ref]);
-        }
-
-        /**
-         * 获取状态信息
-         */
-        function useState(optionsUseState: UseStateOptions) {
-          const update = useUpdate();
-          const $namespace = convertNamespace(optionsUseState?.id);
-
-          /** 经过immer代理的对象 */
-          const refProxy = useRef<unknown>(undefined);
-          /** 原始对象信息 */
-          const refOri = useRef<unknown>(undefined);
-          /** 依赖信息 */
-          const refDeps = useMemoized(() => new Map<string, unknown>());
-
-          function recording() {
-            /** 获取当前节点的 redux 数据 */
-            const sliceState = reduxStore.getState()[$namespace];
-            /** 清空过时的依赖缓存 */
-            refDeps.clear();
-            /** 每次都缓存一下最新的redux数据 */
-            refOri.current = sliceState;
-            /** 创建 proxy 代理对象 */
-            refProxy.current = createProxy(sliceState, refDeps);
+            useLayoutEffect(() => ref.current, [ref]);
           }
 
-          // TODO 这里注意一下，有可能需要 优化至 仅仅首次才 recording 一次
-          recording();
+          /**
+           * 获取状态信息
+           */
+          function useState(optionsUseState: UseStateOptions) {
+            const update = useUpdate();
 
-          useEffect(() => {
-            /** 监听 redux 的所有数据变化 */
-            return reduxStore.subscribe(() => {
-              const currentSliceState = reduxStore.getState()[$namespace];
-              const keysIterator = refDeps.keys();
-              let _ = keysIterator.next();
-              let isUpdate = false;
-              /** 循环对比变更 */
-              while (!_.done) {
-                if (
-                  get(currentSliceState, _.value) !==
-                  get(refOri.current, _.value)
-                ) {
-                  isUpdate = true;
-                  break;
-                } else {
-                  _ = keysIterator.next();
+            /** 经过immer代理的对象 */
+            const refProxy = useRef<unknown>(undefined);
+            /** 原始对象信息 */
+            const refOri = useRef<unknown>(undefined);
+            /** 依赖信息 */
+            const refDeps = useMemoized(() => new Map<string, unknown>());
+
+            function recording() {
+              /** 获取当前节点的 redux 数据 */
+              const sliceState = reduxStore.getState()[$namespace];
+              /** 清空过时的依赖缓存 */
+              refDeps.clear();
+              /** 每次都缓存一下最新的redux数据 */
+              refOri.current = sliceState;
+              /** 创建 proxy 代理对象 */
+              refProxy.current = createProxy(sliceState, refDeps);
+            }
+
+            // TODO 这里注意一下，有可能需要 优化至 仅仅首次才 recording 一次
+            recording();
+
+            useEffect(() => {
+              /** 监听 redux 的所有数据变化 */
+              return reduxStore.subscribe(() => {
+                const currentSliceState = reduxStore.getState()[$namespace];
+                const keysIterator = refDeps.keys();
+                let _ = keysIterator.next();
+                let isUpdate = false;
+                /** 循环对比变更 */
+                while (!_.done) {
+                  if (
+                    get(currentSliceState, _.value) !==
+                    get(refOri.current, _.value)
+                  ) {
+                    isUpdate = true;
+                    break;
+                  } else {
+                    _ = keysIterator.next();
+                  }
                 }
-              }
-              /** 如果存在变更数据 */
-              if (isUpdate) {
-                recording(), update();
-              }
-            });
-          }, [reduxStore.subscribe, $namespace]);
-          return refProxy.current;
-        }
+                /** 如果存在变更数据 */
+                if (isUpdate) {
+                  recording(), update();
+                }
+                // update();
+              });
+            }, [reduxStore.subscribe, $namespace]);
+            return refProxy.current;
+          }
 
-        /**
-         * 绑定数据
-         */
-        function useChange<T extends (...args: any[]) => any>(
-          path: string,
-          optionsUseBind: UseBindOptions<T>,
-        ) {
-          const $namespace = convertNamespace(optionsUseBind?.id);
-          return usePersistFn(
-            (...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]) => {
-              const value = resolveOnChange(optionsUseBind?.transform, ...args);
-              const action = {
-                type: `${$namespace}/@@CHANGE_STATE`,
-                payload: [path, value],
-              };
-              reduxStore.dispatch(action as never);
-            },
-          );
-        }
-
-        const mapToUse = (name: string) => {
-          function use<T extends (...args: any[]) => any>(
-            optionsUse?: UseOptions<T>,
+          /**
+           * 绑定数据
+           */
+          function useChange<T extends (...args: any[]) => any>(
+            path: string,
+            optionsUseBind: UseBindOptions<T>,
           ) {
-            const $namespace = convertNamespace(optionsUse?.id);
-            const type = `${$namespace}/${name}`;
-            const fn = usePersistFn(
+            return usePersistFn(
               (
                 ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
               ) => {
-                const value = resolveOnChange(optionsUse?.transform, ...args);
-                if (isArray(value)) {
-                  reduxStore.dispatch(createAction(type, ...value));
-                } else {
-                  reduxStore.dispatch(createAction(type, value));
-                }
+                const value = resolveOnChange(
+                  optionsUseBind?.transform,
+                  ...args,
+                );
+                const action = {
+                  type: `${$namespace}/@@CHANGE_STATE`,
+                  payload: [path, value],
+                  meta: {
+                    broadcasting: {},
+                  },
+                };
+                reduxStore.dispatch(action as never);
               },
             );
-            return fn;
           }
 
-          return {
-            [`use${upperFirst(name)}`]: use,
-            [name]: function (...args: unknown[]) {
-              const type = `${namespace}/${name}`;
-              reduxStore.dispatch(createAction(type, ...args));
-            },
+          const mapToUse = (name: string) => {
+            function use<T extends (...args: any[]) => any>(
+              optionsUse?: UseOptions<T>,
+            ) {
+              const $namespace = convertNamespace(optionsUse?.id);
+              const type = `${$namespace}/${name}`;
+              const fn = usePersistFn(
+                (
+                  ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
+                ) => {
+                  const value = resolveOnChange(optionsUse?.transform, ...args);
+                  if (isArray(value)) {
+                    reduxStore.dispatch(createAction(type, ...value));
+                  } else {
+                    reduxStore.dispatch(createAction(type, value));
+                  }
+                },
+              );
+              return fn;
+            }
+
+            return {
+              [`use${upperFirst(name)}`]: use,
+              [name]: function (...args: unknown[]) {
+                const type = `${namespace}/${name}`;
+                reduxStore.dispatch(createAction(type, ...args));
+              },
+            };
           };
-        };
 
-        const use = Object.keys(reducers).map(mapToUse).reduce(merge);
+          const use = Object.keys(reducers).map(mapToUse).reduce(merge);
 
-        //TODO
-        function createDuplicate(id: Id) {}
+          return {
+            useMount,
+            useState,
+            useChange,
+            ...use,
+          };
+        }
 
-        return { ...use, useMount, useState, useChange } as never;
+        return { id, ...id() } as never;
       }
 
       return {
