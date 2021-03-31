@@ -23,27 +23,13 @@ import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
 import { usePersistFn } from './usePersistFn';
+import { resolveOnChange, createImmerReducer } from './internal';
+
 setAutoFreeze(false);
 
 export type IsPrimitiveFn = (value: string) => boolean;
 
 export type CreateActionFn = (type: string, ...args: unknown[]) => never;
-
-export type Transform =
-  | ((...args: unknown[]) => unknown)
-  | string
-  | number
-  | undefined;
-
-export type ResolveHtmlInputValueFn = (
-  transform: string | number,
-  event: React.ChangeEvent<HTMLInputElement>,
-) => string | boolean;
-
-export type ResolveOnChangeFn = (
-  transform: Transform,
-  ...args: [React.ChangeEvent<HTMLInputElement>, ...unknown[]]
-) => never | never[];
 
 export type ConvertNamespaceFn = (id?: string | number) => string;
 
@@ -121,71 +107,6 @@ export function createDura() {
             value,
           );
 
-        const resolveHtmlInputValue: ResolveHtmlInputValueFn = (
-          transform,
-          event,
-        ) => {
-          switch (transform) {
-            case 'text':
-            case 'date':
-            case 'datetime-local':
-            case 'email':
-            case 'month':
-            case 'number':
-            case 'password':
-            case 'range':
-            case 'search':
-            case 'tel':
-            case 'time':
-            case 'url':
-            case 'week':
-            case 'datetime':
-              return event.target.value;
-            case 'checkbox':
-            case 'radio':
-              return event.target.checked;
-            default:
-              throw new Error('error');
-            // if (isPrimitive(typeof event)) {
-            //   return event;
-            // } else if (isPlainObject(event)) {
-            //   return event;
-            // } else {
-            //   throw new Error('error');
-            // }
-          }
-        };
-
-        const resolveOnChange: ResolveOnChangeFn = (transform, ...args) => {
-          const [event] = args;
-          const eventType = event?.target?.type;
-          if (typeof transform === 'function') {
-            return transform(...args) as never;
-          } else if (
-            typeof transform === 'string' ||
-            typeof eventType === 'string'
-          ) {
-            return resolveHtmlInputValue(
-              transform ?? eventType,
-              event,
-            ) as never;
-          } else if (typeof transform === 'number') {
-            return args[transform] as never;
-          } else {
-            // TODO 这里关于非 plain object 的处理逻辑要考虑
-
-            // const everyIsPlainObject = every(
-            //   args,
-            //   (x: string) => isPlainObject(x) || isPrimitive(x),
-            // );
-            // if (everyIsPlainObject) {
-            //   return args;
-            // }
-            // throw new Error(' ERROR ');
-            return args as never;
-          }
-        };
-
         /**
          * 转换 namespace
          */
@@ -204,30 +125,29 @@ export function createDura() {
         /**
          * 创建 使用immer 构建的 reducer
          */
-        function createImmerReducer($namespace: string) {
-          return function immerReducer(
-            state = initialState,
-            action: FluxAction<{ key: string[]; val?: string }>,
-          ) {
-            const [_namespace, $name] = action?.type?.split('/');
-            console.log($namespace, _namespace);
+        // function createImmerReducer($namespace: string) {
+        //   return function immerReducer(
+        //     state = initialState,
+        //     action: FluxAction<{ key: string[]; val?: string }>,
+        //   ) {
+        //     const [_namespace, $name] = action?.type?.split('/');
 
-            if (
-              _namespace !== $namespace &&
-              // TODO 广播模式 等待优化
-              !$namespace.startsWith(_namespace)
-            ) {
-              return state;
-            }
-            return produce(state, (draft: never) => {
-              if ($name === '@@CHANGE_STATE') {
-                const [key, val] = action.payload;
-                set(draft, key as never, val);
-              }
-              reducers[$name]?.(draft, ...action.payload);
-            });
-          };
-        }
+        //     if (
+        //       _namespace !== $namespace &&
+        //       // TODO 广播模式 等待优化
+        //       !$namespace.startsWith(_namespace)
+        //     ) {
+        //       return state;
+        //     }
+        //     return produce(state, (draft: never) => {
+        //       if ($name === '@@CHANGE_STATE') {
+        //         const [key, val] = action.payload;
+        //         set(draft, key as never, val);
+        //       }
+        //       reducers[$name]?.(draft, ...action.payload);
+        //     });
+        //   };
+        // }
 
         function id(id?: string | number) {
           const $namespace = convertNamespace(id);
@@ -247,7 +167,11 @@ export function createDura() {
 
             /** 挂载 */
             if (!_SLICE_REDUCERS[$namespace]) {
-              _SLICE_REDUCERS[$namespace] = createImmerReducer($namespace);
+              _SLICE_REDUCERS[$namespace] = createImmerReducer(
+                $namespace,
+                initialState,
+                reducers,
+              );
               refreshRedux();
             }
             useLayoutEffect(() => ref.current, [ref]);

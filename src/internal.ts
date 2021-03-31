@@ -1,0 +1,108 @@
+import { Action } from 'redux';
+import { produce } from 'immer';
+import { set } from 'lodash-es';
+
+export type CreateActionFn = (type: string, ...args: unknown[]) => never;
+
+/**
+ * 创建Action描述信息
+ * @param type Action Type
+ * @param args 参数信息，最终会以数组的形式注入进 Payload
+ * @returns Action对象
+ */
+export const createAction: CreateActionFn = (type, ...args) =>
+  ({
+    type,
+    payload: args,
+  } as never);
+
+export type ResolveHtmlInputValueFn = (
+  eventType: string,
+  event: React.ChangeEvent<HTMLInputElement>,
+) => string | boolean;
+
+/**
+ * 获取 HtmlInput 的 value 值
+ * @param eventType HtmlInput type 的取值 @see https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/Input
+ * @param event HtmlInputEvent
+ * @returns value值
+ */
+export const resolveHtmlInputValue: ResolveHtmlInputValueFn = (
+  eventType,
+  event,
+) => {
+  switch (eventType) {
+    case 'text':
+    case 'date':
+    case 'datetime-local':
+    case 'email':
+    case 'month':
+    case 'number':
+    case 'password':
+    case 'range':
+    case 'search':
+    case 'tel':
+    case 'time':
+    case 'url':
+    case 'week':
+    case 'datetime':
+      return event.target.value;
+    case 'checkbox':
+    case 'radio':
+      return event.target.checked;
+    default:
+      throw new Error('error');
+  }
+};
+
+export type Transform =
+  | ((...args: unknown[]) => unknown)
+  | string
+  | number
+  | undefined;
+
+export type ResolveOnChangeFn = (
+  transform: Transform,
+  ...args: any[]
+) => never | never[];
+
+export const resolveOnChange: ResolveOnChangeFn = (transform, ...args) => {
+  const event = args?.[0] as React.ChangeEvent<HTMLInputElement>;
+  const eventType = event?.target?.type;
+  if (typeof transform === 'function') {
+    return transform(...args);
+  } else if (typeof transform === 'string') {
+    return resolveHtmlInputValue(transform, event);
+  } else if (typeof eventType === 'string') {
+    return resolveHtmlInputValue(eventType, event);
+  } else if (typeof transform === 'number') {
+    return args[transform];
+  } else {
+    return args;
+  }
+};
+
+export interface FluxAction<P> extends Action<string> {
+  payload: any;
+}
+
+export const createImmerReducer = (
+  namespace: string,
+  initialState: Record<string, any>,
+  reducers: Record<string, Function>,
+) => (state = initialState, action: FluxAction<[string, string]>) => {
+  const [$namespace, $name] = action?.type?.split?.('/');
+
+  /** 如果不是当前模块 */
+  if ($namespace !== namespace) {
+    return state;
+  }
+
+  return produce(state, (draft) => {
+    if ($name === '@@CHANGE_STATE') {
+      const [key, val] = action?.payload;
+      return set(draft, key, val);
+    }
+    return reducers[$name]?.(draft, ...action.payload);
+  });
+};
