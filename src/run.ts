@@ -29,6 +29,7 @@ import {
   resolveNamespace,
   createAction,
 } from './internal';
+import { createUseMount } from './createUseMount';
 
 setAutoFreeze(false);
 
@@ -115,34 +116,32 @@ export function createDura() {
           );
         }
 
-        function id(id?: string | number) {
-          const $namespace = resolveNamespace(namespace, id);
-
-          /**
-           * 挂载节点
-           */
-          function useMount() {
-            /** 卸载 */
-            const ref = useRef<(() => void) | undefined>(undefined);
-            ref.current = function unmount() {
-              if (_SLICE_REDUCERS[$namespace]) {
-                delete _SLICE_REDUCERS[$namespace];
-                refreshRedux();
-              }
-            };
-
-            /** 挂载 */
-            if (!_SLICE_REDUCERS[$namespace]) {
+        function operator($namespace: string) {
+          return {
+            has() {
+              return _SLICE_REDUCERS[$namespace];
+            },
+            del() {
+              delete _SLICE_REDUCERS[$namespace];
+            },
+            add() {
               _SLICE_REDUCERS[$namespace] = createImmerReducer(
                 $namespace,
                 initialState,
                 reducers,
               );
-              refreshRedux();
-            }
-            useLayoutEffect(() => ref.current, [ref]);
-          }
+            },
+            refresh() {
+              reduxStore.replaceReducer(
+                compose(reducer, combineReducers(_SLICE_REDUCERS)),
+              );
+            },
+          };
+        }
 
+        function id(id?: string | number) {
+          const $namespace = resolveNamespace(namespace, id);
+          const useMount = createUseMount(operator($namespace));
           /**
            * 获取状态信息
            */
