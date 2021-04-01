@@ -23,7 +23,12 @@ import { useUpdate } from './useUpdate';
 import { useMemoized } from './useMemoized';
 import { createProxy } from './createProxy';
 import { usePersistFn } from './usePersistFn';
-import { resolveOnChange, createImmerReducer } from './internal';
+import {
+  resolveOnChange,
+  createImmerReducer,
+  resolveNamespace,
+  createAction,
+} from './internal';
 
 setAutoFreeze(false);
 
@@ -96,22 +101,10 @@ export function createDura() {
       ) {
         const { namespace, initialState, reducers = {} } = optionsCreateSlice;
 
-        const createAction: CreateActionFn = (type, ...args) =>
-          ({
-            type,
-            payload: args,
-          } as never);
-
         const isPrimitive: IsPrimitiveFn = (value) =>
           ['bigint', 'boolean', 'number', 'string', 'undefined'].includes(
             value,
           );
-
-        /**
-         * 转换 namespace
-         */
-        const convertNamespace: ConvertNamespaceFn = (id?: string | number) =>
-          [namespace, id].filter((x) => !!x).join('.');
 
         /**
          * 刷新 redux 数据
@@ -122,35 +115,8 @@ export function createDura() {
           );
         }
 
-        /**
-         * 创建 使用immer 构建的 reducer
-         */
-        // function createImmerReducer($namespace: string) {
-        //   return function immerReducer(
-        //     state = initialState,
-        //     action: FluxAction<{ key: string[]; val?: string }>,
-        //   ) {
-        //     const [_namespace, $name] = action?.type?.split('/');
-
-        //     if (
-        //       _namespace !== $namespace &&
-        //       // TODO 广播模式 等待优化
-        //       !$namespace.startsWith(_namespace)
-        //     ) {
-        //       return state;
-        //     }
-        //     return produce(state, (draft: never) => {
-        //       if ($name === '@@CHANGE_STATE') {
-        //         const [key, val] = action.payload;
-        //         set(draft, key as never, val);
-        //       }
-        //       reducers[$name]?.(draft, ...action.payload);
-        //     });
-        //   };
-        // }
-
         function id(id?: string | number) {
-          const $namespace = convertNamespace(id);
+          const $namespace = resolveNamespace(namespace, id);
 
           /**
            * 挂载节点
@@ -264,7 +230,7 @@ export function createDura() {
             function use<T extends (...args: any[]) => any>(
               optionsUse?: UseOptions<T>,
             ) {
-              const $namespace = convertNamespace(optionsUse?.id);
+              const $namespace = resolveNamespace(namespace, id);
               const type = `${$namespace}/${name}`;
               const fn = usePersistFn(
                 (

@@ -83,21 +83,29 @@ export const resolveOnChange: ResolveOnChangeFn = (transform, ...args) => {
 };
 
 export interface FluxAction<P> extends Action<string> {
-  payload: any;
+  payload: P;
 }
 
-export const createImmerReducer = (
+export type createImmerReducer = (
   namespace: string,
   initialState: Record<string, any>,
   reducers: Record<string, Function>,
-) => (state = initialState, action: FluxAction<[string, string]>) => {
-  const [$namespace, $name] = action?.type?.split?.('/');
+) => (state: Record<string, any>, action: FluxAction<[string, string]>) => any;
 
-  /** 如果不是当前模块 */
-  if ($namespace !== namespace) {
+export const createImmerReducer: createImmerReducer = (
+  namespace,
+  initialState,
+  reducers,
+) => (state = initialState, action) => {
+  const [$namespace, $name] = action?.type?.split?.('/');
+  if (
+    // 如果不是当前模块
+    $namespace !== namespace &&
+    // 也不是广播模式
+    !namespace.startsWith(`${$namespace}`)
+  ) {
     return state;
   }
-
   return produce(state, (draft) => {
     if ($name === '@@CHANGE_STATE') {
       const [key, val] = action?.payload;
@@ -106,3 +114,11 @@ export const createImmerReducer = (
     return reducers[$name]?.(draft, ...action.payload);
   });
 };
+
+export type ResolveNamespaceFn = (
+  namespace: string,
+  id?: string | number,
+) => string;
+
+export const resolveNamespace: ResolveNamespaceFn = (namespace, id) =>
+  [namespace, id].filter((x) => !!x).join('.');
