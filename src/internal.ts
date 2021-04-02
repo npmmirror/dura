@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { produce } from 'immer';
 import { set } from 'lodash-es';
+import { ON_CHANGE_STATE } from './const';
 
 export type CreateActionFn = (type: string, ...args: unknown[]) => never;
 
@@ -107,7 +108,7 @@ export const createImmerReducer: createImmerReducer = (
     return state;
   }
   return produce(state, (draft) => {
-    if ($name === '@@CHANGE_STATE') {
+    if ($name === ON_CHANGE_STATE) {
       const [key, val] = action?.payload;
       return set(draft, key, val);
     }

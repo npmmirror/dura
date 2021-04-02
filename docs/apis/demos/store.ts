@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createDura, FluxAction } from '../../../src/run';
+import { createDura, FluxAction } from '../../../src';
 
 const store = createStore(
   (state = {}) => state,
@@ -12,6 +12,9 @@ export const user = store.createSlice({
   initialState: {
     name: '张三',
     age: 0,
+    address: {
+      name: '南京市',
+    },
   },
   reducers: {
     onChangeName(state, newName: string, age: number) {

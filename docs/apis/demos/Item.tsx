@@ -3,11 +3,11 @@ import { Input } from 'antd';
 import { user } from './store';
 
 export default function Item(props: { id: number }) {
-  const { useMount, useState, useChange } = user.id(props.id);
+  const { useMount, useState, useOnChange } = user.id(props.id);
   console.log(props);
 
   useMount();
-  const onChangeName = useChange('name');
+  const onChangeName = useOnChange('name');
 
   const state = useState();
 
