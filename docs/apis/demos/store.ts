@@ -7,7 +7,7 @@ const store = createStore(
   composeWithDevTools(createDura()),
 );
 
-export const user = store.createSlice({
+export const user = store.defineLeaf({
   namespace: 'user',
   initialState: {
     name: '张三',
@@ -23,3 +23,4 @@ export const user = store.createSlice({
     },
   },
 });
+// store.defineLeaf(){}
