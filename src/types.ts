@@ -64,7 +64,7 @@ export type ResolveSysFn<S> = {
   useState: () => S;
   useOnChange: (
     path: PathKeys<S>,
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 /**
  * 合并
