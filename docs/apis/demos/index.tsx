@@ -9,6 +9,7 @@ import { user } from './store';
 import UseOnChange from './useOnChange';
 import UseCustomerChange from './UseCustomerChange';
 import Item from './Item';
+import Selector from './Selector';
 
 /**
  * debug: true
@@ -26,6 +27,7 @@ export default function () {
       <UseOnChange />
       <UseCustomerChange />
       <Item />
+      <Selector />
       {/* {times(10).map((x) => (
         <Item id={++x} />
       ))} */}

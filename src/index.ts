@@ -15,6 +15,7 @@ import { createUseMount } from './createUseMount';
 import { createUseState } from './createUseState';
 import { createUseOnChange } from './createUseOnChange';
 import { reducerHandle } from './reducerHandle';
+import { createUseSelector } from './createUseSelector';
 import { DefineLeafFn, AnyFunction } from './types';
 
 setAutoFreeze(false);
@@ -73,9 +74,16 @@ export function createDura() {
         const useMount = createUseMount(context);
         const useState = createUseState(namespace, reduxStore as never);
         const useOnChange = createUseOnChange(namespace, reduxStore as never);
+        const useSelector = createUseSelector(namespace, reduxStore as never);
         const use = reducerHandle(namespace, reduxStore as never, reducers);
 
-        return { ...use, useMount, useState, useOnChange } as never;
+        return {
+          ...use,
+          useMount,
+          useState,
+          useOnChange,
+          useSelector,
+        } as never;
       };
 
       return {

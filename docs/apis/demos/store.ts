@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createDura, FluxAction } from '../../../src';
+import { createDura } from '../../../src';
 
 const store = createStore(
   (state = {}) => state,

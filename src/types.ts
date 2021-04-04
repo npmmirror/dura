@@ -27,19 +27,21 @@ export interface DefineLeafFnOptions<S, R> {
   reducers?: R;
 }
 
-export interface HooksOptions<T extends AnyFunction> {
-  transform: T;
+export interface HooksOptions<T> {
+  transform?: T;
 }
 
-export type Hooks = <T extends AnyFunction>(
+export type Hooks<PF extends AnyFunction> = <T>(
   options: HooksOptions<T>,
-) => T extends AnyFunction ? (...args: Parameters<T>) => void : never;
+) => T extends AnyFunction
+  ? (...args: Parameters<T>) => void
+  : (...args: ShiftAction<Parameters<PF>>) => void;
 
 /**
  * 转换hooks
  */
 export type ResolveHooks<R extends ReducerBase> = {
-  [K in keyof R & string as `use${Capitalize<K>}`]: Hooks;
+  [K in keyof R & string as `use${Capitalize<K>}`]: Hooks<R[K]>;
 };
 /**
  * 转换普通的fn
@@ -59,12 +61,15 @@ type SubKeys<T, K extends string> = K extends keyof T
   ? `${K}.${PathKeys<T[K]>}`
   : never;
 
+export type Selector<S, R> = (state: S) => R;
+
 export type ResolveSysFn<S> = {
   useMount: () => void;
   useState: () => S;
   useOnChange: (
     path: PathKeys<S>,
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  useSelector: <R>(selector: Selector<S, R>) => R;
 };
 /**
  * 合并
