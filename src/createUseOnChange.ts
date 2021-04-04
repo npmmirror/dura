@@ -1,6 +1,6 @@
 import { Store } from 'redux';
 import { resolveOnChange } from './internal';
-import { usePersistFn } from './usePersistFn';
+import { usePersistFn } from '@onecocjs/use';
 import { ON_CHANGE_STATE } from './const';
 
 export interface UseBindOptions<T extends (...args: unknown[]) => unknown> {

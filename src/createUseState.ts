@@ -1,8 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Store } from 'redux';
 import { get } from 'lodash-es';
-import { useUpdate } from './useUpdate';
-import { useMemoized } from './useMemoized';
+import { useUpdate, useMemoized } from '@onecocjs/use';
 import { createProxy } from './createProxy';
 
 export function createUseState(namespace: string, store: Store) {

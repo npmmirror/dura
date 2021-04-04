@@ -1,6 +1,6 @@
 import { Store } from 'redux';
-import { merge, upperFirst, isArray, curry } from 'lodash-es';
-import { usePersistFn } from './usePersistFn';
+import { merge, upperFirst, isArray } from 'lodash-es';
+import { usePersistFn } from '@onecocjs/use';
 import { resolveOnChange, createAction } from './internal';
 import { ReducerBase, AnyFunction } from './types';
 

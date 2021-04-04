@@ -8,6 +8,7 @@ import { Input, Checkbox, DatePicker, Button } from 'antd';
 import { user } from './store';
 import UseOnChange from './useOnChange';
 import UseCustomerChange from './UseCustomerChange';
+import Item from './Item';
 
 /**
  * debug: true
@@ -24,6 +25,7 @@ export default function () {
     <div>
       <UseOnChange />
       <UseCustomerChange />
+      <Item />
       {/* {times(10).map((x) => (
         <Item id={++x} />
       ))} */}

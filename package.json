@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "@onecocjs/use": "0.0.1-alpha.3",
     "immer": "^8.0.1",
     "lodash-es": "^4.17.21",
     "lodash.get": "^4.4.2",
