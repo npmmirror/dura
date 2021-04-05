@@ -1,13 +1,17 @@
-import { Store } from 'redux';
-import { resolveOnChange } from './internal';
+import { Action, AnyAction } from 'redux';
+import { resolveOnChange } from '../internal';
 import { usePersistFn } from '@onecocjs/use';
-import { ON_CHANGE_STATE } from './const';
+import { Context } from '../types';
+import { ON_CHANGE_STATE } from '../const';
 
 export interface UseBindOptions<T extends (...args: unknown[]) => unknown> {
   transform?: T | string | number;
 }
 
-export function createUseOnChange(namespace: string, reduxStore: Store) {
+export function createUseOnChange<
+  S extends Record<string, any>,
+  A extends Action = AnyAction
+>({ namespace, reduxStore }: Context<S, A>) {
   return function useChange<T extends (...args: any[]) => any>(
     path: string,
     optionsUseBind: UseBindOptions<T>,

@@ -11,12 +11,12 @@ import {
 } from 'redux';
 import { setAutoFreeze } from 'immer';
 import { createImmerReducer } from './internal';
-import { createUseMount } from './createUseMount';
-import { createUseState } from './createUseState';
-import { createUseOnChange } from './createUseOnChange';
+import { createUseMount } from './plugins/createUseMount';
+import { createUseState } from './plugins/createUseState';
+import { createUseOnChange } from './plugins/createUseOnChange';
 import { reducerHandle } from './reducerHandle';
-import { createUseSelector } from './createUseSelector';
-import { DefineLeafFn, AnyFunction } from './types';
+import { createUseSelector } from './plugins/createUseSelector';
+import { DefineLeafFn, AnyFunction, CreateContextFn } from './types';
 
 setAutoFreeze(false);
 
@@ -37,7 +37,7 @@ export function createDura() {
     >,
   ): StoreEnhancerStoreCreator<{ defineLeaf: DefineLeafFn }> {
     function _createStore<
-      S = Record<string, any>,
+      S extends Record<string, any>,
       A extends Action = AnyAction
     >(reducer: Reducer<S, A>, preloadedState?: PreloadedState<S>) {
       /**
@@ -47,8 +47,9 @@ export function createDura() {
 
       const defineLeaf: DefineLeafFn = (options) => {
         const { namespace, initialState, reducers = {} } = options;
-        function createContext($namespace: string) {
+        const createContext: CreateContextFn<S, A> = ($namespace) => {
           return {
+            namespace: $namespace,
             has() {
               return !!_SLICE_REDUCERS[$namespace];
             },
@@ -67,14 +68,15 @@ export function createDura() {
                 compose(reducer, combineReducers(_SLICE_REDUCERS)),
               );
             },
+            reduxStore,
           };
-        }
-        const context = createContext(namespace);
+        };
 
+        const context = createContext(namespace);
         const useMount = createUseMount(context);
-        const useState = createUseState(namespace, reduxStore as never);
-        const useOnChange = createUseOnChange(namespace, reduxStore as never);
-        const useSelector = createUseSelector(namespace, reduxStore as never);
+        const useState = createUseState(context);
+        const useOnChange = createUseOnChange(context);
+        const useSelector = createUseSelector(context);
         const use = reducerHandle(namespace, reduxStore as never, reducers);
 
         return {

@@ -1,3 +1,4 @@
+import { Store, Action, AnyAction } from 'redux';
 /**
  * 清除数组的第一个元素
  */
@@ -82,11 +83,15 @@ export type DefineLeafFn = <S, R extends ReducerBase<S>>(
   options: DefineLeafFnOptions<S, R>,
 ) => DefineLeafFnResult<S, R>;
 
-export type createContext = (namespace: string) => Context;
+export type CreateContextFn<S, A extends Action = AnyAction> = (
+  namespace: string,
+) => Context<S, A>;
 
-export type Context = {
+export type Context<S, A extends Action = AnyAction> = {
+  namespace: string;
   has(): boolean;
   del(): void;
   add(): void;
   refresh(): void;
+  reduxStore: Store<S, A>;
 };

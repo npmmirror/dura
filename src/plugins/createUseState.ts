@@ -1,10 +1,14 @@
 import { useRef, useEffect } from 'react';
-import { Store } from 'redux';
+import { Action, AnyAction } from 'redux';
 import { get } from 'lodash-es';
 import { useUpdate, useMemoized } from '@onecocjs/use';
-import { createProxy } from './createProxy';
+import { Context } from '../types';
+import { createProxy } from '../createProxy';
 
-export function createUseState(namespace: string, store: Store) {
+export function createUseState<
+  S extends Record<string, any>,
+  A extends Action = AnyAction
+>({ namespace, reduxStore }: Context<S, A>) {
   return function useState(options: { selector: () => any }) {
     const update = useUpdate();
     //经过immer代理的对象
@@ -16,7 +20,7 @@ export function createUseState(namespace: string, store: Store) {
 
     function recording() {
       //获取当前节点的 redux 数据
-      const state = store.getState()?.[namespace];
+      const state = reduxStore.getState()?.[namespace];
       //清空过时的依赖缓存
       refDeps.clear();
       //每次都缓存一下最新的redux数据
@@ -30,8 +34,8 @@ export function createUseState(namespace: string, store: Store) {
 
     useEffect(
       () =>
-        store.subscribe(() => {
-          const _state = store.getState()[namespace];
+        reduxStore.subscribe(() => {
+          const _state = reduxStore.getState()[namespace];
           const keysIterator = refDeps.keys();
           let $ = keysIterator.next();
           let isUpdate = false;
@@ -48,7 +52,7 @@ export function createUseState(namespace: string, store: Store) {
             recording(), update();
           }
         }),
-      [store.subscribe, namespace],
+      [reduxStore.subscribe, namespace],
     );
 
     return refProxy.current;

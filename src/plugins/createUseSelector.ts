@@ -1,18 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { Store } from 'redux';
+import { Action, AnyAction } from 'redux';
 import { get } from 'lodash-es';
 import { useUpdate } from '@onecocjs/use';
+import { Context } from '../types';
 
-export function createUseSelector(namespace: string, store: Store) {
+export function createUseSelector<
+  S extends Record<string, any>,
+  A extends Action = AnyAction
+>({ namespace, reduxStore }: Context<S, A>) {
   return function useSelector(selector: Function) {
     const update = useUpdate();
     const refCache = useRef(undefined);
-    refCache.current = selector(store.getState()[namespace]);
+    refCache.current = selector(reduxStore.getState()[namespace]);
 
     useEffect(
       () =>
-        store.subscribe(() => {
-          const _ = selector(store.getState()[namespace]);
+        reduxStore.subscribe(() => {
+          const _ = selector(reduxStore.getState()[namespace]);
           const keys = Object.keys(_);
           let isUpdate = false;
           for (let index = 0; index < keys.length; index++) {
@@ -25,9 +29,9 @@ export function createUseSelector(namespace: string, store: Store) {
             update();
           }
         }),
-      [store.subscribe, namespace],
+      [reduxStore.subscribe, namespace],
     );
 
-    return selector(store.getState()[namespace]);
+    return selector(reduxStore.getState()[namespace]);
   };
 }
