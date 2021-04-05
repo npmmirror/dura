@@ -9,7 +9,7 @@ export function createUseState<
   S extends Record<string, any>,
   A extends Action = AnyAction
 >({ namespace, reduxStore }: Context<S, A>) {
-  return function useState(options: { selector: () => any }) {
+  return function useState() {
     const update = useUpdate();
     //经过immer代理的对象
     const refProxy = useRef(undefined);

@@ -3,7 +3,9 @@ import { Input } from 'antd';
 import { user } from './store';
 
 export default function Item() {
-  const onChangeAge = user.useOnChange('age');
+  const onChangeAge = user.useOnChange('age', {
+    transform: 'text',
+  });
 
   const state = user.useState();
 

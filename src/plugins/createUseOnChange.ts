@@ -12,12 +12,12 @@ export function createUseOnChange<
   S extends Record<string, any>,
   A extends Action = AnyAction
 >({ namespace, reduxStore }: Context<S, A>) {
-  return function useChange<T extends (...args: any[]) => any>(
+  return function useOnChange<T extends (...args: any[]) => any>(
     path: string,
-    optionsUseBind: UseBindOptions<T>,
+    options: UseBindOptions<T>,
   ) {
     return usePersistFn((...args: unknown[]) => {
-      const value = resolveOnChange(optionsUseBind?.transform, ...args);
+      const value = resolveOnChange(options?.transform, ...args);
       const action = {
         type: `${namespace}/${ON_CHANGE_STATE}`,
         payload: [path, value],

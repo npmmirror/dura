@@ -67,8 +67,30 @@ export type Selector<S, R> = (state: S) => R;
 export type ResolveSysFn<S> = {
   useMount: () => void;
   useState: () => S;
-  useOnChange: (
+  useOnChange: <T extends AnyFunction>(
     path: PathKeys<S>,
+    options?: {
+      transform?:
+        | T
+        | number
+        | 'text'
+        | 'textarea'
+        | 'date'
+        | 'datetime-local'
+        | 'email'
+        | 'month'
+        | 'number'
+        | 'password'
+        | 'range'
+        | 'search'
+        | 'tel'
+        | 'time'
+        | 'url'
+        | 'week'
+        | 'datetime'
+        | 'checkbox'
+        | 'radio';
+    },
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   useSelector: <R>(selector: Selector<S, R>) => R;
 };

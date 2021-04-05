@@ -34,6 +34,7 @@ export const resolveHtmlInputValue: ResolveHtmlInputValueFn = (
 ) => {
   switch (eventType) {
     case 'text':
+    case 'textarea':
     case 'date':
     case 'datetime-local':
     case 'email':
@@ -70,14 +71,25 @@ export type ResolveOnChangeFn = (
 export const resolveOnChange: ResolveOnChangeFn = (transform, ...args) => {
   const event = args?.[0] as React.ChangeEvent<HTMLInputElement>;
   const eventType = event?.target?.type;
+
+  /**
+   * 优先判定 transform 按照指定的顺序来判断
+   * 1:函数，那么直接调用函数进行转换操作
+   * 2:字符，那么默认走 target type 的逻辑 , transform 将会当做 target type 处理
+   * 3:数字，将会认为是调用时参数列表的第 N 个参数，默认从 0 开始
+   *
+   * transform 逻辑结束之后，将会对 e.target.type 进行判断
+   *
+   * 如以上都不满足，那么默认将会直接返回 args
+   */
   if (typeof transform === 'function') {
     return transform(...args);
   } else if (typeof transform === 'string') {
     return resolveHtmlInputValue(transform, event);
-  } else if (typeof eventType === 'string') {
-    return resolveHtmlInputValue(eventType, event);
   } else if (typeof transform === 'number') {
     return args[transform];
+  } else if (typeof eventType === 'string') {
+    return resolveHtmlInputValue(eventType, event);
   } else {
     return args;
   }
