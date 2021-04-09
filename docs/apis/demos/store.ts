@@ -21,6 +21,7 @@ export const user = store.defineLeaf({
       state.name = newName;
       state.age = age;
     },
+    onShow() {},
   },
 });
 // store.defineLeaf(){}
