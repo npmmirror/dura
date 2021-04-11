@@ -62,12 +62,12 @@ type SubKeys<T, K extends string> = K extends keyof T
   ? `${K}.${PathKeys<T[K]>}`
   : never;
 
-export type Selector<S, R> = (state: S) => R;
+export type Selector<S = any, R = any> = (state: S) => R;
 
 export type ResolveSysFn<S> = {
   useMount: () => void;
-  useState: () => S;
-  useOnChange: <T extends AnyFunction>(
+  useState: <R>(selector?: Selector<S, R> | boolean) => S;
+  useSetter: <T>(
     path: PathKeys<S>,
     options?: {
       transform?:
@@ -91,8 +91,7 @@ export type ResolveSysFn<S> = {
         | 'checkbox'
         | 'radio';
     },
-  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  useSelector: <R>(selector: Selector<S, R>) => R;
+  ) => T;
 };
 /**
  * 合并
@@ -105,15 +104,13 @@ export type DefineLeafFn = <S, R extends ReducerBase<S>>(
   options: DefineLeafFnOptions<S, R>,
 ) => DefineLeafFnResult<S, R>;
 
-export type CreateContextFn<S, A extends Action = AnyAction> = (
-  namespace: string,
-) => Context<S, A>;
+export type CreateContextFn = (namespace: string) => Context;
 
-export type Context<S, A extends Action = AnyAction> = {
+export type Context = {
   namespace: string;
   has(): boolean;
   del(): void;
   add(): void;
   refresh(): void;
-  reduxStore: Store<S, A>;
+  reduxStore: Store<any, any>;
 };

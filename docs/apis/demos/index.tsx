@@ -7,7 +7,8 @@ import React, {
   useState,
   memo,
 } from 'react';
-import { Input, Checkbox, DatePicker, Button } from 'antd';
+import { Input, Checkbox, Button, Switch } from 'antd';
+import { SwitchChangeEventHandler } from 'antd/lib/switch';
 import { user } from './store';
 import UseOnChange from './useOnChange';
 import UseCustomerChange from './UseCustomerChange';
@@ -30,38 +31,30 @@ export default function () {
 
   const show = user.useOnShow({});
   console.log('main render');
+  const [count, setCount] = useState(5);
 
   return (
     <div>
-      <TextArea onChange={_1} value={state.name} />
+      {/* <TextArea onChange={_1} value={state.name} /> */}
       <UseOnChange />
       <UseCustomerChange />
       <Item />
       <Selector />
-      <Button onClick={show} />
-      {times(10).map((x) => {
-        const [state1, setState] = useState(false);
-        console.log('item-render');
-
-        useEffect(() => {
-          console.log('useEffect');
-          return () => {
-            console.log('unmount');
-          };
-        }, []);
-        return (
-          <div key={++x}>
-            <Item />
-            <Button
-              onClick={() => {
-                setState(!state1);
-              }}
-            >
-              click me
-            </Button>
-          </div>
-        );
-      })}
+      <Switch
+        onChange={user.useSetter<SwitchChangeEventHandler>('visable', {
+          transform: 0,
+        })}
+        onClick={(e, _2) => {
+          console.log(e, _2.target);
+        }}
+      />
+      <Button
+        onClick={(e) => {
+          setCount(10);
+        }}
+      >
+        改变数量
+      </Button>
     </div>
   );
 }

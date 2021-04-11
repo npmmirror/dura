@@ -8,6 +8,7 @@ import {
   createStore,
   compose,
   combineReducers,
+  StoreEnhancer,
 } from 'redux';
 import { setAutoFreeze } from 'immer';
 import { createImmerReducer } from './internal';
@@ -16,7 +17,14 @@ import { createUseState } from './plugins/createUseState';
 import { createUseOnChange } from './plugins/createUseOnChange';
 import { reducerHandle } from './reducerHandle';
 import { createUseSelector } from './plugins/createUseSelector';
-import { DefineLeafFn, AnyFunction, CreateContextFn } from './types';
+import {
+  DefineLeafFn,
+  AnyFunction,
+  CreateContextFn,
+  ReducerBase,
+  DefineLeafFnOptions,
+  DefineLeafFnResult,
+} from './types';
 
 setAutoFreeze(false);
 
@@ -25,82 +33,62 @@ export interface UseOptions<T extends AnyFunction> {
 }
 
 export function createDura() {
-  /**
-   * 用来缓存所有 slice reducer
-   */
   const _SLICE_REDUCERS: Record<string, any> = {};
+  const enhancer: StoreEnhancer<{ defineLeaf: DefineLeafFn }> = (
+    createStore,
+  ) => <S, A extends Action = AnyAction>(
+    reducer: Reducer<S, A>,
+    preloadedState?: any,
+  ) => {
+    /**
+     * 创建 redux-store
+     */
+    const reduxStore = createStore(reducer, preloadedState);
 
-  function duraEnhancerStoreCreator(
-    createStore: StoreEnhancerStoreCreator<
-      Record<string, any>,
-      Record<string, any>
-    >,
-  ): StoreEnhancerStoreCreator<{ defineLeaf: DefineLeafFn }> {
-    function _createStore<
-      S extends Record<string, any>,
-      A extends Action = AnyAction
-    >(reducer: Reducer<S, A>, preloadedState?: PreloadedState<S>) {
-      /**
-       * 创建 redux-store
-       */
-      const reduxStore = createStore(reducer, preloadedState);
+    const refresh = () =>
+      void reduxStore.replaceReducer(
+        compose(reducer, combineReducers(_SLICE_REDUCERS)),
+      );
 
-      const defineLeaf: DefineLeafFn = (options) => {
-        const { namespace, initialState, reducers = {} } = options;
-        const createContext: CreateContextFn<S, A> = ($namespace) => {
-          return {
-            namespace: $namespace,
-            has() {
-              return !!_SLICE_REDUCERS[$namespace];
-            },
-            del() {
-              delete _SLICE_REDUCERS[$namespace];
-            },
-            add() {
-              _SLICE_REDUCERS[$namespace] = createImmerReducer(
-                $namespace,
-                initialState,
-                reducers,
-              );
-            },
-            refresh() {
-              reduxStore.replaceReducer(
-                compose(reducer, combineReducers(_SLICE_REDUCERS)),
-              );
-            },
-            reduxStore,
-          };
-        };
-
-        const context = createContext(namespace);
-        const useMount = createUseMount(context);
-        const useState = createUseState(context);
-        const useOnChange = createUseOnChange(context);
-        const useSelector = createUseSelector(context);
-        const use = reducerHandle(namespace, reduxStore as never, reducers);
-
-        return {
-          ...use,
-          useMount,
-          useState,
-          useOnChange,
-          useSelector,
-        } as never;
+    const defineLeaf: DefineLeafFn = (options) => {
+      const { namespace, initialState, reducers = {} } = options;
+      const has = () => !!_SLICE_REDUCERS[namespace];
+      const del = () => void delete _SLICE_REDUCERS[namespace];
+      const add = () =>
+        void (_SLICE_REDUCERS[namespace] = createImmerReducer(
+          namespace,
+          initialState,
+          reducers,
+        ));
+      const context = {
+        namespace,
+        has,
+        del,
+        add,
+        refresh,
+        reduxStore,
       };
 
+      const useMount = createUseMount(context);
+      const useState = createUseState(context);
+      const useSetter = createUseOnChange(context);
+      const use = reducerHandle(namespace, reduxStore as never, reducers);
+
       return {
-        ...reduxStore,
-        defineLeaf,
+        ...use,
+        useMount,
+        useState,
+        useSetter,
       } as never;
-    }
-    return _createStore;
-  }
-  return duraEnhancerStoreCreator;
+    };
+
+    return {
+      ...reduxStore,
+      defineLeaf,
+    };
+  };
+  return enhancer;
 }
-
-const _ = createDura();
-
-const res = createStore((state = {}) => state, compose(_));
 
 // interface Action<P = undefined,M = undefined>{
 //   type:string;

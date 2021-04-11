@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createDura } from '../../../src';
 
 const store = createStore(
-  (state = {}) => state,
+  (state = { name: '' }) => state,
   composeWithDevTools(createDura()),
 );
 
@@ -15,6 +15,7 @@ export const user = store.defineLeaf({
     address: {
       name: '南京市',
     },
+    visable: false,
   },
   reducers: {
     onChangeName(state, newName: string, age: number) {
