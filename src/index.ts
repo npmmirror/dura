@@ -14,9 +14,8 @@ import { setAutoFreeze } from 'immer';
 import { createImmerReducer } from './internal';
 import { createUseMount } from './plugins/createUseMount';
 import { createUseState } from './plugins/createUseState';
-import { createUseOnChange } from './plugins/createUseOnChange';
+import { createUseSetter } from './plugins/createUseSetter';
 import { reducerHandle } from './reducerHandle';
-import { createUseSelector } from './plugins/createUseSelector';
 import {
   DefineLeafFn,
   AnyFunction,
@@ -71,7 +70,7 @@ export function createDura() {
 
       const useMount = createUseMount(context);
       const useState = createUseState(context);
-      const useSetter = createUseOnChange(context);
+      const useSetter = createUseSetter(context);
       const use = reducerHandle(namespace, reduxStore as never, reducers);
 
       return {

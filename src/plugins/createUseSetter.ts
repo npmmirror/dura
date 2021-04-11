@@ -85,8 +85,8 @@ export interface UseBindOptions<T extends (...args: unknown[]) => unknown> {
   transform?: T | string | number;
 }
 
-export function createUseOnChange({ namespace, reduxStore }: Context) {
-  return function useOnChange<T extends (...args: any[]) => any>(
+export function createUseSetter({ namespace, reduxStore }: Context) {
+  return function useSetter<T extends (...args: any[]) => any>(
     path: string,
     options: UseBindOptions<T>,
   ) {
