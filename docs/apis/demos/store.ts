@@ -2,6 +2,10 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createDura } from '../../../src';
 
+type User = {
+  name: string;
+  age: number;
+};
 const store = createStore(
   (state = { name: '' }) => state,
   composeWithDevTools(createDura()),
@@ -10,6 +14,7 @@ const store = createStore(
 export const user = store.defineLeaf({
   namespace: 'user',
   initialState: {
+    users: {} as User,
     name: '张三',
     age: 0,
     address: {
@@ -18,11 +23,11 @@ export const user = store.defineLeaf({
     visable: false,
   },
   reducers: {
-    onChangeName(state, newName: string, age: number) {
-      state.name = newName;
+    onChangeAge(state, age: number) {
       state.age = age;
     },
     onShow() {},
   },
 });
+
 // store.defineLeaf(){}

@@ -29,7 +29,7 @@ function createHooks(type: string, reduxStore: Store) {
        * 因此并不适合使用 resolveOnChange
        */
       const value = options?.transform?.(...args) ?? args;
-      const action = createAction(type, value);
+      const action = createAction(type, ...value);
       reduxStore.dispatch(action);
     });
   };

@@ -1,4 +1,4 @@
-import { Store, Action, AnyAction } from 'redux';
+import { Store } from 'redux';
 /**
  * 清除数组的第一个元素
  */
@@ -33,10 +33,8 @@ export interface HooksOptions<T> {
 }
 
 export type Hooks<PF extends AnyFunction> = <T>(
-  options: HooksOptions<T>,
-) => T extends AnyFunction
-  ? (...args: Parameters<T>) => void
-  : (...args: ShiftAction<Parameters<PF>>) => void;
+  options?: HooksOptions<T>,
+) => T extends AnyFunction ? T : (...args: ShiftAction<Parameters<PF>>) => void;
 
 /**
  * 转换hooks
