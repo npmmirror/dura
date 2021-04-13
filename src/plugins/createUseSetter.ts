@@ -1,5 +1,3 @@
-import { Action, AnyAction } from 'redux';
-
 import { usePersistFn } from '@onecocjs/use';
 import { Context } from '../types';
 import { ON_CHANGE_STATE } from '../const';

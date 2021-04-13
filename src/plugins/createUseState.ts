@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react';
-import { Action, AnyAction } from 'redux';
 import { get } from 'lodash-es';
 import { useUpdate, useMemoized, usePersistFn } from '@onecocjs/use';
 import { Context, Selector } from '../types';
