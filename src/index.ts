@@ -1,35 +1,51 @@
-import React from 'react';
 import {
-  StoreEnhancerStoreCreator,
   AnyAction,
   Action,
   Reducer,
-  PreloadedState,
-  createStore,
   compose,
   combineReducers,
   StoreEnhancer,
 } from 'redux';
-import { setAutoFreeze } from 'immer';
-import { createImmerReducer } from './internal';
+import { produce, setAutoFreeze } from 'immer';
+import { set } from 'lodash-es';
 import { createUseMount } from './plugins/createUseMount';
 import { createUseState } from './plugins/createUseState';
 import { createUseSetter } from './plugins/createUseSetter';
 import { reducerHandle } from './reducerHandle';
-import {
-  DefineLeafFn,
-  AnyFunction,
-  CreateContextFn,
-  ReducerBase,
-  DefineLeafFnOptions,
-  DefineLeafFnResult,
-} from './types';
+import { DefineLeafFn } from './types';
+import { ON_CHANGE_STATE } from './const';
 
 setAutoFreeze(false);
 
-export interface UseOptions<T extends AnyFunction> {
-  transform: T;
+export interface FluxAction<P> extends Action<string> {
+  payload: P;
 }
+
+export const createImmerReducer = (
+  namespace: string,
+  initialState: Record<string, any>,
+  reducers: Record<string, Function>,
+) => (
+  state: Record<string, any> = initialState,
+  action: FluxAction<[string, string]>,
+) => {
+  const [$namespace, $name] = action?.type?.split?.('/');
+  if (
+    // 如果不是当前模块
+    $namespace !== namespace &&
+    // 也不是广播模式
+    !namespace.startsWith(`${$namespace}`)
+  ) {
+    return state;
+  }
+  return produce(state, (draft) => {
+    if ($name === ON_CHANGE_STATE) {
+      const [key, val] = action?.payload;
+      return set(draft, key, val);
+    }
+    return reducers[$name]?.(draft, ...action.payload);
+  });
+};
 
 export function createDura() {
   const _SLICE_REDUCERS: Record<string, any> = {};

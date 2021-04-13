@@ -3,7 +3,6 @@ import { user } from './store';
 
 export default function Selector() {
   const state = user.useState();
-  console.log('Selector');
 
   return (
     <>

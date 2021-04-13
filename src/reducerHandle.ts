@@ -1,8 +1,20 @@
 import { Store } from 'redux';
-import { merge, upperFirst, isArray } from 'lodash-es';
+import { merge, upperFirst } from 'lodash-es';
 import { usePersistFn } from '@onecocjs/use';
-import { createAction } from './internal';
+import { isArray } from 'lodash-es';
 import { ReducerBase, AnyFunction } from './types';
+
+/**
+ * 创建Action描述信息
+ * @param type Action Type
+ * @param args 参数信息，最终会以数组的形式注入进 Payload
+ * @returns Action对象
+ */
+export const createAction = (type: string, ...args: unknown[]) =>
+  ({
+    type,
+    payload: isArray(args) ? args : [args],
+  } as never);
 
 export interface UseOptions<T extends AnyFunction> {
   transform: T;
