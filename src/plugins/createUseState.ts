@@ -108,10 +108,16 @@ export function createUseState(context: Context) {
       selector === true ? autoSubscribeContext : selectorSubscribeContext;
     /** 记录 */
     recording();
-    /** 持久化的订阅函数，为了避免反复装卸 redux subscribe */
-    const subscribeFn = usePersistFn(subscribe);
+    /**
+     * 持久化的订阅函数，为了避免反复装卸 redux subscribe
+     * 反复装卸增加计算量， 刻意的做持久化会增加内存开销。
+     * 当然这部分的类比差异都是微乎其微的，所以暂时注释掉，优先尽可能的减少内存的开销
+     * */
+    // const subscribeFn = usePersistFn(subscribe);
 
-    useEffect(() => context.reduxStore.subscribe(subscribeFn), [subscribeFn]);
+    const deps = [context.reduxStore.subscribe, subscribe];
+
+    useEffect(() => context.reduxStore.subscribe(subscribe), deps);
 
     return state();
   };
