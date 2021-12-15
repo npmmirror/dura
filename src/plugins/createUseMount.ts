@@ -1,7 +1,7 @@
-import { useRef, useLayoutEffect } from 'react';
-import { Context } from '../types';
-
-export function createUseMount({ has, del, add, refresh }: Context) {
+import { Api } from '../types';
+import { useLayoutEffect, useRef } from 'react';
+export function createUseMount(api: Api) {
+  const { has, del, add, refresh } = api.storeManager;
   return function useMount() {
     const ref = useRef<(() => void) | undefined>(undefined);
 

@@ -1,31 +1,21 @@
+import { defineHiddenConstantProperty } from './defineHiddenConstantProperty';
 import isPlainObject from 'lodash.isplainobject';
-
 export const SNAKE_SYMBOL = Symbol('@@SNAKE_SYMBOL');
 
-function caclPath(parentPath: any, property: any) {
+function caclPath(parentPath: unknown, property: unknown) {
   return parentPath ? `${parentPath}.${property}` : `${property}`;
-}
-function defineHiddenConstantProperty<T, S extends symbol | string, V>(
-  target: T,
-  name: S,
-  value: V,
-) {
-  Object.defineProperty(target, name, {
-    value: value,
-    enumerable: false,
-    writable: false,
-    configurable: false,
-  });
 }
 
 export function createProxy<T extends object>(
   state: T,
-  deps: Map<string, any>,
+  deps: Map<string, number>,
   parentPath?: string,
 ): T {
   const proxy = new Proxy(state, {
     get(target, property, receiver) {
       const value = Reflect.get(target, property, receiver);
+      // const value = target[property];
+      // console.log(property);
 
       // 如果是 symbol 类型 则直接返回
       if (typeof property === 'symbol') {

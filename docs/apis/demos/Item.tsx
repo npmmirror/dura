@@ -7,6 +7,7 @@ export default function Item() {
   const nameSetter = user.useSetter<React.ChangeEventHandler<HTMLInputElement>>(
     'name',
   );
+
   return (
     <div>
       <h1>{state.name}</h1>
